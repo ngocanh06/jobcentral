@@ -1,18 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  LayoutDashboard,
   ClipboardList,
-  Users,
-  FileText,
-  CheckCircle2,
-  Calendar,
-  Mail,
-  MessageSquare,
-  Package,
-  UserCog,
-  Settings,
-  HelpCircle,
   Search,
   Bell,
   Settings as SettingsIcon,
@@ -23,32 +12,22 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
 
-const navItems = [
-  { icon: LayoutDashboard, label: "DashBoard", active: true },
-  { icon: ClipboardList, label: "Quản lý đăng tuyển" },
-  { icon: Users, label: "Quản lý ứng viên" },
-  { icon: FileText, label: "Báo cáo tuyển dụng" },
-  { icon: CheckCircle2, label: "Truth Score" },
-  { icon: Calendar, label: "Lịch phỏng vấn" },
-  { icon: Mail, label: "Email mẫu" },
-  { icon: MessageSquare, label: "Tin nhắn" },
-  { icon: Package, label: "Gói dịch vụ" },
-  { icon: UserCog, label: "Quản lý tài khoản" },
-];
+const ScrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    Behavior: "smooth",
+  });
+};
 
-const systemNavItems = [
-  { icon: Settings, label: "Cấu hình hệ thống" },
-  { icon: HelpCircle, label: "Hỗ trợ" },
-];
 
 const statCards = [
-  { label: "Tin tuyển dụng", value: "0", change: "", up: true },
-  { label: "Tổng ứng viên", value: "0", change: "", up: true },
-  { label: "Hồ sơ mới", value: "0", change: "", up: true },
-  { label: "Lịch phỏng vấn", value: "0", change: "", up: false },
-  { label: "Follower", value: "0", change: "", up: true },
-  { label: "Tiến độ tuyển dụng", value: "0%", change: "", up: true },
-  { label: "Tin sắp hết hạn", value: "0", change: "", up: null },
+  { label: "Tin tuyển dụng", value: "", change: "", up: true },
+  { label: "Tổng ứng viên", value: "", change: "", up: true },
+  { label: "Hồ sơ mới", value: "", change: "", up: true },
+  { label: "Lịch phỏng vấn", value: "", change: "", up: false },
+  { label: "Follower", value: "", change: "", up: true },
+  { label: "Tiến độ tuyển dụng", value: "", change: "", up: true },
+  { label: "Tin sắp hết hạn", value: "", change: "", up: null },
 ];
 
 const tasks = [
@@ -63,6 +42,7 @@ const tasks = [
   // },
 ];
 
+//lấy dữ liệu từ DB
 const funnelStages = [
   { label: "Applied", value: 0, color: "bg-indigo-950 text-white" },
   { label: "Screening", value: 0, color: "bg-indigo-800 text-white" },
@@ -72,6 +52,7 @@ const funnelStages = [
   { label: "Hired", value: 0, color: null },
 ];
 
+// lấy dữ liệu từ DB
 const weeklyApplicants = [
   { day: "T2", value: 0 },
   { day: "T3", value: 0 },
@@ -121,20 +102,7 @@ const newCandidates = [
   },
 ];
 
-function SidebarItem({ icon: Icon, label, active }) {
-  return (
-    <button
-      className={`flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm cursor-pointer transition-colors ${
-        active
-          ? "bg-indigo-50 text-[#2170E4] font-medium"
-          : "text-slate-600 hover:bg-slate-50"
-      }`}
-    >
-      <Icon size={17} strokeWidth={2} />
-      <span>{label}</span>
-    </button>
-  );
-}
+
 
 function StatCard({ label, value, change, up }) {
   return (
@@ -160,38 +128,7 @@ export default function RecruiterDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex">
-      {/* Sidebar */}
-      <aside className="w-60 bg-white border-r border-slate-200 flex flex-col shrink-0">
-        <div className="px-5 py-5">
-          <h1 className="text-[#2170E4] font-bold text-lg leading-tight">
-            Nhà tuyển dụng
-          </h1>
-          <p className="text-xs text-slate-400">System Employer</p>
-        </div>
-        <nav className="flex-1 px-2 space-y-0.5">
-          {navItems.map((item) => (
-            <SidebarItem key={item.label} {...item} />
-          ))}
-        </nav>
-        <div className="px-2 pb-2">
-          <p className="px-4 text-[10px] tracking-wider text-slate-400 font-medium mb-1">
-            HỆ THỐNG
-          </p>
-          {systemNavItems.map((item) => (
-            <SidebarItem key={item.label} {...item} />
-          ))}
-        </div>
-        <div className="border-t border-slate-200 px-4 py-3 flex items-center gap-2">
-          <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xs font-semibold">
-            EU
-          </div>
-          <div className="text-xs">
-            <p className="font-medium text-slate-700">Employer User</p>
-            <p className="text-slate-400">admin@hr.system</p>
-          </div>
-        </div>
-      </aside>
-
+      
       {/* Main content */}
       <div className="flex-1 min-w-0">
         {/* Top bar */}
@@ -199,10 +136,10 @@ export default function RecruiterDashboard() {
           <button className="text-slate-500">
             <ClipboardList size={18} className="hidden" />
           </button>
-          <div className="flex items-center gap-1 text-sm text-slate-500 shrink-0">
+          <button onClick={ScrollToTop} className="flex items-center gap-1 text-sm text-slate-500 shrink-0"> 
             <span>≡</span>
             <span>Home</span>
-          </div>
+          </button>
           <div className="flex-1 max-w-md mx-auto relative">
             <Search
               size={16}
@@ -440,14 +377,13 @@ export default function RecruiterDashboard() {
                 Chưa có kết quả tìm kiếm
               </div>
             </div>
-
+            {/* vị trí đặt thông báo hoặc quảng cáo */}
             <div className="lg:col-span-2 bg-[#2170e4] rounded-xl p-6 text-white flex items-center justify-between gap-6">
               <div>
                 <h3 className="font-semibold mb-2">Thông tin thị trường</h3>
                 <p className="text-sm text-indigo-100 max-w-md">
                   Dự báo dựa trên trí tuệ nhân tạo cho thấy nhu cầu tuyển dụng
-                  nhân sự công nghệ theo mùa ở Đông Nam Á sẽ tăng 15% trong quý
-                  tới.
+                  nhân sự công nghệ ở Đông Nam Á sẽ tăng 15% trong quý tới.
                 </p>
                 <button className="bg-white text-[#2170e4] text-xs font-medium px-4 py-2 rounded-lg mt-4 flex items-center gap-2">
                   <Download size={13} /> Tải xuống báo cáo dự báo
@@ -460,7 +396,7 @@ export default function RecruiterDashboard() {
           <div className="bg-sky-50 border border-sky-100 rounded-xl p-6 flex items-center justify-between gap-6">
             <div>
               <h3 className="font-semibold text-sm mb-1">
-                Nâng cấp tài khoản Pro Max để tiếp cận 5.000+ ứng viên tiềm năng
+                Nâng cấp tài khoản Pro để tiếp cận 5.000+ ứng viên tiềm năng
                 ngay hôm nay!
               </h3>
               <p className="text-xs text-slate-500 max-w-xl">
