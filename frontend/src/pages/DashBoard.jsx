@@ -1,10 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import {
-  ClipboardList,
-  Search,
-  Bell,
-  Settings as SettingsIcon,
+  // ClipboardList,
+  // Search,
+  // Bell,
+  // Settings as SettingsIcon,
   ChevronRight,
   MoreHorizontal,
   Rocket,
@@ -12,13 +12,12 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
 
-const ScrollToTop = () => {
-  window.scrollTo({
-    top: 0,
-    Behavior: "smooth",
-  });
-};
-
+// const ScrollToTop = () => {
+//   window.scrollTo({
+//     top: 0,
+//     Behavior: "smooth",
+//   });
+// };
 
 const statCards = [
   { label: "Tin tuyển dụng", value: "", change: "", up: true },
@@ -63,8 +62,8 @@ const weeklyApplicants = [
   { day: "CN", value: 0 },
 ];
 
+//demo
 const activeJobs = [
-  //demo
   // {
   //   title: "Product Designer",
   //   meta: "Toàn thời gian • Hà Nội",
@@ -102,8 +101,6 @@ const newCandidates = [
   },
 ];
 
-
-
 function StatCard({ label, value, change, up }) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 px-4 py-3 min-w-[130px] flex-1">
@@ -128,48 +125,14 @@ export default function RecruiterDashboard() {
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex">
-      
       {/* Main content */}
       <div className="flex-1 min-w-0">
-        {/* Top bar */}
-        <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center gap-4 sticky top-0 z-10">
-          <button className="text-slate-500">
-            <ClipboardList size={18} className="hidden" />
-          </button>
-          <button onClick={ScrollToTop} className="flex items-center gap-1 text-sm text-slate-500 shrink-0"> 
-            <span>≡</span>
-            <span>Home</span>
-          </button>
-          <div className="flex-1 max-w-md mx-auto relative">
-            <Search
-              size={16}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
-            />
-            <input
-              placeholder="Tìm kiếm ứng viên, thông tin báo cáo..."
-              className="w-full bg-slate-50 border border-slate-200 rounded-full pl-9 pr-4 py-2 text-sm outline-none focus:border-indigo-300"
-              readOnly
-            />
-          </div>
-          <div className="flex items-center gap-4 ml-auto">
-            <Bell size={18} className="text-slate-400" />
-            <SettingsIcon size={18} className="text-slate-400" />
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-full bg-indigo-100" />
-              <div className="text-xs text-right">
-                <p className="font-medium">User</p>
-                <p className="text-slate-400">MANAGER</p>
-              </div>
-            </div>
-          </div>
-        </header>
-
         <main className="p-6 space-y-6">
           {/* Header row */}
+          
           <div className="flex justify-end">
             <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
-              <span className="text-lg leading-none">+</span> Tạo tin tuyển dụng
-              mới
+              <span className="text-lg leading-none">+</span> Tạo tin tuyển dụng mới
             </button>
           </div>
 
