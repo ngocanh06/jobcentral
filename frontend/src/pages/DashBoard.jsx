@@ -1,23 +1,9 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import {
-  // ClipboardList,
-  // Search,
-  // Bell,
-  // Settings as SettingsIcon,
-  ChevronRight,
-  MoreHorizontal,
-  Rocket,
-  Download,
-} from "lucide-react";
-import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
+import TaoTinTuyenDung from "./Tao-tin-tuyen-dung";
 
-// const ScrollToTop = () => {
-//   window.scrollTo({
-//     top: 0,
-//     Behavior: "smooth",
-//   });
-// };
+import { ChevronRight, MoreHorizontal, Rocket, Download } from "lucide-react";
+import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
 
 const statCards = [
   { label: "Tin tuyển dụng", value: "", change: "", up: true },
@@ -122,18 +108,18 @@ function StatCard({ label, value, change, up }) {
 
 export default function RecruiterDashboard() {
   const maxVal = Math.max(...weeklyApplicants.map((d) => d.value));
-
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex">
-      {/* Main content */}
       <div className="flex-1 min-w-0">
         <main className="p-6 space-y-6">
-          {/* Header row */}
-          
           <div className="flex justify-end">
-            <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
-              <span className="text-lg leading-none">+</span> Tạo tin tuyển dụng mới
-            </button>
+
+            <Link to={"/Tao-tin-tuyen-dung"}>
+              <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
+                <span className="text-lg leading-none">+</span> Tạo tin tuyển
+                dụng mới
+              </button>
+            </Link>
           </div>
 
           {/* Stat cards */}
@@ -143,7 +129,6 @@ export default function RecruiterDashboard() {
             ))}
           </div>
 
-          {/* Tasks / Funnel / Chart */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Tasks */}
             <div className="bg-white rounded-xl border border-slate-200 p-5">

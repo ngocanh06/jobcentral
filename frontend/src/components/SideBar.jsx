@@ -18,10 +18,10 @@ function SidebarItem({ icon: Icon, label, path }) {
   return (
     <NavLink
       to={path}
-      className={({ Isactive }) =>
-        `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm cursor-pointer transition-colors ${
-          Isactive
-            ? "bg-indigo-50 text-[#2170E4] font-medium"
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm cursor-pointer transition-all duration-200 ${
+          isActive
+            ? "bg-indigo-100 text-[#2170e4] font-bold"
             : "text-slate-600 hover:bg-slate-50"
         }`
       }
@@ -31,6 +31,25 @@ function SidebarItem({ icon: Icon, label, path }) {
     </NavLink>
   );
 }
+
+function SysSidebarItem({ icon: Icon, label, path }) {
+  return (
+    <NavLink
+      to={path}
+      className={({ isActive }) =>
+        `flex items-center gap-3 px-4 py-2.5 rounded-lg text-sm cursor-pointer transition-all duration-200 ${
+          isActive
+            ? "bg-indigo-100 text-[#2170e4] font-bold"
+            : "text-slate-600 hover:bg-slate-50"
+        }`
+      }
+    >
+      <Icon size={17} strokeWidth={2} />
+      <span>{label}</span>
+    </NavLink>
+  );
+}
+
 
 const navItems = [
   {
@@ -54,11 +73,12 @@ const navItems = [
   { icon: MessageSquare, label: "Tin nhắn", path: "/tin-nhan" },
   { icon: Package, label: "Gói dịch vụ", path: "/goi-dich-vu" },
   { icon: UserCog, label: "Quản lý tài khoản", path: "/quan-li-tai-khoan" },
+
 ];
 
 const systemNavItems = [
-  { icon: Settings, label: "Cấu hình hệ thống" },
-  { icon: HelpCircle, label: "Hỗ trợ" },
+  { icon: Settings, label: "Cài đặt",path: "/cai-dat"},
+  { icon: HelpCircle, label: "Hỗ trợ",path: "/ho-tro"},
 ];
 
 export default function SideBar() {
@@ -82,7 +102,7 @@ export default function SideBar() {
             HỆ THỐNG
           </p>
           {systemNavItems.map((item) => (
-            <SidebarItem key={item.label} {...item} />
+            <SysSidebarItem key={item.label} {...item} />
           ))}
         </div>
         <div className="border-t border-slate-200 px-4 py-3 flex items-center gap-2">

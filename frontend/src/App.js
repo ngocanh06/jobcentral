@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RecruiterLayout from "./layouts/RecruiterLayout";
-
 import LoginPage from "./pages/LoginPage";
 import DashBoard from "./pages/DashBoard";
+import TaoTinTuyenDung from "./pages/Tao-tin-tuyen-dung";
 import QuanLiTinTuyenDung from "./pages/quan-li-tin-tuyen-dung";
 import QuanLiUngVien from "./pages/quan-li-ung-vien";
 import BaoCaoTuyenDung from "./pages/bao-cao-tuyen-dung";
@@ -12,6 +12,8 @@ import EmailMau from "./pages/Email-mau";
 import TinNhan from "./pages/tin-nhan";
 import GoiDichVu from "./pages/goi-dich-vu";
 import QuanLiTaiKhoan from "./pages/quan-li-tai-khoan";
+import CaiDat from "./pages/SysPages/Cai-dat";
+import HoTro from "./pages/SysPages/Ho-tro";
 
 const recruiterRoutes = [
   {
@@ -21,6 +23,10 @@ const recruiterRoutes = [
   {
     path: "Dashboard",
     element: <DashBoard />,
+  },
+  {
+    path: "Tao-tin-tuyen-dung",
+    element: <TaoTinTuyenDung />,
   },
   {
     path: "Quan-li-tin-tuyen-dung",
@@ -44,11 +50,11 @@ const recruiterRoutes = [
   },
   {
     path: "Email-mau",
-    element: <EmailMau/>,
+    element: <EmailMau />,
   },
   {
     path: "Tin-nhan",
-    element: <TinNhan/>,
+    element: <TinNhan />,
   },
   {
     path: "Goi-dich-vu",
@@ -57,6 +63,14 @@ const recruiterRoutes = [
   {
     path: "Quan-li-tai-khoan",
     element: <QuanLiTaiKhoan />,
+  },
+  {
+    path: "Cai-dat",
+    element: <CaiDat />,
+  },
+  {
+    path: "Ho-tro",
+    element: <HoTro />,
   },
 ];
 
