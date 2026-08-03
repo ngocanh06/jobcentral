@@ -84,10 +84,9 @@ const systemNavItems = [
 export default function SideBar() {
   return (
     <div className="min-h-screen bg-slate-50 flex">
-      {/* Sidebar */}
       <aside className="w-60 bg-white border-r border-slate-200 flex flex-col shrink-0">
         <div className="px-5 py-5">
-          <h1 className="text-[#2170E4] font-bold text-lg leading-tight">
+          <h1 className="text-[#2170E4] font-bold text-2xl leading-tight">
             Nhà tuyển dụng
           </h1>
           <p className="text-xs text-slate-400">System Employer</p>

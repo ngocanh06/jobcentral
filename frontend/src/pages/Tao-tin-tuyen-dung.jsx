@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 
 
+
 const STEPS = [
   { id: 1, label: "Thông tin cơ bản" },
   { id: 2, label: "Mô tả công việc" },
@@ -28,12 +29,12 @@ const STEPS = [
   { id: 6, label: "Xuất bản" },
 ];
 
-function StepIndicator({ current, onChange }) {
+function StepIndicator({ current, Completed, onChange }) {
   return (
-    <div className="flex items-center w-full px-6 px-2 bg-white border-b border-slate-200">
+    <div className="flex items-center w-full px-6 py-3 bg-white border-b border-slate-200">
       {STEPS.map((step, idx) => {
         const isActive = step.id === current;
-        const isDone = step.id < current;
+        const isDone = Completed[step.id];
         return (
           <React.Fragment key={step.id}>
             <button
@@ -45,7 +46,9 @@ function StepIndicator({ current, onChange }) {
                   ${
                     isActive
                       ? "bg-[#2170e4] border-[#2170e4] text-white"
-                      : isDone ? "bg-[#2170e4]/10 border-[#2170e4]/40 text-[#2170e4]" : "bg-white border-slate-300 text-slate-400"
+                      : isDone
+                        ? "bg-[#2170e4]/10 border-[#2170e4]/40 text-[#2170e4]"
+                        : "bg-white border-slate-300 text-slate-400"
                   }`}
               >
                 {isDone ? <Check size={14} /> : step.id}
@@ -61,7 +64,7 @@ function StepIndicator({ current, onChange }) {
             {idx < STEPS.length - 1 && (
               <div
                 className={`flex-1 h-px mx-2 mb-5 ${
-                  step.id < current ? "bg-[#2170e4]/60" : "bg-slate-200"
+                  Completed[step.id] ? "bg-[#2170e4]/60" : "bg-slate-200"
                 }`}
               />
             )}
@@ -71,6 +74,8 @@ function StepIndicator({ current, onChange }) {
     </div>
   );
 }
+
+
 
 function SectionCard({ icon: Icon, title, children }) {
   return (
@@ -98,7 +103,7 @@ function Field({ label, children }) {
 }
 
 const inputClass =
-  "w-full rounded-lg border border-slate-300 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2170e4]/40 focus:border-[#2170e4] transition";
+  "w-full rounded-lg border border-slatborder border-slate-300 rounded-lg px-3 py-2e-300 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2170e4]/40 focus:border-[#2170e4] transition";
 
 export default function JobPostingForm() {
   const [step, setStep] = useState(1);
@@ -116,17 +121,35 @@ export default function JobPostingForm() {
     currency: "",
     salaryFrom: 0,
     salaryTo: 0,
+    benefits: "",
   });
-  const [skills, setSkills] = useState(["Figma", "Prototyping", "UI/UX"]);
-  const [skillInput, setSkillInput] = useState("");
-  const [benefits, setBenefits] = useState({
-    healthcare: true,
-    flexibleHours: true,
-    stockOptions: false,
-  });
+
   const [questions, setQuestions] = useState([
     { id: 1, text: "", type: "Text", required: true },
   ]);
+  const stepCompleted = {
+    1:
+      form.title.trim() !== "" &&
+      form.department.trim() !== "" &&
+      form.jobType.trim() !== "" &&
+      form.workMode.trim() !== "" &&
+      form.openings !== "" &&
+      form.location.trim() !== "",
+    2: form.summary.trim() !== "" && form.responsibilities.trim() !== "",
+    3: form.experience.trim() !== "" && form.degree.trim() !== "",
+    4:
+      form.benefits.trim() !== "" &&
+      form.salaryFrom !== "" &&
+      form.salaryTo !== "",
+    5:
+      questions?.length > 0 &&
+      questions.every((q) => (q.text ?? "").trim() !== ""),
+
+    6: true,
+  };
+
+  const [skills, setSkills] = useState(["Figma", "Prototyping", "UI/UX"]);
+  const [skillInput, setSkillInput] = useState("");
 
   const update = (key) => (e) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
@@ -138,8 +161,7 @@ export default function JobPostingForm() {
       e.preventDefault();
     }
   };
-  const removeSkill = (idx) =>
-    setSkills((s) => s.filter((_, i) => i !== idx));
+  const removeSkill = (idx) => setSkills((s) => s.filter((_, i) => i !== idx));
 
   const addQuestion = () =>
     setQuestions((q) => [
@@ -164,13 +186,16 @@ export default function JobPostingForm() {
         </div>
       </div>
 
-      <StepIndicator current={step} onChange={setStep} />
+      <StepIndicator
+        current={step}
+        Completed={stepCompleted}
+        onChange={setStep}
+      />
 
       <div className="max-w-11xl mx-auto flex flex-col lg:flex-row gap-5 p-6 items-start">
         {/* LEFT: form content — scrolls independently */}
         <div className="w-full lg:flex-1 lg:min-w-0 space-y-5">
           <SectionCard icon={Info} title="Thông tin cơ bản">
-            
             <div className="grid grid-cols-2 gap-4">
               <div className="col-span-2">
                 <Field label="Tiêu đề công việc *">
@@ -257,6 +282,7 @@ export default function JobPostingForm() {
                   />
                 </div>
               </Field>
+
               <Field label="Trách nhiệm chính">
                 <div className="rounded-lg border border-slate-300 overflow-hidden">
                   <div className="flex items-center gap-1 px-2 py-1.5 border-b border-slate-200 bg-slate-50">
@@ -338,7 +364,7 @@ export default function JobPostingForm() {
               <Field label="Từ">
                 <input
                   type="number"
-                  min= {0}
+                  min={0}
                   className={inputClass}
                   value={form.salaryFrom}
                   onChange={update("salaryFrom")}
@@ -347,41 +373,33 @@ export default function JobPostingForm() {
               <Field label="Đến">
                 <input
                   type="number"
-                   min= {0}
+                  min={0}
                   className={inputClass}
                   value={form.salaryTo}
                   onChange={update("salaryTo")}
                 />
               </Field>
             </div>
-            <span className="block text-xs font-medium text-slate-500 mb-2">
-              Phúc lợi
-            </span>
-            <div className="flex flex-wrap gap-5">
-              {[
-                { key: "healthcare", label: "Chăm sóc sức khỏe" },
-                { key: "flexibleHours", label: "Giờ làm linh hoạt" },
-                { key: "stockOptions", label: "Cổ phần" },
-              ].map((b) => (
-                <label
-                  key={b.key}
-                  className="flex items-center gap-2 text-sm text-slate-700 cursor-pointer"
-                >
-                  <input
-                    type="checkbox"
-                    checked={benefits[b.key]}
-                    onChange={() =>
-                      setBenefits((prev) => ({
-                        ...prev,
-                        [b.key]: !prev[b.key],
-                      }))
-                    }
-                    className="h-4 w-4 rounded border-slate-300 text-[#2170e4] focus:ring-[#2170e4]"
-                  />
-                  {b.label}
-                </label>
-              ))}
-            </div>
+
+            <Field label="Phúc lợi nhân viên">
+              <div className="rounded-lg border border-slate-300 overflow-hidden">
+                <div className="flex items-center gap-1 px-2 py-1.5 border-b border-slate-200 bg-slate-50">
+                  <button className="p-1 rounded hover:bg-slate-200">
+                    <Bold size={13} />
+                  </button>
+                  <button className="p-1 rounded hover:bg-slate-200">
+                    <List size={13} />
+                  </button>
+                </div>
+                <textarea
+                  rows={3}
+                  placeholder="Chế độ phúc lợi của nhân viên..."
+                  className="w-full px-3 py-2 text-sm outline-none resize-none placeholder:text-slate-400"
+                  value={form.benefits}
+                  onChange={update("benefits")}
+                />
+              </div>
+            </Field>
           </SectionCard>
 
           <SectionCard icon={HelpCircle} title="Câu hỏi sàng lọc">
@@ -390,8 +408,7 @@ export default function JobPostingForm() {
                 <div key={q.id} className="flex items-center gap-2 w-full">
                   <GripVertical size={14} className="text-slate-300 skrink-0" />
                   <input
-                  
-                    className={`${inputClass} flex-1 min-w-0`}
+                    className={`border border-slate-300 rounded-lg px-3 py-2 flex-1 min-w-0`}
                     placeholder="Nhập câu hỏi sàng lọc..."
                     value={q.text}
                     onChange={(e) =>
@@ -399,21 +416,21 @@ export default function JobPostingForm() {
                         qs.map((item) =>
                           item.id === q.id
                             ? { ...item, text: e.target.value }
-                            : item
-                        )
+                            : item,
+                        ),
                       )
                     }
                   />
                   <select
-                    className={`${inputClass} w-28 shrink-0`}
+                    className={`border border-slate-300 rounded-lg px-3 py-2 w-28 shrink-0`}
                     value={q.type}
                     onChange={(e) =>
                       setQuestions((qs) =>
                         qs.map((item) =>
                           item.id === q.id
                             ? { ...item, type: e.target.value }
-                            : item
-                        )
+                            : item,
+                        ),
                       )
                     }
                   >
@@ -430,8 +447,8 @@ export default function JobPostingForm() {
                           qs.map((item) =>
                             item.id === q.id
                               ? { ...item, required: !item.required }
-                              : item
-                          )
+                              : item,
+                          ),
                         )
                       }
                       className="h-3.5 w-3.5 rounded border-slate-300 text-[#2170e4]"
@@ -512,7 +529,8 @@ export default function JobPostingForm() {
         {/* RIGHT: preview + assistant — separate panel, sticks while left scrolls */}
         <div className="w-full lg:w-[340px] lg:shrink-0 lg:sticky lg:top-2 space-y-4 lg:max-h-[calc(100vh-3rem)] lg:overflow-y-auto lg:pr-1">
           <div className="text-xs font-medium text-slate-400 flex items-center gap-1.5">
-            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> LIVE PREVIEW
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> LIVE
+            PREVIEW
           </div>
 
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
@@ -537,28 +555,33 @@ export default function JobPostingForm() {
                 </span>
               </div>
               <p className="text-xs text-slate-500">
-                {form.currency || "USD ($)"} {form.salaryFrom || "5,000"} - {form.salaryTo || "10,000"}
+                {form.currency || "USD ($)"} {form.salaryFrom || "5,000"} -{" "}
+                {form.salaryTo || "10,000"}
               </p>
               <p className="text-xs text-slate-500 max-w-[300px] overflow-y-auto overflow-x-hidden whitespace-pre-wrap break-words">
-                {"mô tả công việc: "}
+                {"Mô tả công việc: "}
                 {form.summary}
+              </p>
+              <p className="text-xs text-slate-500 max-w-[300px] overflow-y-auto overflow-x-hidden whitespace-pre-wrap break-words">
+                {"Chế độ phúc lợi: "}
+                {form.benefits}
               </p>
               <button className="w-full bg-[#2170e4] text-white text-xs font-medium rounded-lg py-2 mt-2">
                 Ứng tuyển ngay
               </button>
               <p className="text-[10px] text-slate-400 text-center pt-1">
-                Đăng 0 phút trước · 0 ứng viên
+                Đăng 0 phút trước · 0 đã xem
               </p>
             </div>
           </div>
 
           <div className="bg-[#2170e4]/10 rounded-xl p-3 text-xs text-[#2170e4]">
-            💡 Mẹo cho nhà tuyển dụng: mô tả công việc rõ ràng, cụ thể sẽ thu hút gấp 2 lần số ứng viên phù hợp và rút ngắn thời gian tuyển dụng.
+            💡 Mẹo cho nhà tuyển dụng: mô tả công việc rõ ràng, cụ thể sẽ thu
+            hút gấp 2 lần số ứng viên phù hợp và rút ngắn thời gian tuyển dụng.
           </div>
 
           {/* Chat widget */}
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            
             <div className="bg-[#2170e4] text-white px-3 py-2.5 flex items-center justify-between">
               <div className="flex items-center gap-2 text-xs font-medium">
                 <MessageCircle size={14} /> StickyAI
@@ -599,11 +622,12 @@ export default function JobPostingForm() {
         </div>
       </div>
 
-
       {/* Footer actions */}
       <div className="bottom-0 bg-white border-t border-slate-200 px-6 py-3 flex items-center justify-between">
         <p className="text-xs text-slate-400">
-          <span className="text-[#2170e4] font-semibold">JobCentral |</span> Được vận hành bởi JobCentral · Tất cả dữ liệu được tự động lưu sau vài phút
+          <span className="text-[#2170e4] font-semibold">JobCentral |</span>{" "}
+          Được vận hành bởi JobCentral · Tất cả dữ liệu được tự động lưu sau vài
+          phút
         </p>
         <div className="flex gap-2">
           <button

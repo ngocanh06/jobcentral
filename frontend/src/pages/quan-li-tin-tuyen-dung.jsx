@@ -8,7 +8,6 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  Plus,
   BarChart3,
   TrendingUp,
   Code2,
@@ -16,6 +15,8 @@ import {
   Receipt,
   Clock,
 } from "lucide-react";
+
+import { Link } from "react-router-dom";
 
 const stats = [
   {
@@ -145,10 +146,12 @@ export default function Quan_li_tin_tuyen_dung() {
               Tạo, theo dõi, chỉnh sửa và quản lý các chiến dịch tuyển dụng của bạn.
             </p>
           </div>
-          <button className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 transition-colors text-white font-medium text-sm px-5 py-3 rounded-xl shadow-sm shrink-0">
-            <Plus size={18} strokeWidth={2.5} />
-            Tạo tin tuyển dụng mới
-          </button>
+          <Link to={"/Tao-tin-tuyen-dung"}>
+              <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
+                <span className="text-lg leading-none">+</span> Tạo tin tuyển
+                dụng mới
+              </button>
+            </Link>
         </div>
 
         {/* Search */}
