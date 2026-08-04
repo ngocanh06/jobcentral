@@ -18,8 +18,6 @@ import {
   Send,
 } from "lucide-react";
 
-
-
 const STEPS = [
   { id: 1, label: "Thông tin cơ bản" },
   { id: 2, label: "Mô tả công việc" },
@@ -33,30 +31,23 @@ function StepIndicator({ current, Completed, onChange }) {
   return (
     <div className="flex items-center w-full px-6 py-3 bg-white border-b border-slate-200">
       {STEPS.map((step, idx) => {
-        const isActive = step.id === current;
         const isDone = Completed[step.id];
         return (
           <React.Fragment key={step.id}>
-            <button
-              onClick={() => onChange(step.id)}
-              className="flex flex-col items-center gap-1.5 group"
-            >
+            <button className="flex flex-col items-center gap-1.5 group">
               <div
                 className={`h-7 w-7 rounded-full flex items-center justify-center text-xs font-semibold border-2 transition-colors
                   ${
-                    isActive
-                      ? "bg-[#2170e4] border-[#2170e4] text-white"
-                      : isDone
-                        ? "bg-[#2170e4]/10 border-[#2170e4]/40 text-[#2170e4]"
-                        : "bg-white border-slate-300 text-slate-400"
+                    isDone
+                      ? "bg-[#2170e4]/10 border-[#2170e4]/40 text-[#2170e4]"
+                      : "bg-white border-slate-300 text-slate-400"
                   }`}
               >
                 {isDone ? <Check size={14} /> : step.id}
               </div>
+              {console.log(Completed)}
               <span
-                className={`text-[11px] whitespace-nowrap ${
-                  isActive ? "text-[#2170e4] font-medium" : "text-slate-400"
-                }`}
+                className={`text-[11px] whitespace-nowrap font-medium text-slate-400`}
               >
                 {step.label}
               </span>
@@ -74,8 +65,6 @@ function StepIndicator({ current, Completed, onChange }) {
     </div>
   );
 }
-
-
 
 function SectionCard({ icon: Icon, title, children }) {
   return (
@@ -122,6 +111,8 @@ export default function JobPostingForm() {
     salaryFrom: 0,
     salaryTo: 0,
     benefits: "",
+    begins: "",
+    expired: "",
   });
 
   const [questions, setQuestions] = useState([
@@ -145,7 +136,7 @@ export default function JobPostingForm() {
       questions?.length > 0 &&
       questions.every((q) => (q.text ?? "").trim() !== ""),
 
-    6: true,
+    6: false,
   };
 
   const [skills, setSkills] = useState(["Figma", "Prototyping", "UI/UX"]);
@@ -475,10 +466,30 @@ export default function JobPostingForm() {
           <SectionCard icon={Settings} title="Cài đặt đăng tin">
             <div className="grid grid-cols-2 gap-4 mb-4">
               <Field label="Ngày đăng">
-                <input type="date" className={inputClass} />
+                <input
+                  type="date"
+                  className={inputClass}
+                  value={form.begins}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      begins: e.target.value,
+                    })
+                  }
+                />
               </Field>
               <Field label="Ngày hết hạn">
-                <input type="date" className={inputClass} />
+                <input
+                  type="date"
+                  className={inputClass}
+                  value={form.expired}
+                  onChange={(e) =>
+                    setForm({
+                      ...form,
+                      expired: e.target.value,
+                    })
+                  }
+                />
               </Field>
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -492,6 +503,9 @@ export default function JobPostingForm() {
                     name="visibility"
                     defaultChecked
                     className="text-[#2170e4]"
+                    onChange={(e) => {
+                      console.log(e.target.value);
+                    }}
                   />
                   Công khai (Trang nghề nghiệp & các sàn việc làm)
                 </label>
@@ -532,11 +546,10 @@ export default function JobPostingForm() {
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" /> LIVE
             PREVIEW
           </div>
-
           <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
             <div className="bg-gradient-to-br from-[#2170e4] to-[#0099FF] p-4 text-white">
               <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center mb-3 text-sm font-bold">
-                T
+                NTD
               </div>
               <h4 className="font-semibold text-sm">
                 {form.title || "Tiêu đề công việc"}
@@ -546,12 +559,18 @@ export default function JobPostingForm() {
               </p>
             </div>
             <div className="p-4 space-y-2">
-              <div className="flex items-center gap-2 text-xs text-slate-500">
+              <div className="flex flex-wrap items-center gap-2 text-xs text-slate-500">
                 <span className="px-2 py-0.5 rounded-full bg-slate-100">
                   {form.location || "Địa điểm"}
                 </span>
+
+                <span className="px-2 py-0.5 rounded-full bg-slate-100 whitespace-nowrap">
+                  {form.begins || "Ngày đăng"} -{" "}
+                  {form.expired || "Hạn kết thúc"}
+                </span>
+
                 <span className="px-2 py-0.5 rounded-full bg-slate-100">
-                  {form.jobType || "remote"}
+                  {form.jobType || "Loại công việc"}
                 </span>
               </div>
               <p className="text-xs text-slate-500">
