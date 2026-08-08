@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import TaoTinTuyenDung from "./Tao-tin-tuyen-dung";
 
 import { ChevronRight, MoreHorizontal, Rocket, Download } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
