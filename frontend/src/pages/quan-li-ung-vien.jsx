@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-
+import React, { useRef, useState } from "react";
+import PropTypes from "prop-types";
 import {
   X,
   Download,
@@ -7,12 +7,12 @@ import {
   Sparkles,
   RefreshCw,
   Search,
-  Calendar,
   SlidersHorizontal,
   ChevronLeft,
   ChevronRight,
   FileText,
   Send,
+  User,
 } from "lucide-react";
 
 import pic from "../picture_sec/pic_default.jpg";
@@ -49,16 +49,181 @@ const CANDIDATES = [
       // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
     ],
   },
-  { id: 2 },
-  { id: 3 },
-  { id: 4 },
-  { id: 5 },
-  { id: 6 },
-  { id: 7 },
-  { id: 8 },
-  { id: 9 },
-  { id: 10 },
-  { id: 11 },
+
+  {
+    id: 2,
+    name: "lê đại thú",
+    email: "kietthaivo2006@gmail.com",
+    avatar: pic,
+    role: "Senior Backend Engineer",
+    location: "HaiChau, DN",
+    tags: ["Remote-friendly"],
+    date: "24 Th10, 2026",
+    score: 100,
+    stage: "Interviewing",
+    recruiter: "NgocAnh",
+    recruiterAvatar: pic,
+    skills: ["DEV"],
+    resume: "vo_kiet_resume_2023.pdf",
+
+    successPrediction: 0,
+    skillGaps: [
+      // { name: "Distributed Systems", status: "ok" },
+      // { name: "Kubernetes/Helm", status: "warn" },
+      // { name: "Team Leadership", status: "ok" },
+    ],
+
+    timeline: [
+      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+    ],
+  },
+  {
+    id: 3,
+    name: "Kiều lương tâm",
+    email: "kietthaivo2006@gmail.com",
+    avatar: pic,
+    role: "Senior Backend Engineer",
+    location: "HaiChau, DN",
+    tags: ["Remote-friendly"],
+    date: "24 Th10, 2026",
+    score: 100,
+    stage: "Interviewing",
+    recruiter: "NgocAnh",
+    recruiterAvatar: pic,
+    skills: ["DEV"],
+    resume: "vo_kiet_resume_2023.pdf",
+
+    successPrediction: 0,
+    skillGaps: [
+      // { name: "Distributed Systems", status: "ok" },
+      // { name: "Kubernetes/Helm", status: "warn" },
+      // { name: "Team Leadership", status: "ok" },
+    ],
+
+    timeline: [
+      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+    ],
+  },
+  {
+    id: 4,
+    name: "Ngo thua an",
+    email: "kietthaivo2006@gmail.com",
+    avatar: pic,
+    role: "Senior Backend Engineer",
+    location: "HaiChau, DN",
+    tags: ["Remote-friendly"],
+    date: "24 Th10, 2026",
+    score: 100,
+    stage: "Interviewing",
+    recruiter: "NgocAnh",
+    recruiterAvatar: pic,
+    skills: ["DEV"],
+    resume: "vo_kiet_resume_2023.pdf",
+
+    successPrediction: 0,
+    skillGaps: [
+      // { name: "Distributed Systems", status: "ok" },
+      // { name: "Kubernetes/Helm", status: "warn" },
+      // { name: "Team Leadership", status: "ok" },
+    ],
+
+    timeline: [
+      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+    ],
+  },
+  {
+    id: 5,
+    name: "Vo van b",
+    email: "kietthaivo2006@gmail.com",
+    avatar: pic,
+    role: "Senior Backend Engineer",
+    location: "HaiChau, DN",
+    tags: ["Remote-friendly"],
+    date: "24 Th10, 2026",
+    score: 100,
+    stage: "Interviewing",
+    recruiter: "NgocAnh",
+    recruiterAvatar: pic,
+    skills: ["DEV"],
+    resume: "vo_kiet_resume_2023.pdf",
+
+    successPrediction: 0,
+    skillGaps: [
+      // { name: "Distributed Systems", status: "ok" },
+      // { name: "Kubernetes/Helm", status: "warn" },
+      // { name: "Team Leadership", status: "ok" },
+    ],
+
+    timeline: [
+      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+    ],
+  },
+  {
+    id: 6,
+    name: "Nguyen văn a",
+    email: "kietthaivo2006@gmail.com",
+    avatar: pic,
+    role: "Senior Backend Engineer",
+    location: "HaiChau, DN",
+    tags: ["Remote-friendly"],
+    date: "24 Th10, 2026",
+    score: 100,
+    stage: "Interviewing",
+    recruiter: "NgocAnh",
+    recruiterAvatar: pic,
+    skills: ["DEV"],
+    resume: "vo_kiet_resume_2023.pdf",
+
+    successPrediction: 0,
+    skillGaps: [
+      // { name: "Distributed Systems", status: "ok" },
+      // { name: "Kubernetes/Helm", status: "warn" },
+      // { name: "Team Leadership", status: "ok" },
+    ],
+
+    timeline: [
+      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+    ],
+  },
+  {
+    id: 7,
+    name: "Ng Tai Loc",
+    email: "kietthaivo2006@gmail.com",
+    avatar: pic,
+    role: "Senior Backend Engineer",
+    location: "HaiChau, DN",
+    tags: ["Remote-friendly"],
+    date: "24 Th10, 2026",
+    score: 100,
+    stage: "Interviewing",
+    recruiter: "NgocAnh",
+    recruiterAvatar: pic,
+    skills: ["DEV"],
+    resume: "vo_kiet_resume_2023.pdf",
+
+    successPrediction: 0,
+    skillGaps: [
+      // { name: "Distributed Systems", status: "ok" },
+      // { name: "Kubernetes/Helm", status: "warn" },
+      // { name: "Team Leadership", status: "ok" },
+    ],
+
+    timeline: [
+      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+    ],
+  },
 ];
 
 const STAT_CARDS = [
@@ -337,7 +502,41 @@ function SectionLabel({ children, className = "" }) {
 // App chính
 // ---------------------------------------------------------------------------
 
-export default function CandidateManagement() {
+export default function CandidateManagement(props) {
+
+  CandidateManagement.propTypes = {
+    onSubmit: PropTypes.func,
+  };
+
+  CandidateManagement.defaultProps = {
+    onSubmit: null,
+  };
+
+  const { onSubmit } = props;
+  const [SearchTerm, SetSearchTerm] = useState('');
+  const TypeTimeOutRef = useRef(null);
+
+  function HandleSearchChange(e) {
+    const CallValue = e.target.value;
+    SetSearchTerm(CallValue);
+
+    console.log("giá trị input vào là: ", CallValue);
+    
+    if (!onSubmit) return;
+    if (TypeTimeOutRef.current) {
+      clearTimeout(TypeTimeOutRef.current);
+    }
+    TypeTimeOutRef.current = setTimeout(() => {
+      const formValue = {
+        SearchTerm: CallValue,
+      };
+      console.log("formValue:", formValue);
+      onSubmit(formValue);
+    }, 400);
+  }
+
+  // connect with backend to search
+
   const Item_per_page = 6;
 
   const [currentPage, setCurrentPage] = useState(1);
@@ -363,7 +562,7 @@ export default function CandidateManagement() {
   return (
     <div className="flex h-screen bg-slate-50 font-sans">
       {/* Danh sách ứng viên (bên trái) */}
-      <main className="flex-1 overflow-auto no-scrollbar px-8 py-7">
+      <main className="flex-1 overflow-auto no-scrollbar px-7 py-6">
         <div className="flex justify-between items-start flex-wrap gap-3">
           <div>
             <h1 className="text-2xl font-extrabold text-blue-600 m-0">
@@ -427,17 +626,19 @@ export default function CandidateManagement() {
             <input
               placeholder="Tìm kiếm ứng viên"
               className="w-full py-[9px] pl-8 pr-2.5 rounded-lg border border-slate-200 text-[13px] box-border"
+              type="text"
+              value={SearchTerm}
+              onChange={HandleSearchChange}
             />
           </div>
+
           <select className={selectClass}>
             <option>Tất cả tin tuyển dụng</option>
           </select>
           <select className={selectClass}>
             <option>Tất cả vị trí</option>
           </select>
-          <button className={`${toolBtnClass} px-2.5`}>
-            <Calendar size={15} />
-          </button>
+          <button className={`${toolBtnClass} px-2.5`}>Xóa</button>
           <button className={`${toolBtnClass} px-3`}>
             <SlidersHorizontal size={14} /> Lọc thêm
           </button>
@@ -469,6 +670,7 @@ export default function CandidateManagement() {
             <tbody>
               {DisplayCandidate.map((c) => {
                 const isSelected = c.id === selectedId;
+
                 return (
                   <tr
                     key={c.id}
@@ -485,6 +687,7 @@ export default function CandidateManagement() {
                         onClick={(e) => e.stopPropagation()}
                       />
                     </td>
+
                     <td className="px-4 py-3 border-b border-slate-100">
                       <div className="flex items-center gap-2.5">
                         <img
@@ -502,21 +705,25 @@ export default function CandidateManagement() {
                         </div>
                       </div>
                     </td>
+
                     <td className="px-4 py-3 border-b border-slate-100 text-[13px] text-slate-700">
                       {c.role}
                     </td>
+
                     <td className="px-4 py-3 border-b border-slate-100 text-[13px] text-slate-700">
                       {c.date}
                     </td>
+
                     <td className="px-4 py-3 border-b border-slate-100">
                       <span
                         className={`inline-flex items-center gap-1 font-bold text-xs px-[9px] py-[3px] rounded-full ${scoreClasses(
                           c.score,
                         )}`}
                       >
-                        ⚡ {c.score} %
+                        ⚡{c.score}%
                       </span>
                     </td>
+
                     <td className="px-4 py-3 border-b border-slate-100">
                       <span
                         className={`font-bold text-xs px-2.5 py-[3px] rounded-full ${stageClasses(
@@ -528,6 +735,7 @@ export default function CandidateManagement() {
                           : "Đang xem xét"}
                       </span>
                     </td>
+
                     <td className="px-4 py-3 border-b border-slate-100">
                       <div className="flex items-center gap-2">
                         <img

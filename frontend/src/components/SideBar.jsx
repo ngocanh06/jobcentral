@@ -91,11 +91,13 @@ export default function SideBar() {
           </h1>
           <p className="text-xs text-slate-400">System Employer</p>
         </div>
+
         <nav className="flex-1 px-2 space-y-0.5">
           {navItems.map((item) => (
             <SidebarItem key={item.label} {...item} />
           ))}
         </nav>
+        
         <div className="px-2 pb-2">
           <p className="px-4 text-[10px] tracking-wider text-slate-400 font-medium mb-1">
             HỆ THỐNG
