@@ -15,6 +15,7 @@ import {
   User,
 } from "lucide-react";
 
+import * as XLSX from "xlsx";
 import pic from "../picture_sec/pic_default.jpg";
 
 // Dữ liệu mẫu — thay bằng dữ liệu thật của bạn (props / API) khi tích hợp
@@ -499,11 +500,31 @@ function SectionLabel({ children, className = "" }) {
 }
 
 // ---------------------------------------------------------------------------
+// connect desktop (xuất file)
+// ---------------------------------------------------------------------------
+function HandleExportExcel() {
+  const ExcelData = CANDIDATES.map((c) => ({
+    
+    "Ứng viên": c.name,
+    "Email": c.email,
+    "Vị trí ứng tuyển": c.role,
+    "Ngày": c.date,
+    "Điểm AI": c.score,
+    "Giai đoạn": c.stage,
+    "Người tuyển dụng": c.recruiter,
+  }));
+
+  const worksheet = XLSX.utils.json_to_sheet(ExcelData);
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, "Ứng viên");
+
+  XLSX.writeFile(workbook, "Danh-sach-ung-vien.xlsx");
+}
+// ---------------------------------------------------------------------------
 // App chính
 // ---------------------------------------------------------------------------
 
 export default function CandidateManagement(props) {
-
   CandidateManagement.propTypes = {
     onSubmit: PropTypes.func,
   };
@@ -513,7 +534,7 @@ export default function CandidateManagement(props) {
   };
 
   const { onSubmit } = props;
-  const [SearchTerm, SetSearchTerm] = useState('');
+  const [SearchTerm, SetSearchTerm] = useState("");
   const TypeTimeOutRef = useRef(null);
 
   function HandleSearchChange(e) {
@@ -521,7 +542,7 @@ export default function CandidateManagement(props) {
     SetSearchTerm(CallValue);
 
     console.log("giá trị input vào là: ", CallValue);
-    
+
     if (!onSubmit) return;
     if (TypeTimeOutRef.current) {
       clearTimeout(TypeTimeOutRef.current);
@@ -573,22 +594,27 @@ export default function CandidateManagement(props) {
             </p>
           </div>
           <div className="flex gap-2">
-            <button className={toolBtnClass}>
+            <button className={toolBtnClass} onClick={HandleExportExcel}>
               <Download size={14} /> Xuất file
             </button>
             <button className={toolBtnClass}>
               <Layers size={14} /> Thao tác hàng loạt
             </button>
-            <button className={`${toolBtnClass} bg-slate-900 text-white`}>
+            <button
+              className={`${toolBtnClass} bg-slate-900`}
+              onClick={() => {
+                window.location.href = "https://chatgpt.com/";
+              }}
+            >
               <Sparkles size={14} /> Sàng lọc AI
             </button>
-            <button className={`${toolBtnClass} bg-blue-600 text-white`}>
-              <RefreshCw
-                size={14}
-                onClick={() => {
-                  window.location.reload();
-                }}
-              />{" "}
+            <button
+              className={`${toolBtnClass} bg-blue-600`}
+              onClick={() => {
+                window.location.reload();
+              }}
+            >
+              <RefreshCw size={14} />
               Làm mới
             </button>
           </div>
