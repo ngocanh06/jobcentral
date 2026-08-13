@@ -9,6 +9,7 @@ import {
   Download,
   Paperclip,
   Check,
+  Loader2,
 } from "lucide-react";
 
 const faqs = [
@@ -32,6 +33,29 @@ export default function SupportCenter() {
   const [state, handleSubmit] = useForm("xvkpawjg");
   const toggleFaq = (i) => setOpenFaq(openFaq === i ? null : i);
   const fileInputRef = useRef(null);
+
+
+  const [submitting, setSubmitting] = useState(false);
+  const [succeeded, setSucceeded] = useState(false);
+
+  const handleSubmied = async (e) => {
+    e.preventDefault();
+
+    setSubmitting(true);
+    setSucceeded(false);
+
+    try {
+      // Gọi API ở đây
+      // await axios.post(...);
+      setSucceeded(true);
+    } catch (error) {
+      console.error("Gửi yêu cầu thất bại:", error);
+      setSucceeded(false);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-50 py-10 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
@@ -238,14 +262,22 @@ export default function SupportCenter() {
                 </button>
 
                 <button
-                  className="bg-blue-600 hover:bg-blue-700 transition-colors text-white text-sm font-semibold px-5 py-2.5 rounded-lg"
                   type="submit"
                   disabled={state.submitting}
+                  className={`flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-5 py-2.5 rounded-lg`}
                 >
-                  {state.submitting ? "Đang gửi" : "Gửi yêu cầu ngay"}
-
-                  {state.succeeded && (
-                    <Check className="w-4 h-4 text-write-900" />
+                  {state.submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Đang gửi...
+                    </>
+                  ) : state.succeeded ? (
+                    <>
+                      <Check className="w-4 h-4 disabled:cursor-not-allowed" />
+                      Đã gửi thành công
+                    </>
+                  ) : (
+                    "Gửi yêu cầu ngay"
                   )}
                 </button>
               </div>
