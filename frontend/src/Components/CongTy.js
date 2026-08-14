@@ -1,4 +1,4 @@
-// src/components/Industries.jsx
+// src/Components/CongTy.js (Industries)
 import React from "react";
 import { industries } from "../Data/MockData.js";
 
@@ -6,7 +6,7 @@ export default function Industries() {
     return (
         <section className="w-full px-6 py-14 lg:px-10 xl:px-16">
             <div className="text-center">
-                <h2 className="text-[30px] font-bold">
+                <h2 className="text-[30px] font-bold text-[#0d1c2f]">
                     Việc Làm Theo <span className="text-[#2170e4]">Ngành Nghề</span>
                 </h2>
                 <p className="mt-3 text-[#434654]">
@@ -18,7 +18,7 @@ export default function Industries() {
                 {industries.map((industry, index) => (
                     <button
                         key={industry.name}
-                        className="group flex h-[154px] flex-col items-center justify-center gap-4 rounded-2xl border border-[#e9edff] bg-white shadow-[0_4px_6px_rgba(0,61,155,0.04)] transition hover:-translate-y-1 hover:shadow-lg"
+                        className="group flex h-[154px] flex-col items-center justify-center gap-4 rounded-2xl border border-[#e9edff] bg-white shadow-[0_4px_6px_rgba(0,61,155,0.04)] transition hover:-translate-y-1 hover:shadow-lg hover:border-[#2170e4]"
                     >
                         <div
                             className={`flex h-16 w-16 items-center justify-center rounded-full text-xl ${index % 2 === 0
@@ -29,7 +29,7 @@ export default function Industries() {
                             {industry.icon}
                         </div>
 
-                        <span className="text-sm font-bold text-[#051a3e]">
+                        <span className="text-sm font-bold text-[#051a3e] group-hover:text-[#2170e4]">
                             {industry.name}
                         </span>
                     </button>
