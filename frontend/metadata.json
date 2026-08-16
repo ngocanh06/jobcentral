@@ -1,6 +1,0 @@
-{
-  "name": "JobCentral - Tuyển Dụng & Việc Làm Đã Lưu",
-  "description": "Nền tảng tìm kiếm việc làm, quản lý việc làm đã lưu, kết nối nhà tuyển dụng và tạo CV chuyên nghiệp.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
