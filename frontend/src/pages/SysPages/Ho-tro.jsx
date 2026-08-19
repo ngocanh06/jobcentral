@@ -60,7 +60,7 @@ export default function SupportCenter() {
     <div className="min-h-screen bg-slate-50 py-10 px-4">
       <div className="max-w-4xl mx-auto bg-white rounded-2xl border border-slate-200 shadow-sm p-8">
         {/* Header */}
-        <h1 className="text-2xl font-bold text-[#2170e4] mb-1">
+        <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
           Trung tâm Hỗ trợ &amp; Liên hệ
         </h1>
         <p className="text-slate-500 mb-6">

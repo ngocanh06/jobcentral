@@ -11,9 +11,6 @@ import {
   BarChart3,
   TrendingUp,
   Code2,
-  Palette,
-  Receipt,
-  Clock,
 } from "lucide-react";
 
 import { Link } from "react-router-dom";
@@ -69,54 +66,17 @@ const statusStyles = {
 const jobs = [
   {
     icon: Code2,
-    iconBg: "bg-blue-50",
+    // default
+    iconBg: "bg-blue-50", 
     iconColor: "text-blue-600",
-    title: "Senior React Developer",
-    meta: "Full-time • Hồ Chí Minh",
+
+    title: "Dev FullStack",
+    meta: "Full-time • Đà Nẵng",
     dept: "Engineering",
-    date: "12/05/2024",
-    applicants: "124",
-    views: "3,2k lượt xem",
+    date: "09/08/2026",
+    applicants: "30",
+    // views: "3,2k lượt xem",
     status: "Đang hoạt động",
-    note: "",
-  },
-  {
-    icon: Palette,
-    iconBg: "bg-orange-50",
-    iconColor: "text-orange-500",
-    title: "UI/UX Designer (Product)",
-    meta: "Remote • Toàn quốc",
-    dept: "Design Team",
-    date: "10/05/2024",
-    applicants: "86",
-    views: "1,8k lượt xem",
-    status: "Tin nháp",
-    note: "",
-  },
-  {
-    icon: Receipt,
-    iconBg: "bg-rose-50",
-    iconColor: "text-rose-400",
-    title: "Accountant Specialist",
-    meta: "Full-time • Hà Nội",
-    dept: "Finance",
-    date: "15/04/2024",
-    applicants: "45",
-    views: "900 lượt xem",
-    status: "Đã hết hạn",
-    note: "",
-  },
-  {
-    icon: Clock,
-    iconBg: "bg-blue-50",
-    iconColor: "text-blue-500",
-    title: "Marketing Intern",
-    meta: "Part-time • Đà Nẵng",
-    dept: "Marketing",
-    date: "Dự kiến 20/05",
-    applicants: "0",
-    views: "Chờ đăng",
-    status: "Đã lên lịch",
     note: "",
   },
 ];
@@ -137,15 +97,17 @@ export default function Quan_li_tin_tuyen_dung() {
     <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
       <div className="max-w-6xl mx-auto space-y-6">
         {/* Header */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex justify-between">
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-blue-600">
+            <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
               Quản lý đăng tuyển
             </h1>
             <p className="text-slate-400 text-sm mt-1">
               Tạo, theo dõi, chỉnh sửa và quản lý các chiến dịch tuyển dụng của bạn.
             </p>
           </div>
+
+
           <Link to={"/Tao-tin-tuyen-dung"}>
               <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
                 <span className="text-lg leading-none">+</span> Tạo tin tuyển

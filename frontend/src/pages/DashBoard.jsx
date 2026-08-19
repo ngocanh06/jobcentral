@@ -108,11 +108,18 @@ function StatCard({ label, value, change, up }) {
 export default function RecruiterDashboard() {
   const maxVal = Math.max(...weeklyApplicants.map((d) => d.value));
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 flex">
+    <div className="min-h-screen overflow-auto no-scrollbar bg-slate-50 font-sans text-slate-900 flex">
       <div className="flex-1 min-w-0">
         <main className="p-6 space-y-6">
-          <div className="flex justify-end">
-
+          <div className="flex justify-between">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
+                DashBoard
+              </h1>
+              <p className="text-[13.5px] text-slate-500 mt-1 max-w-[420px]">
+                Theo dõi tổng quan và quản lý hiệu quả hoạt động tuyển dụng.
+              </p>
+            </div>
             <Link to={"/Tao-tin-tuyen-dung"}>
               <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
                 <span className="text-lg leading-none">+</span> Tạo tin tuyển
@@ -340,8 +347,24 @@ export default function RecruiterDashboard() {
           </div>
 
           {/* Upgrade banner */}
-          <div className="bg-sky-50 border border-sky-100 rounded-xl p-6 flex items-center justify-between gap-6">
-            <div>
+          <div className="relative overflow-hidden bg-sky-50 border border-sky-100 rounded-xl p-6 flex items-center justify-between gap-6">
+            {/* Các hạt sáng nhỏ bay lên */}
+            {[...Array(30)].map((_, i) => (
+              <span
+                key={i}
+                className="absolute rounded-full bg-[#2170e4]/40"
+                style={{
+                  width: `${5 + (i % 3) * 2}px`,
+                  height: `${5 + (i % 3) * 2}px`,
+                  left: `${(i * 8.3) % 100}%`,
+                  bottom: "-10px",
+                  animation: `rise ${4 + (i % 4)}s linear infinite`,
+                  animationDelay: `${i * 0.4}s`,
+                }}
+              />
+            ))}
+
+            <div className="relative z-10">
               <h3 className="font-semibold text-sm mb-1">
                 Nâng cấp tài khoản Pro để tiếp cận 5.000+ ứng viên tiềm năng
                 ngay hôm nay!
@@ -352,9 +375,20 @@ export default function RecruiterDashboard() {
                 ưu hóa quy trình tuyển dụng của bạn.
               </p>
             </div>
-            <button className="bg-[#2170e4] text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 whitespace-nowrap">
-              <Rocket size={15} /> Nâng cấp ngay
-            </button>
+
+            <Link to={"/Goi-dich-vu"} className="relative z-10">
+              <button className="bg-[#2170e4] text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 whitespace-nowrap">
+                <Rocket size={15} /> Nâng cấp ngay
+              </button>
+            </Link>
+
+            <style>{`
+    @keyframes rise {
+      0% { transform: translateY(0) scale(1); opacity: 0; }
+      10% { opacity: 1; }
+      100% { transform: translateY(-140px) scale(0.5); opacity: 0; }
+    }
+  `}</style>
           </div>
 
           {/* Footer */}

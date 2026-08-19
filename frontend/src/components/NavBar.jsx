@@ -47,15 +47,15 @@ export default function NavBar() {
               options={{
                 strings: [
                   "Welcome back, *nhà tuyển dụng!",
-                  `Good ${session} !`,
-                  "Welcome to JobCentral",
+                  `Good ${session}!`,
+                  `Welcome to JobCentral`,
                   "Let's make hiring easier.",
                   "Ready to hire top talents?",
                 ],
                 autoStart: true,
                 loop: true,
                 cursor: "|",
-                delay: 40,
+                delay: 60,
                 deleteSpeed: 40,
               }}
             />

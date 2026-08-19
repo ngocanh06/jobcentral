@@ -12,7 +12,6 @@ import {
   ChevronRight,
   FileText,
   Send,
-  User,
 } from "lucide-react";
 
 import * as XLSX from "xlsx";
@@ -586,7 +585,7 @@ export default function CandidateManagement(props) {
       <main className="flex-1 overflow-auto no-scrollbar px-7 py-6">
         <div className="flex justify-between items-start flex-wrap gap-3">
           <div>
-            <h1 className="text-2xl font-extrabold text-blue-600 m-0">
+            <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
               Quản lý ứng viên
             </h1>
             <p className="text-[13.5px] text-slate-500 mt-1 max-w-[420px]">

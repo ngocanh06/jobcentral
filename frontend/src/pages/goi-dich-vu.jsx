@@ -5,18 +5,20 @@ const plans = [
   {
     tag: "CƠ BẢN",
     tagClass: "bg-slate-100 text-slate-500",
-    name: "Gói Khởi Đầu",
+    name: "Gói Cơ Băn",
     price: "0đ",
-    desc: "Phù hợp cho freelancer hoặc các startup giai đoạn sơ khai.",
+    desc: "Phù hợp cho freelancer hoặc các startup giai đoạn sơ khai hoặc nhà tuyển dụng mới.",
     features: [
-      { text: "3 tin tuyển dụng hoạt động", state: "on" },
-      { text: "Quản lý ứng viên cơ bản", state: "on" },
-      { text: "AI Matching tự động", state: "off" },
+      { text: "Đăng 1 bài lên FanPage", state: "on" },
+      { text: "Tiếp cận 5.00 - 10.000 ứng viên", state: "on" },
+      { text: "AI Matching vấn đáp tự động", state: "on" },
     ],
+
     cta: "Bắt đầu miễn phí",
     variant: "outline",
     card: "bg-white border border-slate-200",
   },
+
   {
     tag: "TĂNG TRƯỞNG",
     badge: "Best Value",
@@ -25,26 +27,28 @@ const plans = [
     price: "0đ",
     desc: "Giải pháp tối ưu cho doanh nghiệp vừa và nhỏ.",
     features: [
-      { text: "15 tin tuyển dụng hoạt động", state: "on" },
-      { text: "Tự động hóa workflow email", state: "on" },
-      { text: "Phân tích hiệu suất nguồn", state: "on" },
+      { text: "Đăng 02 bài lên Fanpage", state: "on" },
+      { text: "Ghim bài lên Fanpage trong 03 ngày", state: "on" },
+      { text: "Tiếp cận 15.000 - 20.000 ứng viên", state: "on" },
       { text: "Phỏng vấn video (Sắp tới)", state: "soon" },
     ],
     cta: "Nâng cấp ngay",
     variant: "outline",
     card: "bg-white border border-slate-200",
   },
+
   {
     tag: "BỨT PHÁ",
+    badge: "NEW",
     tagClass: "bg-white/15 text-white",
-    name: "Gói Chuyên Nghiệp",
+    name: "Gói Cao Cấp",
     price: "0đ",
     desc: "Khai phá sức mạnh AI và quản trị dữ liệu tập trung.",
     features: [
-      { text: "Không giới hạn tin đăng", state: "star" },
-      { text: "AI Matching & Ranking 2.0", state: "star" },
-      { text: "A/B Testing chiến dịch email", state: "star" },
-      { text: "Dashboard tùy chỉnh chuyên sâu", state: "star" },
+      { text: "Bao gồm toàn bộ quyền lợi của gói Tiêu Chuẩn", state: "on" },
+      { text: "Chạy Quảng Cáo 05 ngày", state: "on" },
+      { text: "Hỗ trợ tương tác, kéo tin nhắn trong 03 ngày đầu", state: "on" },
+      { text: "Tiếp cận 30.000 - 50.000 ứng viên", state: "on" },
     ],
     cta: "Nâng cấp ngay",
     variant: "solid",
@@ -52,15 +56,16 @@ const plans = [
     featured: true,
   },
   {
-    tag: "TẬP ĐOÀN",
+    tag: "CHUYÊN NGHIỆP",
     tagClass: "bg-slate-100 text-slate-500",
-    name: "Gói Doanh Nghiệp",
+    name: "Gói VIP",
     price: "Liên hệ",
     desc: "Tùy chỉnh riêng biệt theo cấu trúc của tập đoàn đa quốc gia.",
     features: [
-      { text: "Hỗ trợ kỹ thuật 24/7 & CSM riêng", state: "on" },
-      { text: "Full API Access & Webhooks", state: "on" },
-      { text: "Bảo mật SSO & On-prem option", state: "on" },
+      { text: "Đăng 04 bài lên Fanpage", state: "on" },
+      { text: "Luôn có 01 bài được ghim ưu tiên", state: "on" },
+      { text: "Chạy Quảng Cáo 14 ngày", state: "on" },
+      { text: "Tiếp cận > 80.000 ứng viên", state: "on" },
     ],
     cta: "Nâng ký ngay",
     variant: "outline",
@@ -108,7 +113,7 @@ export default function PricingPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-14">
-          <h1 className="text-3xl sm:text-4xl font-extrabold text-blue-600 mb-3">
+          <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
             Nâng tầm quy trình tuyển dụng của bạn
           </h1>
           <p className="text-slate-500 mb-8">
