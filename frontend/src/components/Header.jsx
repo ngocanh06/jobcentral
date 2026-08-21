@@ -122,11 +122,16 @@ export const Header = ({
             {/* Chat / Message Icon */}
             <button
               id="header-messages-btn"
-              onClick={() => onTabChange('jobs')}
+              onClick={() => onTabChange('messages')}
               title="Tin nhắn nhà tuyển dụng"
-              className="p-2 text-slate-700 hover:text-[#0A58CA] hover:bg-slate-50 rounded-full transition-colors cursor-pointer focus:outline-hidden"
+              className={`relative p-2 rounded-full transition-colors cursor-pointer focus:outline-hidden ${
+                activeTab === 'messages'
+                  ? 'text-[#0A58CA] bg-blue-50'
+                  : 'text-slate-700 hover:text-[#0A58CA] hover:bg-slate-50'
+              }`}
             >
               <MessageSquare className="w-5 h-5 stroke-[1.8]" />
+              <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#0A58CA] rounded-full ring-2 ring-white" />
             </button>
 
             {/* User Profile Section */}
@@ -165,6 +170,21 @@ export const Header = ({
                       <p className="text-xs text-slate-500 truncate">{currentUser.email}</p>
                     </div>
                     <div className="py-1">
+                      <button
+                        onClick={() => {
+                          onTabChange('messages');
+                          setProfileDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <MessageSquare className="w-4 h-4 text-slate-500" />
+                          <span>Tin nhắn tuyển dụng</span>
+                        </div>
+                        <span className="px-1.5 py-0.5 bg-blue-100 text-[#0A58CA] text-[10px] font-bold rounded-full">
+                          2 mới
+                        </span>
+                      </button>
                       <button
                         onClick={() => {
                           onTabChange('cv-builder');

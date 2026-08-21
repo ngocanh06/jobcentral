@@ -12,6 +12,7 @@ import { CompaniesView } from './components/CompaniesView';
 import { ReviewsView } from './components/ReviewsView';
 import { NewsView } from './components/NewsView';
 import { CVBuilderView } from './components/CVBuilderView';
+import { MessagesView } from './components/MessagesView';
 import { JobDetailModal } from './components/JobDetailModal';
 import { ApplyModal } from './components/ApplyModal';
 import { AuthModal } from './components/AuthModal';
@@ -25,6 +26,7 @@ export function App() {
   const [selectedJobForApply, setSelectedJobForApply] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+  const [targetCompanyFilter, setTargetCompanyFilter] = useState(null);
   const [currentUser, setCurrentUser] = useState({
     name: 'Nguyễn Minh Anh',
     email: 'minhanh.nguyen@example.com',
@@ -130,6 +132,8 @@ export function App() {
         {activeTab === 'companies' && (
           <CompaniesView
             companies={INITIAL_COMPANIES}
+            initialSearchQuery={targetCompanyFilter}
+            onResetSearch={() => setTargetCompanyFilter(null)}
             onSelectCompany={(c) => setActiveTab('jobs')}
             onExploreJobs={() => setActiveTab('jobs')}
           />
@@ -148,10 +152,23 @@ export function App() {
             onSavedJobsClick={() => setActiveTab('saved')}
           />
         )}
+
+        {activeTab === 'messages' && (
+          <MessagesView
+            currentUser={currentUser}
+            onViewJobDetail={(job) => setSelectedJobForDetail(job)}
+            onNavigateToJobs={() => setActiveTab('jobs')}
+            onNavigateToCompany={(companyName) => {
+              setTargetCompanyFilter(companyName);
+              setActiveTab('companies');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+          />
+        )}
       </main>
 
       {/* Footer */}
-      <Footer />
+      {activeTab !== 'messages' && <Footer />}
 
       {/* Modals & Portals */}
       {selectedJobForDetail && (
