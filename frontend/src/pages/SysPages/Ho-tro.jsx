@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { useForm, ValidationError } from "@formspree/react";
+import myHandBook from "../HandBook/recruitment-handbook-v1.pdf";
+import myFAG from "../FAQ/FAG-v1.pdf";
 import {
   Phone,
   Mail,
@@ -29,30 +30,64 @@ const faqs = [
 
 export default function SupportCenter() {
   const [openFaq, setOpenFaq] = useState(null);
-  const [form, setForm] = useState({ title: "", type: "", detail: "" });
-  const [state, handleSubmit] = useForm("xvkpawjg");
   const toggleFaq = (i) => setOpenFaq(openFaq === i ? null : i);
   const fileInputRef = useRef(null);
+  const [title, setTitle] = useState("");
+  const [type, setType] = useState("technical");
+  const [desc, setdecs] = useState("");
+  const [SelectedFileTemp, setSelectedFileTemp] = useState(null);
+  const [submitting, setsubmitting] = useState(false);
+  const [complete, setcomplete] = useState(false);
 
-
-  const [submitting, setSubmitting] = useState(false);
-  const [succeeded, setSucceeded] = useState(false);
-
-  const handleSubmied = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setSubmitting(true);
-    setSucceeded(false);
+    setsubmitting(true);
+    setcomplete(false);
+
+    const formData = new FormData();
+
+    formData.append("title", title);
+    formData.append("type", type);
+    formData.append("desc", desc);
+
+    if (SelectedFileTemp) {
+      formData.append("attachment", SelectedFileTemp, SelectedFileTemp.name);
+    }
+
+    formData.append("_subject", "Support Center - Yêu cầu hỗ trợ");
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
 
     try {
-      // Gọi API ở đây
-      // await axios.post(...);
-      setSucceeded(true);
+      const response = await fetch(
+        "https://formsubmit.co/kietthaivo2006@gmail.com",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      if (response.ok) {
+        alert("Gửi yêu cầu thành công!");
+        setTitle("");
+        setType("technical");
+        setdecs("");
+        setSelectedFileTemp(null);
+        setcomplete(true);
+        if (fileInputRef.current) {
+          fileInputRef.current.value = "";
+        }
+      } else {
+        console.error("FormSubmit error:", response.status);
+        setcomplete(false);
+        alert("Gửi thất bại!");
+      }
     } catch (error) {
-      console.error("Gửi yêu cầu thất bại:", error);
-      setSucceeded(false);
+      console.error("Error:", error);
+      alert("Có lỗi xảy ra khi gửi!");
     } finally {
-      setSubmitting(false);
+      setsubmitting(false);
     }
   };
 
@@ -105,6 +140,8 @@ export default function SupportCenter() {
             </p>
             <a
               href="https://maps.app.goo.gl/b4JNjGpGJ5aFfKva8"
+              target="_blank"
+              rel="noreferrer"
               className="text-sm font-semibold text-blue-600 hover:underline"
             >
               Xem bản đồ →
@@ -136,17 +173,28 @@ export default function SupportCenter() {
                       }`}
                     />
                   </button>
-                  {openFaq === i && (
-                    <div className="px-5 pb-4 -mt-1">
+                  <div
+                    className={`overflow-hidden transition-all duration-500 ease-in-out ${
+                      openFaq === i
+                        ? "max-h-96 opacity-100"
+                        : "max-h-0 opacity-0"
+                    }`}
+                  >
+                    <div className="px-5 pb-4 pt-1">
                       <p className="text-sm text-slate-500 leading-relaxed">
                         {f.a}
                       </p>
                     </div>
-                  )}
+                  </div>
                 </div>
               ))}
             </div>
-            <button className="w-full text-center text-sm font-medium text-blue-600 bg-blue-50/60 py-3 hover:bg-blue-50 transition-colors">
+            <button
+              className="w-full text-center text-sm font-medium text-blue-600 bg-blue-50/60 py-3 hover:bg-blue-50 transition-colors"
+              onClick={() =>
+                window.open(myFAG, "_blank", "noopener,noreferrer")
+              }
+            >
               Xem tất cả 50+ câu hỏi thường gặp
             </button>
           </div>
@@ -160,15 +208,25 @@ export default function SupportCenter() {
                 HDSD chi tiết của STAFF.
               </p>
             </div>
-            <button className="relative mt-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors text-white text-sm font-semibold py-2.5 rounded-lg">
-              Tải xuống PDF <Download className="w-4 h-4" />
+            <button
+              onClick={() =>
+                window.open(myHandBook, "_blank", "noopener,noreferrer")
+              }
+              className="relative mt-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-500 transition-colors text-white text-sm font-semibold py-2.5 rounded-lg"
+            >
+              Tải xuống PDF
+              <Download className="w-4 h-4" />
             </button>
           </div>
         </div>
-
         {/* Support form */}
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          action="https://formsubmit.co/kietthaivo2006@gmail.com"
+          method="POST"
+          encType="multipart/form-data"
+        >
           <div className="border border-slate-200 rounded-xl overflow-hidden">
             <div className="flex items-center justify-between px-5 py-4 bg-blue-50/50 border-b border-slate-100">
               <div className="flex items-center gap-2">
@@ -189,31 +247,41 @@ export default function SupportCenter() {
                     Tiêu đề yêu cầu
                   </label>
                   <input
-                    id="title"
-                    type="text"
                     name="title"
+                    type="text"
+                    value={title}
                     placeholder="Tóm tắt vấn đề của bạn"
-                    value={form.title}
-                    onChange={(e) =>
-                      setForm({ ...form, title: e.target.value })
-                    }
+                    onChange={(e) => setTitle(e.target.value)}
                     className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2.5 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-medium text-slate-600 mb-1.5">
-                    Loại yêu cầu
+                  <label
+                    htmlFor="Classify"
+                    className="block text-sm font-medium text-slate-700 mb-1.5"
+                  >
+                    Phân loại
                   </label>
-                  <input
-                    id="Classify"
-                    type="text"
-                    name="Classify"
-                    placeholder="Phân loại"
-                    value={form.type}
-                    onChange={(e) => setForm({ ...form, type: e.target.value })}
-                    className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2.5 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  />
+
+                  <div className="relative">
+                    <select
+                      name="type"
+                      id="Classify"
+                      value={type}
+                      onChange={(e) => setType(e.target.value)}
+                      className="w-full appearance-none text-sm text-slate-700 bg-white border border-slate-200 rounded-lg pl-3 pr-9 py-2.5 cursor-pointer transition-colors hover:border-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    >
+                      <option value="technical">Lỗi kỹ thuật</option>
+                      <option value="account">Tài khoản</option>
+                      <option value="interface">Giao diện</option>
+                      <option value="other">Khác</option>
+                    </select>
+                    <ChevronDown
+                      size={16}
+                      className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-slate-400"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -226,28 +294,28 @@ export default function SupportCenter() {
                   name="desc"
                   rows={8}
                   placeholder="Vui lòng cung cấp chi tiết lỗi, các bước thực hiện hoặc hình ảnh liên quan..."
-                  value={form.detail}
-                  onChange={(e) => setForm({ ...form, detail: e.target.value })}
+                  value={desc}
+                  onChange={(e) => setdecs(e.target.value)}
                   className="w-full text-sm border border-slate-200 rounded-lg px-3 py-2.5 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
                 />
               </div>
 
               <div className="flex items-center justify-between">
-                {/* <button className="flex items-center gap-1.5 text-xs text-slate-500 hover:text-slate-700 transition-colors">
-                  <Paperclip className="w-3.5 h-3.5" />
-                  Đính kèm ảnh chụp màn hình
-                </button> */}
-
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="image/*"
+                  name="attachment"
+                  accept="image/png, image/jpeg"
                   className="hidden"
                   onChange={(e) => {
                     const file = e.target.files[0];
-
                     if (file) {
                       console.log("Đã chọn:", file);
+                      if (file.size > 10 * 1024 * 1024) {
+                        alert("Ảnh không được vượt quá 10MB");
+                        return;
+                      }
+                      setSelectedFileTemp(file);
                     }
                   }}
                 />
@@ -258,20 +326,22 @@ export default function SupportCenter() {
                   onClick={() => fileInputRef.current.click()}
                 >
                   <Paperclip className="w-3.5 h-3.5" />
-                  Đính kèm ảnh chụp màn hình
+                  {SelectedFileTemp
+                    ? SelectedFileTemp.name
+                    : "Đính kèm ảnh chụp màn hình"}
                 </button>
 
                 <button
                   type="submit"
-                  disabled={state.submitting}
+                  disabled={submitting}
                   className={`flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors text-white text-sm font-semibold px-5 py-2.5 rounded-lg`}
                 >
-                  {state.submitting ? (
+                  {submitting ? (
                     <>
                       <Loader2 className="w-4 h-4 animate-spin" />
                       Đang gửi...
                     </>
-                  ) : state.succeeded ? (
+                  ) : complete ? (
                     <>
                       <Check className="w-4 h-4 disabled:cursor-not-allowed" />
                       Đã gửi thành công
