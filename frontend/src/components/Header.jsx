@@ -8,12 +8,16 @@ import {
   LogOut,
   Settings,
   FileCheck,
+  Heart,
+  Building2,
+  Sparkles,
 } from 'lucide-react';
 
 export const Header = ({
   activeTab,
   onTabChange,
   savedCount,
+  followedCompaniesCount = 0,
   onOpenAuth,
   currentUser,
   onLogout,
@@ -196,14 +200,36 @@ export const Header = ({
                         <span>Hồ sơ & CV của tôi</span>
                       </button>
                       <button
+                        id="header-profile-saved-jobs-btn"
                         onClick={() => {
                           onTabChange('saved');
                           setProfileDropdownOpen(false);
                         }}
-                        className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center space-x-2 cursor-pointer"
+                        className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
                       >
-                        <Bookmark className="w-4 h-4 text-slate-500" />
-                        <span>Việc làm đã lưu ({savedCount})</span>
+                        <div className="flex items-center space-x-2">
+                          <Bookmark className="w-4 h-4 text-slate-500" />
+                          <span>Việc làm đã lưu</span>
+                        </div>
+                        <span className="px-1.5 py-0.5 bg-slate-100 text-slate-700 text-[10px] font-bold rounded-full">
+                          {savedCount}
+                        </span>
+                      </button>
+                      <button
+                        id="header-profile-favorite-companies-btn"
+                        onClick={() => {
+                          onTabChange('favorite-companies');
+                          setProfileDropdownOpen(false);
+                        }}
+                        className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <Heart className="w-4 h-4 text-rose-500 fill-rose-500" />
+                          <span>Công ty đã yêu thích</span>
+                        </div>
+                        <span className="px-1.5 py-0.5 bg-rose-50 text-rose-600 border border-rose-100 text-[10px] font-bold rounded-full">
+                          {followedCompaniesCount}
+                        </span>
                       </button>
                     </div>
                     <div className="border-t border-slate-100 pt-1">

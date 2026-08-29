@@ -31,13 +31,30 @@ import {
   RotateCcw,
   SlidersHorizontal,
   X,
+  Building2,
+  Truck,
+  HeartPulse,
+  ShoppingBag,
+  Layers,
+  Headphones,
+  BookOpen,
+  ChevronUp,
+  Scale,
+  Factory,
+  UtensilsCrossed,
+  Share2,
 } from 'lucide-react';
+import { JobCardSkeleton } from './JobCardSkeleton';
+import { ErrorBoundary } from './ErrorBoundary';
+import bannerImage from '../assets/images/jobcentral_banner_1787972791221.jpg';
 
 export const AllJobsView = ({
   jobs,
+  isLoading = false,
   onToggleSave,
   onApply,
   onViewDetails,
+  onShare,
 }) => {
   // Search state & Advanced Filters
   const [keyword, setKeyword] = useState('');
@@ -46,6 +63,7 @@ export const AllJobsView = ({
   const [salaryRange, setSalaryRange] = useState('');
   const [experienceLevel, setExperienceLevel] = useState('');
   const [jobType, setJobType] = useState('');
+  const [isFiltering, setIsFiltering] = useState(false);
 
   // Dropdown states
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -69,6 +87,26 @@ export const AllJobsView = ({
   const [companyCarouselIndex, setCompanyCarouselIndex] = useState(0);
   const [chartPeriod, setChartPeriod] = useState('6months');
   const [followedCompanyIds, setFollowedCompanyIds] = useState(['c2']);
+  const [isExpandedIndustries, setIsExpandedIndustries] = useState(false);
+
+  const INITIAL_CATEGORY_COUNT = 7;
+
+  // Brief skeleton loading state trigger when search, filters or tabs change
+  useEffect(() => {
+    setIsFiltering(true);
+    const timer = setTimeout(() => {
+      setIsFiltering(false);
+    }, 280);
+    return () => clearTimeout(timer);
+  }, [
+    keyword,
+    industry,
+    location,
+    salaryRange,
+    experienceLevel,
+    jobType,
+    activeJobTab,
+  ]);
 
   const handleResetFilters = () => {
     setKeyword('');
@@ -88,11 +126,12 @@ export const AllJobsView = ({
     );
   };
 
-  // Categories for "Việc Làm Theo Ngành Nghề"
+  // Comprehensive Categories for "Việc Làm Theo Ngành Nghề"
   const industryCategories = [
     {
       id: 'tech',
       title: 'Công Nghệ',
+      fullName: 'Công nghệ thông tin / Phần mềm',
       icon: Code2,
       bgColor: 'bg-blue-50',
       iconColor: 'text-[#2170E4]',
@@ -101,6 +140,7 @@ export const AllJobsView = ({
     {
       id: 'marketing',
       title: 'Marketing',
+      fullName: 'Marketing / Truyền thông / PR',
       icon: Megaphone,
       bgColor: 'bg-orange-50',
       iconColor: 'text-orange-500',
@@ -109,6 +149,7 @@ export const AllJobsView = ({
     {
       id: 'finance',
       title: 'Tài Chính',
+      fullName: 'Tài chính / Kế toán / Ngân hàng',
       icon: CreditCard,
       bgColor: 'bg-emerald-50',
       iconColor: 'text-emerald-600',
@@ -117,6 +158,7 @@ export const AllJobsView = ({
     {
       id: 'design',
       title: 'Thiết Kế',
+      fullName: 'Thiết kế UI / UX / Đồ họa',
       icon: Palette,
       bgColor: 'bg-indigo-50',
       iconColor: 'text-indigo-600',
@@ -125,6 +167,7 @@ export const AllJobsView = ({
     {
       id: 'data',
       title: 'Dữ Liệu',
+      fullName: 'Dữ liệu & Trí tuệ nhân tạo (AI)',
       icon: BarChart2,
       bgColor: 'bg-amber-50',
       iconColor: 'text-amber-600',
@@ -133,10 +176,119 @@ export const AllJobsView = ({
     {
       id: 'aiml',
       title: 'AI & ML',
+      fullName: 'Dữ liệu & Trí tuệ nhân tạo (AI)',
       icon: Bot,
       bgColor: 'bg-purple-50',
       iconColor: 'text-purple-600',
       jobsCount: '650+',
+    },
+    {
+      id: 'sales',
+      title: 'Kinh Doanh',
+      fullName: 'Kinh doanh / Bán hàng (Sales)',
+      icon: TrendingUp,
+      bgColor: 'bg-rose-50',
+      iconColor: 'text-rose-600',
+      jobsCount: '2,150+',
+    },
+    {
+      id: 'hr',
+      title: 'Nhân Sự',
+      fullName: 'Nhân sự / Tuyển dụng (HR)',
+      icon: Users,
+      bgColor: 'bg-teal-50',
+      iconColor: 'text-teal-600',
+      jobsCount: '860+',
+    },
+    {
+      id: 'product',
+      title: 'Sản Phẩm & PM',
+      fullName: 'Quản lý dự án (Product / Project)',
+      icon: Rocket,
+      bgColor: 'bg-cyan-50',
+      iconColor: 'text-cyan-600',
+      jobsCount: '740+',
+    },
+    {
+      id: 'healthcare',
+      title: 'Y Tế & Dược',
+      fullName: 'Y tế / Dược phẩm / Chăm sóc sức khỏe',
+      icon: HeartPulse,
+      bgColor: 'bg-red-50',
+      iconColor: 'text-red-500',
+      jobsCount: '690+',
+    },
+    {
+      id: 'education',
+      title: 'Giáo Dục',
+      fullName: 'Giáo dục / Đào tạo / Giảng dạy',
+      icon: GraduationCap,
+      bgColor: 'bg-sky-50',
+      iconColor: 'text-sky-600',
+      jobsCount: '580+',
+    },
+    {
+      id: 'realestate',
+      title: 'Bất Động Sản',
+      fullName: 'Bất động sản / Xây dựng / Kiến trúc',
+      icon: Building2,
+      bgColor: 'bg-amber-50',
+      iconColor: 'text-amber-700',
+      jobsCount: '920+',
+    },
+    {
+      id: 'logistics',
+      title: 'Logistics',
+      fullName: 'Logistics / Xuất nhập khẩu / Chuỗi cung ứng',
+      icon: Truck,
+      bgColor: 'bg-lime-50',
+      iconColor: 'text-lime-700',
+      jobsCount: '1,050+',
+    },
+    {
+      id: 'service',
+      title: 'CSKH & Dịch Vụ',
+      fullName: 'Chăm sóc khách hàng / Dịch vụ',
+      icon: Headphones,
+      bgColor: 'bg-violet-50',
+      iconColor: 'text-violet-600',
+      jobsCount: '1,420+',
+    },
+    {
+      id: 'hospitality',
+      title: 'Khách Sạn & Du Lịch',
+      fullName: 'Khách sạn / Nhà hàng / Du lịch',
+      icon: UtensilsCrossed,
+      bgColor: 'bg-emerald-50',
+      iconColor: 'text-emerald-700',
+      jobsCount: '780+',
+    },
+    {
+      id: 'manufacturing',
+      title: 'Sản Xuất',
+      fullName: 'Sản xuất / Vận hành / Kỹ thuật công nghiệp',
+      icon: Factory,
+      bgColor: 'bg-slate-100',
+      iconColor: 'text-slate-700',
+      jobsCount: '890+',
+    },
+    {
+      id: 'legal',
+      title: 'Luật & Pháp Lý',
+      fullName: 'Luật / Pháp chế / Tuân thủ',
+      icon: Scale,
+      bgColor: 'bg-purple-50',
+      iconColor: 'text-purple-700',
+      jobsCount: '430+',
+    },
+    {
+      id: 'ecommerce',
+      title: 'E-Commerce',
+      fullName: 'Thương mại điện tử / Bán lẻ',
+      icon: ShoppingBag,
+      bgColor: 'bg-pink-50',
+      iconColor: 'text-pink-600',
+      jobsCount: '1,260+',
     },
   ];
 
@@ -150,7 +302,8 @@ export const AllJobsView = ({
           job.title?.toLowerCase().includes(kw) ||
           job.company?.toLowerCase().includes(kw) ||
           job.requirementsSummary?.toLowerCase().includes(kw) ||
-          job.category?.toLowerCase().includes(kw);
+          job.category?.toLowerCase().includes(kw) ||
+          job.industry?.toLowerCase().includes(kw);
         if (!matchesKw) return false;
       }
 
@@ -164,7 +317,15 @@ export const AllJobsView = ({
           (industry.includes('Thiết kế') && job.category === 'Thiết kế') ||
           (industry.includes('Tài chính') && job.category === 'Tài chính') ||
           (industry.includes('Marketing') && job.category === 'Marketing') ||
-          (industry.includes('Dữ liệu') && (job.category === 'Dữ liệu' || job.category === 'AI & ML'));
+          (industry.includes('Dữ liệu') && (job.category === 'Dữ liệu' || job.category === 'AI & ML')) ||
+          (industry.includes('Kinh doanh') && (job.category === 'Kinh doanh' || job.category === 'Sales')) ||
+          (industry.includes('Nhân sự') && job.category === 'Nhân sự') ||
+          (industry.includes('Sản phẩm') && (job.category === 'Sản phẩm' || job.category === 'Tài chính' || job.title?.toLowerCase().includes('product'))) ||
+          (industry.includes('Y tế') && (job.category === 'Y tế' || job.industry?.includes('Y tế'))) ||
+          (industry.includes('Giáo dục') && (job.category === 'Giáo dục' || job.industry?.includes('Giáo dục'))) ||
+          (industry.includes('Bất động sản') && (job.category === 'Bất động sản' || job.industry?.includes('Bất động sản'))) ||
+          (industry.includes('Logistics') && (job.category === 'Logistics' || job.industry?.includes('Logistics'))) ||
+          (industry.includes('CSKH') && (job.category === 'Dịch vụ' || job.industry?.includes('khách hàng')));
         if (!matchesInd) return false;
       }
 
@@ -357,7 +518,12 @@ export const AllJobsView = ({
                       'Kinh doanh / Bán hàng (Sales)',
                       'Nhân sự / Tuyển dụng (HR)',
                       'Quản lý dự án (Product / Project)',
-                      'Thương mại điện tử / Logistics',
+                      'Y tế / Dược phẩm / Chăm sóc sức khỏe',
+                      'Giáo dục / Đào tạo / Giảng dạy',
+                      'Bất động sản / Xây dựng / Kiến trúc',
+                      'Logistics / Xuất nhập khẩu / Chuỗi cung ứng',
+                      'Chăm sóc khách hàng / Dịch vụ',
+                      'Hành chính / Văn phòng / Trợ lý',
                     ].map((item) => {
                       const isSelected = (item === 'Tất cả ngành nghề' && !industry) || industry === item;
                       return (
@@ -541,9 +707,16 @@ export const AllJobsView = ({
             {[
               'UI/UX Designer',
               'ReactJS',
-              'Node.js',
+              'Golang',
+              'AI Engineer',
               'Product Manager',
               'Digital Marketing',
+              'Dược Sĩ',
+              'IELTS Teacher',
+              'Bất Động Sản',
+              'Logistics',
+              'Data Analyst',
+              'Sales B2B',
               'Fresher IT',
               'Remote',
             ].map((tag) => (
@@ -568,157 +741,151 @@ export const AllJobsView = ({
                 className="ml-auto inline-flex items-center space-x-1 text-slate-500 hover:text-rose-600 text-xs font-medium cursor-pointer"
               >
                 <RotateCcw className="w-3 h-3" />
-                <span>Đặt lại</span>
+                <span>Đặt lại tất cả</span>
               </button>
             )}
           </div>
         </div>
       </section>
 
-      {/* 2. OFFICIAL LAUNCH PROMOTIONAL BANNER */}
+      {/* 2. PROMOTIONAL HERO BANNER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6 sm:my-8">
-        <div className="relative rounded-3xl overflow-hidden shadow-lg border border-blue-400/20 bg-gradient-to-r from-[#023e8a] via-[#0077b6] to-[#03045e] text-white p-6 sm:p-10">
-          {/* Subtle Background Glows */}
-          <div className="absolute top-0 right-1/4 w-80 h-80 bg-cyan-400/15 rounded-full blur-3xl pointer-events-none" />
-          <div className="absolute -bottom-10 left-10 w-60 h-60 bg-blue-400/20 rounded-full blur-2xl pointer-events-none" />
-
-          <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-6 space-y-4">
-              <div className="inline-flex items-center space-x-2 px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-[11px] font-extrabold tracking-wider uppercase text-cyan-200">
-                <Sparkles className="w-3.5 h-3.5 text-yellow-300" />
-                <span>CHÍNH THỨC</span>
-              </div>
-
-              <div>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white flex items-center gap-2">
-                  RA MẮT
-                </h2>
-                <div className="text-2xl sm:text-3xl font-extrabold text-cyan-300 tracking-tight mt-1 flex items-center gap-2">
-                  <span className="text-white">JC</span> JobCentral
-                </div>
-                <p className="text-xs sm:text-sm text-cyan-100/90 font-medium italic mt-1">
-                  Kết nối cơ hội - Bứt phá tương lai
-                </p>
-              </div>
-
-              {/* 4 Feature Badges */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-                <div className="flex items-start space-x-2.5 bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/10">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/40 flex items-center justify-center text-white shrink-0 mt-0.5">
-                    <Briefcase className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="text-[11px]">
-                    <p className="font-bold text-white leading-snug">HÀNG NGÀN VIỆC LÀM CHẤT LƯỢNG</p>
-                    <p className="text-blue-200 text-[10px]">Cập nhật mỗi ngày</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-2.5 bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/10">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/40 flex items-center justify-center text-white shrink-0 mt-0.5">
-                    <Handshake className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="text-[11px]">
-                    <p className="font-bold text-white leading-snug">KẾT NỐI TRỰC TIẾP VỚI NHÀ TUYỂN DỤNG</p>
-                    <p className="text-blue-200 text-[10px]">Uy tín - Minh bạch - Nhanh chóng</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-2.5 bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/10">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/40 flex items-center justify-center text-white shrink-0 mt-0.5">
-                    <FileText className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="text-[11px]">
-                    <p className="font-bold text-white leading-snug">CÔNG CỤ HỖ TRỢ TÌM VIỆC HIỆU QUẢ</p>
-                    <p className="text-blue-200 text-[10px]">Hồ sơ nổi bật - Gợi ý thông minh</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start space-x-2.5 bg-white/10 backdrop-blur-xs p-2.5 rounded-xl border border-white/10">
-                  <div className="w-7 h-7 rounded-lg bg-blue-500/40 flex items-center justify-center text-white shrink-0 mt-0.5">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                  </div>
-                  <div className="text-[11px]">
-                    <p className="font-bold text-white leading-snug">AN TOÀN & BẢO MẬT</p>
-                    <p className="text-blue-200 text-[10px]">Thông tin được xác thực, bảo vệ tối đa</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Graphic Mockup */}
-            <div className="lg:col-span-6 flex flex-col items-center lg:items-end justify-center relative">
-              <div className="w-full max-w-md bg-slate-900/90 border border-blue-300/30 rounded-2xl p-4 shadow-2xl backdrop-blur-md">
-                <div className="bg-slate-800 rounded-xl p-3 text-center border border-white/10 space-y-2">
-                  <div className="flex items-center justify-between text-[10px] text-slate-400 px-1">
-                    <div className="flex items-center space-x-1.5">
-                      <div className="w-2 h-2 rounded-full bg-red-400" />
-                      <div className="w-2 h-2 rounded-full bg-yellow-400" />
-                      <div className="w-2 h-2 rounded-full bg-green-400" />
-                    </div>
-                    <span className="font-mono">jobcentral.vn</span>
-                  </div>
-                  <div className="py-3 px-2 bg-gradient-to-b from-blue-900/50 to-slate-900 rounded-lg">
-                    <p className="text-xs font-bold text-cyan-300">Tìm việc dễ dàng</p>
-                    <p className="text-sm font-extrabold text-white">Sự nghiệp vững vàng</p>
-                    <p className="text-[10px] text-slate-300 mt-1 max-w-xs mx-auto">
-                      Khám phá hàng ngàn cơ hội việc làm phù hợp với năng lực và đam mê của bạn.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* URL Pill & Slogan */}
-              <div className="mt-4 flex flex-wrap items-center justify-between gap-3 w-full max-w-md">
-                <div className="inline-flex items-center space-x-1.5 px-3 py-1 bg-blue-950/80 border border-blue-400/30 rounded-full text-[11px] font-mono text-cyan-200">
-                  <Globe className="w-3 h-3" />
-                  <span>Truy cập ngay: www.jobcentral.vn</span>
-                </div>
-                <div className="text-xs font-extrabold text-white tracking-wide">
-                  BỨT PHÁ SỰ NGHIỆP <span className="text-cyan-300">cùng JobCentral!</span>
-                </div>
-              </div>
+        <div
+          id="main-banner-section"
+          className="relative rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 group"
+        >
+          <img
+            id="jobcentral-banner-image"
+            src={bannerImage}
+            alt="JobCentral Banner - Kết nối cơ hội, bứt phá tương lai"
+            referrerPolicy="no-referrer"
+            className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-8">
+            <div className="max-w-2xl space-y-2">
+              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-snug">
+                Kết Nối Cơ Hội — Bứt Phá Tương Lai Cùng Hơn 10,000+ Việc Làm Mới
+              </h2>
+              <p className="text-xs sm:text-sm text-slate-200/90 font-medium hidden sm:block">
+                Hồ sơ thông minh, thuật toán gợi ý việc làm chuẩn xác và kết nối trực tiếp với nhà tuyển dụng hàng đầu.
+              </p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. VIỆC LÀM THEO NGÀNH NGHỀ */}
+      {/* 3. VIỆC LÀM THEO NGÀNH NGHỀ (ĐA DẠNG NGHỀ NGHIỆP) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 text-center">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Việc Làm Theo <span className="text-[#2170E4]">Ngành Nghề</span>
-        </h2>
-        <p className="text-slate-500 text-xs sm:text-sm mt-1.5">
-          Khám phá các lĩnh vực đang bùng nổ trong kỷ nguyên số.
-        </p>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
+          <div className="text-left">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Việc Làm Theo <span className="text-[#2170E4]">Ngành Nghề</span>
+            </h2>
+            <p className="text-slate-500 text-xs sm:text-sm mt-1">
+              Khám phá {industryCategories.length}+ lĩnh vực nghề nghiệp sôi động nhất thị trường tuyển dụng.
+            </p>
+          </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3.5 sm:gap-4 mt-7">
-          {industryCategories.map((cat) => {
+          <div className="flex items-center gap-3 self-start sm:self-auto">
+            {industry && (
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-[#2170E4] font-medium shrink-0">
+                <span>Đang lọc: <strong>{industry}</strong></span>
+                <button
+                  type="button"
+                  onClick={() => setIndustry('')}
+                  className="hover:bg-blue-200/60 p-0.5 rounded cursor-pointer transition-colors"
+                  title="Bỏ lọc ngành nghề"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+
+            <button
+              type="button"
+              onClick={() => setIsExpandedIndustries((prev) => !prev)}
+              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-[#2170E4] hover:text-blue-700 bg-blue-50/60 hover:bg-blue-100/70 border border-blue-200/60 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer"
+            >
+              <span>{isExpandedIndustries ? 'Thu gọn' : `Xem tất cả (${industryCategories.length})`}</span>
+              {isExpandedIndustries ? (
+                <ChevronUp className="w-3.5 h-3.5" />
+              ) : (
+                <ChevronDown className="w-3.5 h-3.5" />
+              )}
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3.5">
+          {(isExpandedIndustries
+            ? industryCategories
+            : industryCategories.slice(0, INITIAL_CATEGORY_COUNT)
+          ).map((cat) => {
             const IconComp = cat.icon;
+            const isCategoryActive =
+              industry === cat.title ||
+              industry === cat.fullName ||
+              (industry && cat.title.toLowerCase().includes(industry.toLowerCase())) ||
+              (industry && industry.toLowerCase().includes(cat.title.toLowerCase()));
+
             return (
               <button
                 key={cat.id}
                 type="button"
                 onClick={() => {
-                  setIndustry(cat.title);
+                  if (isCategoryActive) {
+                    setIndustry('');
+                  } else {
+                    setIndustry(cat.title);
+                  }
                 }}
-                className="bg-white hover:bg-blue-50/40 border border-slate-200/90 hover:border-[#2170E4] rounded-xl p-5 flex flex-col items-center justify-center space-y-3 transition-all hover:shadow-sm cursor-pointer group"
+                className={`relative rounded-xl p-4 flex flex-col items-center justify-center space-y-2.5 transition-all duration-300 ease-out transform cursor-pointer group hover:-translate-y-1.5 ${
+                  isCategoryActive
+                    ? 'bg-blue-50/90 border-2 border-[#2170E4] shadow-md ring-2 ring-blue-500/20 -translate-y-1'
+                    : 'bg-white hover:bg-white border border-slate-200/90 hover:border-[#2170E4]/70 hover:shadow-lg hover:shadow-blue-500/10'
+                }`}
               >
+                {isCategoryActive && (
+                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#2170E4]" />
+                )}
                 <div
-                  className={`w-12 h-12 rounded-xl ${cat.bgColor} flex items-center justify-center ${cat.iconColor} group-hover:scale-110 transition-transform`}
+                  className={`w-11 h-11 rounded-xl ${cat.bgColor} flex items-center justify-center ${cat.iconColor} group-hover:scale-110 transition-transform duration-300 ease-out shadow-xs`}
                 >
-                  <IconComp className="w-6 h-6 stroke-[2.2]" />
+                  <IconComp className="w-5 h-5 stroke-[2.2]" />
                 </div>
-                <span className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#2170E4] transition-colors">
+                <span className={`text-xs font-bold leading-tight line-clamp-1 transition-colors ${
+                  isCategoryActive ? 'text-[#2170E4]' : 'text-slate-800 group-hover:text-[#2170E4]'
+                }`}>
                   {cat.title}
                 </span>
-                <span className="text-[11px] text-slate-400 group-hover:text-slate-600">
+                <span className="text-[10.5px] text-slate-400 group-hover:text-slate-600 font-medium">
                   {cat.jobsCount} việc
                 </span>
               </button>
             );
           })}
         </div>
+
+        {industryCategories.length > INITIAL_CATEGORY_COUNT && (
+          <div className="mt-6 flex justify-center">
+            <button
+              type="button"
+              onClick={() => setIsExpandedIndustries((prev) => !prev)}
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200/90 rounded-full text-xs sm:text-sm font-semibold text-slate-700 shadow-xs cursor-pointer active:scale-95"
+            >
+              <span>
+                {isExpandedIndustries
+                  ? 'Thu gọn danh mục ngành nghề'
+                  : `Xem thêm ${industryCategories.length - INITIAL_CATEGORY_COUNT} ngành nghề khác`}
+              </span>
+              {isExpandedIndustries ? (
+                <ChevronUp className="w-4 h-4 text-slate-400" />
+              ) : (
+                <ChevronDown className="w-4 h-4 text-slate-400" />
+              )}
+            </button>
+          </div>
+        )}
       </section>
 
       {/* 4. VIỆC LÀM MỚI NHẤT */}
@@ -764,31 +931,40 @@ export const AllJobsView = ({
           </button>
         </div>
 
-        {/* Job Cards Grid */}
-        {displayedJobs.length === 0 ? (
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-12 text-center my-6">
-            <div className="w-16 h-16 bg-blue-50 text-[#2170E4] rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <Briefcase className="w-8 h-8" />
+        {/* Job Cards Grid with Skeleton Loading & Error Boundary */}
+        <ErrorBoundary
+          title="Không thể tải danh sách việc làm"
+          message="Đã có lỗi xảy ra khi xử lý dữ liệu việc làm. Vui lòng nhấn nút thử lại bên dưới hoặc đặt lại bộ lọc tìm kiếm."
+          onReset={handleResetFilters}
+        >
+          {isLoading || isFiltering ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-7 text-left">
+              <JobCardSkeleton count={6} />
             </div>
-            <h3 className="text-lg font-bold text-slate-800">Không tìm thấy việc làm phù hợp</h3>
-            <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1 mb-6">
-              Hãy thử điều chỉnh bộ lọc, xóa từ khóa hoặc đặt lại điều kiện tìm kiếm để khám phá thêm cơ hội.
-            </p>
-            <button
-              type="button"
-              onClick={handleResetFilters}
-              className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] text-white text-xs font-semibold rounded-xl hover:bg-[#1a5bbd] transition-all cursor-pointer shadow-xs"
-            >
-              <RotateCcw className="w-3.5 h-3.5" />
-              <span>Đặt lại bộ lọc tìm kiếm</span>
-            </button>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-7 text-left">
-            {displayedJobs.map((job) => {
-              return (
+          ) : displayedJobs.length === 0 ? (
+            <div className="bg-white rounded-2xl border border-slate-200/90 p-12 text-center my-6">
+              <div className="w-16 h-16 bg-blue-50 text-[#2170E4] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <Briefcase className="w-8 h-8" />
+              </div>
+              <h3 className="text-lg font-bold text-slate-800">Không tìm thấy việc làm phù hợp</h3>
+              <p className="text-xs sm:text-sm text-slate-500 max-w-md mx-auto mt-1 mb-6">
+                Hãy thử điều chỉnh bộ lọc, xóa từ khóa hoặc đặt lại điều kiện tìm kiếm để khám phá thêm cơ hội.
+              </p>
+              <button
+                type="button"
+                onClick={handleResetFilters}
+                className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] text-white text-xs font-semibold rounded-xl hover:bg-[#1a5bbd] transition-all cursor-pointer shadow-xs"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Đặt lại bộ lọc tìm kiếm</span>
+              </button>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-7 text-left">
+              {displayedJobs.map((job) => (
                 <div
                   key={job.id}
+                  id={`alljobs-card-${job.id}`}
                   className="bg-white rounded-2xl border border-slate-200/90 p-5 hover:border-[#2170E4]/60 hover:shadow-md transition-all flex flex-col justify-between space-y-4 relative group"
                 >
                   {/* Header Row: Company Logo Placeholder + Title + Company + Bookmark */}
@@ -799,6 +975,7 @@ export const AllJobsView = ({
                           <img
                             src={job.companyLogo}
                             alt={job.company}
+                            referrerPolicy="no-referrer"
                             className="w-full h-full object-cover"
                           />
                         ) : (
@@ -818,50 +995,68 @@ export const AllJobsView = ({
                       </div>
                     </div>
 
-                    {/* Bookmark Button */}
-                    <button
-                      type="button"
-                      onClick={(e) => onToggleSave(job.id, e)}
-                      className="p-1.5 text-slate-400 hover:text-[#2170E4] rounded-lg hover:bg-blue-50/50 transition-colors cursor-pointer shrink-0"
-                      title="Lưu việc làm"
-                    >
-                      <Bookmark
-                        className={`w-4 h-4 ${
-                          job.isSaved ? 'text-[#2170E4] fill-[#2170E4]' : ''
-                        }`}
-                      />
-                    </button>
-                  </div>
+                      {/* Action Buttons: Share + Bookmark */}
+                      <div className="flex items-center space-x-1 shrink-0">
+                        <button
+                          type="button"
+                          id={`share-btn-${job.id}`}
+                          onClick={(e) => {
+                            if (e) e.stopPropagation();
+                            if (onShare) onShare(job, e);
+                          }}
+                          className="p-1.5 text-slate-400 hover:text-[#2170E4] rounded-lg hover:bg-blue-50/50 transition-colors cursor-pointer"
+                          title="Chia sẻ việc làm"
+                          aria-label="Chia sẻ việc làm"
+                        >
+                          <Share2 className="w-4 h-4" />
+                        </button>
 
-                  {/* Tags Row */}
-                  <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
-                    <span className="px-2.5 py-1 bg-blue-50 text-[#2170E4] rounded-md font-semibold">
-                      {job.jobType || 'Full-time'}
-                    </span>
-                    <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md font-semibold">
-                      {job.salary}
-                    </span>
-                    <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
-                      {job.location?.split(',').pop()?.trim() || job.location}
-                    </span>
-                  </div>
+                        <button
+                          type="button"
+                          id={`bookmark-btn-${job.id}`}
+                          onClick={(e) => onToggleSave(job.id, e)}
+                          className="p-1.5 text-slate-400 hover:text-[#2170E4] rounded-lg hover:bg-blue-50/50 transition-colors cursor-pointer"
+                          title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
+                          aria-label="Lưu việc làm"
+                        >
+                          <Bookmark
+                            className={`w-4 h-4 ${
+                              job.isSaved ? 'text-[#2170E4] fill-[#2170E4]' : ''
+                            }`}
+                          />
+                        </button>
+                      </div>
+                    </div>
 
-                  {/* Footer Row: Posted Time & Apply Button */}
-                  <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                    <span className="text-slate-400 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
-                    <button
-                      type="button"
-                      onClick={(e) => onApply(job, e)}
-                      className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-lg text-xs shadow-xs transition-all cursor-pointer"
-                    >
-                      Ứng tuyển ngay
-                    </button>
+                    {/* Tags Row */}
+                    <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
+                      <span className="px-2.5 py-1 bg-blue-50 text-[#2170E4] rounded-md font-semibold">
+                        {job.jobType || 'Full-time'}
+                      </span>
+                      <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md font-semibold">
+                        {job.salary}
+                      </span>
+                      <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
+                        {job.location?.split(',').pop()?.trim() || job.location}
+                      </span>
+                    </div>
+
+                    {/* Footer Row: Posted Time & Apply Button */}
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+                      <span className="text-slate-400 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
+                      <button
+                        type="button"
+                        onClick={(e) => onApply(job, e)}
+                        className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-lg text-xs shadow-xs transition-all cursor-pointer"
+                      >
+                        Ứng tuyển ngay
+                      </button>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
+        </ErrorBoundary>
       </section>
 
       {/* 5. CẬP NHẬT THỊ TRƯỜNG LAO ĐỘNG MỖI NGÀY */}

@@ -9,7 +9,9 @@ import {
   Search,
   X,
   Sparkles,
+  Heart,
 } from 'lucide-react';
+import { FavoriteCompaniesSection } from './FavoriteCompaniesSection';
 
 export const CompaniesView = ({
   companies,
@@ -17,6 +19,8 @@ export const CompaniesView = ({
   onExploreJobs,
   initialSearchQuery = '',
   onResetSearch,
+  followedCompanyIds = [],
+  onToggleFollowCompany,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchQuery || '');
   const [selectedIndustry, setSelectedIndustry] = useState('all');
@@ -121,29 +125,33 @@ export const CompaniesView = ({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredCompanies.map((company) => {
             const isTarget = initialSearchQuery && company.name.toLowerCase().includes(initialSearchQuery.toLowerCase());
+            const isFollowed = followedCompanyIds.includes(company.id);
+
             return (
               <div
                 key={company.id}
                 id={`company-card-${company.id}`}
-                className={`bg-white rounded-2xl border p-6 transition-all duration-200 flex flex-col justify-between ${
+                onClick={() => onSelectCompany && onSelectCompany(company)}
+                className={`bg-white rounded-2xl border p-6 transition-all duration-200 flex flex-col justify-between cursor-pointer group ${
                   isTarget
                     ? 'border-[#0A58CA] ring-2 ring-blue-500/20 shadow-md'
-                    : 'border-slate-200/80 hover:shadow-md hover:border-indigo-300'
+                    : 'border-slate-200/80 hover:shadow-lg hover:border-blue-300'
                 }`}
               >
                 <div>
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex items-center space-x-4">
-                      <div className="w-16 h-16 rounded-2xl border border-slate-200 bg-slate-50 p-2 flex items-center justify-center shrink-0 shadow-xs">
+                      <div className="w-16 h-16 rounded-2xl border border-slate-200 bg-slate-50 p-2 flex items-center justify-center shrink-0 shadow-xs group-hover:border-blue-200 transition-colors">
                         <img
                           src={company.logo}
                           alt={company.name}
+                          referrerPolicy="no-referrer"
                           className="w-full h-full object-cover rounded-xl"
                         />
                       </div>
                       <div>
                         <div className="flex items-center gap-2">
-                          <h3 className="text-lg font-bold text-slate-900 hover:text-indigo-600 transition-colors">
+                          <h3 className="text-lg font-bold text-slate-900 group-hover:text-[#0A58CA] transition-colors">
                             {company.name}
                           </h3>
                           {isTarget && (
@@ -158,10 +166,36 @@ export const CompaniesView = ({
                       </div>
                     </div>
 
-                    <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-700 shrink-0">
-                      <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
-                      <span>{company.rating}</span>
-                      <span className="text-amber-600 font-normal">({company.reviewsCount})</span>
+                    <div className="flex items-center space-x-2 shrink-0">
+                      <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-700">
+                        <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                        <span>{company.rating}</span>
+                        <span className="text-amber-600 font-normal">({company.reviewsCount})</span>
+                      </div>
+
+                      <button
+                        type="button"
+                        id={`company-follow-heart-${company.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onToggleFollowCompany) {
+                            onToggleFollowCompany(company.id);
+                          }
+                        }}
+                        title={isFollowed ? 'Bỏ yêu thích công ty' : 'Yêu thích công ty'}
+                        aria-label="Yêu thích công ty"
+                        className={`p-2 rounded-xl border transition-all cursor-pointer ${
+                          isFollowed
+                            ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
+                            : 'bg-slate-50/80 border-slate-200/80 text-slate-400 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200'
+                        }`}
+                      >
+                        <Heart
+                          className={`w-4 h-4 ${
+                            isFollowed ? 'fill-rose-600 text-rose-600' : ''
+                          }`}
+                        />
+                      </button>
                     </div>
                   </div>
 
@@ -201,16 +235,16 @@ export const CompaniesView = ({
 
                   <button
                     id={`view-jobs-company-${company.id}`}
-                    onClick={() => {
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
                       if (onSelectCompany) {
                         onSelectCompany(company);
-                      } else if (onExploreJobs) {
-                        onExploreJobs();
                       }
                     }}
-                    className="inline-flex items-center space-x-1.5 text-xs font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-xl transition-all shadow-sm shadow-indigo-200 cursor-pointer"
+                    className="inline-flex items-center space-x-1.5 text-xs font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] px-4 py-2 rounded-xl transition-all shadow-xs cursor-pointer"
                   >
-                    <span>Xem việc làm</span>
+                    <span>Xem chi tiết</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
                   </button>
                 </div>
@@ -219,6 +253,18 @@ export const CompaniesView = ({
           })}
         </div>
       )}
+
+      {/* Favorite / Followed Companies Section at bottom of page */}
+      <FavoriteCompaniesSection
+        allCompanies={companies}
+        followedCompanyIds={followedCompanyIds}
+        onToggleFollowCompany={onToggleFollowCompany}
+        onSelectCompany={onSelectCompany}
+        onExploreCompanies={() => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+      />
     </div>
   );
 };
+

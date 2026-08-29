@@ -18,6 +18,7 @@ export const JobDetailModal = ({
   onClose,
   onToggleSave,
   onApply,
+  onShare,
 }) => {
   if (!job) return null;
 
@@ -34,6 +35,7 @@ export const JobDetailModal = ({
               <img
                 src={job.companyLogo}
                 alt={job.company}
+                referrerPolicy="no-referrer"
                 className="w-full h-full object-cover rounded-xl"
               />
             </div>
@@ -53,14 +55,25 @@ export const JobDetailModal = ({
             </div>
           </div>
 
-          <button
-            id="close-job-modal-btn"
-            onClick={onClose}
-            className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors cursor-pointer"
-            aria-label="Đóng chi tiết việc làm"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center space-x-1 shrink-0">
+            <button
+              id="modal-header-share-btn"
+              onClick={(e) => onShare && onShare(job, e)}
+              className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-200/60 rounded-full transition-colors cursor-pointer"
+              title="Chia sẻ tin tuyển dụng"
+              aria-label="Chia sẻ tin tuyển dụng"
+            >
+              <Share2 className="w-5 h-5" />
+            </button>
+            <button
+              id="close-job-modal-btn"
+              onClick={onClose}
+              className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors cursor-pointer"
+              aria-label="Đóng chi tiết việc làm"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Modal Scrollable Body */}
@@ -152,19 +165,31 @@ export const JobDetailModal = ({
         </div>
 
         {/* Modal Sticky Bottom Action Footer */}
-        <div className="p-4 sm:p-6 border-t border-slate-100 bg-white flex items-center justify-between gap-3">
-          <button
-            id="modal-bookmark-btn"
-            onClick={(e) => onToggleSave(job.id, e)}
-            className={`px-4 py-2.5 rounded-xl border flex items-center space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
-              job.isSaved
-                ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
-                : 'border-slate-200 text-slate-700 hover:bg-slate-50'
-            }`}
-          >
-            <Bookmark className={`w-4 h-4 ${job.isSaved ? 'fill-indigo-600 text-indigo-600' : ''}`} />
-            <span>{job.isSaved ? 'Đã lưu việc làm' : 'Lưu tin tuyển dụng'}</span>
-          </button>
+        <div className="p-4 sm:p-6 border-t border-slate-100 bg-white flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center space-x-2">
+            <button
+              id="modal-share-btn"
+              onClick={(e) => onShare && onShare(job, e)}
+              className="px-3.5 py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 flex items-center space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              title="Chia sẻ tin tuyển dụng"
+            >
+              <Share2 className="w-4 h-4 text-slate-500" />
+              <span>Chia sẻ</span>
+            </button>
+
+            <button
+              id="modal-bookmark-btn"
+              onClick={(e) => onToggleSave(job.id, e)}
+              className={`px-3.5 sm:px-4 py-2.5 rounded-xl border flex items-center space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                job.isSaved
+                  ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+              }`}
+            >
+              <Bookmark className={`w-4 h-4 ${job.isSaved ? 'fill-indigo-600 text-indigo-600' : ''}`} />
+              <span>{job.isSaved ? 'Đã lưu' : 'Lưu tin'}</span>
+            </button>
+          </div>
 
           <div className="flex items-center space-x-3">
             <button

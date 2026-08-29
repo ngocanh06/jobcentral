@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   INITIAL_JOBS,
   INITIAL_COMPANIES,
@@ -9,6 +9,7 @@ import { Header } from './components/Header';
 import { AllJobsView } from './components/AllJobsView';
 import { SavedJobsView } from './components/SavedJobsView';
 import { CompaniesView } from './components/CompaniesView';
+import { CompanyDetailView } from './components/CompanyDetailView';
 import { ReviewsView } from './components/ReviewsView';
 import { NewsView } from './components/NewsView';
 import { CVBuilderView } from './components/CVBuilderView';
@@ -21,12 +22,14 @@ import { Footer } from './components/Footer';
 
 export function App() {
   const [jobs, setJobs] = useState(INITIAL_JOBS);
+  const [followedCompanyIds, setFollowedCompanyIds] = useState(['c1', 'c2']);
   const [activeTab, setActiveTab] = useState('jobs');
   const [selectedJobForDetail, setSelectedJobForDetail] = useState(null);
   const [selectedJobForApply, setSelectedJobForApply] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
   const [targetCompanyFilter, setTargetCompanyFilter] = useState(null);
+  const [selectedCompany, setSelectedCompany] = useState(null);
   const [currentUser, setCurrentUser] = useState({
     name: 'Nguyễn Minh Anh',
     email: 'minhanh.nguyen@example.com',
@@ -39,6 +42,80 @@ export function App() {
     setTimeout(() => {
       setToast((prev) => (prev?.message === message ? null : prev));
     }, 3500);
+  };
+
+  const handleToggleFollowCompany = (companyId, e) => {
+    if (e) e.stopPropagation();
+    const company = INITIAL_COMPANIES.find((c) => c.id === companyId);
+    const companyName = company ? company.name : 'Công ty';
+
+    setFollowedCompanyIds((prev) => {
+      const isAlreadyFollowed = prev.includes(companyId);
+      if (isAlreadyFollowed) {
+        showToast(`Đã bỏ theo dõi công ty "${companyName}"`, 'info');
+        return prev.filter((id) => id !== companyId);
+      } else {
+        showToast(
+          `Đã theo dõi công ty "${companyName}"! Bạn sẽ nhận được thông báo khi có việc làm mới.`,
+          'success'
+        );
+        return [...prev, companyId];
+      }
+    });
+  };
+
+  // Open job details if URL contains jobId
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const urlJobId = params.get('jobId');
+      if (urlJobId) {
+        const found = jobs.find((j) => String(j.id) === String(urlJobId));
+        if (found) {
+          setSelectedJobForDetail(found);
+        }
+      }
+    } catch {
+      // Ignore if URL query params fail to parse
+    }
+  }, [jobs]);
+
+  const handleShareJob = (job, e) => {
+    if (e) e.stopPropagation();
+    
+    // Construct shareable URL
+    const url = new URL(window.location.href);
+    url.searchParams.set('jobId', job.id);
+    const shareUrl = url.toString();
+
+    const jobTitle = job.title ? `"${job.title}"` : 'việc làm';
+
+    const copyFallback = () => {
+      try {
+        const tempInput = document.createElement('input');
+        tempInput.value = shareUrl;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand('copy');
+        document.body.removeChild(tempInput);
+        showToast(`Đã sao chép liên kết ${jobTitle} vào bộ nhớ tạm!`, 'success');
+      } catch {
+        showToast('Không thể sao chép liên kết. Vui lòng thử lại.', 'error');
+      }
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(shareUrl)
+        .then(() => {
+          showToast(`Đã sao chép liên kết ${jobTitle} vào bộ nhớ tạm!`, 'success');
+        })
+        .catch(() => {
+          copyFallback();
+        });
+    } else {
+      copyFallback();
+    }
   };
 
   const handleToggleSave = (jobId, e) => {
@@ -99,10 +176,27 @@ export function App() {
       <Header
         activeTab={activeTab}
         onTabChange={(tab) => {
+          if (tab === 'favorite-companies') {
+            setSelectedCompany(null);
+            setTargetCompanyFilter(null);
+            setActiveTab('companies');
+            setTimeout(() => {
+              const el = document.getElementById('favorite-companies-section');
+              if (el) {
+                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 120);
+            return;
+          }
+          if (tab === 'companies') {
+            setSelectedCompany(null);
+            setTargetCompanyFilter(null);
+          }
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         savedCount={savedCount}
+        followedCompaniesCount={followedCompanyIds.length}
         onOpenAuth={handleOpenAuth}
         currentUser={currentUser}
         onLogout={handleLogout}
@@ -116,6 +210,7 @@ export function App() {
             onToggleSave={handleToggleSave}
             onApply={handleApplyClick}
             onViewDetails={(job) => setSelectedJobForDetail(job)}
+            onShare={handleShareJob}
           />
         )}
 
@@ -125,18 +220,41 @@ export function App() {
             onToggleSave={handleToggleSave}
             onApply={handleApplyClick}
             onViewDetails={(job) => setSelectedJobForDetail(job)}
+            onShare={handleShareJob}
             onExploreMore={() => setActiveTab('jobs')}
           />
         )}
 
         {activeTab === 'companies' && (
-          <CompaniesView
-            companies={INITIAL_COMPANIES}
-            initialSearchQuery={targetCompanyFilter}
-            onResetSearch={() => setTargetCompanyFilter(null)}
-            onSelectCompany={(c) => setActiveTab('jobs')}
-            onExploreJobs={() => setActiveTab('jobs')}
-          />
+          selectedCompany ? (
+            <CompanyDetailView
+              company={selectedCompany}
+              allJobs={jobs}
+              followedCompanyIds={followedCompanyIds}
+              onToggleFollowCompany={handleToggleFollowCompany}
+              onBack={() => {
+                setSelectedCompany(null);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onApplyJob={handleApplyClick}
+              onViewJobDetail={(job) => setSelectedJobForDetail(job)}
+              onToggleSaveJob={(jobId) => handleToggleSave(jobId)}
+              onShareJob={handleShareJob}
+            />
+          ) : (
+            <CompaniesView
+              companies={INITIAL_COMPANIES}
+              initialSearchQuery={targetCompanyFilter}
+              onResetSearch={() => setTargetCompanyFilter(null)}
+              followedCompanyIds={followedCompanyIds}
+              onToggleFollowCompany={handleToggleFollowCompany}
+              onSelectCompany={(c) => {
+                setSelectedCompany(c);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onExploreJobs={() => setActiveTab('jobs')}
+            />
+          )
         )}
 
         {activeTab === 'reviews' && (
@@ -159,7 +277,17 @@ export function App() {
             onViewJobDetail={(job) => setSelectedJobForDetail(job)}
             onNavigateToJobs={() => setActiveTab('jobs')}
             onNavigateToCompany={(companyName) => {
-              setTargetCompanyFilter(companyName);
+              const matched = INITIAL_COMPANIES.find(
+                (c) =>
+                  c.name.toLowerCase().includes(companyName.toLowerCase()) ||
+                  companyName.toLowerCase().includes(c.name.toLowerCase())
+              );
+              if (matched) {
+                setSelectedCompany(matched);
+              } else {
+                setTargetCompanyFilter(companyName);
+                setSelectedCompany(null);
+              }
               setActiveTab('companies');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
@@ -177,6 +305,7 @@ export function App() {
           onClose={() => setSelectedJobForDetail(null)}
           onToggleSave={handleToggleSave}
           onApply={handleApplyClick}
+          onShare={handleShareJob}
         />
       )}
 

@@ -1,11 +1,12 @@
 import React from 'react';
-import { MapPin, Banknote, Briefcase, Clock, Bookmark } from 'lucide-react';
+import { MapPin, Banknote, Briefcase, Clock, Bookmark, Share2 } from 'lucide-react';
 
 export const JobCard = ({
   job,
   onToggleSave,
   onApply,
   onViewDetails,
+  onShare,
 }) => {
   return (
     <div
@@ -37,24 +38,41 @@ export const JobCard = ({
           </div>
         </div>
 
-        {/* Bookmark action button */}
-        <button
-          id={`bookmark-btn-${job.id}`}
-          onClick={(e) => onToggleSave(job.id, e)}
-          title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
-          className={`p-2 rounded-xl transition-all focus:outline-hidden ${
-            job.isSaved
-              ? 'text-indigo-600 bg-indigo-50 hover:bg-indigo-100'
-              : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-50'
-          }`}
-          aria-label="Lưu việc làm"
-        >
-          <Bookmark
-            className={`w-5 h-5 ${
-              job.isSaved ? 'fill-indigo-600 text-indigo-600' : 'text-slate-400'
+        {/* Top Action buttons: Share + Bookmark */}
+        <div className="flex items-center space-x-1 shrink-0">
+          <button
+            id={`share-btn-${job.id}`}
+            type="button"
+            onClick={(e) => {
+              if (e) e.stopPropagation();
+              if (onShare) onShare(job, e);
+            }}
+            title="Chia sẻ việc làm"
+            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition-all focus:outline-hidden cursor-pointer"
+            aria-label="Chia sẻ việc làm"
+          >
+            <Share2 className="w-5 h-5" />
+          </button>
+
+          <button
+            id={`bookmark-btn-${job.id}`}
+            type="button"
+            onClick={(e) => onToggleSave(job.id, e)}
+            title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
+            className={`p-2 rounded-xl transition-all focus:outline-hidden cursor-pointer ${
+              job.isSaved
+                ? 'text-indigo-600 bg-indigo-50 hover:bg-indigo-100'
+                : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-50'
             }`}
-          />
-        </button>
+            aria-label="Lưu việc làm"
+          >
+            <Bookmark
+              className={`w-5 h-5 ${
+                job.isSaved ? 'fill-indigo-600 text-indigo-600' : 'text-slate-400'
+              }`}
+            />
+          </button>
+        </div>
       </div>
 
       {/* Meta Pills Row */}

@@ -1,12 +1,14 @@
 import React from 'react';
 import { Bookmark, ArrowLeft, Briefcase, Search, Sparkles } from 'lucide-react';
 import { JobCard } from './JobCard';
+import { ErrorBoundary } from './ErrorBoundary';
 
 export const SavedJobsView = ({
   jobs,
   onToggleSave,
   onApply,
   onViewDetails,
+  onShare,
   onExploreMore,
 }) => {
   const savedJobs = jobs.filter((j) => j.isSaved);
@@ -50,38 +52,45 @@ export const SavedJobsView = ({
       </div>
 
       {/* Main Content Area */}
-      {savedJobs.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {savedJobs.map((job) => (
-            <JobCard
-              key={job.id}
-              job={job}
-              onToggleSave={onToggleSave}
-              onApply={onApply}
-              onViewDetails={onViewDetails}
-            />
-          ))}
-        </div>
-      ) : (
-        <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center max-w-lg mx-auto shadow-xs my-8">
-          <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
-            <Bookmark className="w-8 h-8" />
+      <ErrorBoundary
+        title="Không thể tải danh sách việc làm đã lưu"
+        message="Đã có lỗi xảy ra khi hiển thị các công việc bạn đã lưu. Vui lòng thử tải lại hoặc quay lại danh sách việc làm."
+        onReset={onExploreMore}
+      >
+        {savedJobs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {savedJobs.map((job) => (
+              <JobCard
+                key={job.id}
+                job={job}
+                onToggleSave={onToggleSave}
+                onApply={onApply}
+                onViewDetails={onViewDetails}
+                onShare={onShare}
+              />
+            ))}
           </div>
-          <h3 className="text-lg font-bold text-slate-900 mb-2">
-            Chưa có việc làm nào được lưu
-          </h3>
-          <p className="text-sm text-slate-500 leading-relaxed mb-6">
-            Khi bạn tìm thấy công việc phù hợp nhưng chưa sẵn sàng ứng tuyển ngay, hãy nhấn biểu tượng Bookmark để lưu lại tại đây.
-          </p>
-          <button
-            onClick={onExploreMore}
-            className="inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm shadow-indigo-200 transition-all"
-          >
-            <Sparkles className="w-4 h-4" />
-            <span>Khám phá việc làm ngay</span>
-          </button>
-        </div>
-      )}
+        ) : (
+          <div className="bg-white rounded-2xl border border-slate-200/80 p-12 text-center max-w-lg mx-auto shadow-xs my-8">
+            <div className="w-16 h-16 bg-slate-100 rounded-2xl flex items-center justify-center mx-auto mb-4 text-slate-400">
+              <Bookmark className="w-8 h-8" />
+            </div>
+            <h3 className="text-lg font-bold text-slate-900 mb-2">
+              Chưa có việc làm nào được lưu
+            </h3>
+            <p className="text-sm text-slate-500 leading-relaxed mb-6">
+              Khi bạn tìm thấy công việc phù hợp nhưng chưa sẵn sàng ứng tuyển ngay, hãy nhấn biểu tượng Bookmark để lưu lại tại đây.
+            </p>
+            <button
+              onClick={onExploreMore}
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-xl shadow-sm shadow-indigo-200 transition-all"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Khám phá việc làm ngay</span>
+            </button>
+          </div>
+        )}
+      </ErrorBoundary>
     </div>
   );
 };
