@@ -4,10 +4,10 @@ import {
   HelpCircle,
   LayoutDashboard,
   Users,
-  FileText,
+  // FileText,
   CheckCircle2,
   Calendar,
-  Mail,
+  // Mail,
   MessageSquare,
   Package,
   UserCog,
@@ -66,10 +66,10 @@ const navItems = [
   },
 
   { icon: Users, label: "Quản lý ứng viên", path: "/quan-li-ung-vien" },
-  { icon: FileText, label: "Báo cáo tuyển dụng", path: "/bao-cao-tuyen-dung" },
+  // { icon: FileText, label: "Báo cáo tuyển dụng", path: "/bao-cao-tuyen-dung" },
   { icon: CheckCircle2, label: "Truth Score", path: "/Truth-Score" },
   { icon: Calendar, label: "Lịch phỏng vấn", path: "/lich-phong-van" },
-  { icon: Mail, label: "Email mẫu", path: "/Email-mau" },
+  // { icon: Mail, label: "Email mẫu", path: "/Email-mau" },
   { icon: MessageSquare, label: "Tin nhắn", path: "/tin-nhan" },
   { icon: Package, label: "Gói dịch vụ", path: "/goi-dich-vu" },
   { icon: UserCog, label: "Quản lý tài khoản", path: "/quan-li-tai-khoan" },
@@ -111,8 +111,8 @@ export default function SideBar() {
             EU
           </div>
           <div className="text-xs">
-            <p className="font-medium text-slate-700">Employer User</p>
-            <p className="text-slate-400">admin@hr.system</p>
+            <p className="font-medium text-slate-700">NameOfCompany</p>
+            <p className="text-slate-400">Company@gmail.com.vn</p>
           </div>
         </div>
       </aside>

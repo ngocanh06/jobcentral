@@ -8,7 +8,7 @@ export default function RecruiterLayout() {
       <SideBar />
       <div className="flex-1 flex flex-col">
         <NavBar />
-        <main className="flex-1 overflow-auto p-6">
+        <main className="flex-1 overflow-auto">
           <Outlet />
         </main>
       </div>

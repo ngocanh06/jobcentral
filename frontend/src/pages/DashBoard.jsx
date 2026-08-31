@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import picdef from "../picture_sec/pic_default.jpg";
 import { ChevronRight, MoreHorizontal, Rocket, Download } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
 
@@ -62,6 +62,7 @@ const activeJobs = [
 const newCandidates = [
   {
     name: "Nguyễn Hồng Hạnh",
+    avatarDefault: picdef,
     role: "Product Designer",
     time: "15 phút trước",
     tags: [
@@ -71,6 +72,7 @@ const newCandidates = [
   },
   {
     name: "Trần Hoàng Long",
+    avatarDefault: picdef,
     role: "Senior React Developer",
     time: "1 giờ trước",
     tags: [
@@ -80,6 +82,7 @@ const newCandidates = [
   },
   {
     name: "Phạm Minh Anh",
+    avatarDefault: picdef,
     role: "Marketing Manager",
     time: "3 giờ trước",
     tags: [{ label: "Exp 8y", color: "bg-slate-100 text-slate-500" }],
@@ -295,7 +298,12 @@ export default function RecruiterDashboard() {
               <div className="space-y-4">
                 {newCandidates.map((c) => (
                   <div key={c.name} className="flex items-start gap-3">
-                    <div className="w-9 h-9 rounded-full bg-indigo-100 shrink-0" />
+                    {/* <div className="w-9 h-9 rounded-full bg-indigo-100 shrink-0" /> */}
+                    <img
+                      src={c.avatarDefault}
+                      alt={c.name}
+                      className="w-8 h-8 rounded-full bg-indigo-100 shrink-0 object-cover"
+                    />
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between">
                         <p className="text-sm font-medium truncate">{c.name}</p>

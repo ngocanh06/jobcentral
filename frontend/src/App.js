@@ -5,7 +5,7 @@ import DashBoard from "./pages/DashBoard";
 import TaoTinTuyenDung from "./pages/Tao-tin-tuyen-dung";
 import QuanLiTinTuyenDung from "./pages/quan-li-tin-tuyen-dung";
 import QuanLiUngVien from "./pages/quan-li-ung-vien";
-import BaoCaoTuyenDung from "./pages/bao-cao-tuyen-dung";
+// import BaoCaoTuyenDung from "./pages/bao-cao-tuyen-dung";
 import TruthScore from "./pages/Truth-Score";
 import LichPhongVan from "./pages/lich-phong-van";
 import EmailMau from "./pages/Email-mau";
@@ -35,10 +35,6 @@ const recruiterRoutes = [
   {
     path: "Quan-li-ung-vien",
     element: <QuanLiUngVien />,
-  },
-  {
-    path: "Bao-cao-tuyen-dung",
-    element: <BaoCaoTuyenDung />,
   },
   {
     path: "Truth-Score",
