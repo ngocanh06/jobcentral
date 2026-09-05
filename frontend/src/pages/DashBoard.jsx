@@ -398,8 +398,8 @@ export default function RecruiterDashboard() {
     }
   `}</style>
           </div>
-
           {/* Footer */}
+          
           <footer className="pt-8 pb-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
             <div>
               <h4 className="text-[#2170e4] font-bold text-lg">JobCentral</h4>

@@ -20,7 +20,7 @@ const plans = [
   },
 
   {
-    tag: "TĂNG TRƯỞNG",
+    tag: "TIÊU CHUẨN",
     badge: "Best Value",
     tagClass: "bg-slate-100 text-slate-500",
     name: "Gói Tiêu Chuẩn",

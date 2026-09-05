@@ -24,3 +24,24 @@ code {
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes clients-page-enter {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.clients-page-enter {
+  animation: clients-page-enter 500ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clients-page-enter {
+    animation: none;
+  }
+}

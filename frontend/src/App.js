@@ -5,7 +5,6 @@ import DashBoard from "./pages/DashBoard";
 import TaoTinTuyenDung from "./pages/Tao-tin-tuyen-dung";
 import QuanLiTinTuyenDung from "./pages/quan-li-tin-tuyen-dung";
 import QuanLiUngVien from "./pages/quan-li-ung-vien";
-// import BaoCaoTuyenDung from "./pages/bao-cao-tuyen-dung";
 import TruthScore from "./pages/Truth-Score";
 import LichPhongVan from "./pages/lich-phong-van";
 import EmailMau from "./pages/Email-mau";
@@ -14,12 +13,10 @@ import GoiDichVu from "./pages/goi-dich-vu";
 import QuanLiTaiKhoan from "./pages/quan-li-tai-khoan";
 import CaiDat from "./pages/SysPages/Cai-dat";
 import HoTro from "./pages/SysPages/Ho-tro";
+import Intro from "./pages/Intro-signup-in/Intro"
 
 const recruiterRoutes = [
-  {
-    index: true,
-    element: <DashBoard />,
-  },
+
   {
     path: "Dashboard",
     element: <DashBoard />,
@@ -72,11 +69,15 @@ const recruiterRoutes = [
 
 const router = createBrowserRouter([
   {
+    path: "/",
+    element: <Intro />,
+  },
+  {
     path: "/login",
     element: <LoginPage />,
   },
+  
   {
-    path: "/",
     element: <RecruiterLayout />,
     children: recruiterRoutes,
   },
