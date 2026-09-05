@@ -14,12 +14,15 @@ import {
 import Typewriter from "typewriter-effect";
 
 import { TimeOfDay } from "./GetTime";
+import { href, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const session = TimeOfDay();
 
 export default function NavBar() {
   const [openMenu, setOpenMenu] = useState(null);
   const menuRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -33,10 +36,10 @@ export default function NavBar() {
   }, []);
 
   const menuItems = [
-    { label: "Hồ sơ cá nhân", icon: UserRound },
+    { label: "Hồ sơ cá nhân", icon: UserRound, href:"" },
     { label: "Dành cho ứng viên", icon: ArrowLeftRight },
     { label: "Quản lý công việc", icon: BriefcaseBusiness },
-    { label: "Đăng xuất", icon: LogOut, danger: true },
+    { label: "Đăng xuất", icon: LogOut, danger: true, href:"/" },
   ];
 
   return (
@@ -180,13 +183,14 @@ export default function NavBar() {
               </div>
 
               <div className="py-1">
-                {menuItems.map(({ label, icon: Icon, danger }) => (
+                {menuItems.map(({ label, icon: Icon, danger, href }) => (
                   <button
                     key={label}
                     type="button"
                     className={`w-full flex items-center gap-2 px-3 py-2.5 text-left text-sm hover:bg-slate-50 transition-colors ${
                       danger ? "text-rose-500" : "text-slate-700"
                     }`}
+                    onClick={()=>navigate(href)}
                   >
                     <Icon size={15} className={danger ? "text-rose-400" : "text-slate-400"} />
                     {label}

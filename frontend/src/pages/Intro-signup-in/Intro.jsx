@@ -13,8 +13,11 @@ import {
   Quote,
   ChevronLeft,
   ChevronRight,
+  RefreshCw,
+  User,
 } from "lucide-react";
 import { Link } from "react-router-dom";
+import pic_logo from "d:/Recruitment Website/jobcentral_role_r9t/jobcentral/frontend/src/picture_sec/Logo_JobCentral.png";
 
 /* ------------------------------------------------------------------ */
 /*  Reveal-on-scroll primitive                                         */
@@ -293,11 +296,11 @@ function Header() {
   }, []);
 
   const links = [
-    "Jobs",
-    "AI Recruitment",
-    "Career Advice",
-    "Enterprise",
-    "Contacts",
+    { label: "Jobs", href: "#jobs" },
+    { label: "AI Recruitment", href: "#ai-recruitment" },
+    { label: "Career Advice", href: "#career-advice" },
+    { label: "Enterprise", href: "#enterprise" },
+    { label: "Contacts", href: "/Ho-tro-intro" },
   ];
 
   return (
@@ -306,28 +309,56 @@ function Header() {
         scrolled ? "bg-white/90 backdrop-blur shadow-sm" : "bg-white"
       }`}
     >
-      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
+      <div className="mx-10 flex max-w-9xl items-center justify-between px-6 py-4">
         <div className="flex items-center text-[1.35rem] font-black leading-none text-slate-900">
           JOB<span className="ml-1 text-[#2170e4]">CENTRAL</span>
         </div>
         <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
-          {links.map((l) => (
-            <a
-              key={l}
-              href="#"
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
               className="relative py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
             >
-              {l}
-            </a>
+              {link.label}
+            </Link>
           ))}
         </nav>
         <div className="hidden items-center gap-3 sm:flex">
-          <button className="text-sm font-medium text-slate-700 transition-colors hover:text-blue-600">
-            Log in / Register
-          </button>
-          <button className="rounded-full bg-blue-600 px-5 py-2.5 text-sm font-semibold text-white transition-all duration-300 hover:bg-blue-700 hover:shadow-lg hover:shadow-blue-600/30 active:scale-95">
-            Đăng tuyển ngay
-          </button>
+          <div className="flex items-center gap-2">
+            <Link
+              to="/login"
+              className="group flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+            >
+              <User
+                size={16}
+                strokeWidth={1.8}
+                className="transition-transform duration-200 group-hover:scale-110"
+              />
+              <span>Đăng nhập</span>
+            </Link>
+
+            <span className="text-slate-300">/</span>
+
+            <Link
+              to="/Register"
+              className="rounded-lg px-2.5 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+            >
+              Đăng ký
+            </Link>
+          </div>
+          <Link
+            to="/"
+            className="ml-20 group flex h-10 w-fit items-center justify-center gap-2 rounded-full bg-blue-600 px-5 text-sm font-semibold text-white transition-all duration-300"
+          >
+            <RefreshCw
+              size={16}
+              className="transition-transform duration-300 group-hover:animate-spin"
+            />
+            <span className="transition-all duration-200">
+              Dành cho ứng viên
+            </span>
+          </Link>
         </div>
       </div>
     </header>
@@ -339,7 +370,10 @@ function Header() {
 /* ------------------------------------------------------------------ */
 function Hero() {
   return (
-    <section className="overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-white">
+    <section
+      id="jobs"
+      className="scroll-mt-24 overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-white"
+    >
       <div className="mx-auto max-w-8xl px-2 py-3 md:py-6">
         <Reveal delay={100} y={32}>
           <div className="relative isolate overflow-hidden rounded-3xl bg-slate-900 shadow-2xl shadow-blue-900/20">
@@ -373,9 +407,12 @@ function Hero() {
                   tìm kiếm nhân tài của bạn.
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-4">
-                  <button className="rounded-full bg-blue-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-blue-950/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 active:translate-y-0">
+                  <Link
+                    to="/Register"
+                    className="rounded-full bg-blue-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-blue-950/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 active:translate-y-0"
+                  >
                     Bắt đầu tuyển dụng
-                  </button>
+                  </Link>
                   <button className="rounded-full border border-white/70 bg-white/10 px-7 py-3.5 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-blue-600">
                     Tìm hiểu thêm
                   </button>
@@ -452,7 +489,7 @@ function Stats() {
 /* ------------------------------------------------------------------ */
 function Features() {
   return (
-    <section className="bg-slate-50/60 py-20">
+    <section id="ai-recruitment" className="scroll-mt-24 bg-slate-50/60 py-20">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
@@ -491,7 +528,7 @@ function Process() {
   const [active, setActive] = useState(null);
 
   return (
-    <section className="bg-white py-20">
+    <section id="career-advice" className="scroll-mt-24 bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
@@ -608,7 +645,7 @@ function Pricing() {
   const [activePlan, setActivePlan] = useState(0);
 
   return (
-    <section className="bg-white py-20">
+    <section id="enterprise" className="scroll-mt-24 bg-white py-20">
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
@@ -813,53 +850,118 @@ export default function JobCentralLanding() {
       <Testimonials />
       <Pricing />
       <Clients />
-      <footer className="pt-8 pb-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
-    <div>
-      <h4 className="text-[#2170e4] font-bold text-lg">JobCentral</h4>
-      <p className="border-t border-slate-100 py-8 text-center text-sm text-slate-400">
-        © {new Date().getFullYear()} Jobcantral. All rights reserved.
-      </p>
-    </div>
-    <div>
-      <p className="font-medium text-slate-700 mb-2">Công ty</p>
-      <ul className="space-y-1.5 text-slate-500 text-xs">
-        <li>
-          <Link to="/about" className="hover:text-[#2170E4] transition-colors">
-            About Us
-          </Link>
-        </li>
+      <footer
+        id="contacts"
+        className="scroll-mt-24 border-t border-slate-200 bg-slate-50"
+      >
+        <div className="grid grid-cols-1 border-b border-slate-200 text-sm sm:grid-cols-2 lg:grid-cols-4">
+          <div className="border-b border-slate-200 px-6 py-10 sm:col-span-2 lg:col-span-1 lg:border-b-0 lg:border-r lg:px-10">
+            <Link to="/" className="inline-flex items-center gap-3">
+              <img
+                src={pic_logo}
+                alt="Logo JobCentral"
+                className="h-10 w-10 rounded-xl object-contain"
+              />
+              <span className="text-lg font-black tracking-tight text-slate-900">
+                JOB<span className="text-[#2170e4]">CENTRAL</span>
+              </span>
+            </Link>
+            <p className="mt-4 max-w-xs leading-relaxed text-slate-500">
+              Liên hệ:
+            </p>
+            <br />
+            <p>Trụ sở chính: 256 Kinh Dương Vương, Thanh Khê,Tp Đà Nẵng</p>
+            <p className="overflow-auto whitespace-pre">
+              Email: Helper.jobcentral@gmail.com
+            </p>
+            <p className="overflow-auto whitespace-pre">
+              Hotline: 0962.522.881
+            </p>
+            <p className="overflow-auto whitespace-pre">
+              FaceBook: JobCentral Today
+            </p>
+            <p className="overflow-auto whitespace-pre">
+              TikTok: JobCentral.VietNam
+            </p>
+          </div>
 
-        <li>
-          <Link to="/about" className="hover:text-[#2170E4] transition-colors">
-            Career
-          </Link>
-        </li>
+          <div className="px-6 py-8 sm:px-8 lg:px-10">
+            <p className="font-semibold text-slate-900">Công ty</p>
+            <ul className="mt-4 space-y-3 text-slate-500">
+              <li>
+                <Link
+                  to="/about"
+                  className="transition-colors hover:text-[#2170e4]"
+                >
+                  About Us
+                </Link>
+              </li>
 
-        <li>
-          <Link to="/about" className="hover:text-[#2170E4] transition-colors">
-            Mobile App
-          </Link>
-        </li>
-      </ul>
-    </div>
-    <div>
-      <p className="font-medium text-slate-700 mb-2">Hỗ trợ</p>
-      <ul className="space-y-1.5 text-slate-500 text-xs">
-        <li>Help Center</li>
-        <li>Privacy Policy</li>
-        <li>Terms of Service</li>
-      </ul>
-    </div>
-    <div>
-      <p className="font-medium text-slate-700 mb-2">Tài liệu</p>
-      <ul className="space-y-1.5 text-xs">
-        <li className="text-slate-500">Handbook</li>
-        <li className="text-slate-500">Market Trends</li>
-        <li className="text-slate-500">Interview Tips</li>
-      </ul>
-    </div>
-    
-  </footer>;
+              <li>
+                <Link
+                  to="/about"
+                  className="transition-colors hover:text-[#2170e4]"
+                >
+                  Career
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/about"
+                  className="transition-colors hover:text-[#2170e4]"
+                >
+                  Mobile App
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="px-6 py-8 sm:px-8 lg:px-10">
+            <p className="font-semibold text-slate-900">Hỗ trợ</p>
+            <ul className="mt-4 space-y-3 text-slate-500">
+              <li>
+                <Link
+                  to="/Ho-tro-intro"
+                  className="transition-colors hover:text-[#2170e4]"
+                >
+                  Help Center
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/privacy"
+                  className="transition-colors hover:text-[#2170e4]"
+                >
+                  Privacy Policy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/terms"
+                  className="transition-colors hover:text-[#2170e4]"
+                >
+                  Terms of Service
+                </Link>
+              </li>
+            </ul>
+          </div>
+
+          <div className="px-6 py-8 lg:px-10">
+            <p className="font-semibold text-slate-900">Tài liệu</p>
+            <ul className="mt-4 space-y-3 text-slate-500">
+              <li>Handbook</li>
+              <li>Market Trends</li>
+              <li>Interview Tips</li>
+            </ul>
+          </div>
+        </div>
+        <div className="border-t border-slate-200 px-6 py-5 flex justify-center">
+          <p className="text-xs text-slate-400">
+            © {new Date().getFullYear()} JobCentral. All rights reserved.
+          </p>
+        </div>
+      </footer>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import RecruiterLayout from "./layouts/RecruiterLayout";
-import LoginPage from "./pages/LoginPage";
+import Register from "./pages/Register";
 import DashBoard from "./pages/DashBoard";
 import TaoTinTuyenDung from "./pages/Tao-tin-tuyen-dung";
 import QuanLiTinTuyenDung from "./pages/quan-li-tin-tuyen-dung";
@@ -14,7 +14,7 @@ import QuanLiTaiKhoan from "./pages/quan-li-tai-khoan";
 import CaiDat from "./pages/SysPages/Cai-dat";
 import HoTro from "./pages/SysPages/Ho-tro";
 import Intro from "./pages/Intro-signup-in/Intro"
-
+import LogIn from "./pages/LogIn"
 const recruiterRoutes = [
 
   {
@@ -73,10 +73,18 @@ const router = createBrowserRouter([
     element: <Intro />,
   },
   {
-    path: "/login",
-    element: <LoginPage />,
+    path: "/Ho-tro-intro",
+    element: <HoTro/>
   },
-  
+  {
+    path: "/Register",
+    element: <Register />,
+  },
+
+  {
+    path: "/LogIn",
+    element: <LogIn/>
+  },
   {
     element: <RecruiterLayout />,
     children: recruiterRoutes,
