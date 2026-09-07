@@ -32,19 +32,19 @@ export const ApplyModal = ({
   };
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 animate-fadeIn">
       <div
         id={`apply-modal-${job.id}`}
-        className="bg-white rounded-3xl max-w-lg w-full overflow-hidden shadow-2xl border border-slate-200 flex flex-col my-auto"
+        className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col my-auto"
       >
         {/* Header */}
-        <div className="p-6 border-b border-slate-100 bg-slate-50/70 flex items-start justify-between">
-          <div>
+        <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/70 flex items-start justify-between sticky top-0 z-10 backdrop-blur-md">
+          <div className="min-w-0">
             <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold mb-1.5">
               <Sparkles className="w-3 h-3" />
               <span>Nộp hồ sơ ứng tuyển</span>
             </div>
-            <h2 className="text-xl font-extrabold text-slate-900 leading-tight">
+            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight truncate">
               {job.title}
             </h2>
             <p className="text-xs font-medium text-slate-500 mt-0.5">
@@ -55,14 +55,14 @@ export const ApplyModal = ({
           <button
             id="close-apply-modal-btn"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors"
+            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Form Form */}
-        <form onSubmit={handleSubmit} className="p-6 space-y-4 text-sm">
+        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3.5 text-sm">
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
               Họ và tên *

@@ -20,6 +20,7 @@ import {
   X,
   Check,
   CheckCheck,
+  ArrowLeft,
 } from 'lucide-react';
 
 export const MessagesView = ({
@@ -236,9 +237,237 @@ export const MessagesView = ({
         },
       ],
     },
+    {
+      id: 'conv-6',
+      recruiterName: 'Nguyễn Quốc Bảo',
+      recruiterRole: 'Senior Frontend / Đồng nghiệp cũ',
+      companyName: 'Grab Vietnam',
+      companyLogo:
+        'https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=120&auto=format&fit=crop&q=80',
+      avatar:
+        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+      avatarType: 'image',
+      online: true,
+      jobTitle: 'Senior Frontend Web (GrabPay & Rewards)',
+      jobSalary: '45 - 60 triệu',
+      jobLocation: 'Quận 7, TP. Hồ Chí Minh',
+      jobId: 'job-3',
+      unreadCount: 2,
+      lastMessage: 'Gửi CV bản mới tớ bắn referral nội bộ luôn cho!',
+      lastTime: '11:15 AM',
+      isTimeHighlighted: true,
+      status: 'referral',
+      messages: [
+        {
+          id: 'm6-1',
+          sender: 'recruiter',
+          text: 'Alo Minh Anh! Team Core Web bên Grab đang mở 2 slot Senior Frontend đó, lương 45 - 60 củ, môi trường hybrid 2 ngày WFH. Cậu có hứng thú nhảy qua làm cùng team tớ không?',
+          time: '11:05 AM',
+          status: 'read',
+        },
+        {
+          id: 'm6-2',
+          sender: 'user',
+          text: 'Ủa ngon vậy Bảo! Bên đó đang dùng stack gì thế, Next.js hay React Native?',
+          time: '11:10 AM',
+          status: 'read',
+        },
+        {
+          id: 'm6-3',
+          sender: 'recruiter',
+          text: 'Chủ yếu Next.js với TypeScript, micro-frontends cậu rành quá rồi. Gửi CV bản mới tớ bắn referral nội bộ luôn cho!',
+          time: '11:15 AM',
+          status: 'unread',
+        },
+      ],
+    },
+    {
+      id: 'conv-7',
+      recruiterName: 'Lê Hoàng Yến',
+      recruiterRole: 'Product Design Lead / Bạn đại học',
+      companyName: 'Tiki Corporation',
+      companyLogo:
+        'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=120&auto=format&fit=crop&q=80',
+      avatar:
+        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80',
+      avatarType: 'image',
+      online: true,
+      jobTitle: 'Lead Product Designer (Checkout & Loyalty)',
+      jobSalary: '40 - 55 triệu',
+      jobLocation: 'Tân Bình, TP. Hồ Chí Minh',
+      jobId: 'job-1',
+      unreadCount: 1,
+      lastMessage: 'Mai 9h sáng cafe ở Bitexco tớ chia sẻ roadmap team cho nha!',
+      lastTime: '10:02 AM',
+      isTimeHighlighted: true,
+      status: 'connected',
+      messages: [
+        {
+          id: 'm7-1',
+          sender: 'recruiter',
+          text: 'Minh Anh ơi, tớ vừa xem case study Fintech của cậu trên Behance, layout với micro-interactions xịn xò ghê!',
+          time: '09:40 AM',
+          status: 'read',
+        },
+        {
+          id: 'm7-2',
+          sender: 'user',
+          text: 'Cảm ơn Yến nha! Đang tính cập nhật lại portfolio để chuẩn bị thử sức thử thách mới nè.',
+          time: '09:48 AM',
+          status: 'read',
+        },
+        {
+          id: 'm7-3',
+          sender: 'recruiter',
+          text: 'Bên Tiki đang tuyển Lead Product Designer cho mảng checkout nè. Mai 9h sáng cafe ở Bitexco tớ chia sẻ roadmap team cho nha!',
+          time: '10:02 AM',
+          status: 'unread',
+        },
+      ],
+    },
+    {
+      id: 'conv-8',
+      recruiterName: 'Đặng Minh Tuấn',
+      recruiterRole: 'AI Research Engineer / Bạn Tech Community',
+      companyName: 'VinAI Research',
+      companyLogo:
+        'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=120&auto=format&fit=crop&q=80',
+      avatarText: 'MT',
+      avatarBg: 'bg-teal-600',
+      avatarType: 'initials',
+      online: false,
+      jobTitle: 'Generative AI & LLM Engineer',
+      jobSalary: '50 - 75 triệu',
+      jobLocation: 'Cầu Giấy, Hà Nội (Remote option)',
+      jobId: 'job-4',
+      unreadCount: 0,
+      lastMessage: 'Khi nào rảnh tớ gửi cậu bản JD nghiên cứu LLM bên tớ tham khảo nhé.',
+      lastTime: 'Yesterday',
+      isTimeHighlighted: false,
+      status: 'connected',
+      messages: [
+        {
+          id: 'm8-1',
+          sender: 'recruiter',
+          text: 'Chào Minh Anh, đợt hackathon GenAI vừa rồi ứng dụng hỗ trợ phỏng vấn của team cậu giải Nhì xuất sắc nha!',
+          time: 'Yesterday 16:15',
+          status: 'read',
+        },
+        {
+          id: 'm8-2',
+          sender: 'user',
+          text: 'Cảm ơn Tuấn nhiều! Đợt đó tụi tớ tích hợp cả Gemini API để trích xuất kỹ năng từ CV tự động nữa.',
+          time: 'Yesterday 16:30',
+          status: 'read',
+        },
+        {
+          id: 'm8-3',
+          sender: 'recruiter',
+          text: 'Khi nào rảnh tớ gửi cậu bản JD nghiên cứu LLM bên tớ tham khảo nhé.',
+          time: 'Yesterday 17:05',
+          status: 'read',
+        },
+      ],
+    },
+    {
+      id: 'conv-9',
+      recruiterName: 'Trần Mai Chi',
+      recruiterRole: 'Senior Tech Headhunter / Bạn cấp 3',
+      companyName: 'Navigos Group',
+      companyLogo:
+        'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=120&auto=format&fit=crop&q=80',
+      avatar:
+        'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&auto=format&fit=crop&q=80',
+      avatarType: 'image',
+      online: true,
+      jobTitle: 'Fullstack Engineer (100% Remote - Singapore Fintech)',
+      jobSalary: '$2,500 - $3,500 USD (~62 - 87 triệu)',
+      jobLocation: 'Làm việc từ xa (Remote toàn quốc)',
+      jobId: 'job-2',
+      unreadCount: 0,
+      lastMessage: 'Đã gửi JD chi tiết qua email cho cậu rồi nhé!',
+      lastTime: '02/09',
+      isTimeHighlighted: false,
+      status: 'reviewing',
+      messages: [
+        {
+          id: 'm9-1',
+          sender: 'recruiter',
+          text: 'Minh Anh ơi! Chi đang có job Fullstack Remote cho startup Fintech Singapore, ngân sách $2,500 - $3,500, phúc lợi đóng full bảo hiểm quốc tế.',
+          time: '02/09 10:15',
+          status: 'read',
+        },
+        {
+          id: 'm9-2',
+          sender: 'user',
+          text: 'Chào Chi, nghe hấp dẫn dữ! Yêu cầu tiếng Anh và múi giờ làm việc thế nào vậy bạn?',
+          time: '02/09 10:30',
+          status: 'read',
+        },
+        {
+          id: 'm9-3',
+          sender: 'recruiter',
+          text: 'Giao tiếp tiếng Anh tốt hàng ngày, múi giờ Sing lệch mình 1 tiếng nên làm việc cực kỳ thoải mái luôn.',
+          time: '02/09 11:00',
+          status: 'read',
+        },
+        {
+          id: 'm9-4',
+          sender: 'recruiter',
+          text: 'Đã gửi JD chi tiết qua email cho cậu rồi nhé!',
+          time: '02/09 11:02',
+          status: 'read',
+        },
+      ],
+    },
+    {
+      id: 'conv-10',
+      recruiterName: 'Đỗ Văn Khoa',
+      recruiterRole: 'DevOps & Cloud Specialist / Bạn hội Gym',
+      companyName: 'FPT Software',
+      companyLogo:
+        'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=120&auto=format&fit=crop&q=80',
+      avatarText: 'VK',
+      avatarBg: 'bg-amber-600',
+      avatarType: 'initials',
+      online: false,
+      jobTitle: 'Cloud DevOps Engineer (Kubernetes & CI/CD)',
+      jobSalary: '35 - 50 triệu',
+      jobLocation: 'Khu Công Nghệ Cao, TP. Thủ Đức',
+      jobId: 'job-8',
+      unreadCount: 0,
+      lastMessage: 'Tui đã gửi link tài liệu AWS Architect qua đây rồi nha!',
+      lastTime: '28/08',
+      isTimeHighlighted: false,
+      status: 'connected',
+      messages: [
+        {
+          id: 'm10-1',
+          sender: 'recruiter',
+          text: 'Hôm nay có đi tập không ông? Tiện thể tui gửi ông bộ câu hỏi phỏng vấn System Design & AWS Solution Architect đợt trước tui pass bên FPT nè.',
+          time: '28/08 17:15',
+          status: 'read',
+        },
+        {
+          id: 'm10-2',
+          sender: 'user',
+          text: 'Hay quá Khoa ơi, tui đang cần tài liệu ôn phần này gấp. 6h chiều nay gym xong ghé ăn tối tui bao nha!',
+          time: '28/08 17:25',
+          status: 'read',
+        },
+        {
+          id: 'm10-3',
+          sender: 'recruiter',
+          text: 'Tui đã gửi link tài liệu AWS Architect qua đây rồi nha!',
+          time: '28/08 17:30',
+          status: 'read',
+        },
+      ],
+    },
   ]);
 
   const [activeConvId, setActiveConvId] = useState('conv-1');
+  const [mobileView, setMobileView] = useState('chat'); // 'list' | 'chat'
   const [searchQuery, setSearchQuery] = useState('');
   const [inputText, setInputText] = useState('');
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -256,6 +485,7 @@ export const MessagesView = ({
   // Handle select conversation
   const handleSelectConv = (convId) => {
     setActiveConvId(convId);
+    setMobileView('chat');
     setConversations((prev) =>
       prev.map((c) => (c.id === convId ? { ...c, unreadCount: 0 } : c))
     );
@@ -263,10 +493,13 @@ export const MessagesView = ({
 
   // Filter conversations
   const filteredConversations = conversations.filter((conv) => {
+    const q = searchQuery.toLowerCase();
     return (
-      conv.recruiterName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      conv.lastMessage.toLowerCase().includes(searchQuery.toLowerCase())
+      conv.recruiterName.toLowerCase().includes(q) ||
+      (conv.recruiterRole && conv.recruiterRole.toLowerCase().includes(q)) ||
+      conv.companyName.toLowerCase().includes(q) ||
+      conv.lastMessage.toLowerCase().includes(q) ||
+      (conv.jobTitle && conv.jobTitle.toLowerCase().includes(q))
     );
   });
 
@@ -354,29 +587,38 @@ export const MessagesView = ({
   };
 
   return (
-    <div className="w-full bg-white text-left animate-in fade-in duration-200 border-t border-slate-200">
-      <div className="grid grid-cols-1 md:grid-cols-12 min-h-[calc(100vh-70px)] h-[calc(100vh-70px)] max-w-[1600px] mx-auto">
-        {/* LEFT COLUMN: Sidebar Messages List (md:col-span-4 lg:col-span-3) */}
-        <div className="md:col-span-4 lg:col-span-3 border-r border-slate-200 flex flex-col h-full bg-white">
+    <div className="w-full h-full bg-white text-left animate-in fade-in duration-200 border-t border-slate-200 flex flex-col overflow-hidden min-h-0">
+      <div className="flex flex-1 w-full max-w-[1600px] mx-auto overflow-hidden min-h-0">
+        {/* LEFT COLUMN: Sidebar Messages List */}
+        <div
+          className={`w-full md:w-80 lg:w-96 border-r border-slate-200 flex-col h-full bg-white shrink-0 min-h-0 ${
+            mobileView === 'chat' ? 'hidden md:flex' : 'flex'
+          }`}
+        >
           {/* Header Title & Search Box */}
-          <div className="p-4 sm:p-5 border-b border-slate-100">
-            <h2 className="text-base sm:text-[17px] font-bold text-slate-900 mb-3 tracking-tight">
-              Tin nhắn với nhà tuyển dụng
-            </h2>
+          <div className="p-4 sm:p-5 border-b border-slate-100 shrink-0">
+            <div className="flex items-center justify-between mb-3">
+              <h2 className="text-base sm:text-[17px] font-bold text-slate-900 tracking-tight">
+                Tin nhắn & Kết nối
+              </h2>
+              <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                {conversations.length} hội thoại
+              </span>
+            </div>
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search messages..."
+                placeholder="Tìm bạn bè, nhà tuyển dụng, vị trí..."
                 className="w-full pl-10 pr-4 py-2 bg-[#f0f4f9] rounded-full text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:bg-white focus:ring-1 focus:ring-blue-200 transition-all"
               />
             </div>
           </div>
 
           {/* Conversations List */}
-          <div className="flex-1 overflow-y-auto divide-y divide-slate-50">
+          <div className="flex-1 overflow-y-auto divide-y divide-slate-50 min-h-0">
             {filteredConversations.map((conv) => {
               const isSelected = conv.id === activeConvId;
               return (
@@ -426,7 +668,7 @@ export const MessagesView = ({
                       </h4>
                       <span
                         className={`text-[11px] shrink-0 ml-1 ${
-                          conv.isTimeHighlighted
+                          conv.isTimeHighlighted || conv.unreadCount > 0
                             ? 'text-[#1877F2] font-semibold'
                             : 'text-slate-400 font-normal'
                         }`}
@@ -434,9 +676,22 @@ export const MessagesView = ({
                         {conv.lastTime}
                       </span>
                     </div>
-                    <p className="text-xs text-slate-500 truncate leading-tight">
-                      {conv.lastMessage}
-                    </p>
+                    <div className="flex items-center justify-between">
+                      <p
+                        className={`text-xs truncate leading-tight flex-1 ${
+                          conv.unreadCount > 0
+                            ? 'text-slate-900 font-medium'
+                            : 'text-slate-500'
+                        }`}
+                      >
+                        {conv.lastMessage}
+                      </p>
+                      {conv.unreadCount > 0 && (
+                        <span className="shrink-0 ml-2 px-1.5 py-0.2 text-[10px] font-bold bg-[#1877F2] text-white rounded-full min-w-[18px] text-center">
+                          {conv.unreadCount}
+                        </span>
+                      )}
+                    </div>
                   </div>
                 </div>
               );
@@ -444,12 +699,26 @@ export const MessagesView = ({
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Active Chat Panel (md:col-span-8 lg:col-span-9) */}
-        <div className="md:col-span-8 lg:col-span-9 flex flex-col h-full bg-white relative">
+        {/* RIGHT COLUMN: Active Chat Panel */}
+        <div
+          className={`flex-1 flex-col h-full bg-white relative min-h-0 overflow-hidden ${
+            mobileView === 'list' ? 'hidden md:flex' : 'flex'
+          }`}
+        >
           {/* Chat Header */}
-          <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
+          <div className="px-3 sm:px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-white shrink-0 z-10">
             {/* Recruiter & Company Info */}
-            <div className="flex items-center space-x-3 min-w-0">
+            <div className="flex items-center space-x-2 sm:space-x-3 min-w-0">
+              {/* Back button on mobile */}
+              <button
+                type="button"
+                onClick={() => setMobileView('list')}
+                title="Quay lại danh sách"
+                aria-label="Quay lại danh sách tin nhắn"
+                className="md:hidden p-1.5 -ml-1 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
               <div className="relative shrink-0">
                 {activeConv.avatarType === 'image' ? (
                   <img
@@ -558,7 +827,7 @@ export const MessagesView = ({
           </div>
 
           {/* Messages Thread Container */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 sm:px-8 space-y-5 bg-white">
+          <div className="flex-1 overflow-y-auto min-h-0 p-4 sm:p-6 sm:px-8 space-y-5 bg-white">
             {/* Centered Date Badge */}
             <div className="flex justify-center my-1">
               <span className="px-3.5 py-1 bg-[#f1f5f9] text-slate-600 rounded-full text-xs font-medium">
@@ -617,8 +886,8 @@ export const MessagesView = ({
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Bottom Chat Input Bar */}
-          <div className="p-4 sm:px-6 sm:pb-4 sm:pt-3 bg-white border-t border-slate-200 shrink-0">
+          {/* Bottom Chat Input Bar - Sticky and Never Lost */}
+          <div className="p-3 sm:px-6 sm:pb-4 sm:pt-3 bg-white border-t border-slate-200 shrink-0 sticky bottom-0 z-20">
             <form onSubmit={handleSendMessage}>
               <div className="bg-[#eff4fc] border border-[#dbe6f6] rounded-xl px-3 py-2 sm:py-2.5 flex items-center space-x-2.5">
                 {/* Paperclip Icon */}

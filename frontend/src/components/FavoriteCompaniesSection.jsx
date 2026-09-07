@@ -30,13 +30,13 @@ export const FavoriteCompaniesSection = ({
     >
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
-          <div className="inline-flex items-center space-x-2 bg-rose-50 border border-rose-100 text-rose-700 text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2.5">
-            <Heart className="w-3.5 h-3.5 text-rose-600 fill-rose-600" />
-            <span>Danh mục quan tâm</span>
+          <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0A58CA] text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2.5">
+            <Building2 className="w-3.5 h-3.5 text-[#0A58CA]" />
+            <span>Doanh nghiệp đang theo dõi</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
-            <span>Công Ty Đã Yêu Thích & Theo Dõi</span>
-            <span className="text-sm font-bold bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full">
+            <span>Công Ty Đã Theo Dõi</span>
+            <span className="text-sm font-bold bg-blue-100 text-[#0A58CA] px-2.5 py-0.5 rounded-full">
               {favoriteCompanies.length}
             </span>
           </h2>
@@ -58,14 +58,14 @@ export const FavoriteCompaniesSection = ({
           id="favorite-companies-empty-state"
           className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-xs"
         >
-          <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center mx-auto mb-4 text-rose-500 shadow-xs">
-            <Heart className="w-8 h-8 stroke-[1.7]" />
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-4 text-[#0A58CA] shadow-xs">
+            <Building2 className="w-8 h-8 stroke-[1.7]" />
           </div>
           <h3 className="text-lg font-bold text-slate-800">
-            Chưa có công ty nào trong danh sách yêu thích
+            Chưa có công ty nào trong danh sách theo dõi
           </h3>
           <p className="text-xs sm:text-sm text-slate-500 mt-2 max-w-md mx-auto leading-relaxed">
-            Nhấn vào biểu tượng trái tim hoặc nút "Theo dõi" trên bất kỳ thẻ công ty nào để lưu lại và theo dõi cơ hội nghề nghiệp nhanh chóng.
+            Nhấn vào nút "Theo dõi" trên bất kỳ thẻ công ty nào để lưu lại và theo dõi cơ hội nghề nghiệp nhanh chóng.
           </p>
           {onExploreCompanies && (
             <button

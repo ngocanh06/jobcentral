@@ -19,8 +19,14 @@ import { ApplyModal } from './components/ApplyModal';
 import { AuthModal } from './components/AuthModal';
 import { Toast } from './components/Toast';
 import { Footer } from './components/Footer';
+import { MobileBottomNav } from './components/MobileBottomNav';
+import { MobileProfileDrawer } from './components/MobileProfileDrawer';
+import { DeviceStatusBadge } from './components/DeviceStatusBadge';
+import { useDevice } from './context/DeviceContext';
+import { authService } from './services/authService';
 
 export function App() {
+  const device = useDevice();
   const [jobs, setJobs] = useState(INITIAL_JOBS);
   const [followedCompanyIds, setFollowedCompanyIds] = useState(['c1', 'c2']);
   const [activeTab, setActiveTab] = useState('jobs');
@@ -28,12 +34,16 @@ export function App() {
   const [selectedJobForApply, setSelectedJobForApply] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
+  const [mobileProfileDrawerOpen, setMobileProfileDrawerOpen] = useState(false);
   const [targetCompanyFilter, setTargetCompanyFilter] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
-  const [currentUser, setCurrentUser] = useState({
-    name: 'Nguyễn Minh Anh',
-    email: 'minhanh.nguyen@example.com',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('jobcentral_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
   });
   const [toast, setToast] = useState(null);
 
@@ -158,20 +168,36 @@ export function App() {
   };
 
   const handleAuthSuccess = (user) => {
-    setCurrentUser(user);
+    const loggedInUser = { ...user, isGuest: false };
+    setCurrentUser(loggedInUser);
+    try {
+      localStorage.setItem('jobcentral_user', JSON.stringify(loggedInUser));
+    } catch (e) {
+      console.error('Failed to save user session:', e);
+    }
     setAuthModalOpen(false);
     showToast(`Chào mừng ${user.name}! Bạn đã đăng nhập thành công.`, 'success');
   };
 
   const handleLogout = () => {
+    authService.logout();
     setCurrentUser(null);
+    try {
+      localStorage.removeItem('jobcentral_user');
+    } catch (e) {
+      console.error('Failed to remove user session:', e);
+    }
     showToast('Đã đăng xuất khỏi hệ thống.', 'info');
   };
 
   const savedCount = jobs.filter((j) => j.isSaved).length;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900">
+    <div
+      className={`min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 ${
+        activeTab === 'messages' ? 'h-screen overflow-hidden' : ''
+      }`}
+    >
       {/* Top Main Navigation Header */}
       <Header
         activeTab={activeTab}
@@ -200,10 +226,17 @@ export function App() {
         onOpenAuth={handleOpenAuth}
         currentUser={currentUser}
         onLogout={handleLogout}
+        onOpenMobileDrawer={() => setMobileProfileDrawerOpen(true)}
       />
 
       {/* Main View Display Body */}
-      <main className="flex-1">
+      <main
+        className={
+          activeTab === 'messages'
+            ? 'flex-1 h-[calc(100dvh-64px)] sm:h-[calc(100dvh-72px)] overflow-hidden flex flex-col min-h-0 pb-16 md:pb-0'
+            : 'flex-1 pb-16 md:pb-0'
+        }
+      >
         {activeTab === 'jobs' && (
           <AllJobsView
             jobs={jobs}
@@ -297,6 +330,47 @@ export function App() {
 
       {/* Footer */}
       {activeTab !== 'messages' && <Footer />}
+
+      {/* Mobile Bottom Navigation Bar (Phone-Optimized) */}
+      <MobileBottomNav
+        activeTab={activeTab}
+        onTabChange={(tab) => {
+          setActiveTab(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        savedCount={savedCount}
+        currentUser={currentUser}
+        onOpenProfileDrawer={() => setMobileProfileDrawerOpen(true)}
+        onOpenAuth={handleOpenAuth}
+      />
+
+      {/* Mobile Profile & Account Sheet */}
+      <MobileProfileDrawer
+        isOpen={mobileProfileDrawerOpen}
+        onClose={() => setMobileProfileDrawerOpen(false)}
+        currentUser={currentUser}
+        savedCount={savedCount}
+        followedCompaniesCount={followedCompanyIds.length}
+        onTabChange={(tab) => {
+          if (tab === 'favorite-companies') {
+            setSelectedCompany(null);
+            setTargetCompanyFilter(null);
+            setActiveTab('companies');
+            setTimeout(() => {
+              const el = document.getElementById('favorite-companies-section');
+              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 120);
+            return;
+          }
+          setActiveTab(tab);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }}
+        onLogout={handleLogout}
+        onOpenAuth={handleOpenAuth}
+      />
+
+      {/* Device Status & Simulation Diagnostic Badge */}
+      <DeviceStatusBadge />
 
       {/* Modals & Portals */}
       {selectedJobForDetail && (

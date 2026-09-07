@@ -83,6 +83,8 @@ export const AllJobsView = ({
   }, []);
 
   const [activeJobTab, setActiveJobTab] = useState('featured');
+  const [currentPage, setCurrentPage] = useState(1);
+  const JOBS_PER_PAGE = 6;
   const [activeCompanyCategory, setActiveCompanyCategory] = useState('all');
   const [companyCarouselIndex, setCompanyCarouselIndex] = useState(0);
   const [chartPeriod, setChartPeriod] = useState('6months');
@@ -94,6 +96,7 @@ export const AllJobsView = ({
   // Brief skeleton loading state trigger when search, filters or tabs change
   useEffect(() => {
     setIsFiltering(true);
+    setCurrentPage(1);
     const timer = setTimeout(() => {
       setIsFiltering(false);
     }, 280);
@@ -115,6 +118,7 @@ export const AllJobsView = ({
     setSalaryRange('');
     setExperienceLevel('');
     setJobType('');
+    setCurrentPage(1);
     setOpenDropdown(null);
   };
 
@@ -369,6 +373,12 @@ export const AllJobsView = ({
     });
   }, [jobs, keyword, industry, location, salaryRange, experienceLevel, jobType, activeJobTab]);
 
+  // Paginated jobs for Section 4 (6 jobs per page)
+  const paginatedJobs = useMemo(() => {
+    const startIndex = (currentPage - 1) * JOBS_PER_PAGE;
+    return displayedJobs.slice(startIndex, startIndex + JOBS_PER_PAGE);
+  }, [displayedJobs, currentPage]);
+
   // Companies carousel data
   const companiesList = useMemo(() => [
     {
@@ -536,8 +546,8 @@ export const AllJobsView = ({
                           }}
                           className={`w-full text-left px-2.5 py-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'bg-blue-50 text-[#2170E4] font-bold'
-                              : 'text-slate-700 hover:bg-slate-50'
+                              ? 'text-[#2170E4] font-bold'
+                              : 'text-slate-700 hover:text-[#2170E4]'
                           }`}
                         >
                           <span className="truncate">{item}</span>
@@ -597,8 +607,8 @@ export const AllJobsView = ({
                           }}
                           className={`w-full text-left px-2.5 py-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'bg-blue-50 text-[#2170E4] font-bold'
-                              : 'text-slate-700 hover:bg-slate-50'
+                              ? 'text-[#2170E4] font-bold'
+                              : 'text-slate-700 hover:text-[#2170E4]'
                           }`}
                         >
                           <span className="truncate">{item}</span>
@@ -776,44 +786,27 @@ export const AllJobsView = ({
 
       {/* 3. VIỆC LÀM THEO NGÀNH NGHỀ (ĐA DẠNG NGHỀ NGHIỆP) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 text-center">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mb-6">
-          <div className="text-left">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-              Việc Làm Theo <span className="text-[#2170E4]">Ngành Nghề</span>
-            </h2>
-            <p className="text-slate-500 text-xs sm:text-sm mt-1">
-              Khám phá {industryCategories.length}+ lĩnh vực nghề nghiệp sôi động nhất thị trường tuyển dụng.
-            </p>
-          </div>
+        <div className="text-center mb-6">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Việc Làm Theo <span className="text-[#2170E4]">Ngành Nghề</span>
+          </h2>
+          <p className="text-slate-500 text-xs sm:text-sm mt-1 max-w-xl mx-auto">
+            Khám phá {industryCategories.length}+ lĩnh vực nghề nghiệp sôi động nhất thị trường tuyển dụng.
+          </p>
 
-          <div className="flex items-center gap-3 self-start sm:self-auto">
-            {industry && (
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-[#2170E4] font-medium shrink-0">
-                <span>Đang lọc: <strong>{industry}</strong></span>
-                <button
-                  type="button"
-                  onClick={() => setIndustry('')}
-                  className="hover:bg-blue-200/60 p-0.5 rounded cursor-pointer transition-colors"
-                  title="Bỏ lọc ngành nghề"
-                >
-                  <X className="w-3.5 h-3.5" />
-                </button>
-              </div>
-            )}
-
-            <button
-              type="button"
-              onClick={() => setIsExpandedIndustries((prev) => !prev)}
-              className="hidden sm:inline-flex items-center gap-1.5 text-xs font-semibold text-[#2170E4] hover:text-blue-700 bg-blue-50/60 hover:bg-blue-100/70 border border-blue-200/60 px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer"
-            >
-              <span>{isExpandedIndustries ? 'Thu gọn' : `Xem tất cả (${industryCategories.length})`}</span>
-              {isExpandedIndustries ? (
-                <ChevronUp className="w-3.5 h-3.5" />
-              ) : (
-                <ChevronDown className="w-3.5 h-3.5" />
-              )}
-            </button>
-          </div>
+          {industry && (
+            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-[#2170E4] font-medium">
+              <span>Đang lọc: <strong>{industry}</strong></span>
+              <button
+                type="button"
+                onClick={() => setIndustry('')}
+                className="hover:bg-blue-200/60 p-0.5 rounded cursor-pointer transition-colors"
+                title="Bỏ lọc ngành nghề"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3.5">
@@ -889,8 +882,11 @@ export const AllJobsView = ({
       </section>
 
       {/* 4. VIỆC LÀM MỚI NHẤT */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 text-center">
-        <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+      <section
+        id="latest-jobs-section"
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 text-center"
+      >
+        <h2 id="latest-jobs-heading" className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Việc Làm <span className="text-[#2170E4]">Mới Nhất</span>
         </h2>
 
@@ -898,6 +894,7 @@ export const AllJobsView = ({
         <div className="flex items-center justify-center space-x-2 mt-5">
           <button
             type="button"
+            id="tab-job-featured"
             onClick={() => setActiveJobTab('featured')}
             className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeJobTab === 'featured'
@@ -909,6 +906,7 @@ export const AllJobsView = ({
           </button>
           <button
             type="button"
+            id="tab-job-urgent"
             onClick={() => setActiveJobTab('urgent')}
             className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeJobTab === 'urgent'
@@ -920,6 +918,7 @@ export const AllJobsView = ({
           </button>
           <button
             type="button"
+            id="tab-job-intern"
             onClick={() => setActiveJobTab('intern')}
             className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
               activeJobTab === 'intern'
@@ -961,7 +960,7 @@ export const AllJobsView = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-7 text-left">
-              {displayedJobs.map((job) => (
+              {paginatedJobs.map((job) => (
                 <div
                   key={job.id}
                   id={`alljobs-card-${job.id}`}
@@ -1004,7 +1003,7 @@ export const AllJobsView = ({
                             if (e) e.stopPropagation();
                             if (onShare) onShare(job, e);
                           }}
-                          className="p-1.5 text-slate-400 hover:text-[#2170E4] rounded-lg hover:bg-blue-50/50 transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
                           title="Chia sẻ việc làm"
                           aria-label="Chia sẻ việc làm"
                         >
@@ -1015,7 +1014,7 @@ export const AllJobsView = ({
                           type="button"
                           id={`bookmark-btn-${job.id}`}
                           onClick={(e) => onToggleSave(job.id, e)}
-                          className="p-1.5 text-slate-400 hover:text-[#2170E4] rounded-lg hover:bg-blue-50/50 transition-colors cursor-pointer"
+                          className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
                           title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
                           aria-label="Lưu việc làm"
                         >
@@ -1054,6 +1053,70 @@ export const AllJobsView = ({
                     </div>
                   </div>
               ))}
+            </div>
+          )}
+
+          {/* Phân trang / Các chỉ mục 1, 2, 3 */}
+          {displayedJobs.length > 0 && (
+            <div
+              id="jobs-pagination-controls"
+              className="flex items-center justify-center space-x-1 mt-10"
+            >
+              {/* Nút Trang trước */}
+              <button
+                type="button"
+                id="jobs-pagination-prev"
+                onClick={() => {
+                  if (currentPage > 1) {
+                    setCurrentPage((p) => p - 1);
+                    document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                disabled={currentPage === 1}
+                className="w-8 h-8 flex items-center justify-center text-slate-400 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
+                title="Trang trước"
+                aria-label="Trang trước"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              {/* Các chỉ mục 1, 2, 3 */}
+              {[1, 2, 3].map((pageNum) => (
+                <button
+                  key={pageNum}
+                  type="button"
+                  id={`jobs-pagination-page-${pageNum}`}
+                  onClick={() => {
+                    setCurrentPage(pageNum);
+                    document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className={`w-8 h-8 flex items-center justify-center text-sm cursor-pointer select-none bg-transparent ${
+                    currentPage === pageNum
+                      ? 'text-[#2170E4] font-bold text-base'
+                      : 'text-slate-500 font-medium'
+                  }`}
+                >
+                  {pageNum}
+                </button>
+              ))}
+
+              {/* Nút Trang sau */}
+              <button
+                type="button"
+                id="jobs-pagination-next"
+                onClick={() => {
+                  if (currentPage < 3) {
+                    setCurrentPage((p) => p + 1);
+                    document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                disabled={currentPage === 3}
+                className="w-8 h-8 flex items-center justify-center text-slate-400 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
+                title="Trang sau"
+                aria-label="Trang sau"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
             </div>
           )}
         </ErrorBoundary>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   Building2,
   MapPin,
@@ -33,6 +33,7 @@ import {
   Cpu,
   Coffee,
   Smile,
+  Compass,
 } from 'lucide-react';
 import { JobCardSkeleton } from './JobCardSkeleton';
 import { ErrorBoundary } from './ErrorBoundary';
@@ -81,7 +82,8 @@ export const CompanyDetailView = ({
     rating: company?.rating || 4.9,
     reviewsCount: company?.reviewsCount || 142,
     coverImage:
-      'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1600&auto=format&fit=crop&q=80',
+      company?.coverImage ||
+      'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=1600&auto=format&fit=crop&q=80',
     logo:
       company?.logo ||
       'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=200&auto=format&fit=crop&q=80',
@@ -355,7 +357,7 @@ export const CompanyDetailView = ({
     {
       id: 4,
       title: 'Developer Setup',
-      url: 'https://images.unsplash.com/photo-1593642532400-2682810df593?w=400&auto=format&fit=crop&q=80',
+      url: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?w=400&auto=format&fit=crop&q=80',
     },
   ];
 
@@ -396,61 +398,109 @@ export const CompanyDetailView = ({
       <div
         key={job.id}
         id={`company-job-card-${job.id}`}
-        className="bg-white rounded-2xl border border-slate-200 p-5 shadow-2xs hover:shadow-md hover:border-blue-200 transition-all flex flex-col justify-between"
+        className="bg-white rounded-2xl border border-slate-200/90 p-5 hover:border-[#2170E4]/60 hover:shadow-md transition-all flex flex-col justify-between space-y-4 relative group"
       >
-        <div>
-          {/* Top: Icon & Bookmark */}
-          <div className="flex items-center justify-between mb-3.5">
-            <div
-              className={`w-10 h-10 rounded-xl ${job.iconBg} flex items-center justify-center shadow-xs`}
-            >
-              {job.iconType === 'pen' && <Layout className="w-5 h-5" />}
-              {job.iconType === 'code' && <Code2 className="w-5 h-5" />}
-              {job.iconType === 'briefcase' && <Briefcase className="w-5 h-5" />}
-              {job.iconType === 'trending' && <TrendingUp className="w-5 h-5" />}
+        {/* Header Row: Company Logo Placeholder + Title + Company + Bookmark */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start space-x-3.5 flex-1 min-w-0">
+            <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 overflow-hidden flex items-center justify-center text-[#2170E4] font-bold text-sm shrink-0">
+              {job.companyLogo || currentCompany?.logo ? (
+                <img
+                  src={job.companyLogo || currentCompany?.logo}
+                  alt={job.company}
+                  referrerPolicy="no-referrer"
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <Building2 className="w-5 h-5 text-[#2170E4]" />
+              )}
             </div>
-
-            <div className="flex items-center space-x-1">
-              <button
-                type="button"
-                id={`company-share-btn-${job.id}`}
-                onClick={(e) => {
-                  if (e) e.stopPropagation();
-                  if (onShareJob) {
-                    onShareJob(job, e);
+            <div className="min-w-0 flex-1">
+              <h3
+                onClick={() => {
+                  if (onViewJobDetail) {
+                    onViewJobDetail({
+                      id: job.id,
+                      title: job.title,
+                      company: job.company,
+                      salary: job.salary,
+                      location: job.location,
+                    });
                   }
                 }}
-                title="Chia sẻ việc làm"
-                aria-label="Chia sẻ việc làm"
-                className="p-1.5 text-slate-400 hover:text-[#0A58CA] hover:bg-blue-50/60 rounded-lg transition-colors cursor-pointer"
+                className="text-sm font-bold text-slate-900 truncate hover:text-[#2170E4] cursor-pointer transition-colors"
               >
-                <Share2 className="w-4 h-4" />
-              </button>
-
-              <button
-                type="button"
-                id={`company-bookmark-btn-${job.id}`}
-                onClick={() => toggleSave(job.id)}
-                title={isSaved ? 'Bỏ lưu' : 'Lưu công việc'}
-                aria-label="Lưu việc làm"
-                className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
-                  isSaved
-                    ? 'text-[#0A58CA] bg-blue-50'
-                    : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'
-                }`}
-              >
-                <Bookmark
-                  className={`w-4 h-4 ${isSaved ? 'fill-[#0A58CA]' : ''}`}
-                />
-              </button>
+                {job.title}
+              </h3>
+              <p className="text-xs text-slate-500 font-medium truncate mt-0.5">
+                {job.company}
+              </p>
             </div>
           </div>
 
-          {/* Title & Company */}
-          <h3
-            onClick={() => {
-              if (onViewJobDetail) {
-                onViewJobDetail({
+          {/* Action Buttons: Share + Bookmark */}
+          <div className="flex items-center space-x-1 shrink-0">
+            <button
+              type="button"
+              id={`company-share-btn-${job.id}`}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                if (onShareJob) {
+                  onShareJob(job, e);
+                } else {
+                  handleCopyLink();
+                }
+              }}
+              className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
+              title="Chia sẻ việc làm"
+              aria-label="Chia sẻ việc làm"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+
+            <button
+              type="button"
+              id={`company-bookmark-btn-${job.id}`}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                toggleSave(job.id);
+              }}
+              className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
+              title={isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
+              aria-label="Lưu việc làm"
+            >
+              <Bookmark
+                className={`w-4 h-4 ${
+                  isSaved ? 'text-[#2170E4] fill-[#2170E4]' : ''
+                }`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* Tags Row */}
+        <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
+          <span className="px-2.5 py-1 bg-blue-50 text-[#2170E4] rounded-md font-semibold">
+            {job.jobType || job.type || 'Full-time'}
+          </span>
+          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md font-semibold">
+            {job.salary}
+          </span>
+          <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
+            {job.location?.split(',').pop()?.trim() || job.location}
+          </span>
+        </div>
+
+        {/* Footer Row: Posted Time & Apply Button */}
+        <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
+          <span className="text-slate-400 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
+          <button
+            type="button"
+            id={`apply-btn-${job.id}`}
+            onClick={(e) => {
+              if (e) e.stopPropagation();
+              if (onApplyJob) {
+                onApplyJob({
                   id: job.id,
                   title: job.title,
                   company: job.company,
@@ -459,87 +509,10 @@ export const CompanyDetailView = ({
                 });
               }
             }}
-            className="text-sm sm:text-base font-bold text-slate-900 hover:text-[#0A58CA] transition-colors cursor-pointer line-clamp-1 mb-1"
+            className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-lg text-xs shadow-xs transition-all cursor-pointer"
           >
-            {job.title}
-          </h3>
-          <p className="text-xs text-slate-500 mt-0.5">{job.company}</p>
-
-          {/* Badges / Tags */}
-          <div className="flex flex-wrap items-center gap-1.5 mt-3.5">
-            {/* Job Type Pill (Blue) */}
-            <span className="px-2.5 py-1 bg-blue-50 text-[#0A58CA] text-[11px] font-semibold rounded-lg">
-              {job.type}
-            </span>
-
-            {/* Salary Pill (Light Gray) */}
-            <span className="px-2.5 py-1 bg-slate-100 text-slate-700 text-[11px] font-medium rounded-lg">
-              {job.salary}
-            </span>
-
-            {/* Location Pill (Light Red/Pink) */}
-            <span className="px-2.5 py-1 bg-rose-50 text-rose-600 text-[11px] font-medium rounded-lg">
-              {job.location}
-            </span>
-          </div>
-
-          {/* Tech/Skill Tags */}
-          {job.tags && (
-            <div className="flex flex-wrap items-center gap-1.5 mt-2.5">
-              {job.tags.map((t, idx) => (
-                <span
-                  key={idx}
-                  className="px-2 py-0.5 bg-slate-50 text-slate-600 text-[10px] rounded-md border border-slate-100"
-                >
-                  {t}
-                </span>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Card Footer: Time & Apply Now */}
-        <div className="flex items-center justify-between mt-5 pt-3.5 border-t border-slate-100">
-          <span className="text-xs text-slate-400 font-normal">
-            {job.postedTime}
-          </span>
-
-          <div className="flex items-center space-x-2">
-            <button
-              type="button"
-              onClick={() => {
-                if (onViewJobDetail) {
-                  onViewJobDetail({
-                    id: job.id,
-                    title: job.title,
-                    company: job.company,
-                    salary: job.salary,
-                    location: job.location,
-                  });
-                }
-              }}
-              className="px-3 py-1.5 border border-slate-200 hover:border-slate-300 text-slate-700 hover:bg-slate-50 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
-            >
-              Chi tiết
-            </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (onApplyJob) {
-                  onApplyJob({
-                    id: job.id,
-                    title: job.title,
-                    company: job.company,
-                    salary: job.salary,
-                    location: job.location,
-                  });
-                }
-              }}
-              className="px-4 py-1.5 bg-[#0A58CA] hover:bg-[#084298] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-2xs"
-            >
-              Apply Now
-            </button>
-          </div>
+            Ứng tuyển ngay
+          </button>
         </div>
       </div>
     );
@@ -547,90 +520,76 @@ export const CompanyDetailView = ({
 
   return (
     <div className="w-full bg-[#f8fafd] min-h-screen text-slate-800 pb-16">
-      {/* Back Button Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 pb-2">
-        <button
-          onClick={onBack}
-          className="inline-flex items-center space-x-2 text-xs font-semibold text-slate-600 hover:text-[#0A58CA] bg-white border border-slate-200 px-3.5 py-2 rounded-xl shadow-xs transition-colors cursor-pointer"
-        >
-          <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Quay lại danh sách công ty</span>
-        </button>
-      </div>
-
       {/* Main Container */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         {/* Top Banner Section */}
-        <div className="relative w-full rounded-2xl overflow-hidden shadow-sm bg-slate-900 border border-slate-200">
+        <div className="relative w-full rounded-2xl overflow-hidden shadow-xs bg-slate-900 border border-slate-200/80">
           <img
             src={currentCompany.coverImage}
             alt={currentCompany.name}
-            className="w-full h-48 sm:h-64 md:h-80 lg:h-96 object-cover object-center"
+            className="w-full h-56 sm:h-72 md:h-80 lg:h-[340px] object-cover object-center"
           />
           {/* Subtle gradient overlay at bottom */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent pointer-events-none" />
+
+          {/* Floating Back Button */}
+          {onBack && (
+            <button
+              type="button"
+              onClick={onBack}
+              title="Quay lại danh sách công ty"
+              className="absolute top-4 left-4 z-20 inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-white/95 hover:bg-white text-slate-700 hover:text-[#2170E4] text-xs font-semibold shadow-xs backdrop-blur-xs transition-all cursor-pointer border border-slate-200/60"
+            >
+              <ArrowLeft className="w-3.5 h-3.5" />
+              <span>Quay lại</span>
+            </button>
+          )}
         </div>
 
-        {/* Company Header Card (Overlapping Banner & matching banner width exactly) */}
-        <div className="relative -mt-16 sm:-mt-20 md:-mt-24 mb-8 z-10">
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sm:p-6 md:p-8 flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+        {/* Company Header Row (Info below banner, avatar nudged up into banner) */}
+        <div className="relative px-2 sm:px-4 z-10 mt-3 sm:mt-4">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
             {/* Left: Logo & Company Info */}
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-              {/* Company Logo Badge */}
-              <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-white border border-slate-200 shadow-sm p-3 flex items-center justify-center shrink-0">
-                <div className="w-full h-full flex flex-col items-center justify-center bg-slate-50 rounded-xl p-2 text-center border border-slate-100">
-                  <div className="w-8 h-8 rounded-lg bg-[#0A58CA]/10 text-[#0A58CA] flex items-center justify-center font-black text-sm mb-1">
+            <div className="flex flex-col sm:flex-row items-start sm:items-end gap-4 sm:gap-6">
+              {/* Company Logo Badge (nudged up into banner) */}
+              <div className="-mt-14 sm:-mt-18 md:-mt-22 w-28 h-24 sm:w-36 sm:h-32 rounded-2xl bg-white border border-slate-200/90 shadow-md p-2.5 flex items-center justify-center shrink-0 z-20">
+                <div className="w-full h-full flex flex-col items-center justify-center bg-[#F8FAFC] rounded-xl p-2 text-center border border-slate-100">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2170E4] flex items-center justify-center font-black text-sm mb-1">
                     TF
                   </div>
-                  <span className="text-[10px] font-bold text-slate-800 uppercase tracking-tighter leading-none">
-                    TECHFLOW
+                  <span className="text-xs font-extrabold text-slate-800 tracking-tight leading-none">
+                    TechFlow
                   </span>
-                  <span className="text-[8px] text-slate-400 font-medium scale-90">
+                  <span className="text-[9px] text-slate-400 font-semibold tracking-wider mt-0.5 uppercase">
                     SOLUTIONS
                   </span>
                 </div>
               </div>
 
-              {/* Title & Metadata */}
-              <div>
-                <div className="flex items-center gap-2.5">
-                  <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-                    {currentCompany.name}
-                  </h1>
-                  <span className="px-2.5 py-0.5 bg-emerald-50 text-emerald-700 text-xs font-semibold rounded-full border border-emerald-200 flex items-center space-x-1">
-                    <ShieldCheck className="w-3.5 h-3.5" />
-                    <span>Doanh nghiệp xác thực</span>
-                  </span>
-                </div>
-                <div className="flex flex-wrap items-center gap-3 sm:gap-4 mt-2 text-xs sm:text-sm text-slate-600 font-medium">
+              {/* Title & Metadata (comfortably below the image) */}
+              <div className="pt-2 pb-1">
+                <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+                  {currentCompany.name}
+                </h1>
+                <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-2 text-xs sm:text-sm text-slate-500 font-medium">
                   <div className="flex items-center space-x-1.5">
                     <Building2 className="w-4 h-4 text-slate-400" />
                     <span>{currentCompany.industry}</span>
                   </div>
-                  <span className="text-slate-300 hidden sm:inline">•</span>
                   <div className="flex items-center space-x-1.5">
                     <MapPin className="w-4 h-4 text-slate-400" />
                     <span>{currentCompany.location}</span>
                   </div>
-                  <span className="text-slate-300 hidden sm:inline">•</span>
                   <div className="flex items-center space-x-1.5">
                     <Users className="w-4 h-4 text-slate-400" />
                     <span>{currentCompany.employees}</span>
-                  </div>
-                  <span className="text-slate-300 hidden sm:inline">•</span>
-                  <div className="flex items-center space-x-1 text-amber-600 font-bold">
-                    <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    <span>{currentCompany.rating}</span>
-                    <span className="text-slate-400 font-normal text-xs">
-                      ({currentCompany.reviewsCount} đánh giá)
-                    </span>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Right: Action Buttons */}
-            <div className="flex items-center space-x-3 shrink-0 self-start md:self-center">
+            {/* Right: Action Buttons (+ Theo dõi & Website) */}
+            <div className="flex items-center space-x-3 shrink-0 pb-1">
               {/* + Theo dõi Button */}
               {(() => {
                 const isFollowing = onToggleFollowCompany
@@ -648,7 +607,7 @@ export const CompanyDetailView = ({
                         setInternalFollowing(!internalFollowing);
                       }
                     }}
-                    className={`px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer ${
+                    className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer shadow-2xs ${
                       isFollowing
                         ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
                         : 'bg-white border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50'
@@ -674,7 +633,7 @@ export const CompanyDetailView = ({
                 href={currentCompany.website}
                 target="_blank"
                 rel="noreferrer"
-                className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-bold bg-[#0A58CA] hover:bg-[#084298] text-white transition-colors shadow-xs flex items-center space-x-2 cursor-pointer"
+                className="px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-[#2170E4] hover:bg-[#1a5bbd] text-white transition-colors shadow-2xs flex items-center space-x-2 cursor-pointer"
               >
                 <Globe className="w-4 h-4" />
                 <span>Website</span>
@@ -684,47 +643,47 @@ export const CompanyDetailView = ({
         </div>
 
         {/* Tab Navigation Menu */}
-        <div id="company-detail-tabs" className="border-b border-slate-200 mb-8 bg-transparent">
+        <div id="company-detail-tabs" className="border-b border-slate-200 mt-8 mb-8 bg-transparent">
           <nav className="flex space-x-8">
             <button
               onClick={() => setActiveTab('overview')}
               className={`pb-3.5 text-sm sm:text-base font-bold transition-colors relative cursor-pointer ${
                 activeTab === 'overview'
-                  ? 'text-[#0A58CA]'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'text-[#2170E4]'
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
               }`}
             >
               <span>Tổng quan</span>
               {activeTab === 'overview' && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A58CA]" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2170E4]" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('jobs')}
-              className={`pb-3.5 text-sm sm:text-base font-bold transition-colors relative cursor-pointer ${
+              className={`pb-3.5 text-sm sm:text-base transition-colors relative cursor-pointer ${
                 activeTab === 'jobs'
-                  ? 'text-[#0A58CA]'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'text-[#2170E4] font-bold'
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
               }`}
             >
               <span>Tuyển dụng ({currentCompany.openJobsCount})</span>
               {activeTab === 'jobs' && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A58CA]" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2170E4]" />
               )}
             </button>
 
             <button
               onClick={() => setActiveTab('reviews')}
-              className={`pb-3.5 text-sm sm:text-base font-bold transition-colors relative cursor-pointer ${
+              className={`pb-3.5 text-sm sm:text-base transition-colors relative cursor-pointer ${
                 activeTab === 'reviews'
-                  ? 'text-[#0A58CA]'
-                  : 'text-slate-500 hover:text-slate-800'
+                  ? 'text-[#2170E4] font-bold'
+                  : 'text-slate-600 hover:text-slate-900 font-medium'
               }`}
             >
-              <span>Đánh giá ({reviewsData.length})</span>
+              <span>Đánh giá</span>
               {activeTab === 'reviews' && (
-                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0A58CA]" />
+                <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#2170E4]" />
               )}
             </button>
           </nav>
@@ -738,41 +697,13 @@ export const CompanyDetailView = ({
             {activeTab === 'overview' && (
               <>
                 {/* Card: Về chúng tôi */}
-                <div className="bg-white rounded-2xl border border-slate-200 p-6 sm:p-7 shadow-2xs">
-                  <h2 className="text-xl font-bold text-slate-900 mb-4 flex items-center justify-between">
-                    <span>Về chúng tôi</span>
-                    <span className="text-xs font-semibold text-slate-500 bg-slate-100 px-3 py-1 rounded-full">
-                      Thành lập 2015
-                    </span>
+                <div className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-2xs">
+                  <h2 className="text-xl font-bold text-slate-900 mb-4">
+                    Về chúng tôi
                   </h2>
                   <div className="space-y-4 text-sm sm:text-[15px] text-slate-600 leading-relaxed">
                     <p>{currentCompany.aboutP1}</p>
                     <p>{currentCompany.aboutP2}</p>
-                  </div>
-
-                  {/* Core Strengths & Tech Highlights */}
-                  <div className="mt-6 pt-6 border-t border-slate-100">
-                    <h3 className="text-xs font-bold text-slate-800 uppercase tracking-wider mb-3">
-                      Công nghệ & Nền tảng trọng tâm
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {[
-                        'Artificial Intelligence & GenAI',
-                        'Fintech Solutions',
-                        'Cloud Native (AWS/GCP)',
-                        'Microservices Architecture',
-                        'React & React Native',
-                        'Golang & Node.js',
-                        'Design Systems & Figma',
-                      ].map((item, idx) => (
-                        <span
-                          key={idx}
-                          className="px-3 py-1.5 bg-blue-50/60 text-[#0A58CA] border border-blue-100 rounded-xl text-xs font-semibold"
-                        >
-                          {item}
-                        </span>
-                      ))}
-                    </div>
                   </div>
                 </div>
 
@@ -782,45 +713,20 @@ export const CompanyDetailView = ({
                     <h2 className="text-xl font-bold text-slate-900">
                       Vị trí đang tuyển
                     </h2>
-                    {/* The requested button "Xem tất cả 12 vị trí" */}
+                    {/* The requested link "Xem tất cả 12 vị trí" */}
                     <button
                       type="button"
                       id="btn-view-all-company-jobs"
                       onClick={handleGoToAllJobs}
-                      className="text-xs sm:text-sm font-semibold text-[#0A58CA] hover:text-[#084298] hover:underline flex items-center space-x-1 cursor-pointer transition-colors bg-blue-50/80 hover:bg-blue-100/80 px-3 py-1.5 rounded-lg border border-blue-200"
+                      className="text-sm font-semibold text-[#2170E4] hover:underline cursor-pointer transition-colors"
                     >
-                      <span>Xem tất cả {currentCompany.openJobsCount} vị trí</span>
-                      <ChevronRight className="w-4 h-4 ml-0.5" />
+                      Xem tất cả {currentCompany.openJobsCount} vị trí
                     </button>
                   </div>
 
                   {/* 2x2 Jobs Grid */}
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     {overviewJobs.map((job) => renderJobCard(job))}
-                  </div>
-
-                  {/* Bottom banner prompting more jobs */}
-                  <div className="mt-5 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200/80 rounded-2xl p-4.5 flex flex-col sm:flex-row items-center justify-between gap-3">
-                    <div className="flex items-center space-x-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#0A58CA] text-white flex items-center justify-center shrink-0">
-                        <Briefcase className="w-5 h-5" />
-                      </div>
-                      <div>
-                        <h4 className="text-sm font-bold text-slate-900">
-                          Còn {currentCompany.openJobsCount - overviewJobs.length} vị trí tuyển dụng khác đang mở
-                        </h4>
-                        <p className="text-xs text-slate-500">
-                          Kỹ thuật, Sản phẩm, DevOps, AI, Mobile và Phân tích Dữ liệu
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleGoToAllJobs}
-                      className="px-4 py-2 bg-[#0A58CA] hover:bg-[#084298] text-white text-xs font-bold rounded-xl transition-colors shrink-0 cursor-pointer shadow-xs"
-                    >
-                      Khám phá toàn bộ 12 vị trí
-                    </button>
                   </div>
                 </div>
               </>
@@ -1103,7 +1009,7 @@ export const CompanyDetailView = ({
           {/* RIGHT COLUMN (lg:col-span-4) */}
           <div className="lg:col-span-4 space-y-6">
             {/* Card 1: Hoạt động công ty */}
-            <div className="bg-white rounded-2xl border border-slate-200 p-5 sm:p-6 shadow-2xs">
+            <div className="bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-2xs">
               <h3 className="text-base font-bold text-slate-900 mb-4">
                 Hoạt động công ty
               </h3>
@@ -1129,21 +1035,21 @@ export const CompanyDetailView = ({
               <button
                 type="button"
                 onClick={() => setShowGalleryModal(true)}
-                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:border-slate-300 transition-colors text-center cursor-pointer"
+                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-colors text-center cursor-pointer shadow-2xs"
               >
                 Xem tất cả hình ảnh
               </button>
             </div>
 
             {/* Card 2: Số liệu ấn tượng (Solid Blue) */}
-            <div className="bg-[#1877F2] text-white rounded-2xl p-6 sm:p-7 shadow-md space-y-5">
-              <h3 className="text-base font-bold text-white mb-2">
+            <div className="bg-[#2170E4] text-white rounded-2xl p-6 sm:p-7 shadow-xs space-y-4">
+              <h3 className="text-sm sm:text-base font-bold text-white mb-2">
                 Số liệu ấn tượng
               </h3>
 
               {/* Stat 1 */}
               <div>
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight">
                   95%
                 </div>
                 <p className="text-xs text-blue-100 mt-1">
@@ -1151,11 +1057,11 @@ export const CompanyDetailView = ({
                 </p>
               </div>
 
-              <div className="border-t border-white/15" />
+              <div className="border-t border-blue-400/40 my-3.5" />
 
               {/* Stat 2 */}
               <div>
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight">
                   12+
                 </div>
                 <p className="text-xs text-blue-100 mt-1">
@@ -1163,11 +1069,11 @@ export const CompanyDetailView = ({
                 </p>
               </div>
 
-              <div className="border-t border-white/15" />
+              <div className="border-t border-blue-400/40 my-3.5" />
 
               {/* Stat 3 */}
               <div>
-                <div className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+                <div className="text-3xl sm:text-4xl font-extrabold tracking-tight">
                   25%
                 </div>
                 <p className="text-xs text-blue-100 mt-1">
@@ -1177,13 +1083,12 @@ export const CompanyDetailView = ({
             </div>
 
             {/* Card 3: Chia sẻ hồ sơ (Light Blue Tint) */}
-            <div className="bg-[#eff5fd] border border-blue-100 rounded-2xl p-5 sm:p-6 text-left">
-              <h3 className="text-base font-bold text-slate-900 mb-1">
+            <div className="bg-[#EDF2FD] border border-blue-100/70 rounded-2xl p-5 sm:p-6 text-left">
+              <h3 className="text-sm font-bold text-slate-900 mb-1">
                 Chia sẻ hồ sơ
               </h3>
-              <p className="text-xs text-slate-600 mb-4 leading-relaxed">
-                Lan tỏa cơ hội nghề nghiệp tại {currentCompany.name} đến bạn bè
-                của bạn.
+              <p className="text-xs text-slate-500 mb-4 leading-relaxed">
+                Lan tỏa cơ hội nghề nghiệp tại {currentCompany.name} đến bạn bè của bạn.
               </p>
 
               {/* Share Action Buttons */}
@@ -1193,7 +1098,7 @@ export const CompanyDetailView = ({
                   type="button"
                   onClick={handleCopyLink}
                   title="Chia sẻ"
-                  className="w-10 h-10 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-blue-600 flex items-center justify-center shadow-xs transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-full bg-white hover:bg-slate-50 border border-slate-200/70 text-[#2170E4] flex items-center justify-center shadow-2xs transition-colors cursor-pointer"
                 >
                   <Share2 className="w-4 h-4" />
                 </button>
@@ -1203,7 +1108,7 @@ export const CompanyDetailView = ({
                   type="button"
                   onClick={handleCopyLink}
                   title="Sao chép liên kết"
-                  className="w-10 h-10 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-blue-600 flex items-center justify-center shadow-xs transition-colors cursor-pointer relative"
+                  className="w-10 h-10 rounded-full bg-white hover:bg-slate-50 border border-slate-200/70 text-[#2170E4] flex items-center justify-center shadow-2xs transition-colors cursor-pointer relative"
                 >
                   <Link2 className="w-4 h-4" />
                 </button>
@@ -1212,7 +1117,7 @@ export const CompanyDetailView = ({
                 <a
                   href={`mailto:?subject=Cơ hội nghề nghiệp tại ${currentCompany.name}&body=Khám phá cơ hội việc làm tại ${currentCompany.name}: ${window.location.href}`}
                   title="Gửi Email"
-                  className="w-10 h-10 rounded-full bg-white hover:bg-slate-50 border border-slate-200 text-blue-600 flex items-center justify-center shadow-xs transition-colors cursor-pointer"
+                  className="w-10 h-10 rounded-full bg-white hover:bg-slate-50 border border-slate-200/70 text-[#2170E4] flex items-center justify-center shadow-2xs transition-colors cursor-pointer"
                 >
                   <Mail className="w-4 h-4" />
                 </a>

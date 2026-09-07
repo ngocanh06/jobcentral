@@ -48,7 +48,7 @@ export const JobCard = ({
               if (onShare) onShare(job, e);
             }}
             title="Chia sẻ việc làm"
-            className="p-2 text-slate-400 hover:text-indigo-600 hover:bg-slate-50 rounded-xl transition-all focus:outline-hidden cursor-pointer"
+            className="p-2 text-slate-400 hover:text-indigo-600 transition-colors focus:outline-hidden cursor-pointer"
             aria-label="Chia sẻ việc làm"
           >
             <Share2 className="w-5 h-5" />
@@ -59,10 +59,10 @@ export const JobCard = ({
             type="button"
             onClick={(e) => onToggleSave(job.id, e)}
             title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
-            className={`p-2 rounded-xl transition-all focus:outline-hidden cursor-pointer ${
+            className={`p-2 transition-colors focus:outline-hidden cursor-pointer ${
               job.isSaved
-                ? 'text-indigo-600 bg-indigo-50 hover:bg-indigo-100'
-                : 'text-slate-400 hover:text-indigo-600 hover:bg-slate-50'
+                ? 'text-indigo-600'
+                : 'text-slate-400 hover:text-indigo-600'
             }`}
             aria-label="Lưu việc làm"
           >
