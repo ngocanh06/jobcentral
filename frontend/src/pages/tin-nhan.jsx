@@ -355,9 +355,9 @@ const TinNhan = ({
 
   return (
     <div className="w-full bg-white text-left animate-in fade-in duration-200 border-t border-slate-200">
-      <div className="grid grid-cols-1 md:grid-cols-12 min-h-[calc(100vh-70px)] max-w-[1600px] mx-auto">
+      <div className="grid h-[calc(100vh-70px)] min-h-0 grid-cols-1 md:grid-cols-12 max-w-[1600px] mx-auto">
         {/* LEFT COLUMN: Sidebar Messages List (md:col-span-4 lg:col-span-3) */}
-        <div className="md:col-span-4 lg:col-span-3 border-r border-slate-200 flex flex-col h-full bg-white">
+        <div className="md:col-span-4 lg:col-span-3 flex h-full min-h-0 flex-col border-r border-slate-200 bg-white">
           {/* Header Title & Search Box */}
           <div className="p-4 sm:p-5 border-b border-slate-100">
             <h2 className="text-base sm:text-[17px] font-bold text-slate-900 mb-3 tracking-tight">
@@ -445,7 +445,7 @@ const TinNhan = ({
         </div>
 
         {/* RIGHT COLUMN: Active Chat Panel (md:col-span-8 lg:col-span-9) */}
-        <div className="md:col-span-8 lg:col-span-9 flex flex-col h-full bg-white relative">
+        <div className="relative md:col-span-8 lg:col-span-9 flex h-full min-h-0 flex-col bg-white">
           {/* Chat Header */}
           <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between bg-white shrink-0">
             {/* Recruiter & Company Info */}
@@ -558,7 +558,7 @@ const TinNhan = ({
           </div>
 
           {/* Messages Thread Container */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 sm:px-8 space-y-5 bg-white">
+          <div className="min-h-0 flex-1 overflow-y-auto p-4 sm:p-6 sm:px-8 space-y-5 bg-white">
             {/* Centered Date Badge */}
             <div className="flex justify-center my-1">
               <span className="px-3.5 py-1 bg-[#f1f5f9] text-slate-600 rounded-full text-xs font-medium">
