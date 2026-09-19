@@ -13,8 +13,11 @@ import GoiDichVu from "./pages/goi-dich-vu";
 import QuanLiTaiKhoan from "./pages/quan-li-tai-khoan";
 import CaiDat from "./pages/SysPages/Cai-dat";
 import HoTro from "./pages/SysPages/Ho-tro";
-import Intro from "./pages/Intro-signup-in/Intro"
-import LogIn from "./pages/LogIn"
+import Intro from "./pages/Intro-signup-in/Intro";
+import LogIn from "./pages/LogIn";
+import CamNang from "./pages/Intro-signup-in/cam-nang"
+
+
 const recruiterRoutes = [
 
   {
@@ -84,6 +87,10 @@ const router = createBrowserRouter([
   {
     path: "/LogIn",
     element: <LogIn/>
+  },
+  {
+    path:"/Cam-nang-tuyen-dung",
+    element : <CamNang/>
   },
   {
     element: <RecruiterLayout />,

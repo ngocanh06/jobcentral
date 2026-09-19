@@ -1,6 +1,5 @@
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
-  Sparkles,
   Building2,
   Radar,
   Megaphone,
@@ -13,11 +12,14 @@ import {
   Quote,
   ChevronLeft,
   ChevronRight,
+  ArrowLeft,
   RefreshCw,
   User,
+  ArrowRight,
 } from "lucide-react";
 import { Link } from "react-router-dom";
-import pic_logo from "d:/Recruitment Website/jobcentral_role_r9t/jobcentral/frontend/src/picture_sec/Logo_JobCentral.png";
+import { useTranslation } from "react-i18next";
+import Footer from "../../components/Footer";
 
 /* ------------------------------------------------------------------ */
 /*  Reveal-on-scroll primitive                                         */
@@ -72,121 +74,165 @@ function Reveal({ children, delay = 0, y = 24, className = "" }) {
 /*  Data                                                               */
 /* ------------------------------------------------------------------ */
 const STATS = [
-  { value: "5M+", label: "Ứng viên chất lượng" },
-  { value: "3x", label: "Tốc độ tuyển dụng nhanh hơn" },
-  { value: "85%", label: "Độ chính xác AI Matching" },
-  { value: "20K+", label: "Doanh nghiệp tin dùng" },
+  { value: "5M+", labelKey: "stats.candidates" },
+  { value: "3x", labelKey: "stats.speed" },
+  { value: "85%", labelKey: "stats.accuracy" },
+  { value: "20K+", labelKey: "stats.companies" },
 ];
 
 const FEATURES = [
   {
     icon: Radar,
-    title: "AI Matching",
-    desc: "Công nghệ AI học sâu giúp gợi ý ứng viên phù hợp nhất theo vị trí, kinh nghiệm và kỹ năng chỉ trong vài giây.",
+    titleKey: "features.matchingTitle",
+    descKey: "features.matching",
+    image: "/picture/banner_1.png",
+    duration: 5500,
   },
   {
     icon: Building2,
-    title: "Employer Branding",
-    desc: "Xây dựng trang thương hiệu tuyển dụng riêng, giúp doanh nghiệp thu hút và giữ chân nhân tài hiệu quả hơn.",
+    titleKey: "features.brandingTitle",
+    descKey: "features.branding",
+    image: "/picture/banner_2.png",
+    duration: 5500,
   },
   {
     icon: Cpu,
-    title: "Hệ thống ATS",
-    desc: "Quản lý toàn bộ quy trình tuyển dụng từ đăng tin, sàng lọc đến phỏng vấn trên một nền tảng duy nhất.",
+    titleKey: "features.atsTitle",
+    descKey: "features.ats",
+    image: "/picture/banner_3.jpg",
+    duration: 5500,
   },
   {
     icon: Megaphone,
-    title: "Quảng cáo nhắm mục tiêu",
-    desc: "Phân phối tin tuyển dụng đúng đối tượng ứng viên tiềm năng, tối ưu ngân sách theo thời gian thực.",
+    titleKey: "features.advertisingTitle",
+    descKey: "features.advertising",
+    image: "/picture/images.jpg",
+    duration: 5500,
   },
   {
     icon: Globe2,
-    title: "Tiếp cận toàn cầu",
-    desc: "Mạng lưới ứng viên trải rộng trong nước và quốc tế, mở rộng phạm vi tìm kiếm nhân tài của bạn.",
+    titleKey: "features.globalTitle",
+    descKey: "features.global",
+    image: "/picture/banner_1.png",
+    duration: 5500,
   },
   {
     icon: Headset,
-    title: "Hỗ trợ 24/7",
-    desc: "Đội ngũ chuyên gia tuyển dụng đồng hành cùng doanh nghiệp xuyên suốt quá trình sử dụng dịch vụ.",
+    titleKey: "features.supportTitle",
+    descKey: "features.support",
+    image: "/picture/banner_2.png",
+    duration: 5500,
   },
 ];
 
 const STEPS = [
   {
     icon: UserPlus,
-    title: "Đăng ký",
-    desc: "Tạo tài khoản doanh nghiệp miễn phí trong vài phút.",
+    titleKey: "process.registerTitle",
+    descKey: "process.register",
   },
   {
     icon: FileText,
-    title: "Đăng tuyển",
-    desc: "Tạo tin tuyển dụng chuẩn hoá với gợi ý nội dung từ AI.",
+    titleKey: "process.postTitle",
+    descKey: "process.post",
   },
   {
     icon: Cpu,
-    title: "AI Matching",
-    desc: "Hệ thống tự động sàng lọc và đề xuất ứng viên phù hợp nhất.",
+    titleKey: "process.matchingTitle",
+    descKey: "process.matching",
   },
   {
     icon: CheckCircle2,
-    title: "Tuyển dụng",
-    desc: "Phỏng vấn, đánh giá và chốt ứng viên ngay trên nền tảng.",
+    titleKey: "process.hireTitle",
+    descKey: "process.hire",
   },
 ];
 
 const TESTIMONIALS = [
   {
-    quote:
-      "Nhờ giải pháp AI Matching của JobCenTral, thời gian tìm kiếm ứng viên phù hợp rút ngắn đáng kể. Đội ngũ hỗ trợ cũng rất nhiệt tình và sát sao.",
+    quoteKey: "testimonials.quoteOne",
     name: "Nguyễn Thị A",
-    role: "Giám đốc Nhân sự, Công ty XYZ",
+    roleKey: "testimonials.roleOne",
   },
   {
-    quote:
-      "Trang Employer Branding giúp chúng tôi xây dựng hình ảnh chuyên nghiệp và thu hút được nhiều ứng viên chất lượng hơn hẳn so với trước đây.",
+    quoteKey: "testimonials.quoteTwo",
     name: "Trần Văn B",
-    role: "Trưởng phòng Tuyển dụng, Tập đoàn ABC",
+    roleKey: "testimonials.roleTwo",
   },
 ];
 
 const PLANS = [
   {
     name: "CƠ BẢN",
-    tagline:
-      "Phù hợp cho freelancer hoặc các startup giai đoạn sơ khai hoặc nhà tuyển dụng mới.",
-    features: [
-      "Đăng 1 bài lên FanPage",
-      "Tiếp cận < 5000 ứng viên",
-      "Hỗ trợ email cơ bản",
-      "AI Matching vấn đáp tự động",
+    nameKey: "pricing.basic",
+    taglineKey: "pricing.basicTagline",
+    featureKeys: [
+      "pricing.basicFeatureOne",
+      "pricing.basicFeatureTwo",
+      "pricing.basicFeatureThree",
+      "pricing.basicFeatureFour",
     ],
-    cta: "Tìm hiểu thêm",
+    ctaKey: "pricing.learnMore",
     highlight: false,
   },
   {
-    name: "TIỂU CHUẨN",
-    tagline: "Giải pháp tối ưu cho doanh nghiệp vừa và nhỏ.",
-    features: [
-      "Đăng 02 bài lên Fanpage được đánh logo đỏ",
-      "Ghim bài lên Fanpage trong 03 ngày",
-      "Tiếp cận 15.000 - 20.000 ứng viên",
-      "Phỏng vấn video (Sắp tới)",
+    nameKey: "pricing.standard",
+    taglineKey: "pricing.standardTagline",
+    featureKeys: [
+      "pricing.standardFeatureOne",
+      "pricing.standardFeatureTwo",
+      "pricing.standardFeatureThree",
+      "pricing.standardFeatureFour",
     ],
-    cta: "Bắt đầu ngay",
+    ctaKey: "pricing.start",
     highlight: true,
-    badge: "Phổ biến nhất",
+    badgeKey: "pricing.popular",
   },
   {
-    name: "BỨT PHÁ",
-    tagline: "Khai phá sức mạnh AI và quản trị dữ liệu tập trung.",
-    features: [
-      "Bao gồm toàn bộ quyền lợi của gói Tiêu Chuẩn",
-      "Chạy Quảng Cáo 05 ngày",
-      "Hỗ trợ tương tác, kéo tin nhắn trong 03 ngày đầu",
-      "Chuyên viên hỗ trợ riêng",
+    nameKey: "pricing.breakthrough",
+    taglineKey: "pricing.breakthroughTagline",
+    featureKeys: [
+      "pricing.breakthroughFeatureOne",
+      "pricing.breakthroughFeatureTwo",
+      "pricing.breakthroughFeatureThree",
+      "pricing.breakthroughFeatureFour",
     ],
-    cta: "Liên hệ",
+    ctaKey: "pricing.contact",
     highlight: false,
+  },
+];
+
+const Intro_AI = [
+  {
+    title: "Tạo và đăng tin bằng AI",
+    image: "/picture/ai-create-job.png",
+    items: [
+      "Tạo tin tuyển dụng chuyên nghiệp, tùy chỉnh linh hoạt văn phong, nội dung bằng AI",
+      "Gợi ý mức lương phù hợp theo từng vị trí",
+      "Đăng tin nhanh từ file mô tả công việc hoặc link có sẵn",
+    ],
+    imageLeft: false,
+  },
+  {
+    title: "Sàng lọc bằng AI",
+    image: "/picture/ai-screen-candidate.png",
+    items: [
+      "Tự động sàng lọc hồ sơ theo tiêu chí tuyển dụng của từng vị trí",
+      "AI chấm điểm và xếp hạng ứng viên phù hợp nhất để nhà tuyển dụng ưu tiên đánh giá",
+      "Rút ngắn 80% thời gian lọc hồ sơ thủ công, giúp đội ngũ tuyển dụng ra quyết định nhanh hơn",
+      "Đẩy nhanh quá trình ra quyết định shortlist nhờ đánh giá ứng viên bằng AI",
+    ],
+    imageLeft: true,
+  },
+  {
+    title: "AI đề xuất ứng viên",
+    image: "/picture/ai-suggest-candidate.png",
+    items: [
+      "Nhận danh sách ứng viên phù hợp được AI đề xuất trên mô tả công việc của tiêu chuẩn",
+      "Chủ động tiếp cận đúng ứng viên tiềm năng ngay cả khi họ chưa ứng tuyển",
+      "95% ứng viên do AI đề xuất đáp ứng tiêu chí để bước vào vòng tiếp theo",
+    ],
+    imageLeft: false,
   },
 ];
 
@@ -211,7 +257,6 @@ const CLIENTS = [
     image:
       "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSR4jyPc2_xukGAc0vvvRPko58yQaVBydBS7G9A9glgPQ&s=10",
   },
-  // { name: "Vietcombank", image: "data:image/jpeg;base64,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" },
   {
     name: "FPT",
     image:
@@ -288,7 +333,10 @@ const CLIENTS = [
 /*  Header                                                             */
 /* ------------------------------------------------------------------ */
 function Header() {
+  const { t, i18n } = useTranslation();
   const [scrolled, setScrolled] = useState(false);
+  const [open, setOpen] = useState(false);
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", onScroll);
@@ -296,12 +344,17 @@ function Header() {
   }, []);
 
   const links = [
-    { label: "Jobs", href: "#jobs" },
-    { label: "AI Recruitment", href: "#ai-recruitment" },
-    { label: "Career Advice", href: "#career-advice" },
-    { label: "Enterprise", href: "#enterprise" },
-    { label: "Contacts", href: "/Ho-tro-intro" },
+    { label: t("nav.product"), href: "#product" },
+    { label: t("nav.aiRecruitment"), href: "#ai-recruitment" },
+    { label: t("nav.handbook"), href: "/cam-nang-tuyen-dung" },
+    { label: t("nav.contact"), href: "/Ho-tro-intro" },
   ];
+
+  const options = [
+    { code: "vi", label: "VI" },
+    { code: "en", label: "EN" },
+  ];
+  const currentLanguage = i18n.resolvedLanguage || i18n.language;
 
   return (
     <header
@@ -323,7 +376,54 @@ function Header() {
               {link.label}
             </Link>
           ))}
+          <div className="group relative">
+            <button
+              type="button"
+              aria-haspopup="true"
+              className="flex items-center gap-1 py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              {t("nav.utilities")}
+              <span className="text-xs text-slate-400">▼</span>
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 mt-2 w-64 translate-y-1 rounded-xl border border-slate-200 bg-white p-1.5 text-sm opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <Link
+                to="/Truth-Score"
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.truthScore")}
+              </Link>
+
+              <Link
+                to="/Goi-dich-vu"
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.servicePlans")}
+              </Link>
+
+              <Link
+                // to={/BoTinhLuong}
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.Calculator_salary")}
+              </Link>
+
+              <Link
+                // to={/BoTinhLuong}
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.Personal_IncomeTax")}
+              </Link>
+
+              <Link
+                // to={/BoTinhLuong}
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.industry_specific_base_salary")}
+              </Link>
+            </div>
+          </div>
         </nav>
+
         <div className="hidden items-center gap-3 sm:flex">
           <div className="flex items-center gap-2">
             <Link
@@ -335,7 +435,7 @@ function Header() {
                 strokeWidth={1.8}
                 className="transition-transform duration-200 group-hover:scale-110"
               />
-              <span>Đăng nhập</span>
+              <span>{t("nav.login")}</span>
             </Link>
 
             <span className="text-slate-300">/</span>
@@ -344,19 +444,46 @@ function Header() {
               to="/Register"
               className="rounded-lg px-2.5 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
             >
-              Đăng ký
+              {t("nav.register")}
             </Link>
+          </div>
+          <div className="relative w-30">
+            <button
+              onClick={() => setOpen(!open)}
+              className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm"
+            >
+              {currentLanguage.toUpperCase()}
+
+              <span className="text-slate-400">▼</span>
+            </button>
+
+            {open && (
+              <div className="absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white p-1 shadow-lg">
+                {options.map((option) => (
+                  <button
+                    key={option.code}
+                    onClick={() => {
+                      void i18n.changeLanguage(option.code);
+                      setOpen(false);
+                    }}
+                    className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-slate-100"
+                  >
+                    {option.label}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
           <Link
             to="/"
-            className="ml-20 group flex h-10 w-fit items-center justify-center gap-2 rounded-full bg-blue-600 px-5 text-sm font-semibold text-white transition-all duration-300"
+            className="ml-4 group flex h-10 w-fit items-center justify-center gap-2 rounded-full bg-blue-600 px-5 text-sm font-semibold text-white transition-all duration-300"
           >
             <RefreshCw
               size={16}
               className="transition-transform duration-300 group-hover:animate-spin"
             />
             <span className="transition-all duration-200">
-              Dành cho ứng viên
+              {t("nav.candidate")}
             </span>
           </Link>
         </div>
@@ -369,28 +496,27 @@ function Header() {
 /*  Hero                                                                */
 /* ------------------------------------------------------------------ */
 function Hero() {
+  const { t } = useTranslation();
+
   return (
-    <section
-      id="jobs"
-      className="scroll-mt-24 overflow-hidden bg-gradient-to-b from-blue-50/60 via-white to-white"
-    >
-      <div className="mx-auto max-w-8xl px-2 py-3 md:py-6">
+    <section id="jobs" className="scroll-mt-24 overflow-hidden">
+      <div className="mx-auto max-w-8xl px-2">
         <Reveal delay={100} y={32}>
           <div className="relative isolate overflow-hidden rounded-3xl bg-slate-900 shadow-2xl shadow-blue-900/20">
-            <div className="grid h-[520px] grid-cols-2 gap-1 sm:grid-cols-3 md:h-[580px]">
+            <div className="grid h-[440px] grid-cols-2 gap-1 sm:grid-cols-3 md:h-[630px]">
               <img
                 src="https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=900&q=85"
-                alt="Đội ngũ tuyển dụng đang trao đổi"
+                alt={t("hero.team")}
                 className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
               />
               <img
                 src="https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=1100&q=85"
-                alt="Nhà tuyển dụng phỏng vấn ứng viên"
+                alt={t("hero.interview")}
                 className="col-span-2 h-full w-full object-cover transition-transform duration-700 hover:scale-105 sm:col-span-1"
               />
               <img
                 src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?auto=format&fit=crop&w=900&q=85"
-                alt="Nhóm nhân sự làm việc cùng nhau"
+                alt={t("hero.collaboration")}
                 className="hidden h-full w-full object-cover transition-transform duration-700 hover:scale-105 sm:block"
               />
             </div>
@@ -399,48 +525,65 @@ function Hero() {
             <div className="absolute inset-0 flex items-center justify-center px-6 text-center">
               <div className="max-w-3xl text-white">
                 <h1 className="text-4xl font-bold leading-tight md:text-6xl">
-                  Chuyển đổi Tuyển dụng với{" "}
-                  <span className="text-blue-300">Công nghệ AI</span>
+                  {t("hero.title")}{" "}
+                  <span className="text-blue-300">{t("hero.highlight")}</span>
                 </h1>
                 <p className="mx-auto mt-5 max-w-2xl text-base text-blue-50 md:text-lg">
-                  Giải pháp tuyển dụng dựa trên dữ liệu, tối ưu hoá quy trình
-                  tìm kiếm nhân tài của bạn.
+                  {t("hero.description")}
                 </p>
                 <div className="mt-8 flex flex-wrap justify-center gap-4">
                   <Link
                     to="/Register"
                     className="rounded-full bg-blue-600 px-7 py-3.5 font-semibold text-white shadow-lg shadow-blue-950/30 transition-all duration-300 hover:-translate-y-0.5 hover:bg-blue-700 active:translate-y-0"
                   >
-                    Bắt đầu tuyển dụng
+                    {t("hero.start")}
                   </Link>
                   <button className="rounded-full border border-white/70 bg-white/10 px-7 py-3.5 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-blue-600">
-                    Tìm hiểu thêm
+                    {t("hero.learnMore")}
                   </button>
                 </div>
               </div>
             </div>
           </div>
         </Reveal>
+        <section id="stats">
+          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
+            {STATS.map((s, i) => (
+              <Reveal key={s.labelKey} delay={i * 100}>
+                <div className="text-center">
+                  <div className="text-3xl font-bold text-blue-600 md:text-4xl">
+                    {s.value}
+                  </div>
+                  <div className="mt-2 text-sm text-slate-500">
+                    {t(s.labelKey)}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+        </section>
       </div>
     </section>
   );
 }
 
 function ScrollHint() {
+  const { t } = useTranslation();
+
   const scrollToStats = () => {
     document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
-    <div className="mt-5 flex justify-center bg-white py-3">
+    <div className="mt-12 flex justify-center bg-white py-5">
       <button
         type="button"
         onClick={scrollToStats}
-        aria-label="Lướt xuống phần giới thiệu"
-        className="group flex animate-bounce flex-col items-center gap-1 text-[#2170e4] transition-all duration-300 hover:animate-none hover:scale-110"
+        aria-label={t("scrollHint")}
+        className="group flex animate-bounce flex-col items-center gap-1 text-[#2170e4]"
       >
-        <span className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-[#2170e4] pt-1.5 transition-all duration-300 group-hover:bg-[#2170e4]">
-          <span class="h-2 w-1 rounded-full bg-[#2170e4] transition-all duration-700 ease-out group-hover:translate-y-4 group-hover:bg-white" />
+        <span className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-[#2170e4] pt-1.5">
+          <span class="h-2 w-1 rounded-full bg-[#2170e4] transition-all duration-700 ease-out" />
         </span>
         <span className="text-lg leading-none transition-transform duration-700 group-hover:translate-y-1">
           ↓
@@ -451,69 +594,219 @@ function ScrollHint() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Stats                                                               */
+/*  Feature grid                                                       */
 /* ------------------------------------------------------------------ */
-function Stats() {
-  return (
-    <section
-      id="stats"
-      className="mt-7 border-y border-slate-100 bg-white py-16"
-    >
-      <Reveal>
-        <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
-          Tại sao chọn JobCentral?
-        </h2>
-        <p className="mx-auto mt-2 max-w-lg text-center text-slate-500">
-          Những con số ấn tượng chứng minh hiệu quả tuyển dụng vượt trội
-        </p>
-      </Reveal>
+function Features() {
+  const { t } = useTranslation();
+  const [activeFeature, setActiveFeature] = useState(0);
 
-      <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
-        {STATS.map((s, i) => (
-          <Reveal key={s.label} delay={i * 100}>
-            <div className="text-center">
-              <div className="text-3xl font-bold text-blue-600 md:text-4xl">
-                {s.value}
+  useEffect(() => {
+    const currentFeature = FEATURES[activeFeature];
+    if (!currentFeature) return undefined;
+
+    const timer = setTimeout(() => {
+      setActiveFeature((prev) => (prev + 1) % FEATURES.length);
+    }, currentFeature.duration);
+
+    return () => clearTimeout(timer);
+  }, [activeFeature]);
+
+  const activeItem = FEATURES[activeFeature];
+
+  return (
+    <section id="ai-recruitment" className="scroll-mt-24 bg-slate-50/60 py-20">
+      <div className="mx-auto max-w-7xl px-6">
+        <Reveal>
+          <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
+            {t("features.title")}
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-center text-slate-500">
+            {t("features.description")}
+          </p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="space-y-4">
+            {FEATURES.map(({ icon: Icon, titleKey, descKey, duration }, i) => {
+              const isActive = i === activeFeature;
+
+              return (
+                <Reveal key={titleKey} delay={(i % 3) * 100}>
+                  <button
+                    type="button"
+                    onClick={() => setActiveFeature(i)}
+                    className={`group w-full overflow-hidden rounded-2xl border text-left transition-all duration-300 ${
+                      isActive
+                        ? "border-blue-200 bg-blue-50/60 shadow-lg shadow-blue-200/30"
+                        : "border-slate-200 bg-white hover:-translate-y-0.5 hover:border-blue-200 hover:shadow-md"
+                    }`}
+                  >
+                    <div className="flex items-start gap-4 p-5">
+                      <div
+                        className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl transition-all duration-300 ${
+                          isActive
+                            ? "bg-blue-600 text-white"
+                            : "bg-blue-50 text-blue-600 group-hover:bg-blue-100"
+                        }`}
+                      >
+                        <Icon size={22} strokeWidth={2} />
+                      </div>
+
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-3">
+                          <h3 className="text-left text-lg font-semibold text-slate-900">
+                            {t(titleKey)}
+                          </h3>
+                        </div>
+                        <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                          {t(descKey)}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="h-1.5 w-100 overflow-hidden bg-slate-200">
+                      <span
+                        className={`block h-full rounded-r-full bg-gradient-to-r from-blue-500 via-sky-500 to-cyan-400 transition-[width] ease-linear ${
+                          isActive ? "opacity-100" : "opacity-0"
+                        }`}
+                        style={{
+                          width: isActive ? "100%" : "0%",
+                          transitionDuration: `${duration}ms`,
+                        }}
+                      />
+                    </div>
+                  </button>
+                </Reveal>
+              );
+            })}
+          </div>
+
+          <div className="relative overflow-hidden rounded-[28px] border border-slate-200 bg-white shadow-sm ring-1 ring-slate-100">
+            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-cyan-50" />
+            <div className="relative h-full min-h-[480px]">
+              <img
+                key={activeItem.titleKey}
+                src={activeItem.image}
+                alt={t(activeItem.titleKey)}
+                className="h-full w-full object-cover transition-all duration-500 ease-out"
+              />
+              <div className="absolute bottom-5 left-1/2 flex w-[min(88%,440px)] -translate-x-1/2 gap-3">
+                <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+                  Trải nghiệm ngay
+                </button>
+
+                <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
+                  Liên hệ tư vấn
+                </button>
               </div>
-              <div className="mt-2 text-sm text-slate-500">{s.label}</div>
             </div>
-          </Reveal>
-        ))}
+          </div>
+        </div>
       </div>
     </section>
   );
 }
 
-/* ------------------------------------------------------------------ */
-/*  Feature grid                                                       */
-/* ------------------------------------------------------------------ */
-function Features() {
+function FeatureList({ items }) {
   return (
-    <section id="ai-recruitment" className="scroll-mt-24 bg-slate-50/60 py-20">
-      <div className="mx-auto max-w-6xl px-6">
-        <Reveal>
-          <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
-            Giải pháp Tuyển dụng Toàn diện
-          </h2>
-          <p className="mx-auto mt-2 max-w-xl text-center text-slate-500">
-            Công cụ hỗ trợ nhà tuyển dụng ở mọi bước trong hành trình tìm kiếm
-            nhân tài, từ đăng tin đến chốt ứng viên.
-          </p>
-        </Reveal>
+    <ul className="mt-5 space-y-3">
+      {items.map((item, index) => (
+        <li
+          key={index}
+          className="flex items-start gap-2.5 text-sm leading-5 text-slate-700"
+        >
+          <CheckCircle2
+            size={15}
+            strokeWidth={2}
+            className="mt-0.5 shrink-0 text-[#2170E4]"
+          />
 
-        <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {FEATURES.map(({ icon: Icon, title, desc }, i) => (
-            <Reveal key={title} delay={(i % 3) * 100}>
-              <div className="group h-full rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg">
-                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-50 text-blue-600 transition-colors duration-300 group-hover:bg-blue-600 group-hover:text-white">
-                  <Icon size={22} strokeWidth={2} />
-                </div>
-                <h3 className="mt-4 font-semibold text-slate-900">{title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-500">
-                  {desc}
-                </p>
+          <span>{item}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function FeatureImage({ src, title }) {
+  return (
+    <div className="flex items-center justify-center rounded-2xl border border-slate-100 bg-white p-3 shadow-[0_8px_25px_rgba(15,23,42,0.08)]">
+      <div className="flex h-full min-h-[220px] w-full items-center justify-center overflow-hidden rounded-xl bg-slate-50">
+        <img
+          src={src}
+          alt={title}
+          className="h-auto max-h-[300px] w-full object-contain"
+        />
+      </div>
+    </div>
+  );
+}
+
+function AIRecruitmentSection() {
+  return (
+    <section className="mt-10 w-full bg-white px-4 py-8 sm:px-6 lg:px-8">
+      <div className="mx-auto w-full max-w-6xl rounded-[14px] border border-[#d7e1f0] bg-[#f3f6fb] p-2.5 sm:p-3">
+        {/* Header */}
+        <div className="flex flex-col gap-6 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="flex text-base font-bold text-slate-900 sm:text-lg">
+            Tối ưu hiệu quả tuyển dụng với
+            <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent text-2xl font-bold">
+              JobCentralAI
+            </span>
+            <img
+              src="/picture/AI_logo2.png"
+              alt="Gemini"
+              className="h-6 w-6 object-contain"
+            />
+          </h2>
+
+          <div className="flex gap-2">
+            <button
+              type="button"
+              className="rounded-md border border-[#2170E4] bg-white px-5 py-2 text-xs font-medium text-[#2170E4] transition-all duration-200 hover:bg-[#2170E4] hover:text-white"
+            >
+              Trải nghiệm ngay
+            </button>
+
+            <button
+              type="button"
+              className="rounded-md border border-slate-200 bg-white px-5 py-2 text-xs font-medium text-slate-700 transition-all duration-200 hover:border-[#2170E4] hover:text-[#2170E4]"
+            >
+              Liên hệ tư vấn
+            </button>
+          </div>
+        </div>
+
+        {/* Feature sections */}
+        <div className="space-y-2.5">
+          {Intro_AI.map((feature, index) => (
+            <div
+              key={feature.title}
+              className="grid items-center gap-6 rounded-xl bg-white p-4 sm:p-8 md:grid-cols-2"
+            >
+              {/* Image */}
+              {feature.imageLeft && (
+                <FeatureImage src={feature.image} title={feature.title} />
+              )}
+
+              {/* Content */}
+              <div
+                className={`flex flex-col justify-center ${
+                  feature.imageLeft ? "md:order-2" : ""
+                }`}
+              >
+                <h3 className="text-xl font-bold tracking-tight text-[#0645a5] sm:text-2xl">
+                  {feature.title}
+                </h3>
+
+                <FeatureList items={feature.items} />
               </div>
-            </Reveal>
+
+              {/* Image */}
+              {!feature.imageLeft && (
+                <FeatureImage src={feature.image} title={feature.title} />
+              )}
+            </div>
           ))}
         </div>
       </div>
@@ -525,108 +818,324 @@ function Features() {
 /*  Process — with hover interaction on each step                      */
 /* ------------------------------------------------------------------ */
 function Process() {
+  const { t } = useTranslation();
   const [active, setActive] = useState(null);
 
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    position: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    console.log("Thông tin ứng viên:", formData);
+
+    // Sau này có thể gọi API tại đây
+  };
+
   return (
-    <section id="career-advice" className="scroll-mt-24 bg-white py-20">
+    <section
+      id="career-advice"
+      className="scroll-mt-24 bg-slate-50/60 py-20"
+    >
       <div className="mx-auto max-w-6xl px-6">
+        {/* TITLE */}
         <Reveal>
           <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
-            Quy trình Đơn giản, Hiệu quả Tối đa
+            {t("process.title")}
           </h2>
         </Reveal>
 
-        <div className="relative mt-16">
-          {/* connecting line */}
-          <div className="absolute left-0 right-0 top-7 hidden h-[2px] bg-slate-200 md:block" />
-          <div
-            className="absolute left-0 top-7 hidden h-[2px] bg-blue-600 transition-all duration-500 ease-out md:block"
-            style={{
-              width:
-                active === null
-                  ? "0%"
-                  : `${(active / (STEPS.length - 1)) * 100}%`,
-            }}
-          />
+        <div className="mt-14 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+          {/* ================= LEFT - PROCESS ================= */}
+          <Reveal>
+            <div className="relative rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8">
+              <div className="mb-8">
+                <h3 className="text-xl font-bold text-slate-900">
+                  Quy trình tuyển dụng
+                </h3>
 
-          <div className="relative grid grid-cols-2 gap-y-10 md:grid-cols-4 md:gap-y-0">
-            {STEPS.map(({ icon: Icon, title, desc }, i) => (
-              <Reveal key={title} delay={i * 100}>
-                <div
-                  className="group flex flex-col items-center text-center"
-                  onMouseEnter={() => setActive(i)}
-                  onMouseLeave={() => setActive(null)}
-                >
-                  <div
-                    className={`flex h-14 w-14 items-center justify-center rounded-full text-lg font-bold transition-all duration-300 ${
-                      active === i
-                        ? "scale-110 bg-blue-600 text-white shadow-lg shadow-blue-600/30"
-                        : "bg-blue-100 text-blue-600 group-hover:bg-blue-200"
-                    }`}
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Đồng hành cùng bạn trong từng bước của quá trình tìm kiếm
+                  công việc phù hợp.
+                </p>
+              </div>
+
+              {/* Vertical connecting line */}
+              <div className="absolute left-[60px] top-[125px] bottom-[45px] w-[2px] bg-slate-200" />
+
+              <div className="relative space-y-8">
+                {STEPS.map(
+                  ({ icon: Icon, titleKey, descKey }, i) => (
+                    <div
+                      key={titleKey}
+                      className="relative flex gap-5"
+                      onMouseEnter={() => setActive(i)}
+                      onMouseLeave={() => setActive(null)}
+                    >
+                      {/* NUMBER */}
+                      <div
+                        className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-bold transition-all duration-300 ${
+                          active === i
+                            ? "scale-110 bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                            : "bg-blue-100 text-blue-600"
+                        }`}
+                      >
+                        {i + 1}
+                      </div>
+
+                      {/* CONTENT */}
+                      <div className="pt-1">
+                        <div
+                          className={`mb-1 flex items-center gap-2 transition-colors duration-300 ${
+                            active === i
+                              ? "text-blue-600"
+                              : "text-slate-400"
+                          }`}
+                        >
+                          <Icon size={20} />
+
+                          <span className="text-xs font-semibold uppercase tracking-wide">
+                            Bước {i + 1}
+                          </span>
+                        </div>
+
+                        <h3
+                          className={`font-semibold transition-colors duration-300 ${
+                            active === i
+                              ? "text-blue-600"
+                              : "text-slate-900"
+                          }`}
+                        >
+                          {t(titleKey)}
+                        </h3>
+
+                        <p className="mt-1 max-w-md text-sm leading-6 text-slate-500">
+                          {t(descKey)}
+                        </p>
+                      </div>
+                    </div>
+                  )
+                )}
+              </div>
+            </div>
+
+            <Link
+              to="/Register"
+              className="mt-8 inline-flex w-[43%] items-center justify-center gap-2 rounded-3xl bg-[#2170e4] px-5 py-3.5 text-base font-semibold text-white shadow-md shadow-blue-600/20 transition-colors duration-200 hover:bg-[#185fc5] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/25"
+            >
+              <span>Đăng ký ngay</span>
+              <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+
+          </Reveal>
+
+          <Reveal delay={200}>
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+              <div className="mb-7">
+                <h3 className="mt-3 text-3xl font-bold text-[#2170e4]">
+                  Nhận tư vấn miễn phí ngay !
+                </h3>
+
+                <p className="mt-2 text-sm leading-6 text-slate-500">
+                  Hãy để lại thông tin, đội ngũ tuyển dụng sẽ liên hệ để tư
+                  vấn công việc phù hợp với bạn.
+                </p>
+              </div>
+
+              <form onSubmit={handleSubmit} className="space-y-5">
+                {/* NAME */}
+                <div>
+                  <label
+                    htmlFor="name"
+                    className="mb-2 block text-sm font-medium text-slate-700"
                   >
-                    {i + 1}
-                  </div>
-                  <div
-                    className={`mt-4 flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-300 ${
-                      active === i ? "text-blue-600" : "text-slate-400"
-                    }`}
-                  >
-                    <Icon size={22} />
-                  </div>
-                  <h3
-                    className={`mt-1 font-semibold transition-colors duration-300 ${
-                      active === i ? "text-blue-600" : "text-slate-900"
-                    }`}
-                  >
-                    {title}
-                  </h3>
-                  <p
-                    className={`mt-2 max-w-[10rem] text-sm text-slate-500 transition-all duration-300 ${
-                      active === i ? "opacity-100" : "opacity-70"
-                    }`}
-                  >
-                    {desc}
-                  </p>
+                    Họ và tên
+                  </label>
+
+                  <input
+                    id="name"
+                    name="name"
+                    type="text"
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Nhập họ và tên"
+                    required
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                  />
                 </div>
-              </Reveal>
-            ))}
-          </div>
+                <div className="grid gap-5 sm:grid-cols-2">
+                  <div>
+                    <label
+                      htmlFor="email"
+                      className="mb-2 block text-sm font-medium text-slate-700"
+                    >
+                      Email
+                    </label>
+
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      value={formData.email}
+                      onChange={handleChange}
+                      placeholder="example@gmail.com"
+                      required
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                    />
+                  </div>
+
+                  <div>
+                    <label
+                      htmlFor="phone"
+                      className="mb-2 block text-sm font-medium text-slate-700"
+                    >
+                      Số điện thoại
+                    </label>
+
+                    <input
+                      id="phone"
+                      name="phone"
+                      type="tel"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      placeholder="09xx xxx xxx"
+                      required
+                      className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                    />
+                  </div>
+                </div>
+
+                {/* POSITION */}
+                <div>
+                  <label
+                    htmlFor="position"
+                    className="mb-2 block text-sm font-medium text-slate-700"
+                  >
+                    Vị trí quan tâm
+                  </label>
+
+                  <select
+                    id="position"
+                    name="position"
+                    value={formData.position}
+                    onChange={handleChange}
+                    required
+                    className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                  >
+                    <option value="">Chọn vị trí bạn quan tâm</option>
+                    <option value="frontend">Frontend Developer</option>
+                    <option value="backend">Backend Developer</option>
+                    <option value="fullstack">Fullstack Developer</option>
+                    <option value="designer">UI/UX Designer</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="other">Vị trí khác</option>
+                  </select>
+                </div>
+
+                {/* MESSAGE */}
+                <div>
+                  <label
+                    htmlFor="message"
+                    className="mb-2 block text-sm font-medium text-slate-700"
+                  >
+                    Nội dung cần tư vấn
+                  </label>
+
+                  <textarea
+                    id="message"
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={4}
+                    placeholder="Bạn đang quan tâm đến công việc hoặc vị trí nào?"
+                    className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
+                  />
+                </div>
+
+                {/* SUBMIT */}
+                <div className="flex gap-4">
+                <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+                  Trải nghiệm ngay
+                </button>
+
+                <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
+                  Liên hệ tư vấn
+                </button>
+              </div>
+
+                <p className="text-center text-xs leading-5 text-slate-400">
+                  Thông tin của bạn được sử dụng để liên hệ và tư vấn cơ hội
+                  việc làm phù hợp.
+                </p>
+              </form>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>
+
+// thực hiện đáp useTranslation
+// call SubmitFile by Email
+// format giao diện người dùng bao gồm nhiều giai đoạn => background/ font / img_behind 
+
   );
 }
+
+
+
+/* ------------------------------------------------------------------ */
+/*  Tools for NTD                                                     */
+/* ------------------------------------------------------------------ */
+
 
 /* ------------------------------------------------------------------ */
 /*  Testimonials                                                       */
 /* ------------------------------------------------------------------ */
 function Testimonials() {
+  const { t } = useTranslation();
+
   return (
     <section className="bg-slate-50/60 py-20">
       <div className="mx-auto max-w-5xl px-6">
         <Reveal>
           <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
-            Khách hàng nói gì về chúng tôi
+            {t("testimonials.title")}
           </h2>
         </Reveal>
 
         <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {TESTIMONIALS.map((t, i) => (
-            <Reveal key={t.name} delay={i * 120}>
+          {TESTIMONIALS.map((testimonial, i) => (
+            <Reveal key={testimonial.name} delay={i * 120}>
               <div className="h-full rounded-2xl bg-white p-7 shadow-sm ring-1 ring-slate-100 transition-shadow duration-300 hover:shadow-md">
                 <Quote className="text-blue-200" size={28} />
                 <p className="mt-4 text-sm leading-relaxed text-slate-600">
-                  “{t.quote}”
+                  “{t(testimonial.quoteKey)}”
                 </p>
                 <div className="mt-6 flex items-center gap-3">
                   <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
-                    {t.name.charAt(0)}
+                    {testimonial.name.charAt(0)}
                   </div>
                   <div>
                     <div className="text-sm font-semibold text-slate-900">
-                      {t.name}
+                      {testimonial.name}
                     </div>
-                    <div className="text-xs text-slate-500">{t.role}</div>
+                    <div className="text-xs text-slate-500">
+                      {t(testimonial.roleKey)}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -642,6 +1151,7 @@ function Testimonials() {
 /*  Pricing                                                             */
 /* ------------------------------------------------------------------ */
 function Pricing() {
+  const { t } = useTranslation();
   const [activePlan, setActivePlan] = useState(0);
 
   return (
@@ -649,18 +1159,17 @@ function Pricing() {
       <div className="mx-auto max-w-6xl px-6">
         <Reveal>
           <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
-            Gói Giải pháp Linh hoạt
+            {t("pricing.title")}
           </h2>
           <p className="mx-auto mt-2 max-w-xl text-center text-slate-500">
-            Chọn gói dịch vụ phù hợp với quy mô và nhu cầu tuyển dụng của doanh
-            nghiệp bạn
+            {t("pricing.description")}
           </p>
         </Reveal>
 
         <div className="relative mt-12 min-h-[31rem] md:grid md:min-h-0 md:grid-cols-3 md:gap-8">
           {PLANS.map((p, i) => (
             <Reveal
-              key={`${p.name}-${i}`}
+              key={`${p.nameKey}-${i}`}
               delay={i * 120}
               className={`absolute inset-x-0 top-0 cursor-pointer transition-all duration-500 md:static md:cursor-default md:opacity-100 md:translate-y-0 ${
                 i === activePlan
@@ -680,24 +1189,27 @@ function Pricing() {
                     : "border-slate-200 bg-white hover:border-blue-200 hover:shadow-lg"
                 }`}
               >
-                {p.badge && (
+                {p.badgeKey && (
                   <span className="absolute -top-3 right-6 rounded-full bg-amber-400 px-3 py-1 text-xs font-semibold text-slate-900">
-                    {p.badge}
+                    {t(p.badgeKey)}
                   </span>
                 )}
                 <h3
                   className={`text-lg font-bold ${p.highlight ? "text-white" : "text-slate-900"}`}
                 >
-                  {p.name}
+                  {t(p.nameKey)}
                 </h3>
                 <p
                   className={`mt-2 text-sm ${p.highlight ? "text-blue-100" : "text-slate-500"}`}
                 >
-                  {p.tagline}
+                  {t(p.taglineKey)}
                 </p>
                 <ul className="mt-6 flex-1 space-y-3">
-                  {p.features.map((f) => (
-                    <li key={f} className="flex items-start gap-2 text-sm">
+                  {p.featureKeys.map((featureKey) => (
+                    <li
+                      key={featureKey}
+                      className="flex items-start gap-2 text-sm"
+                    >
                       <CheckCircle2
                         size={18}
                         className={
@@ -709,7 +1221,7 @@ function Pricing() {
                           p.highlight ? "text-blue-50" : "text-slate-600"
                         }
                       >
-                        {f}
+                        {t(featureKey)}
                       </span>
                     </li>
                   ))}
@@ -721,7 +1233,7 @@ function Pricing() {
                       : "border border-slate-300 text-slate-700 hover:border-blue-600 hover:text-blue-600"
                   }`}
                 >
-                  {p.cta}
+                  {t(p.ctaKey)}
                 </button>
               </div>
             </Reveal>
@@ -736,6 +1248,7 @@ function Pricing() {
 /*  Clients strip                                                       */
 /* ------------------------------------------------------------------ */
 function Clients() {
+  const { t } = useTranslation();
   const logosPerPage = 6;
   const [currentPage, setCurrentPage] = useState(0);
   const pageCount = Math.ceil(CLIENTS.length / logosPerPage);
@@ -764,7 +1277,7 @@ function Clients() {
     <section className="bg-slate-50/60 py-16">
       <Reveal>
         <h2 className="text-center text-lg font-semibold text-slate-500">
-          Khách hàng của chúng tôi
+          {t("clients.title")}
         </h2>
       </Reveal>
       <Reveal delay={100}>
@@ -780,7 +1293,7 @@ function Clients() {
               >
                 <img
                   src={client.image}
-                  alt={`Logo ${client.name}`}
+                  alt={t("clients.logo", { name: client.name })}
                   className="h-9 max-w-[8rem] object-contain grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
                   onError={(event) => {
                     event.currentTarget.style.display = "none";
@@ -797,21 +1310,24 @@ function Clients() {
             <button
               type="button"
               onClick={showPrevious}
-              aria-label="Xem nhóm logo trước"
+              aria-label={t("clients.previous")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-all hover:border-[#2170e4] hover:bg-[#2170e4] hover:text-white"
             >
               <ChevronLeft size={18} />
             </button>
             <div
               className="flex items-center gap-1.5"
-              aria-label={`Nhóm logo ${currentPage + 1} trên ${pageCount}`}
+              aria-label={t("clients.page", {
+                current: currentPage + 1,
+                total: pageCount,
+              })}
             >
               {Array.from({ length: pageCount }, (_, page) => (
                 <button
                   key={page}
                   type="button"
                   onClick={() => setCurrentPage(page)}
-                  aria-label={`Xem nhóm logo ${page + 1}`}
+                  aria-label={t("clients.viewPage", { page: page + 1 })}
                   className={`h-2 rounded-full transition-all duration-300 ${
                     page === currentPage
                       ? "w-6 bg-[#2170e4]"
@@ -823,7 +1339,7 @@ function Clients() {
             <button
               type="button"
               onClick={showNext}
-              aria-label="Xem nhóm logo tiếp theo"
+              aria-label={t("clients.next")}
               className="flex h-9 w-9 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-all hover:border-[#2170e4] hover:bg-[#2170e4] hover:text-white"
             >
               <ChevronRight size={18} />
@@ -840,128 +1356,18 @@ function Clients() {
 /* ------------------------------------------------------------------ */
 export default function JobCentralLanding() {
   return (
-    <div className="min-h-screen bg-white font-sans text-slate-900 antialiased">
+    <div className="min-h-screen bg-slate-50 font-sans text-slate-900 antialiased">
       <Header />
       <Hero />
-      <ScrollHint />
-      <Stats />
+      {/* <ScrollHint /> */}
+      {/* <Stats /> */}
       <Features />
+      <AIRecruitmentSection />
       <Process />
       <Testimonials />
       <Pricing />
       <Clients />
-      <footer
-        id="contacts"
-        className="scroll-mt-24 border-t border-slate-200 bg-slate-50"
-      >
-        <div className="grid grid-cols-1 border-b border-slate-200 text-sm sm:grid-cols-2 lg:grid-cols-4">
-          <div className="border-b border-slate-200 px-6 py-10 sm:col-span-2 lg:col-span-1 lg:border-b-0 lg:border-r lg:px-10">
-            <Link to="/" className="inline-flex items-center gap-3">
-              <img
-                src={pic_logo}
-                alt="Logo JobCentral"
-                className="h-10 w-10 rounded-xl object-contain"
-              />
-              <span className="text-lg font-black tracking-tight text-slate-900">
-                JOB<span className="text-[#2170e4]">CENTRAL</span>
-              </span>
-            </Link>
-            <p className="mt-4 max-w-xs leading-relaxed text-slate-500">
-              Liên hệ:
-            </p>
-            <br />
-            <p>Trụ sở chính: 256 Kinh Dương Vương, Thanh Khê,Tp Đà Nẵng</p>
-            <p className="overflow-auto whitespace-pre">
-              Email: Helper.jobcentral@gmail.com
-            </p>
-            <p className="overflow-auto whitespace-pre">
-              Hotline: 0962.522.881
-            </p>
-            <p className="overflow-auto whitespace-pre">
-              FaceBook: JobCentral Today
-            </p>
-            <p className="overflow-auto whitespace-pre">
-              TikTok: JobCentral.VietNam
-            </p>
-          </div>
-
-          <div className="px-6 py-8 sm:px-8 lg:px-10">
-            <p className="font-semibold text-slate-900">Công ty</p>
-            <ul className="mt-4 space-y-3 text-slate-500">
-              <li>
-                <Link
-                  to="/about"
-                  className="transition-colors hover:text-[#2170e4]"
-                >
-                  About Us
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/about"
-                  className="transition-colors hover:text-[#2170e4]"
-                >
-                  Career
-                </Link>
-              </li>
-
-              <li>
-                <Link
-                  to="/about"
-                  className="transition-colors hover:text-[#2170e4]"
-                >
-                  Mobile App
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="px-6 py-8 sm:px-8 lg:px-10">
-            <p className="font-semibold text-slate-900">Hỗ trợ</p>
-            <ul className="mt-4 space-y-3 text-slate-500">
-              <li>
-                <Link
-                  to="/Ho-tro-intro"
-                  className="transition-colors hover:text-[#2170e4]"
-                >
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/privacy"
-                  className="transition-colors hover:text-[#2170e4]"
-                >
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link
-                  to="/terms"
-                  className="transition-colors hover:text-[#2170e4]"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          <div className="px-6 py-8 lg:px-10">
-            <p className="font-semibold text-slate-900">Tài liệu</p>
-            <ul className="mt-4 space-y-3 text-slate-500">
-              <li>Handbook</li>
-              <li>Market Trends</li>
-              <li>Interview Tips</li>
-            </ul>
-          </div>
-        </div>
-        <div className="border-t border-slate-200 px-6 py-5 flex justify-center">
-          <p className="text-xs text-slate-400">
-            © {new Date().getFullYear()} JobCentral. All rights reserved.
-          </p>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }

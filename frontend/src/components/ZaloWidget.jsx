@@ -64,7 +64,7 @@ export default function ZaloChatWidget() {
         >
 
           {/* HEADER */}
-          <div className="bg-gradient-to-br from-[#0068ff] to-blue-600 px-5 pb-5 pt-5 text-white">
+          <div className="bg-gradient-to-br from-[#015CE0] to-blue-600 px-5 pb-5 pt-5 text-white">
             
             {/* Top */}
             <div className="flex items-center justify-between">
@@ -86,7 +86,7 @@ export default function ZaloChatWidget() {
                 </div>
 
                 <h2 className="text-base font-semibold">
-                  JobCentral official
+                  JobCentral Official
                 </h2>
               </div>
 
@@ -128,7 +128,7 @@ export default function ZaloChatWidget() {
               </p>
 
               <button
-                className="h-11 w-full rounded-lg bg-[#0068ff] text-base font-semibold text-white shadow-sm transition hover:bg-blue-700"
+                className="h-11 w-full rounded-lg bg-[#015CE0] text-base font-semibold text-white shadow-sm transition hover:bg-blue-700"
                 onClick={() => {
                   window.open(
                     "https://zalo.me/0962522881",
@@ -172,7 +172,7 @@ export default function ZaloChatWidget() {
                     key={chatMessage.id}
                     className={`max-w-[85%] rounded-2xl px-4 py-2 text-sm ${
                       chatMessage.from === "user"
-                        ? "self-end rounded-br-sm bg-[#0068ff] text-white"
+                        ? "self-end rounded-br-sm bg-[#015CE0] text-white"
                         : "self-start rounded-bl-sm bg-white text-slate-700 shadow-sm"
                     }`}
                   >
@@ -199,7 +199,7 @@ export default function ZaloChatWidget() {
                   type="submit"
                   aria-label="Gửi tin nhắn"
                   disabled={!message.trim()}
-                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#0068ff] text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                  className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#015CE0] text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   <Send size={17} />
                 </button>

@@ -398,63 +398,6 @@ export default function RecruiterDashboard() {
     }
   `}</style>
           </div>
-          {/* Footer */}
-          
-          <footer className="pt-8 pb-4 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
-            <div>
-              <h4 className="text-[#2170e4] font-bold text-lg">JobCentral</h4>
-              <p className="text-xs text-slate-400 mt-2">
-                © 2024 JobCentral. Empowering your professional journey.
-              </p>
-            </div>
-            <div>
-              <p className="font-medium text-slate-700 mb-2">Công ty</p>
-              <ul className="space-y-1.5 text-slate-500 text-xs">
-                <li>
-                  <Link
-                    to="/about"
-                    className="hover:text-[#2170E4] transition-colors"
-                  >
-                    About Us
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to="/about"
-                    className="hover:text-[#2170E4] transition-colors"
-                  >
-                    Career
-                  </Link>
-                </li>
-
-                <li>
-                  <Link
-                    to="/about"
-                    className="hover:text-[#2170E4] transition-colors"
-                  >
-                    Mobile App
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-medium text-slate-700 mb-2">Hỗ trợ</p>
-              <ul className="space-y-1.5 text-slate-500 text-xs">
-                <li>Help Center</li>
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-medium text-slate-700 mb-2">Tài liệu</p>
-              <ul className="space-y-1.5 text-xs">
-                <li className="text-slate-500">Handbook</li>
-                <li className="text-slate-500">Market Trends</li>
-                <li className="text-slate-500">Interview Tips</li>
-              </ul>
-            </div>
-          </footer>
         </main>
       </div>
     </div>
