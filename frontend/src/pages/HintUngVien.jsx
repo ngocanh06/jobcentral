@@ -145,7 +145,7 @@ export default function CandidateSearchPage() {
         {/* Search card */}
         <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-6 flex items-center gap-2">
-            <span className="h-5 w-1.5 rounded-full bg-blue-600" />
+            <span className="h-5 w-1.5 rounded-full bg-blue-500" />
             <h2 className="text-sm font-extrabold uppercase text-slate-900">Từ khóa tìm kiếm hồ sơ</h2>
           </div>
 
