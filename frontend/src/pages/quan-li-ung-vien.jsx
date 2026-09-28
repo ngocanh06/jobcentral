@@ -12,6 +12,7 @@ import {
   ChevronRight,
   FileText,
   Send,
+  Plus,
 } from "lucide-react";
 
 import * as XLSX from "xlsx";
@@ -22,25 +23,26 @@ import pic from "../picture_sec/pic_default.jpg";
 const CANDIDATES = [
   {
     id: 1,
-    name: "Vo Thai Kiet",
-    email: "kietthaivo2006@gmail.com",
+    name: "Nguyen Thanh Cong",
+    email: "thanhcong123@gmail.com",
     avatar: pic,
     role: "Senior Backend Engineer",
     location: "HaiChau, DN",
     tags: ["Remote-friendly"],
     date: "24 Th10, 2026",
-    score: 100,
+    score: 86,
     stage: "Interviewing",
-    recruiter: "NgocAnh",
+    recruiter: "Thu Hoai",
     recruiterAvatar: pic,
     skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+    resume: "thanhcong_resume_2026.pdf",
 
-    successPrediction: 0,
+    successPrediction: 86,
     skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
+      { name: "TeamWork", status: "ok" },
+      { name: "Python", status: "warn" },
+      { name: "Tư Duy Thiết Kế", status: "ok" },
+        { name: "JS", status:"ok"},
     ],
 
     timeline: [
@@ -50,180 +52,180 @@ const CANDIDATES = [
     ],
   },
 
-  {
-    id: 2,
-    name: "lê đại thú",
-    email: "kietthaivo2006@gmail.com",
-    avatar: pic,
-    role: "Senior Backend Engineer",
-    location: "HaiChau, DN",
-    tags: ["Remote-friendly"],
-    date: "24 Th10, 2026",
-    score: 100,
-    stage: "Interviewing",
-    recruiter: "NgocAnh",
-    recruiterAvatar: pic,
-    skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+  // {
+  //   id: 2,
+  //   name: "lê đại thú",
+  //   email: "kietthaivo2006@gmail.com",
+  //   avatar: pic,
+  //   role: "Senior Backend Engineer",
+  //   location: "HaiChau, DN",
+  //   tags: ["Remote-friendly"],
+  //   date: "24 Th10, 2026",
+  //   score: 100,
+  //   stage: "Interviewing",
+  //   recruiter: "NgocAnh",
+  //   recruiterAvatar: pic,
+  //   skills: ["DEV"],
+  //   resume: "vo_kiet_resume_2023.pdf",
 
-    successPrediction: 0,
-    skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
-    ],
+  //   successPrediction: 0,
+  //   skillGaps: [
+  //     // { name: "Distributed Systems", status: "ok" },
+  //     // { name: "Kubernetes/Helm", status: "warn" },
+  //     // { name: "Team Leadership", status: "ok" },
+  //   ],
 
-    timeline: [
-      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
-      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
-      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
-    ],
-  },
-  {
-    id: 3,
-    name: "Kiều lương tâm",
-    email: "kietthaivo2006@gmail.com",
-    avatar: pic,
-    role: "Senior Backend Engineer",
-    location: "HaiChau, DN",
-    tags: ["Remote-friendly"],
-    date: "24 Th10, 2026",
-    score: 100,
-    stage: "Interviewing",
-    recruiter: "NgocAnh",
-    recruiterAvatar: pic,
-    skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+  //   timeline: [
+  //     // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+  //     // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+  //     // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+  //   ],
+  // },
+  // {
+  //   id: 3,
+  //   name: "Kiều lương tâm",
+  //   email: "kietthaivo2006@gmail.com",
+  //   avatar: pic,
+  //   role: "Senior Backend Engineer",
+  //   location: "HaiChau, DN",
+  //   tags: ["Remote-friendly"],
+  //   date: "24 Th10, 2026",
+  //   score: 100,
+  //   stage: "Interviewing",
+  //   recruiter: "NgocAnh",
+  //   recruiterAvatar: pic,
+  //   skills: ["DEV"],
+  //   resume: "vo_kiet_resume_2023.pdf",
 
-    successPrediction: 0,
-    skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
-    ],
+  //   successPrediction: 0,
+  //   skillGaps: [
+  //     // { name: "Distributed Systems", status: "ok" },
+  //     // { name: "Kubernetes/Helm", status: "warn" },
+  //     // { name: "Team Leadership", status: "ok" },
+  //   ],
 
-    timeline: [
-      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
-      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
-      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
-    ],
-  },
-  {
-    id: 4,
-    name: "Ngo thua an",
-    email: "kietthaivo2006@gmail.com",
-    avatar: pic,
-    role: "Senior Backend Engineer",
-    location: "HaiChau, DN",
-    tags: ["Remote-friendly"],
-    date: "24 Th10, 2026",
-    score: 100,
-    stage: "Interviewing",
-    recruiter: "NgocAnh",
-    recruiterAvatar: pic,
-    skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+  //   timeline: [
+  //     // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+  //     // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+  //     // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+  //   ],
+  // },
+  // {
+  //   id: 4,
+  //   name: "Ngo thua an",
+  //   email: "kietthaivo2006@gmail.com",
+  //   avatar: pic,
+  //   role: "Senior Backend Engineer",
+  //   location: "HaiChau, DN",
+  //   tags: ["Remote-friendly"],
+  //   date: "24 Th10, 2026",
+  //   score: 100,
+  //   stage: "Interviewing",
+  //   recruiter: "NgocAnh",
+  //   recruiterAvatar: pic,
+  //   skills: ["DEV"],
+  //   resume: "vo_kiet_resume_2023.pdf",
 
-    successPrediction: 0,
-    skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
-    ],
+  //   successPrediction: 0,
+  //   skillGaps: [
+  //     // { name: "Distributed Systems", status: "ok" },
+  //     // { name: "Kubernetes/Helm", status: "warn" },
+  //     // { name: "Team Leadership", status: "ok" },
+  //   ],
 
-    timeline: [
-      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
-      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
-      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
-    ],
-  },
-  {
-    id: 5,
-    name: "Vo van b",
-    email: "kietthaivo2006@gmail.com",
-    avatar: pic,
-    role: "Senior Backend Engineer",
-    location: "HaiChau, DN",
-    tags: ["Remote-friendly"],
-    date: "24 Th10, 2026",
-    score: 100,
-    stage: "Interviewing",
-    recruiter: "NgocAnh",
-    recruiterAvatar: pic,
-    skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+  //   timeline: [
+  //     // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+  //     // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+  //     // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+  //   ],
+  // },
+  // {
+  //   id: 5,
+  //   name: "Vo van b",
+  //   email: "kietthaivo2006@gmail.com",
+  //   avatar: pic,
+  //   role: "Senior Backend Engineer",
+  //   location: "HaiChau, DN",
+  //   tags: ["Remote-friendly"],
+  //   date: "24 Th10, 2026",
+  //   score: 100,
+  //   stage: "Interviewing",
+  //   recruiter: "NgocAnh",
+  //   recruiterAvatar: pic,
+  //   skills: ["DEV"],
+  //   resume: "vo_kiet_resume_2023.pdf",
 
-    successPrediction: 0,
-    skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
-    ],
+  //   successPrediction: 0,
+  //   skillGaps: [
+  //     // { name: "Distributed Systems", status: "ok" },
+  //     // { name: "Kubernetes/Helm", status: "warn" },
+  //     // { name: "Team Leadership", status: "ok" },
+  //   ],
 
-    timeline: [
-      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
-      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
-      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
-    ],
-  },
-  {
-    id: 6,
-    name: "Nguyen văn a",
-    email: "kietthaivo2006@gmail.com",
-    avatar: pic,
-    role: "Senior Backend Engineer",
-    location: "HaiChau, DN",
-    tags: ["Remote-friendly"],
-    date: "24 Th10, 2026",
-    score: 100,
-    stage: "Interviewing",
-    recruiter: "NgocAnh",
-    recruiterAvatar: pic,
-    skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+  //   timeline: [
+  //     // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+  //     // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+  //     // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+  //   ],
+  // },
+  // {
+  //   id: 6,
+  //   name: "Nguyen văn a",
+  //   email: "kietthaivo2006@gmail.com",
+  //   avatar: pic,
+  //   role: "Senior Backend Engineer",
+  //   location: "HaiChau, DN",
+  //   tags: ["Remote-friendly"],
+  //   date: "24 Th10, 2026",
+  //   score: 100,
+  //   stage: "Interviewing",
+  //   recruiter: "NgocAnh",
+  //   recruiterAvatar: pic,
+  //   skills: ["DEV"],
+  //   resume: "vo_kiet_resume_2023.pdf",
 
-    successPrediction: 0,
-    skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
-    ],
+  //   successPrediction: 0,
+  //   skillGaps: [
+  //     // { name: "Distributed Systems", status: "ok" },
+  //     // { name: "Kubernetes/Helm", status: "warn" },
+  //     // { name: "Team Leadership", status: "ok" },
+  //   ],
 
-    timeline: [
-      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
-      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
-      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
-    ],
-  },
-  {
-    id: 7,
-    name: "Ng Tai Loc",
-    email: "kietthaivo2006@gmail.com",
-    avatar: pic,
-    role: "Senior Backend Engineer",
-    location: "HaiChau, DN",
-    tags: ["Remote-friendly"],
-    date: "24 Th10, 2026",
-    score: 100,
-    stage: "Interviewing",
-    recruiter: "NgocAnh",
-    recruiterAvatar: pic,
-    skills: ["DEV"],
-    resume: "vo_kiet_resume_2023.pdf",
+  //   timeline: [
+  //     // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+  //     // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+  //     // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+  //   ],
+  // },
+  // {
+  //   id: 7,
+  //   name: "Ng Tai Loc",
+  //   email: "kietthaivo2006@gmail.com",
+  //   avatar: pic,
+  //   role: "Senior Backend Engineer",
+  //   location: "HaiChau, DN",
+  //   tags: ["Remote-friendly"],
+  //   date: "24 Th10, 2026",
+  //   score: 100,
+  //   stage: "Interviewing",
+  //   recruiter: "NgocAnh",
+  //   recruiterAvatar: pic,
+  //   skills: ["DEV"],
+  //   resume: "vo_kiet_resume_2023.pdf",
 
-    successPrediction: 0,
-    skillGaps: [
-      // { name: "Distributed Systems", status: "ok" },
-      // { name: "Kubernetes/Helm", status: "warn" },
-      // { name: "Team Leadership", status: "ok" },
-    ],
+  //   successPrediction: 0,
+  //   skillGaps: [
+  //     // { name: "Distributed Systems", status: "ok" },
+  //     // { name: "Kubernetes/Helm", status: "warn" },
+  //     // { name: "Team Leadership", status: "ok" },
+  //   ],
 
-    timeline: [
-      // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
-      // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
-      // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
-    ],
-  },
+  //   timeline: [
+  //     // { title: "Phỏng vấn đã lên lịch", detail: "26 Th10, 2023 · 10:00 AM", note: "Với Technical Lead: Duy Nguyễn" },
+  //     // { title: "Hoàn thành sàng lọc", detail: "24 Th10, 2023 · 02:45 PM" },
+  //     // { title: "Đã nhận hồ sơ", detail: "24 Th10, 2023 · 09:12 AM" },
+  //   ],
+  // },
 ];
 
 const STAT_CARDS = [
@@ -503,11 +505,10 @@ function SectionLabel({ children, className = "" }) {
 // ---------------------------------------------------------------------------
 function HandleExportExcel() {
   const ExcelData = CANDIDATES.map((c) => ({
-    
     "Ứng viên": c.name,
-    "Email": c.email,
+    Email: c.email,
     "Vị trí ứng tuyển": c.role,
-    "Ngày": c.date,
+    Ngày: c.date,
     "Điểm AI": c.score,
     "Giai đoạn": c.stage,
     "Người tuyển dụng": c.recruiter,
@@ -535,6 +536,9 @@ export default function CandidateManagement(props) {
   const { onSubmit } = props;
   const [SearchTerm, SetSearchTerm] = useState("");
   const TypeTimeOutRef = useRef(null);
+  const [isAiScreeningOpen, setIsAiScreeningOpen] = useState(false);
+  const [jobTitle, setJobTitle] = useState("");
+  const [screeningCriteria, setScreeningCriteria] = useState([""]);
 
   function HandleSearchChange(e) {
     const CallValue = e.target.value;
@@ -599,14 +603,27 @@ export default function CandidateManagement(props) {
             <button className={toolBtnClass}>
               <Layers size={14} /> Thao tác hàng loạt
             </button>
+
             <button
-              className={`${toolBtnClass} bg-slate-900`}
-              onClick={() => {
-                window.location.href = "https://chatgpt.com/";
-              }}
+              type="button"
+              aria-expanded={isAiScreeningOpen}
+              aria-controls="ai-screening-panel"
+              className={`inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-[13px] font-semibold transition-all duration-300 ${
+                isAiScreeningOpen
+                  ? "border-transparent bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 text-white shadow-md shadow-blue-200 hover:from-cyan-700 hover:via-blue-700 hover:to-violet-700 hover:shadow-lg"
+                  : "border-cyan-200 bg-gradient-to-r from-cyan-50 via-blue-50 to-violet-50 text-blue-700 hover:border-blue-300 hover:shadow-sm"
+              }`}
+              onClick={() => setIsAiScreeningOpen((isOpen) => !isOpen)}
             >
-              <Sparkles size={14} /> Sàng lọc AI
+              <Sparkles
+                size={14}
+                className={`transition-transform duration-300 ${
+                  isAiScreeningOpen ? "rotate-12" : "rotate-0"
+                }`}
+              />
+              Sàng lọc AI
             </button>
+
             <button
               className={`${toolBtnClass} bg-blue-600`}
               onClick={() => {
@@ -616,6 +633,150 @@ export default function CandidateManagement(props) {
               <RefreshCw size={14} />
               Làm mới
             </button>
+          </div>
+        </div>
+
+        <div
+          id="ai-screening-panel"
+          aria-hidden={!isAiScreeningOpen}
+          inert={!isAiScreeningOpen}
+          className={`grid transition-[grid-template-rows,opacity,margin] duration-300 ease-in-out ${
+            isAiScreeningOpen
+              ? "mt-4 grid-rows-[1fr] opacity-100"
+              : "mt-0 grid-rows-[0fr] opacity-0"
+          }`}
+        >
+          <div className="overflow-hidden">
+            <section className="overflow-hidden rounded-2xl border border-sky-100 bg-gradient-to-br from-white via-cyan-50/50 to-violet-50/50 shadow-sm">
+              <div className="flex flex-wrap items-center justify-between gap-3 bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 px-5 py-4 text-white">
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 shadow-inner">
+                    <Sparkles size={19} />
+                  </span>
+                  <div>
+                    <h2 className="text-base font-bold">
+                      Tiêu chí sàng lọc
+                    </h2>
+                    <p className="mt-0.5 text-xs text-cyan-50">
+                      Thiết lập yêu cầu phù hợp cho vị trí tuyển dụng
+                    </p>
+                  </div>
+                </div>
+                <span className="rounded-full border border-white/30 bg-white/15 px-3 py-1 text-[10px] font-bold uppercase">
+                  AI hỗ trợ
+                </span>
+              </div>
+
+              <div className="space-y-5 p-5 md:p-6">
+              <div className="rounded-xl border border-cyan-100 bg-white/80 p-4 shadow-sm">
+                <label
+                  htmlFor="screening-job-title"
+                  className="mb-1.5 block text-[13px] font-semibold text-cyan-800"
+                >
+                  Job title
+                </label>
+                <input
+                  id="screening-job-title"
+                  type="text"
+                  value={jobTitle}
+                  onChange={(event) => setJobTitle(event.target.value)}
+                  placeholder="Nhập chức danh công việc"
+                  className="w-full rounded-lg border border-cyan-100 bg-white px-3 py-2.5 text-sm outline-none transition focus:border-cyan-400 focus:ring-2 focus:ring-cyan-100"
+                />
+              </div>
+
+              <div className="rounded-xl border border-violet-100 bg-white/70 p-4">
+                <div className="mb-2 flex items-center justify-between gap-3">
+                  <h3 className="text-[13px] font-semibold text-violet-800">
+                    Các tiêu chí
+                  </h3>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setScreeningCriteria((criteria) => [...criteria, ""])
+                    }
+                    className="flex items-center gap-1.5 rounded-lg border border-violet-200 bg-violet-50 px-3 py-2 text-xs font-semibold text-violet-700 transition hover:bg-violet-100"
+                  >
+                    <Plus size={14} /> Thêm tiêu chí
+                  </button>
+                </div>
+                <div className="grid gap-3 md:grid-cols-2">
+                  {screeningCriteria.map((criterion, index) => (
+                    <div
+                      key={index}
+                      className="rounded-lg border border-sky-100 bg-gradient-to-br from-white to-sky-50/80 p-3 shadow-sm"
+                    >
+                      <div className="mb-2 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="flex h-6 w-6 items-center justify-center rounded-md bg-gradient-to-br from-cyan-500 to-blue-600 text-[11px] font-bold text-white">
+                            {index + 1}
+                          </span>
+                          <label
+                            htmlFor={`screening-criterion-${index}`}
+                            className="text-xs font-semibold text-slate-700"
+                          >
+                            Tiêu chí {index + 1}
+                          </label>
+                        </div>
+                        {screeningCriteria.length > 1 && (
+                          <button
+                            type="button"
+                            aria-label={`Xóa tiêu chí ${index + 1}`}
+                            onClick={() =>
+                              setScreeningCriteria((criteria) =>
+                                criteria.filter(
+                                  (_, criterionIndex) =>
+                                    criterionIndex !== index,
+                                ),
+                              )
+                            }
+                            className="text-xs font-medium text-red-600 hover:text-red-700"
+                          >
+                            Xóa
+                          </button>
+                        )}
+                      </div>
+                      <input
+                        id={`screening-criterion-${index}`}
+                        type="text"
+                        value={criterion}
+                        onChange={(event) =>
+                          setScreeningCriteria((criteria) =>
+                            criteria.map((item, criterionIndex) =>
+                              criterionIndex === index
+                                ? event.target.value
+                                : item,
+                            ),
+                          )
+                        }
+                        placeholder="Nhập một tiêu chí sàng lọc"
+                        className="w-full rounded-md border border-sky-100 bg-white px-3 py-2 text-sm outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-100"
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 border-t border-sky-100 pt-4">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setJobTitle("");
+                    setScreeningCriteria([""]);
+                  }}
+                  className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-[13px] font-semibold text-slate-600 transition hover:border-rose-200 hover:bg-rose-50 hover:text-rose-700"
+                >
+                  Xóa
+                </button>
+                <button
+                  type="button"
+                  className="rounded-lg bg-gradient-to-r from-cyan-600 via-blue-600 to-violet-600 px-5 py-2 text-[13px] font-semibold text-white shadow-md shadow-blue-200 transition-all duration-300 hover:-translate-y-0.5 hover:from-cyan-700 hover:via-blue-700 hover:to-violet-700 hover:shadow-lg"
+                >
+                  Đồng ý
+                </button>
+              </div>
+              </div>
+            </section>
           </div>
         </div>
 
@@ -679,8 +840,8 @@ export default function CandidateManagement(props) {
                   "ỨNG VIÊN",
                   "VỊ TRÍ ỨNG TUYỂN",
                   "NGÀY",
-                  "ĐIỂM AI",
-                  "GIAI ĐOẠN",
+                  "ĐIỂM PHÙ HỢP",
+                  "TRẠNG THÁI",
                   "NGƯỜI TUYỂN DỤNG",
                 ].map((h) => (
                   <th

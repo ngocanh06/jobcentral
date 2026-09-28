@@ -44,7 +44,7 @@ const resources = {
       },
       features: {
         title: "JobCentral giải pháp tối ưu giành cho nhà tuyển dụng",
-        matchingTitle: "AI Matching",
+        matchingTitle: "Part Time Job With HIRA",
         brandingTitle: "Employer Branding",
         atsTitle: "Hệ thống ATS",
         advertisingTitle: "Quảng cáo nhắm mục tiêu",

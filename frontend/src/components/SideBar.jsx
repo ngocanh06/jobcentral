@@ -1,4 +1,4 @@
-import { NavLink} from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
   Settings,
   HelpCircle,
@@ -12,6 +12,8 @@ import {
   Package,
   UserCog,
   ClipboardList,
+  Bot,
+  Sparkles,
 } from "lucide-react";
 
 function SidebarItem({ icon: Icon, label, path }) {
@@ -50,7 +52,6 @@ function SysSidebarItem({ icon: Icon, label, path }) {
   );
 }
 
-
 const navItems = [
   {
     icon: LayoutDashboard,
@@ -64,21 +65,19 @@ const navItems = [
     label: "Quản lý đăng tuyển",
     path: "/quan-li-tin-tuyen-dung",
   },
-
-  { icon: Users, label: "Quản lý ứng viên", path: "/quan-li-ung-vien" },
-  // { icon: FileText, label: "Báo cáo tuyển dụng", path: "/bao-cao-tuyen-dung" },
-  { icon: CheckCircle2, label: "Truth Score", path: "/Truth-Score" },
-  { icon: Calendar, label: "Lịch phỏng vấn", path: "/lich-phong-van" },
-  // { icon: Mail, label: "Email mẫu", path: "/Email-mau" },
   { icon: MessageSquare, label: "Tin nhắn", path: "/tin-nhan" },
+  { icon: Users, label: "Quản lý ứng viên", path: "/quan-li-ung-vien" },
+  { icon: Sparkles, label: "Gợi ý ứng viên", path: "/Hint-Ung-Vien" },
+  { icon: Calendar, label: "Lịch phỏng vấn", path: "/lich-phong-van" },
+  { icon: CheckCircle2, label: "Truth Score", path: "/Truth-Score" },
+  { icon: Bot, label: "ChatBox", path: "/ChatBox" },
   { icon: Package, label: "Gói dịch vụ", path: "/goi-dich-vu" },
   { icon: UserCog, label: "Quản lý tài khoản", path: "/quan-li-tai-khoan" },
-
 ];
 
 const systemNavItems = [
-  { icon: Settings, label: "Cài đặt",path: "/cai-dat"},
-  { icon: HelpCircle, label: "Hỗ trợ",path: "/ho-tro"},
+  { icon: Settings, label: "Cài đặt", path: "/cai-dat" },
+  { icon: HelpCircle, label: "Hỗ trợ", path: "/ho-tro" },
 ];
 
 export default function SideBar() {
@@ -97,7 +96,7 @@ export default function SideBar() {
             <SidebarItem key={item.label} {...item} />
           ))}
         </nav>
-        
+
         <div className="px-2 pb-2">
           <p className="px-4 text-[10px] tracking-wider text-slate-400 font-medium mb-1">
             HỆ THỐNG

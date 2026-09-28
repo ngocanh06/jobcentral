@@ -125,6 +125,29 @@ const FEATURES = [
   },
 ];
 
+const Tools = [
+  {
+    image: "/picture/banner_8.png",
+    title: "TruthScore",
+    desc: "Xây dựng hệ thống điểm uy tín mang đến cho các ứng viên sự uy tín đến từ nhà tuyển dụng ",
+  },
+  {
+    image: "/picture/banner_2.png",
+    title: "Cập nhật xu hướng thị trường",
+    desc: "Nắm bắt xu hướng tuyển dụng và biến động thị trường để xây dựng chiến lược nhân sự hiệu quả.",
+  },
+  {
+    image: "/picture/banner_7.png",
+    title: "Công cụ tính lương GROSS - NET",
+    desc: "Tính nhanh lương GROSS, NET cùng các khoản thuế và bảo hiểm để biết chính xác thu nhập thực tế.",
+  },
+  {
+    image: "/picture/banner_4.png",
+    title: "APP Mobile",
+    desc: "Tìm việc, quản lý hồ sơ và theo dõi ứng tuyển thuận tiện mọi lúc trên thiết bị di động.",
+  },
+];
+
 const STEPS = [
   {
     icon: UserPlus,
@@ -205,7 +228,7 @@ const PLANS = [
 const Intro_AI = [
   {
     title: "Tạo và đăng tin bằng AI",
-    image: "/picture/ai-create-job.png",
+    image: "/picture/pic_AIRecruitmentSection1.png",
     items: [
       "Tạo tin tuyển dụng chuyên nghiệp, tùy chỉnh linh hoạt văn phong, nội dung bằng AI",
       "Gợi ý mức lương phù hợp theo từng vị trí",
@@ -215,7 +238,7 @@ const Intro_AI = [
   },
   {
     title: "Sàng lọc bằng AI",
-    image: "/picture/ai-screen-candidate.png",
+    image: "/picture/pic_AIRecruitmentSection3.png",
     items: [
       "Tự động sàng lọc hồ sơ theo tiêu chí tuyển dụng của từng vị trí",
       "AI chấm điểm và xếp hạng ứng viên phù hợp nhất để nhà tuyển dụng ưu tiên đánh giá",
@@ -547,7 +570,7 @@ function Hero() {
           </div>
         </Reveal>
         <section id="stats">
-          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-8 px-6 md:grid-cols-4">
+          <div className="mx-auto mt-12 grid max-w-5xl grid-cols-2 gap-8 px-6 pb-8 md:grid-cols-4">
             {STATS.map((s, i) => (
               <Reveal key={s.labelKey} delay={i * 100}>
                 <div className="text-center">
@@ -847,10 +870,7 @@ function Process() {
   };
 
   return (
-    <section
-      id="career-advice"
-      className="scroll-mt-24 bg-slate-50/60 py-20"
-    >
+    <section id="career-advice" className="scroll-mt-24 bg-slate-50/60 py-20">
       <div className="mx-auto max-w-6xl px-6">
         {/* TITLE */}
         <Reveal>
@@ -869,8 +889,8 @@ function Process() {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Đồng hành cùng bạn trong từng bước của quá trình tìm kiếm
-                  công việc phù hợp.
+                  Đồng hành cùng bạn trong từng bước của quá trình tìm kiếm công
+                  việc phù hợp.
                 </p>
               </div>
 
@@ -878,59 +898,57 @@ function Process() {
               <div className="absolute left-[60px] top-[125px] bottom-[45px] w-[2px] bg-slate-200" />
 
               <div className="relative space-y-8">
-                {STEPS.map(
-                  ({ icon: Icon, titleKey, descKey }, i) => (
+                {STEPS.map(({ icon: Icon, titleKey, descKey }, i) => (
+                  <div
+                    key={titleKey}
+                    className="relative flex gap-5"
+                    onMouseEnter={() => setActive(i)}
+                    onMouseLeave={() => setActive(null)}
+                  >
+                    {/* NUMBER */}
                     <div
-                      key={titleKey}
-                      className="relative flex gap-5"
-                      onMouseEnter={() => setActive(i)}
-                      onMouseLeave={() => setActive(null)}
+                      className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-bold transition-all duration-300 ${
+                        active === i
+                          ? "scale-110 bg-blue-600 text-white shadow-lg shadow-blue-600/30"
+                          : "bg-blue-100 text-blue-600"
+                      }`}
                     >
-                      {/* NUMBER */}
+                      {i + 1}
+                    </div>
+
+                    {/* CONTENT */}
+                    <div className="pt-1">
                       <div
-                        className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-bold transition-all duration-300 ${
-                          active === i
-                            ? "scale-110 bg-blue-600 text-white shadow-lg shadow-blue-600/30"
-                            : "bg-blue-100 text-blue-600"
+                        className={`mb-1 flex items-center gap-2 transition-colors duration-300 ${
+                          active === i ? "text-blue-600" : "text-slate-400"
                         }`}
                       >
-                        {i + 1}
+                        <Icon size={20} />
+
+                        <span className="text-xs font-semibold uppercase tracking-wide">
+                          Bước {i + 1}
+                        </span>
                       </div>
 
-                      {/* CONTENT */}
-                      <div className="pt-1">
-                        <div
-                          className={`mb-1 flex items-center gap-2 transition-colors duration-300 ${
-                            active === i
-                              ? "text-blue-600"
-                              : "text-slate-400"
-                          }`}
-                        >
-                          <Icon size={20} />
+                      <h3
+                        className={`font-semibold transition-colors duration-300 ${
+                          active === i ? "text-blue-600" : "text-slate-900"
+                        }`}
+                      >
+                        {t(titleKey)}
+                      </h3>
 
-                          <span className="text-xs font-semibold uppercase tracking-wide">
-                            Bước {i + 1}
-                          </span>
-                        </div>
-
-                        <h3
-                          className={`font-semibold transition-colors duration-300 ${
-                            active === i
-                              ? "text-blue-600"
-                              : "text-slate-900"
-                          }`}
-                        >
-                          {t(titleKey)}
-                        </h3>
-
-                        <p className="mt-1 max-w-md text-sm leading-6 text-slate-500">
-                          {t(descKey)}
-                        </p>
-                      </div>
+                      <p className="mt-1 max-w-md text-sm leading-6 text-slate-500">
+                        {t(descKey)}
+                      </p>
                     </div>
-                  )
-                )}
+                  </div>
+                ))}
               </div>
+            </div>
+
+            <div className="mt-3 w-100 h-48 overflow-hidden rounded-lg shadow-md">
+              <img src="./picture/pic1.png" alt="pic-HIRA" className="w-full h-full object-cover"  />
             </div>
 
             <Link
@@ -940,7 +958,6 @@ function Process() {
               <span>Đăng ký ngay</span>
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
-
           </Reveal>
 
           <Reveal delay={200}>
@@ -951,8 +968,8 @@ function Process() {
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-slate-500">
-                  Hãy để lại thông tin, đội ngũ tuyển dụng sẽ liên hệ để tư
-                  vấn công việc phù hợp với bạn.
+                  Hãy để lại thông tin, đội ngũ tuyển dụng sẽ liên hệ để tư vấn
+                  công việc phù hợp với bạn.
                 </p>
               </div>
 
@@ -1068,14 +1085,14 @@ function Process() {
 
                 {/* SUBMIT */}
                 <div className="flex gap-4">
-                <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
-                  Trải nghiệm ngay
-                </button>
+                  <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+                    Trải nghiệm ngay
+                  </button>
 
-                <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
-                  Liên hệ tư vấn
-                </button>
-              </div>
+                  <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
+                    Liên hệ tư vấn
+                  </button>
+                </div>
 
                 <p className="text-center text-xs leading-5 text-slate-400">
                   Thông tin của bạn được sử dụng để liên hệ và tư vấn cơ hội
@@ -1087,20 +1104,61 @@ function Process() {
         </div>
       </div>
     </section>
-
-// thực hiện đáp useTranslation
-// call SubmitFile by Email
-// format giao diện người dùng bao gồm nhiều giai đoạn => background/ font / img_behind 
-
   );
 }
-
-
 
 /* ------------------------------------------------------------------ */
 /*  Tools for NTD                                                     */
 /* ------------------------------------------------------------------ */
 
+function TOOLS() {
+  return (
+    <section id="ai-recruitment" className="scroll-mt-20 bg-white py-20">
+      <div className="mx-auto max-w-6xl px-6">
+        <Reveal>
+          <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
+            Bộ công cụ giành cho nhà tuyển dụng
+          </h2>
+          <p className="mx-auto mt-2 max-w-xl text-center text-slate-500">
+            Công cụ hỗ trợ nhà tuyển dụng ở mọi bước trong hành trình tìm kiếm
+            nhân tài, từ đăng tin đến chốt ứng viên.
+          </p>
+        </Reveal>
+
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-2">
+          {Tools.map(({ image, title, desc }, i) => (
+            <Reveal key={title} delay={(i % 3) * 100}>
+              <div className="group h-full overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg">
+                <div className="aspect-[16/9] w-full overflow-hidden bg-slate-100">
+                  <img
+                    src={image}
+                    alt={title}
+                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
+                </div>
+                <div className="p-6">
+                  <h3 className="font-semibold text-slate-900">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-500">
+                    {desc}
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+          ))}
+        </div>
+        <div className="flex mt-20 mx-auto max-w-xl items-center justify-center gap-5">
+                <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+                  Trải nghiệm ngay
+                </button>
+
+                <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
+                  Liên hệ tư vấn
+                </button>
+              </div>
+      </div>
+    </section>
+  );
+}
 
 /* ------------------------------------------------------------------ */
 /*  Testimonials                                                       */
@@ -1361,6 +1419,7 @@ export default function JobCentralLanding() {
       <Hero />
       {/* <ScrollHint /> */}
       {/* <Stats /> */}
+      <TOOLS />
       <Features />
       <AIRecruitmentSection />
       <Process />

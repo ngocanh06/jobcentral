@@ -16,6 +16,10 @@ import HoTro from "./pages/SysPages/Ho-tro";
 import Intro from "./pages/Intro-signup-in/Intro";
 import LogIn from "./pages/LogIn";
 import CamNang from "./pages/Intro-signup-in/cam-nang"
+import ChatBox from "./pages/ChatBox"
+import HintUngVien from "./pages/HintUngVien";
+import { ThemeProvider } from "./context/ThemeContext";
+import { element } from "prop-types";
 
 
 const recruiterRoutes = [
@@ -35,6 +39,10 @@ const recruiterRoutes = [
   {
     path: "Quan-li-ung-vien",
     element: <QuanLiUngVien />,
+  },
+  {
+    path: "Hint-Ung-Vien",
+    element: <HintUngVien />,
   },
   {
     path: "Truth-Score",
@@ -68,6 +76,10 @@ const recruiterRoutes = [
     path: "Ho-tro",
     element: <HoTro />,
   },
+  {
+    path: "ChatBox",
+    element: <ChatBox/>
+  },
 ];
 
 const router = createBrowserRouter([
@@ -99,7 +111,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <ThemeProvider>
+      <RouterProvider router={router} />
+    </ThemeProvider>
+  );
 }
 
 export default App;
