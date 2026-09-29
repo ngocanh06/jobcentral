@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import {
-  Search,
   Bell,
   Settings as SettingsIcon,
   ChevronDown,
@@ -11,18 +10,18 @@ import {
   BriefcaseBusiness,
   ArrowLeftRight,
 } from "lucide-react";
-import Typewriter from "typewriter-effect";
+import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
-import { TimeOfDay } from "./GetTime";
 import { href, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
 
-const session = TimeOfDay();
 
 export default function NavBar() {
   const [openMenu, setOpenMenu] = useState(null);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+    const { t, i18n } = useTranslation();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -42,49 +41,72 @@ export default function NavBar() {
     { label: "Đăng xuất", icon: LogOut, danger: true, href:"/" },
   ];
 
-  return (
-    <header className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between sticky top-0 z-10">
-      <div className="w-80 relative">
-        <Search
-          size={16}
-          className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"
-        />
-        <input
-          placeholder="Tìm kiếm ứng viên, thông tin báo cáo..."
-          className="w-full bg-slate-50 border border-slate-200 rounded-full pl-9 pr-4 py-2 text-sm outline-none focus:border-indigo-300"
-        />
-      </div>
+    const links = [
+    { label: t("nav.product"), href: "#product" },
+    { label: t("nav.aiRecruitment"), href: "#ai-recruitment" },
+    { label: t("nav.handbook"), href: "/cam-nang-tuyen-dung" },
+    { label: t("nav.contact"), href: "/Ho-tro-intro" },
+  ];
 
-      <div className="flex-1 flex justify-center">
-        <h1
-          className="
-            text-lg
-            sm:text-xl
-            md:text-2xl
-            font-semibold
-            font-[Poppins]
-            tracking-tight
-            text-[#2170E4]
-          "
-        >
-          <Typewriter
-            options={{
-              strings: [
-                "Welcome back, *nhà tuyển dụng!",
-                `Good ${session}!`,
-                `Welcome to JobCentral`,
-                "Let's make hiring easier.",
-                "Ready to hire top talents?",
-              ],
-              autoStart: true,
-              loop: true,
-              cursor: "|",
-              delay: 60,
-              deleteSpeed: 40,
-            }}
-          />
-        </h1>
-      </div>
+  return (
+    <header className="bg-white border-b border-slate-200 pl-8 py-3 flex items-center justify-between sticky top-0 z-10">
+      <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              to={link.href}
+              className="relative py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="group relative">
+            <button
+              type="button"
+              aria-haspopup="true"
+              className="flex items-center gap-1 py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+            >
+              {t("nav.utilities")}
+              <span className="text-xs text-slate-400">▼</span>
+            </button>
+            <div className="invisible absolute left-0 top-full z-50 mt-2 w-64 translate-y-1 rounded-xl border border-slate-200 bg-white p-1.5 text-sm opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+              <Link
+                to="/Truth-Score"
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.truthScore")}
+              </Link>
+
+              <Link
+                to="/Goi-dich-vu"
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.servicePlans")}
+              </Link>
+
+              <Link
+                // to={/BoTinhLuong}
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.Calculator_salary")}
+              </Link>
+
+              <Link
+                // to={/BoTinhLuong}
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.Personal_IncomeTax")}
+              </Link>
+
+              <Link
+                // to={/BoTinhLuong}
+                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+              >
+                {t("utilities.industry_specific_base_salary")}
+              </Link>
+            </div>
+          </div>
+        </nav>
 
       <div ref={menuRef} className="w-72 flex justify-end items-center gap-3 relative">
         <div className="relative">

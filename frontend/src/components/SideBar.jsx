@@ -67,7 +67,7 @@ const navItems = [
   },
   { icon: MessageSquare, label: "Tin nhắn", path: "/tin-nhan" },
   { icon: Users, label: "Quản lý ứng viên", path: "/quan-li-ung-vien" },
-  { icon: Sparkles, label: "Gợi ý ứng viên", path: "/Hint-Ung-Vien" },
+  { icon: Sparkles, label: "Tra cứu ứng viên", path: "/Hint-Ung-Vien" },
   { icon: Calendar, label: "Lịch phỏng vấn", path: "/lich-phong-van" },
   { icon: CheckCircle2, label: "Truth Score", path: "/Truth-Score" },
   { icon: Bot, label: "ChatBox", path: "/ChatBox" },

@@ -10,15 +10,29 @@ import {
   ChevronDown,
   ArrowRight,
   WandSparkles,
+  Clock,
+  Phone,
+  Wallet,
+  CalendarClock,
+  Users,
 } from "lucide-react";
 
-const filters = [
+const profileFilters = [
   { label: "Nội dung hồ sơ", type: "input", placeholder: "Nhập từ khóa (Kỹ năng, chức vụ, trường học, công ty cũ...)", icon: Search },
   { label: "Ngành nghề chuyên môn", type: "select", value: "Tất cả ngành nghề", icon: Briefcase },
   { label: "Địa điểm làm việc", type: "select", value: "Tất cả địa điểm", icon: MapPin, iconClass: "text-red-500" },
   { label: "Ngày truy cập / cập nhật hồ sơ", type: "select", value: "Tất cả hồ sơ", icon: CalendarDays },
   { label: "Trạng thái tìm việc", type: "select", value: "Tất cả trạng thái", icon: UserCheck },
   { label: "Số năm kinh nghiệm", type: "select", value: "Tất cả kinh nghiệm", icon: Award },
+];
+
+const partTimeFilters = [
+  { label: "Công việc", type: "input", placeholder: "Nhập vị trí cần tuyển (Phục vụ, gia sư, bán hàng...)", icon: Briefcase },
+  { label: "Khoảng thời gian làm việc", type: "select", value: "Tất cả khung giờ", icon: Clock },
+  { label: "Địa điểm làm việc", type: "select", value: "Tất cả địa điểm", icon: MapPin, iconClass: "text-red-500" },
+  { label: "Ca làm việc mong muốn", type: "select", value: "Tất cả ca làm", icon: CalendarClock },
+  { label: "Số điện thoại", type: "input", inputType: "tel", placeholder: "Nhập số điện thoại liên hệ", icon: Phone },
+  { label: "Mức lương mong muốn", type: "select", value: "Tất cả mức lương", icon: Wallet },
 ];
 
 const categories = [
@@ -58,7 +72,7 @@ function useColumnCount() {
   return count;
 }
 
-function FilterField({ label, type, placeholder, value, icon: Icon, iconClass = "text-slate-400" }) {
+function FilterField({ label, type, inputType = "text", placeholder, value, icon: Icon, iconClass = "text-slate-400" }) {
   return (
     <div>
       <label className="mb-2 block text-[11px] font-bold uppercase tracking-wide text-slate-600">
@@ -68,7 +82,7 @@ function FilterField({ label, type, placeholder, value, icon: Icon, iconClass = 
         <Icon className={`pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 ${iconClass}`} />
         {type === "input" ? (
           <input
-            type="text"
+            type={inputType}
             placeholder={placeholder}
             className="h-10 w-full rounded-lg border border-slate-200 bg-slate-50 pl-10 pr-3 text-xs text-slate-700 placeholder:text-slate-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-100"
           />
@@ -123,8 +137,10 @@ function CategoryGroup({ name, items }) {
 
 export default function CandidateSearchPage() {
   const [showAll, setShowAll] = useState(false);
+  const [activeTab, setActiveTab] = useState("profile"); // "profile" | "parttime"
   const columnCount = useColumnCount();
   const visibleCategories = showAll ? [...categories, ...extraCategories] : categories;
+  const activeFilters = activeTab === "profile" ? profileFilters : partTimeFilters;
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
@@ -144,13 +160,41 @@ export default function CandidateSearchPage() {
       <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 lg:px-8">
         {/* Search card */}
         <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="mb-6 flex items-center gap-2">
-            <span className="h-5 w-1.5 rounded-full bg-blue-500" />
-            <h2 className="text-sm font-extrabold uppercase text-slate-900">Từ khóa tìm kiếm hồ sơ</h2>
+          <div className="mb-6 flex flex-wrap items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <span className="h-5 w-1.5 rounded-full bg-blue-600" />
+              <h2 className="text-sm font-extrabold uppercase text-slate-900">
+                {activeTab === "profile" ? "Từ khóa tìm kiếm hồ sơ" : "Tuyển Dụng Part Time"}
+              </h2>
+            </div>
+
+            {/* Tab chuyển đổi giữa Tìm hồ sơ và Tuyển dụng PartTime */}
+            <div className="flex gap-1 rounded-lg bg-slate-100 p-1">
+              <button
+                onClick={() => setActiveTab("profile")}
+                aria-pressed={activeTab === "profile"}
+                className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition-colors ${
+                  activeTab === "profile" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                <Search className="h-3.5 w-3.5" />
+                Tìm Hồ Sơ
+              </button>
+              <button
+                onClick={() => setActiveTab("parttime")}
+                aria-pressed={activeTab === "parttime"}
+                className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition-colors ${
+                  activeTab === "parttime" ? "bg-white text-blue-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
+                }`}
+              >
+                <Users className="h-3.5 w-3.5" />
+                Tuyển Dụng PartTime
+              </button>
+            </div>
           </div>
 
           <div className="grid gap-x-6 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
-            {filters.map((f) => (
+            {activeFilters.map((f) => (
               <FilterField key={f.label} {...f} />
             ))}
           </div>
@@ -162,21 +206,14 @@ export default function CandidateSearchPage() {
             </button>
             <button className="flex h-10 items-center gap-2 rounded-lg bg-blue-600 px-6 text-xs font-bold text-white shadow-sm hover:bg-blue-700">
               <Search className="h-4 w-4" />
-              Tìm Kiếm Hồ Sơ
+              {activeTab === "profile" ? "Tìm Kiếm Hồ Sơ" : "Tìm Ứng Viên PartTime"}
             </button>
           </div>
         </section>
 
         {/* AI banner */}
-        <section className="relative isolate flex flex-col items-start justify-between gap-4 overflow-hidden rounded-xl p-6 text-white md:flex-row md:items-center">
-          <img
-            src="/picture/bannerForHintUV.jpg"
-            alt="pic"
-            aria-hidden="true"
-            className="absolute inset-0 h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-slate-950/90 via-slate-950/75 to-slate-950/60" aria-hidden="true" />
-          <div className="relative z-10 flex items-start gap-4">
+        <section className="flex flex-col items-start justify-between gap-4 rounded-xl bg-gradient-to-r from-slate-900 via-[#141a33] to-slate-900 p-6 text-white md:flex-row md:items-center">
+          <div className="flex items-start gap-4">
             <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-white/10 bg-white/10">
               <WandSparkles className="h-5 w-5 text-amber-300" />
             </div>
@@ -191,7 +228,7 @@ export default function CandidateSearchPage() {
               </p>
             </div>
           </div>
-          <button className="relative z-10 flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-xs font-bold text-slate-900 hover:bg-slate-100">
+          <button className="flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-xs font-bold text-slate-900 hover:bg-slate-100">
             Trải Nghiệm AI Matching Ngay
             <ArrowRight className="h-4 w-4" />
           </button>
