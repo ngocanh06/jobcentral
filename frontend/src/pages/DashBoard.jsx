@@ -1,9 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import picdef from "../picture_sec/pic_default.jpg";
-import { ChevronRight, MoreHorizontal, Rocket, Download } from "lucide-react";
+import {
+  ChevronRight,
+  MoreHorizontal,
+  Rocket,
+  Download,
+  Laptop,
+} from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
+import TimeOfDay from "../components/GetTime";
+import { Book, laptop } from "lucide-react";
 
+const session = TimeOfDay();
 const statCards = [
   { label: "Tin tuyển dụng", value: "", change: "", up: true },
   { label: "Tổng ứng viên", value: "", change: "", up: true },
@@ -178,36 +187,53 @@ export default function RecruiterDashboard() {
             </div>
 
             {/* Funnel */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <h3 className="font-semibold text-sm mb-4">
-                Số lượng tuyển dụng theo ngành
-              </h3>
-              <div className="space-y-2.5">
-                {funnelStages.map((f) => (
-                  <div key={f.label} className="flex items-center gap-3">
-                    {f.value ? (
-                      <div
-                        className={`${f.color} text-xs font-medium px-3 py-1.5 rounded-md flex items-center justify-between flex-1`}
-                        style={{
-                          maxWidth: `${
-                            30 + (f.value / funnelStages[0].value) * 70
-                          }%`,
-                        }}
-                      >
-                        <span>{f.label}</span>
-                        <span>{f.value}</span>
-                      </div>
-                    ) : (
-                      <p className="text-xs text-slate-500 pl-1">
-                        {f.label}
-                        {f.value}
-                      </p>
-                    )}
-                  </div>
-                ))}
-              </div>
-            </div>
+          <div
+  className="relative overflow-hidden rounded-2xl bg-cover bg-center p-5 shadow-lg border border-white/10"
+  style={{
+    backgroundImage: "url('/picture/funnel1.png')",
+  }}
+>
+  {/* Lớp overlay tối mờ giúp tương phản chữ tốt và tạo chiều sâu */}
+  <div className="absolute inset-0 bg-gradient-to-r from-blue-950/85 to-slate-900/50" />
 
+  {/* Nội dung chính bên trong */}
+  <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+    {/* Cột chữ & danh sách link */}
+    <div className="space-y-2.5 text-white">
+      <div>
+        <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+          Good {session},{" "}
+          <span className="bg-gradient-to-r from-rose-400 to-pink-300 bg-clip-text text-transparent">
+            User!
+          </span>{" "}
+          👋
+        </h3>
+        <p className="text-xs text-slate-300/90">
+          Đây là một số thông tin hướng dẫn nhanh:
+        </p>
+      </div>
+
+      {/* Danh sách link dạng viên thuốc (badge/pill) mờ nhẹ */}
+      <div className="flex flex-col gap-3 pt-1 pt-9 ">
+        <a
+          href="/huong-dan-su-dung"
+          className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/20 hover:text-white"
+        >
+          <Book className="h-4.5 w-4.5 text-rose-400 transition-transform group-hover:scale-110" />
+          <span>FAQ / Hướng dẫn sử dụng</span>
+        </a>
+
+        <a
+          href="/danh-muc-san-pham"
+          className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/20 hover:text-white"
+        >
+          <Laptop className="h-4.5 w-4.5 text-rose-400 transition-transform group-hover:scale-110" />
+          <span>Danh mục sản phẩm</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
             {/* Chart */}
             <div className="bg-white rounded-xl border border-slate-200 p-5">
               <div className="flex items-center justify-between mb-4">

@@ -1,5 +1,5 @@
 import i18n from "i18next";
-import { Calculator } from "lucide-react";
+// import { Calculator } from "lucide-react";
 import { initReactI18next } from "react-i18next";
 
 const resources = {
@@ -7,7 +7,7 @@ const resources = {
     translation: {
       nav: {
         product: "Việc làm",
-        aiRecruitment: "AI Recruitment",
+        HiraRecruitment: "AI Recruitment",
         handbook: "Cẩm nang tuyển dụng",
         utilities: "Công cụ",
         contact: "Liên hệ",

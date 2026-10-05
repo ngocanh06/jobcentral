@@ -1,5 +1,6 @@
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { createBrowserRouter, Navigate, RouterProvider } from "react-router-dom";
 import RecruiterLayout from "./layouts/RecruiterLayout";
+import PublicLayout from "./layouts/PublicLayout";
 import Register from "./pages/Register";
 import DashBoard from "./pages/DashBoard";
 import TaoTinTuyenDung from "./pages/Tao-tin-tuyen-dung";
@@ -18,12 +19,22 @@ import LogIn from "./pages/LogIn";
 import CamNang from "./pages/Intro-signup-in/cam-nang"
 import ChatBox from "./pages/ChatBox"
 import HintUngVien from "./pages/HintUngVien";
+import Hirablogcards from "./pages/Intro-signup-in/Hirablogcards"
 import { ThemeProvider } from "./context/ThemeContext";
-import { element } from "prop-types";
+import { AuthProvider, useAuth } from "./context/AuthContext";
+// import { element } from "prop-types";
 
+function HomeRoute() {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <Navigate to="/Dashboard" replace /> : <Intro />;
+}
+
+function ProtectedRecruiterLayout() {
+  const { isAuthenticated } = useAuth();
+  return isAuthenticated ? <RecruiterLayout /> : <Navigate to="/LogIn" replace />;
+}
 
 const recruiterRoutes = [
-
   {
     path: "Dashboard",
     element: <DashBoard />,
@@ -85,11 +96,11 @@ const recruiterRoutes = [
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Intro />,
+    element: <HomeRoute />,
   },
-  {
-    path: "/Ho-tro-intro",
-    element: <HoTro/>
+   {
+    path:"Hira-blog-cards",
+    element: <Hirablogcards/>,
   },
   {
     path: "/Register",
@@ -102,19 +113,35 @@ const router = createBrowserRouter([
   },
   {
     path:"/Cam-nang-tuyen-dung",
-    element : <CamNang/>
+    element: <PublicLayout />,
+    children: [{ index: true, element: <CamNang /> }],
   },
+
   {
-    element: <RecruiterLayout />,
+    path :"/Ho-tro-intro",
+    element: <PublicLayout/>,
+    children: [{ index: true, element: <HoTro /> }],
+  },
+
+{
+    path :"/Hira-blog-cards",
+    element: <PublicLayout/>,
+    children: [{ index: true, element: <Hirablogcards /> }],
+  },
+
+  {
+    element: <ProtectedRecruiterLayout />,
     children: recruiterRoutes,
   },
 ]);
 
 function App() {
   return (
-    <ThemeProvider>
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider>
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
 

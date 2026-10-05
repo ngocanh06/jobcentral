@@ -22,6 +22,7 @@ import {
 import { Link } from "lucide-react";
 import pic_logo from "d:/Recruitment Website/jobcentral_role_r9t/jobcentral/frontend/src/picture_sec/Logo_JobCentral.png";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const PROVINCES = [
   "TP. Hồ Chí Minh",
@@ -321,6 +322,13 @@ function SSOButton({ label, children }) {
 function RightPanel() {
   const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
+  const { login } = useAuth();
+
+  function handleRegister(event) {
+    event.preventDefault();
+    login();
+    navigate("/Dashboard", { replace: true });
+  }
 
   return (
     <div className="flex h-full flex-col bg-white px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
@@ -352,7 +360,7 @@ function RightPanel() {
         </p>
 
         {/* Form */}
-        <form onSubmit={(e) => e.preventDefault()} className="mt-6 space-y-4">
+        <form onSubmit={handleRegister} className="mt-6 space-y-4">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <TextField
               icon={User}
@@ -429,7 +437,6 @@ function RightPanel() {
 
           <button
             type="submit"
-            onClick={() => navigate("/DashBoard")}
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
           >
             Hoàn tất đăng ký &amp; Nhận ưu đãi

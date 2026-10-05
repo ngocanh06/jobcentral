@@ -17,6 +17,7 @@ import {
 
 import * as XLSX from "xlsx";
 import pic from "../picture_sec/pic_default.jpg";
+import { getManagedCandidates } from "../candidateStorage";
 
 // Dữ liệu mẫu — thay bằng dữ liệu thật của bạn (props / API) khi tích hợp
 
@@ -503,8 +504,8 @@ function SectionLabel({ children, className = "" }) {
 // ---------------------------------------------------------------------------
 // connect desktop (xuất file)
 // ---------------------------------------------------------------------------
-function HandleExportExcel() {
-  const ExcelData = CANDIDATES.map((c) => ({
+function HandleExportExcel(candidates) {
+  const ExcelData = candidates.map((c) => ({
     "Ứng viên": c.name,
     Email: c.email,
     "Vị trí ứng tuyển": c.role,
@@ -535,6 +536,7 @@ export default function CandidateManagement(props) {
 
   const { onSubmit } = props;
   const [SearchTerm, SetSearchTerm] = useState("");
+  const [candidates] = useState(() => [...CANDIDATES, ...getManagedCandidates()]);
   const TypeTimeOutRef = useRef(null);
   const [isAiScreeningOpen, setIsAiScreeningOpen] = useState(false);
   const [jobTitle, setJobTitle] = useState("");
@@ -568,11 +570,11 @@ export default function CandidateManagement(props) {
   const StartPage = (currentPage - 1) * Item_per_page;
   const EndPage = StartPage + Item_per_page;
 
-  const DisplayCandidate = CANDIDATES.slice(StartPage, EndPage);
-  const totalPages = Math.ceil(CANDIDATES.length / Item_per_page);
+  const DisplayCandidate = candidates.slice(StartPage, EndPage);
+  const totalPages = Math.ceil(candidates.length / Item_per_page);
 
   const [selectedId, setSelectedId] = useState(null);
-  const selectedCandidate = CANDIDATES.find((c) => c.id === selectedId) || null;
+  const selectedCandidate = candidates.find((c) => c.id === selectedId) || null;
 
   const toolBtnClass =
     "flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3.5 py-[9px] text-[12.5px] font-bold text-slate-700 cursor-pointer";
@@ -597,7 +599,7 @@ export default function CandidateManagement(props) {
             </p>
           </div>
           <div className="flex gap-2">
-            <button className={toolBtnClass} onClick={HandleExportExcel}>
+            <button className={toolBtnClass} onClick={() => HandleExportExcel(candidates)}>
               <Download size={14} /> Xuất file
             </button>
             <button className={toolBtnClass}>

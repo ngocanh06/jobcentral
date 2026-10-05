@@ -16,6 +16,7 @@ import {
 import pic_logo from "d:/Recruitment Website/jobcentral_role_r9t/jobcentral/frontend/src/picture_sec/Logo_JobCentral.png";
 import { Link } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const CLIENT_LOGOS = [
   "HSBC",
@@ -211,6 +212,14 @@ function RightPanel() {
   const [visible, setVisible] = useState(false);
   const [remember, setRemember] = useState(true);
   const navigate = useNavigate();
+  const { login } = useAuth();
+
+  function handleLogin(event) {
+    event.preventDefault();
+    login();
+    navigate("/Dashboard", { replace: true });
+  }
+
   return (
     <div className="flex h-full flex-col bg-white px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
       {/* Top bar */}
@@ -241,7 +250,7 @@ function RightPanel() {
         </p>
 
         {/* Form */}
-        <form onSubmit={(e) => e.preventDefault()} className="mt-6 space-y-4">
+        <form onSubmit={handleLogin} className="mt-6 space-y-4">
           <label className="block">
             <span className="mb-1.5 block text-[13px] font-medium text-slate-700">
               EMAIL DOANH NGHIỆP (@COMPANY.COM)
@@ -311,7 +320,6 @@ function RightPanel() {
           <button
             type="submit"
             className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
-            onClick={() => navigate("/DashBoard")}
           >
             Đăng nhập vào JobCentral
             <span aria-hidden>→</span>

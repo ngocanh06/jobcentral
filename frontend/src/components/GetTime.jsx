@@ -1,4 +1,4 @@
-export function TimeOfDay() {
+export default function TimeOfDay() {
   const hour = new Date().getHours();
 
   if (hour >= 5 && hour < 12) {

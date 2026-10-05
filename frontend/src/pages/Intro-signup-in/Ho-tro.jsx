@@ -32,10 +32,13 @@ export default function SupportCenter() {
   const [openFaq, setOpenFaq] = useState(null);
   const toggleFaq = (i) => setOpenFaq(openFaq === i ? null : i);
   const fileInputRef = useRef(null);
+  const [SelectedFileTemp, setSelectedFileTemp] = useState(null);
+
   const [title, setTitle] = useState("");
   const [type, setType] = useState("technical");
   const [desc, setdecs] = useState("");
-  const [SelectedFileTemp, setSelectedFileTemp] = useState(null);
+ 
+
   const [submitting, setsubmitting] = useState(false);
   const [complete, setcomplete] = useState(false);
 
@@ -55,7 +58,7 @@ export default function SupportCenter() {
       formData.append("attachment", SelectedFileTemp, SelectedFileTemp.name);
     }
 
-    formData.append("_subject", "Support Center - Yêu cầu hỗ trợ");
+    formData.append("_subject", "Support JobCenter - Yêu cầu hỗ trợ");
     formData.append("_template", "table");
     formData.append("_captcha", "false");
 
@@ -219,6 +222,7 @@ export default function SupportCenter() {
             </button>
           </div>
         </div>
+        
         {/* Support form */}
 
         <form
@@ -354,6 +358,7 @@ export default function SupportCenter() {
             </div>
           </div>
         </form>
+        
       </div>
     </div>
   );

@@ -12,7 +12,8 @@ import {
   Quote,
   ChevronLeft,
   ChevronRight,
-  ArrowLeft,
+  Loader2,
+  Check,
   RefreshCw,
   User,
   ArrowRight,
@@ -73,6 +74,7 @@ function Reveal({ children, delay = 0, y = 24, className = "" }) {
 /* ------------------------------------------------------------------ */
 /*  Data                                                               */
 /* ------------------------------------------------------------------ */
+
 const STATS = [
   { value: "5M+", labelKey: "stats.candidates" },
   { value: "3x", labelKey: "stats.speed" },
@@ -249,7 +251,7 @@ const Intro_AI = [
   },
   {
     title: "AI đề xuất ứng viên",
-    image: "/picture/ai-suggest-candidate.png",
+    image: "/picture/pic_AIRecruitmentSection4.png",
     items: [
       "Nhận danh sách ứng viên phù hợp được AI đề xuất trên mô tả công việc của tiêu chuẩn",
       "Chủ động tiếp cận đúng ứng viên tiềm năng ngay cả khi họ chưa ứng tuyển",
@@ -368,7 +370,7 @@ function Header() {
 
   const links = [
     { label: t("nav.product"), href: "#product" },
-    { label: t("nav.aiRecruitment"), href: "#ai-recruitment" },
+    { label: t("nav.HiraRecruitment"), href: "/Hira-blog-cards" },
     { label: t("nav.handbook"), href: "/cam-nang-tuyen-dung" },
     { label: t("nav.contact"), href: "/Ho-tro-intro" },
   ];
@@ -590,31 +592,31 @@ function Hero() {
   );
 }
 
-function ScrollHint() {
-  const { t } = useTranslation();
+// function ScrollHint() {
+//   const { t } = useTranslation();
 
-  const scrollToStats = () => {
-    document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" });
-  };
+//   const scrollToStats = () => {
+//     document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" });
+//   };
 
-  return (
-    <div className="mt-12 flex justify-center bg-white py-5">
-      <button
-        type="button"
-        onClick={scrollToStats}
-        aria-label={t("scrollHint")}
-        className="group flex animate-bounce flex-col items-center gap-1 text-[#2170e4]"
-      >
-        <span className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-[#2170e4] pt-1.5">
-          <span class="h-2 w-1 rounded-full bg-[#2170e4] transition-all duration-700 ease-out" />
-        </span>
-        <span className="text-lg leading-none transition-transform duration-700 group-hover:translate-y-1">
-          ↓
-        </span>
-      </button>
-    </div>
-  );
-}
+//   return (
+//     <div className="mt-12 flex justify-center bg-white py-5">
+//       <button
+//         type="button"
+//         onClick={scrollToStats}
+//         aria-label={t("scrollHint")}
+//         className="group flex animate-bounce flex-col items-center gap-1 text-[#2170e4]"
+//       >
+//         <span className="relative flex h-10 w-6 items-start justify-center rounded-full border-2 border-[#2170e4] pt-1.5">
+//           <span class="h-2 w-1 rounded-full bg-[#2170e4] transition-all duration-700 ease-out" />
+//         </span>
+//         <span className="text-lg leading-none transition-transform duration-700 group-hover:translate-y-1">
+//           ↓
+//         </span>
+//       </button>
+//     </div>
+//   );
+// }
 
 /* ------------------------------------------------------------------ */
 /*  Feature grid                                                       */
@@ -843,30 +845,62 @@ function AIRecruitmentSection() {
 function Process() {
   const { t } = useTranslation();
   const [active, setActive] = useState(null);
+  // dataForm
 
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    position: "",
-    message: "",
-  });
+  const [Title, setTitle] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [position, setposition] = useState("");
+  const [message, setMessage] = useState("");
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const [submitting, setsubmitting] = useState(false);
+  const [complete, setcomplete] = useState(false);
 
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    console.log("Thông tin ứng viên:", formData);
+    setsubmitting(false);
+    setcomplete(false);
 
-    // Sau này có thể gọi API tại đây
+    const formData = new FormData();
+
+    formData.append("Title", Title);
+    formData.append("email", email);
+    formData.append("phone", phone);
+    formData.append("Position", position);
+    formData.append("message", message);
+
+    formData.append("_subject", "Support JobCenter - Bộ phận tư vấn");
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+
+    try {
+      const res = await fetch(
+        "https://formsubmit.co/kietthaivo2006@gmail.com",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      if (res.ok) {
+        alert("Gửi yêu cầu thành công!");
+        setTitle("");
+        setEmail("");
+        setPhone("");
+        setposition("");
+        setcomplete(true);
+      } else {
+        console.error("FormSubmit error:", res.status);
+        setcomplete(false);
+        alert("Gửi thất bại!");
+      }
+    } catch (error) {
+      console.error("Đã xảy ra lỗi:", error.message);
+      alert("Có lỗi xảy ra khi gửi!");
+    } finally {
+      setsubmitting(false);
+    }
   };
 
   return (
@@ -948,7 +982,11 @@ function Process() {
             </div>
 
             <div className="mt-3 w-100 h-48 overflow-hidden rounded-lg shadow-md">
-              <img src="./picture/pic1.png" alt="pic-HIRA" className="w-full h-full object-cover"  />
+              <img
+                src="./picture/pic1.png"
+                alt="pic-HIRA"
+                className="w-full h-full object-cover"
+              />
             </div>
 
             <Link
@@ -973,8 +1011,13 @@ function Process() {
                 </p>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-5">
-                {/* NAME */}
+              <form
+                onSubmit={handleSubmit}
+                action={"https://formsubmit.co/kietthaivo2006@gmail.com"}
+                method="POST"
+                encType="multipart/form-data"
+                className="space-y-5"
+              >
                 <div>
                   <label
                     htmlFor="name"
@@ -984,13 +1027,11 @@ function Process() {
                   </label>
 
                   <input
-                    id="name"
-                    name="name"
+                    name="Title"
                     type="text"
-                    value={formData.name}
-                    onChange={handleChange}
+                    value={Title}
+                    onChange={(e)=>setTitle(e.target.value)}
                     placeholder="Nhập họ và tên"
-                    required
                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   />
                 </div>
@@ -1007,8 +1048,8 @@ function Process() {
                       id="email"
                       name="email"
                       type="email"
-                      value={formData.email}
-                      onChange={handleChange}
+                      value={email}
+                      onChange={(e)=>setEmail(e.target.value)}
                       placeholder="example@gmail.com"
                       required
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
@@ -1027,8 +1068,8 @@ function Process() {
                       id="phone"
                       name="phone"
                       type="tel"
-                      value={formData.phone}
-                      onChange={handleChange}
+                      value={phone}
+                      onChange={(e)=>setPhone(e.target.value)}
                       placeholder="09xx xxx xxx"
                       required
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
@@ -1048,8 +1089,8 @@ function Process() {
                   <select
                     id="position"
                     name="position"
-                    value={formData.position}
-                    onChange={handleChange}
+                    value={position}
+                    onChange={(e)=>setposition(e.target.value)}
                     required
                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   >
@@ -1075,9 +1116,9 @@ function Process() {
                   <textarea
                     id="message"
                     name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={4}
+                    value={message}
+                    onChange={(e)=>setMessage(e.target.value)}
+                    rows={8}
                     placeholder="Bạn đang quan tâm đến công việc hoặc vị trí nào?"
                     className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   />
@@ -1085,12 +1126,26 @@ function Process() {
 
                 {/* SUBMIT */}
                 <div className="flex gap-4">
-                  <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
-                    Trải nghiệm ngay
+                  <button
+                  type="submit"
+                  disabled={submitting}
+                  className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+                    {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      Đang gửi...
+                    </>
+                  ) : complete ? (
+                    <>
+                      <Check className="w-4 h-4 disabled:cursor-not-allowed" />
+                    </>
+                  ) : (
+                    "Liên hệ tư vấn ngay"
+                  )}
                   </button>
 
                   <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
-                    Liên hệ tư vấn
+                    Tìm hiểu thêm
                   </button>
                 </div>
 
@@ -1147,14 +1202,14 @@ function TOOLS() {
           ))}
         </div>
         <div className="flex mt-20 mx-auto max-w-xl items-center justify-center gap-5">
-                <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
-                  Trải nghiệm ngay
-                </button>
+          <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+            Trải nghiệm ngay
+          </button>
 
-                <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
-                  Liên hệ tư vấn
-                </button>
-              </div>
+          <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
+            Liên hệ tư vấn
+          </button>
+        </div>
       </div>
     </section>
   );

@@ -9,7 +9,6 @@ import {
   Gift,
   Building2,
   Bot,
-  Clock,
   Mail,
   FileText,
   FileSpreadsheet,
@@ -18,9 +17,7 @@ import {
   Download,
   Shield,
   Check,
-  Home,
 } from "lucide-react";
-import { useNavigate, Link } from "react-router-dom";
 
 /* -------------------------------------------------------------------- */
 /*  Mock content — stands in for real CMS data                          */
@@ -211,43 +208,6 @@ const practiceGroups = [
 /* -------------------------------------------------------------------- */
 /*  Small building blocks                                               */
 /* -------------------------------------------------------------------- */
-
-function Header() {
-  const NaviGate = useNavigate();
-  return (
-    <header className="border-b border-slate-200 bg-white px-6 py-3 flex items-center justify-center gap-4">
-      <nav className="hidden lg:flex items-center gap-6 text-sm text-slate-600 font-medium">
-        <a className="text-blue-600" href="#top">
-          <Link
-            to={"/"}
-            className="inline-flex items-center justify-center rounded-lg p-2
-             text-slate-600 transition-all duration-200
-             hover:bg-blue-50 hover:text-blue-600
-             hover:scale-110 active:scale-95"
-          >
-            <Home className="h-5 w-5" />
-          </Link>
-        </a>
-        <a className="text-blue-600" href="#top">
-          Cẩm Nang Tuyển Dụng 2026
-        </a>
-        <a className="hover:text-slate-900" href="#topics">
-          Chuyên Mục Kiến Thức
-        </a>
-        <a className="hover:text-slate-900" href="#resources">
-          Mẫu Biểu &amp; Công Cụ
-        </a>
-        <a className="hover:text-slate-900" href="#practice">
-          Thực Hành Nhân Sự
-        </a>
-      </nav>
-      {/* 
-      <button className="hidden sm:inline-flex items-center gap-1.5 rounded-md bg-blue-600 px-3.5 py-2 text-xs font-semibold text-white hover:bg-blue-700 transition-colors whitespace-nowrap">
-        Đăng Ký Nhận Bản Tin HR
-      </button> */}
-    </header>
-  );
-}
 
 function HeroSearch() {
   return (
@@ -672,7 +632,6 @@ function Footer() {
 export default function RecruitmentGuidePage() {
   return (
     <div className="min-h-screen bg-white font-sans antialiased">
-      <Header />
       <HeroSearch />
       <TopicsSection />
       <FeaturedArticles />
