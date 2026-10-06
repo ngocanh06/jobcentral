@@ -116,7 +116,7 @@ export const JobCard = ({
           <button
             id={`apply-btn-${job.id}`}
             onClick={(e) => onApply(job, e)}
-            className="px-5 py-2 text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-lg shadow-sm shadow-indigo-200 transition-all focus:outline-hidden cursor-pointer"
+            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-full shadow-xs hover:shadow-sm active:scale-95 transition-all focus:outline-hidden cursor-pointer"
           >
             Ứng tuyển ngay
           </button>

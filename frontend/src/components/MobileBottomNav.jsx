@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Home,
   Briefcase,
   Building2,
   MessageSquare,
@@ -19,8 +20,8 @@ export const MobileBottomNav = ({
   const tabs = [
     {
       id: 'jobs',
-      label: 'Việc làm',
-      icon: Briefcase,
+      label: 'Trang chủ',
+      icon: Home,
     },
     {
       id: 'companies',

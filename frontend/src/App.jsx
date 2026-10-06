@@ -7,6 +7,7 @@ import {
 } from './data/mockData';
 import { Header } from './components/Header';
 import { AllJobsView } from './components/AllJobsView';
+import { JobSearchView } from './components/JobSearchView';
 import { SavedJobsView } from './components/SavedJobsView';
 import { CompaniesView } from './components/CompaniesView';
 import { CompanyDetailView } from './components/CompanyDetailView';
@@ -18,12 +19,9 @@ import { JobDetailModal } from './components/JobDetailModal';
 import { ApplyModal } from './components/ApplyModal';
 import { AuthModal } from './components/AuthModal';
 import { Toast } from './components/Toast';
-import { Footer } from './components/Footer';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileProfileDrawer } from './components/MobileProfileDrawer';
-import { DeviceStatusBadge } from './components/DeviceStatusBadge';
 import { useDevice } from './context/DeviceContext';
-import { authService } from './services/authService';
 
 export function App() {
   const device = useDevice();
@@ -180,10 +178,10 @@ export function App() {
   };
 
   const handleLogout = () => {
-    authService.logout();
     setCurrentUser(null);
     try {
       localStorage.removeItem('jobcentral_user');
+      localStorage.removeItem('user_session');
     } catch (e) {
       console.error('Failed to remove user session:', e);
     }
@@ -194,8 +192,10 @@ export function App() {
 
   return (
     <div
-      className={`min-h-screen bg-[#F8FAFC] flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 ${
-        activeTab === 'messages' ? 'h-screen overflow-hidden' : ''
+      className={`bg-[#F8FAFC] flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 ${
+        activeTab === 'messages' || activeTab === 'search'
+          ? 'h-dvh overflow-hidden'
+          : 'min-h-screen'
       }`}
     >
       {/* Top Main Navigation Header */}
@@ -232,8 +232,8 @@ export function App() {
       {/* Main View Display Body */}
       <main
         className={
-          activeTab === 'messages'
-            ? 'flex-1 h-[calc(100dvh-64px)] sm:h-[calc(100dvh-72px)] overflow-hidden flex flex-col min-h-0 pb-16 md:pb-0'
+          activeTab === 'messages' || activeTab === 'search'
+            ? 'flex-1 overflow-hidden flex flex-col min-h-0 pb-16 md:pb-0'
             : 'flex-1 pb-16 md:pb-0'
         }
       >
@@ -244,6 +244,24 @@ export function App() {
             onApply={handleApplyClick}
             onViewDetails={(job) => setSelectedJobForDetail(job)}
             onShare={handleShareJob}
+          />
+        )}
+
+        {activeTab === 'search' && (
+          <JobSearchView
+            jobs={jobs}
+            currentUser={currentUser}
+            onToggleSave={handleToggleSave}
+            onApply={handleApplyClick}
+            onViewDetails={(job) => setSelectedJobForDetail(job)}
+            onShare={handleShareJob}
+            onOpenAuth={(mode) => {
+              setAuthMode(mode || 'login');
+              setAuthModalOpen(true);
+            }}
+            onOpenProfileDrawer={() => setMobileProfileDrawerOpen(true)}
+            onNavigateHome={() => setActiveTab('jobs')}
+            onExploreJobs={() => setActiveTab('jobs')}
           />
         )}
 
@@ -328,9 +346,6 @@ export function App() {
         )}
       </main>
 
-      {/* Footer */}
-      {activeTab !== 'messages' && <Footer />}
-
       {/* Mobile Bottom Navigation Bar (Phone-Optimized) */}
       <MobileBottomNav
         activeTab={activeTab}
@@ -368,9 +383,6 @@ export function App() {
         onLogout={handleLogout}
         onOpenAuth={handleOpenAuth}
       />
-
-      {/* Device Status & Simulation Diagnostic Badge */}
-      <DeviceStatusBadge />
 
       {/* Modals & Portals */}
       {selectedJobForDetail && (

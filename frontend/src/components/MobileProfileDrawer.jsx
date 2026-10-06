@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {
   X,
   User,
+  Search,
   MessageSquare,
   FileCheck,
   Bookmark,
@@ -114,6 +115,23 @@ export const MobileProfileDrawer = ({
 
             {/* Navigation List */}
             <div className="space-y-1 text-sm font-semibold text-slate-700">
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onTabChange('search');
+                }}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-lg bg-sky-50 text-sky-600 flex items-center justify-center">
+                    <Search className="w-4 h-4" />
+                  </div>
+                  <span>Tìm việc</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
+              </button>
+
               <button
                 type="button"
                 onClick={() => {

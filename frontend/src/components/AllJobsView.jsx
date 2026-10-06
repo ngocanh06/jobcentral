@@ -456,23 +456,46 @@ export const AllJobsView = ({
 
   return (
     <div className="bg-[#F8FAFC] pb-20">
-      {/* 1. HERO SEARCH SECTION */}
-      <section className="pt-12 pb-8 px-4 sm:px-6 lg:px-8 text-center max-w-6xl mx-auto">
-        <h1 className="text-3xl sm:text-4xl lg:text-[46px] font-extrabold text-slate-900 tracking-tight leading-tight">
-          Cầu Nối Sự Nghiệp <span className="text-[#2170E4]">Thế Hệ Mới</span>
-        </h1>
-        <p className="mt-3 text-slate-600 text-sm sm:text-base font-medium max-w-xl mx-auto leading-relaxed">
-          Tìm kiếm liền tay - Nhận ngay công việc
-          <br />
-          Hơn <span className="text-[#2170E4] font-bold">10,000+</span> nghề nghiệp đang chờ bạn ứng tuyển
-        </p>
+      {/* 1. HERO SEARCH SECTION WITH BACKGROUND IMAGE */}
+      <section
+        id="main-search-hero-section"
+        className="relative overflow-hidden pt-12 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 text-center bg-slate-900 border-b border-slate-200/50 shadow-xs"
+      >
+        {/* Background Image with Layered Readability Overlays */}
+        <div className="absolute inset-0 z-0">
+          <img
+            id="jobcentral-search-bg-image"
+            src={bannerImage}
+            alt="JobCentral Background"
+            referrerPolicy="no-referrer"
+            className="w-full h-full object-cover object-center scale-105 filter blur-[1px] brightness-[0.45] contrast-[1.05]"
+          />
+          {/* Gradients for crisp contrast */}
+          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/75 to-slate-950/90" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-600/25 via-transparent to-transparent" />
+        </div>
 
-        {/* Enhanced Floating Search Bar with Multiple Options */}
-        <div ref={searchFormRef} className="mt-7 max-w-4xl mx-auto text-left relative z-20">
-          <form
-            onSubmit={handleSearchSubmit}
-            className="bg-white rounded-xl border border-slate-200 p-2 sm:p-2.5 shadow-md flex flex-col md:flex-row items-center gap-2"
-          >
+        <div className="relative z-10 max-w-5xl mx-auto">
+          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold mb-4 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
+            <span>Nền tảng kết nối cơ hội việc làm & bứt phá sự nghiệp</span>
+          </div>
+
+          <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-extrabold text-white tracking-tight leading-tight drop-shadow-xs">
+            Cầu Nối Sự Nghiệp <span className="text-[#38bdf8] sm:text-[#60a5fa]">Thế Hệ Mới</span>
+          </h1>
+          <p className="mt-3 text-slate-200 text-sm sm:text-base font-medium max-w-xl mx-auto leading-relaxed drop-shadow-xs">
+            Tìm kiếm liền tay — Nhận ngay công việc mơ ước
+            <br />
+            Hơn <span className="text-amber-300 font-bold">10,000+</span> việc làm hấp dẫn đang chờ bạn ứng tuyển
+          </p>
+
+          {/* Enhanced Floating Search Bar with Multiple Options */}
+          <div ref={searchFormRef} className="mt-8 max-w-4xl mx-auto text-left relative z-20">
+            <form
+              onSubmit={handleSearchSubmit}
+              className="bg-white/95 backdrop-blur-md rounded-3xl md:rounded-full border border-white/40 p-2 sm:pl-4 sm:pr-2 sm:py-2 shadow-2xl flex flex-col md:flex-row items-center gap-2 ring-4 ring-black/15"
+            >
             {/* 1. Keyword Input */}
             <div className="flex items-center space-x-2.5 px-3 py-2 flex-1 w-full text-left">
               <Search className="w-4 h-4 text-[#2170E4] shrink-0" />
@@ -626,7 +649,7 @@ export const AllJobsView = ({
               type="button"
               onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
               title="Thêm bộ lọc nâng cao"
-              className={`p-2.5 rounded-md border transition-colors cursor-pointer shrink-0 ${
+              className={`p-2.5 rounded-full border transition-colors cursor-pointer shrink-0 ${
                 showAdvancedFilters || salaryRange || experienceLevel || jobType
                   ? 'border-blue-300 bg-blue-50/70 text-[#2170E4]'
                   : 'border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300'
@@ -638,7 +661,7 @@ export const AllJobsView = ({
             {/* Search Button */}
             <button
               type="submit"
-              className="w-full md:w-auto px-7 py-2.5 sm:py-3 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold text-sm rounded-md transition-colors cursor-pointer shrink-0"
+              className="w-full md:w-auto px-7 py-2.5 sm:py-3 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold text-sm rounded-full transition-colors cursor-pointer shrink-0"
             >
               Tìm kiếm
             </button>
@@ -712,8 +735,8 @@ export const AllJobsView = ({
           )}
 
           {/* Quick Popular Keywords & Suggested Tags */}
-          <div className="mt-3 flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-slate-400 font-medium text-[11px] mr-1">Gợi ý tìm kiếm:</span>
+          <div className="mt-3.5 flex flex-wrap items-center gap-1.5 text-xs">
+            <span className="text-slate-300 font-medium text-[11px] mr-1">Gợi ý tìm kiếm:</span>
             {[
               'UI/UX Designer',
               'ReactJS',
@@ -736,8 +759,8 @@ export const AllJobsView = ({
                 onClick={() => setKeyword(tag)}
                 className={`px-2.5 py-1 rounded-md text-xs transition-colors cursor-pointer ${
                   keyword === tag
-                    ? 'bg-blue-100 text-[#2170E4] font-bold'
-                    : 'bg-white/80 hover:bg-white text-slate-600 hover:text-[#2170E4] border border-slate-200/70 shadow-2xs'
+                    ? 'bg-[#2170E4] text-white font-bold shadow-xs'
+                    : 'bg-slate-900/60 hover:bg-slate-800/80 text-slate-200 hover:text-white border border-white/20 backdrop-blur-xs'
                 }`}
               >
                 {tag}
@@ -748,7 +771,7 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="ml-auto inline-flex items-center space-x-1 text-slate-500 hover:text-rose-600 text-xs font-medium cursor-pointer"
+                className="ml-auto inline-flex items-center space-x-1 text-rose-300 hover:text-rose-200 text-xs font-medium cursor-pointer bg-rose-950/60 px-2 py-1 rounded-md border border-rose-500/30"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Đặt lại tất cả</span>
@@ -756,35 +779,10 @@ export const AllJobsView = ({
             )}
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      {/* 2. PROMOTIONAL HERO BANNER */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-6 sm:my-8">
-        <div
-          id="main-banner-section"
-          className="relative rounded-3xl overflow-hidden shadow-lg border border-slate-200/80 bg-slate-900 group"
-        >
-          <img
-            id="jobcentral-banner-image"
-            src={bannerImage}
-            alt="JobCentral Banner - Kết nối cơ hội, bứt phá tương lai"
-            referrerPolicy="no-referrer"
-            className="w-full h-48 sm:h-64 md:h-72 lg:h-80 object-cover object-center group-hover:scale-[1.01] transition-transform duration-500"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent flex flex-col justify-end p-6 sm:p-8">
-            <div className="max-w-2xl space-y-2">
-              <h2 className="text-xl sm:text-2xl md:text-3xl font-extrabold text-white tracking-tight leading-snug">
-                Kết Nối Cơ Hội — Bứt Phá Tương Lai Cùng Hơn 10,000+ Việc Làm Mới
-              </h2>
-              <p className="text-xs sm:text-sm text-slate-200/90 font-medium hidden sm:block">
-                Hồ sơ thông minh, thuật toán gợi ý việc làm chuẩn xác và kết nối trực tiếp với nhà tuyển dụng hàng đầu.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. VIỆC LÀM THEO NGÀNH NGHỀ (ĐA DẠNG NGHỀ NGHIỆP) */}
+      {/* 2. VIỆC LÀM THEO NGÀNH NGHỀ (ĐA DẠNG NGHỀ NGHIỆP) */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 text-center">
         <div className="text-center mb-6">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
@@ -890,16 +888,16 @@ export const AllJobsView = ({
           Việc Làm <span className="text-[#2170E4]">Mới Nhất</span>
         </h2>
 
-        {/* Filter Tabs */}
-        <div className="flex items-center justify-center space-x-2 mt-5">
+        {/* Filter Tabs - Pill Vibe */}
+        <div className="inline-flex p-1 bg-slate-100/90 rounded-full border border-slate-200/80 mt-5 max-w-full overflow-x-auto no-scrollbar shadow-2xs">
           <button
             type="button"
             id="tab-job-featured"
             onClick={() => setActiveJobTab('featured')}
-            className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            className={`px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeJobTab === 'featured'
-                ? 'bg-[#2170E4] text-white shadow-xs'
-                : 'bg-transparent text-slate-600 hover:text-slate-900'
+                ? 'bg-[#2170E4] text-white shadow-sm shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             Việc làm nổi bật
@@ -908,10 +906,10 @@ export const AllJobsView = ({
             type="button"
             id="tab-job-urgent"
             onClick={() => setActiveJobTab('urgent')}
-            className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            className={`px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeJobTab === 'urgent'
-                ? 'bg-[#2170E4] text-white shadow-xs'
-                : 'bg-transparent text-slate-600 hover:text-slate-900'
+                ? 'bg-[#2170E4] text-white shadow-sm shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             Việc Làm Tuyển gấp
@@ -920,10 +918,10 @@ export const AllJobsView = ({
             type="button"
             id="tab-job-intern"
             onClick={() => setActiveJobTab('intern')}
-            className={`px-5 py-2 rounded-lg text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+            className={`px-5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap ${
               activeJobTab === 'intern'
-                ? 'bg-[#2170E4] text-white shadow-xs'
-                : 'bg-transparent text-slate-600 hover:text-slate-900'
+                ? 'bg-[#2170E4] text-white shadow-sm shadow-blue-500/20'
+                : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/60'
             }`}
           >
             Việc Làm Thực tập sinh
@@ -1046,7 +1044,7 @@ export const AllJobsView = ({
                       <button
                         type="button"
                         onClick={(e) => onApply(job, e)}
-                        className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-lg text-xs shadow-xs transition-all cursor-pointer"
+                        className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs hover:shadow-sm active:scale-95 transition-all cursor-pointer"
                       >
                         Ứng tuyển ngay
                       </button>
@@ -1353,7 +1351,7 @@ export const AllJobsView = ({
         </p>
 
         {/* Category Pills */}
-        <div className="flex flex-wrap items-center justify-center gap-2 mt-5">
+        <div className="inline-flex flex-wrap items-center justify-center gap-1.5 mt-5 p-1 bg-slate-100/90 rounded-full border border-slate-200/80 max-w-full shadow-2xs">
           {[
             { id: 'all', label: 'Tất cả' },
             { id: 'tech', label: 'Công nghệ' },
@@ -1368,10 +1366,10 @@ export const AllJobsView = ({
                 setActiveCompanyCategory(tab.id);
                 setCompanyCarouselIndex(0);
               }}
-              className={`px-4 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              className={`px-4.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer whitespace-nowrap ${
                 activeCompanyCategory === tab.id
-                  ? 'bg-[#2170E4] text-white shadow-xs'
-                  : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                  ? 'bg-[#2170E4] text-white shadow-xs shadow-blue-500/20'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/70'
               }`}
             >
               {tab.label}

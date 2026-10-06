@@ -30,7 +30,8 @@ export const Header = ({
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
 
   const navItems = [
-    { id: 'jobs', label: 'Việc Làm' },
+    { id: 'jobs', label: 'Trang Chủ' },
+    { id: 'search', label: 'Tìm việc' },
     { id: 'companies', label: 'Công ty' },
     { id: 'reviews', label: 'Đánh giá' },
     { id: 'news', label: 'Tin tức' },
@@ -261,20 +262,14 @@ export const Header = ({
                 </div>
               </div>
             ) : (
-              <div className="flex items-center space-x-1.5 sm:space-x-3">
+              <div className="flex items-center">
                 <button
-                  id="header-login-btn"
+                  id="header-employer-pill-btn"
                   onClick={() => onOpenAuth('login')}
-                  className="px-3 sm:px-6 py-1.5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs transition-colors cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px] flex items-center justify-center"
+                  className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px]"
                 >
-                  Đăng nhập
-                </button>
-                <button
-                  id="header-register-btn"
-                  onClick={() => onOpenAuth('register')}
-                  className="px-3 sm:px-6 py-1.5 sm:py-2.5 text-xs sm:text-sm font-semibold text-[#0A58CA] hover:text-[#084298] bg-white border border-[#0A58CA] hover:bg-blue-50/70 rounded-full transition-colors cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px] flex items-center justify-center"
-                >
-                  Đăng ký
+                  <Building2 className="w-4 h-4 text-blue-200 shrink-0" />
+                  <span>Dành cho nhà tuyển dụng</span>
                 </button>
               </div>
             )}
