@@ -1,0 +1,32 @@
+import type { CSSToken } from './token-types';
+export { TokenType } from './token-types';
+export type { Token, StringValueToken, HashToken, NumberValueToken, DimensionToken, UnicodeRangeToken, CSSToken } from './token-types';
+export { FLAG_UNRESTRICTED, FLAG_ID, FLAG_INTEGER, FLAG_NUMBER } from './token-types';
+export { isDigit, isHex, isWhiteSpace, isNameCodePoint, isValidEscape, isIdentifierStart, isNameStartCodePoint, isNumberStart } from './token-constants';
+export { COMMA_TOKEN, COLON_TOKEN, SEMICOLON_TOKEN, LEFT_PARENTHESIS_TOKEN, RIGHT_PARENTHESIS_TOKEN, LEFT_CURLY_BRACKET_TOKEN, RIGHT_CURLY_BRACKET_TOKEN, LEFT_SQUARE_BRACKET_TOKEN, RIGHT_SQUARE_BRACKET_TOKEN, WHITESPACE_TOKEN, EOF_TOKEN, BAD_URL_TOKEN, BAD_STRING_TOKEN, CDC_TOKEN, CDO_TOKEN, PREFIX_MATCH_TOKEN, SUFFIX_MATCH_TOKEN, SUBSTRING_MATCH_TOKEN, DASH_MATCH_TOKEN, INCLUDE_MATCH_TOKEN, COLUMN_TOKEN } from './token-singletons';
+export declare class Tokenizer {
+    private static _pool;
+    private static readonly MAX_POOL_SIZE;
+    static get(): Tokenizer;
+    static release(tokenizer: Tokenizer): void;
+    private _value;
+    constructor();
+    private _reset;
+    write(chunk: string): void;
+    read(): CSSToken[];
+    private consumeToken;
+    private consumeCodePoint;
+    private reconsumeCodePoint;
+    private peekCodePoint;
+    private consumeUnicodeRangeToken;
+    private consumeIdentLikeToken;
+    private consumeUrlToken;
+    private consumeWhiteSpace;
+    private consumeBadUrlRemnants;
+    private consumeStringSlice;
+    private consumeStringToken;
+    private consumeNumber;
+    private consumeNumericToken;
+    private consumeEscapedCodePoint;
+    private consumeName;
+}
