@@ -78,19 +78,19 @@ export const JobCard = ({
       {/* Meta Pills Row */}
       <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mt-4">
         {/* Location badge */}
-        <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-slate-100 text-slate-700 text-xs font-medium">
+        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
           <MapPin className="w-3.5 h-3.5 text-slate-500" />
           <span>{job.location}</span>
         </div>
 
         {/* Salary badge */}
-        <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-emerald-50 border border-emerald-200/70 text-emerald-700 text-xs font-semibold">
+        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700 text-xs font-semibold">
           <Banknote className="w-3.5 h-3.5 text-emerald-600" />
           <span>{job.salary}</span>
         </div>
 
         {/* Job Type badge */}
-        <div className="inline-flex items-center space-x-1.5 px-2.5 py-1 rounded-lg bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-medium">
+        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-medium">
           <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
           <span>{job.jobType}</span>
         </div>

@@ -33,7 +33,7 @@ export const NewsView = ({ articles }) => {
                 alt={art.title}
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               />
-              <span className="absolute top-3 left-3 bg-indigo-600/90 backdrop-blur-md text-white text-xs font-semibold px-2.5 py-1 rounded-lg shadow-xs">
+              <span className="absolute top-3 left-3 bg-indigo-600/90 backdrop-blur-md text-white text-xs font-semibold px-3 py-1 rounded-full shadow-xs">
                 {art.category}
               </span>
             </div>
@@ -97,7 +97,7 @@ export const NewsView = ({ articles }) => {
             <div className="mt-8 pt-4 border-t border-slate-100 flex justify-end">
               <button
                 onClick={() => setSelectedArticle(null)}
-                className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-medium text-sm transition-all shadow-sm shadow-indigo-200"
+                className="px-7 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full font-medium text-sm transition-all shadow-sm shadow-indigo-200 cursor-pointer active:scale-95"
               >
                 Đóng bài viết
               </button>

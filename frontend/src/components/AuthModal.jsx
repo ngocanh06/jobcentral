@@ -85,12 +85,12 @@ export const AuthModal = ({
         </div>
 
         {/* Mode Switcher */}
-        <div className="flex bg-slate-100 p-1 rounded-xl mb-4 sm:mb-5 text-xs font-semibold">
+        <div className="flex bg-slate-100 p-1 rounded-full mb-4 sm:mb-5 text-xs font-semibold">
           <button
             type="button"
             id="auth-mode-login-tab"
             onClick={() => setMode('login')}
-            className={`flex-1 py-2 sm:py-1.5 rounded-lg transition-all cursor-pointer ${
+            className={`flex-1 py-2 sm:py-1.5 rounded-full transition-all cursor-pointer ${
               mode === 'login'
                 ? 'bg-white text-[#2170E4] shadow-xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'
@@ -102,7 +102,7 @@ export const AuthModal = ({
             type="button"
             id="auth-mode-register-tab"
             onClick={() => setMode('register')}
-            className={`flex-1 py-2 sm:py-1.5 rounded-lg transition-all cursor-pointer ${
+            className={`flex-1 py-2 sm:py-1.5 rounded-full transition-all cursor-pointer ${
               mode === 'register'
                 ? 'bg-white text-[#2170E4] shadow-xs font-bold'
                 : 'text-slate-600 hover:text-slate-900'
@@ -184,7 +184,7 @@ export const AuthModal = ({
           <button
             type="submit"
             id="auth-submit-btn"
-            className="w-full py-3 sm:py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all flex items-center justify-center space-x-2 mt-4 cursor-pointer"
+            className="w-full py-3 sm:py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-[0.98] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs transition-all flex items-center justify-center space-x-2 mt-4 cursor-pointer"
           >
             <span>{mode === 'login' ? 'Đăng nhập ngay' : 'Tạo tài khoản'}</span>
             <ArrowRight className="w-4 h-4" />

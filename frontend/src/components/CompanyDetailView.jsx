@@ -480,13 +480,13 @@ export const CompanyDetailView = ({
 
         {/* Tags Row */}
         <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
-          <span className="px-2.5 py-1 bg-blue-50 text-[#2170E4] rounded-md font-semibold">
+          <span className="px-3 py-1 bg-blue-50 text-[#2170E4] rounded-full font-semibold">
             {job.jobType || job.type || 'Full-time'}
           </span>
-          <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md font-semibold">
+          <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full font-semibold">
             {job.salary}
           </span>
-          <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
+          <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
             {job.location?.split(',').pop()?.trim() || job.location}
           </span>
         </div>
@@ -509,7 +509,7 @@ export const CompanyDetailView = ({
                 });
               }
             }}
-            className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-lg text-xs shadow-xs transition-all cursor-pointer"
+            className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs hover:shadow-sm active:scale-95 transition-all cursor-pointer"
           >
             Ứng tuyển ngay
           </button>
@@ -538,7 +538,7 @@ export const CompanyDetailView = ({
               type="button"
               onClick={onBack}
               title="Quay lại danh sách công ty"
-              className="absolute top-4 left-4 z-20 inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-lg bg-white/95 hover:bg-white text-slate-700 hover:text-[#2170E4] text-xs font-semibold shadow-xs backdrop-blur-xs transition-all cursor-pointer border border-slate-200/60"
+              className="absolute top-4 left-4 z-20 inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-white/95 hover:bg-white text-slate-700 hover:text-[#2170E4] text-xs font-semibold shadow-xs backdrop-blur-xs transition-all cursor-pointer border border-slate-200/60 active:scale-95"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Quay lại</span>
@@ -607,7 +607,7 @@ export const CompanyDetailView = ({
                         setInternalFollowing(!internalFollowing);
                       }
                     }}
-                    className={`px-5 py-2.5 rounded-lg text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer shadow-2xs ${
+                    className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer shadow-2xs active:scale-95 ${
                       isFollowing
                         ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
                         : 'bg-white border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50'
@@ -633,7 +633,7 @@ export const CompanyDetailView = ({
                 href={currentCompany.website}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-2.5 rounded-lg text-xs sm:text-sm font-semibold bg-[#2170E4] hover:bg-[#1a5bbd] text-white transition-colors shadow-2xs flex items-center space-x-2 cursor-pointer"
+                className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-[#2170E4] hover:bg-[#1a5bbd] text-white transition-all shadow-2xs flex items-center space-x-2 cursor-pointer active:scale-95"
               >
                 <Globe className="w-4 h-4" />
                 <span>Website</span>
@@ -796,7 +796,7 @@ export const CompanyDetailView = ({
                         key={dept.id}
                         type="button"
                         onClick={() => setSelectedDepartment(dept.id)}
-                        className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+                        className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer ${
                           selectedDepartment === dept.id
                             ? 'bg-[#0A58CA] text-white font-bold shadow-2xs'
                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -858,7 +858,7 @@ export const CompanyDetailView = ({
                           setSelectedDepartment('all');
                           setSelectedJobType('all');
                         }}
-                        className="mt-4 px-4 py-2 bg-[#0A58CA] text-white text-xs font-bold rounded-xl"
+                        className="mt-4 px-5 py-2.5 bg-[#0A58CA] text-white text-xs font-bold rounded-full hover:bg-[#084298] transition-all cursor-pointer active:scale-95 shadow-xs"
                       >
                         Xem toàn bộ 12 công việc
                       </button>
@@ -1035,7 +1035,7 @@ export const CompanyDetailView = ({
               <button
                 type="button"
                 onClick={() => setShowGalleryModal(true)}
-                className="w-full py-2.5 px-4 rounded-xl border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-colors text-center cursor-pointer shadow-2xs"
+                className="w-full py-2.5 px-4 rounded-full border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-colors text-center cursor-pointer shadow-2xs active:scale-95"
               >
                 Xem tất cả hình ảnh
               </button>

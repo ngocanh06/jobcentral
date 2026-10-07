@@ -757,7 +757,7 @@ export const AllJobsView = ({
                 key={tag}
                 type="button"
                 onClick={() => setKeyword(tag)}
-                className={`px-2.5 py-1 rounded-md text-xs transition-colors cursor-pointer ${
+                className={`px-3 py-1 rounded-full text-xs transition-colors cursor-pointer ${
                   keyword === tag
                     ? 'bg-[#2170E4] text-white font-bold shadow-xs'
                     : 'bg-slate-900/60 hover:bg-slate-800/80 text-slate-200 hover:text-white border border-white/20 backdrop-blur-xs'
@@ -771,7 +771,7 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="ml-auto inline-flex items-center space-x-1 text-rose-300 hover:text-rose-200 text-xs font-medium cursor-pointer bg-rose-950/60 px-2 py-1 rounded-md border border-rose-500/30"
+                className="ml-auto inline-flex items-center space-x-1 text-rose-300 hover:text-rose-200 text-xs font-medium cursor-pointer bg-rose-950/60 px-3 py-1 rounded-full border border-rose-500/30"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Đặt lại tất cả</span>
@@ -793,12 +793,12 @@ export const AllJobsView = ({
           </p>
 
           {industry && (
-            <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 bg-blue-50 border border-blue-200 rounded-lg text-xs text-[#2170E4] font-medium">
+            <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-xs text-[#2170E4] font-medium">
               <span>Đang lọc: <strong>{industry}</strong></span>
               <button
                 type="button"
                 onClick={() => setIndustry('')}
-                className="hover:bg-blue-200/60 p-0.5 rounded cursor-pointer transition-colors"
+                className="hover:bg-blue-200/60 p-0.5 rounded-full cursor-pointer transition-colors"
                 title="Bỏ lọc ngành nghề"
               >
                 <X className="w-3.5 h-3.5" />
@@ -950,7 +950,7 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] text-white text-xs font-semibold rounded-xl hover:bg-[#1a5bbd] transition-all cursor-pointer shadow-xs"
+                className="inline-flex items-center space-x-2 px-6 py-2.5 bg-[#2170E4] text-white text-xs font-semibold rounded-full hover:bg-[#1a5bbd] transition-all cursor-pointer shadow-xs active:scale-95"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Đặt lại bộ lọc tìm kiếm</span>
@@ -1027,13 +1027,13 @@ export const AllJobsView = ({
 
                     {/* Tags Row */}
                     <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
-                      <span className="px-2.5 py-1 bg-blue-50 text-[#2170E4] rounded-md font-semibold">
+                      <span className="px-3 py-1 bg-blue-50 text-[#2170E4] rounded-full font-semibold">
                         {job.jobType || 'Full-time'}
                       </span>
-                      <span className="px-2.5 py-1 bg-emerald-50 text-emerald-700 rounded-md font-semibold">
+                      <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full font-semibold">
                         {job.salary}
                       </span>
-                      <span className="px-2.5 py-1 bg-slate-100 text-slate-700 rounded-md">
+                      <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
                         {job.location?.split(',').pop()?.trim() || job.location}
                       </span>
                     </div>
@@ -1482,7 +1482,7 @@ export const AllJobsView = ({
                           onClick={() =>
                             alert(`Đang mở ${centerCompany.jobsCount} của ${centerCompany.name}!`)
                           }
-                          className="w-full py-2.5 bg-white text-[#1d63cb] hover:bg-blue-50/90 active:scale-[0.98] font-semibold rounded-lg text-xs shadow-xs transition-all cursor-pointer"
+                          className="w-full py-2.5 bg-white text-[#1d63cb] hover:bg-blue-50/90 active:scale-[0.98] font-semibold rounded-full text-xs shadow-xs transition-all cursor-pointer"
                         >
                           {centerCompany.jobsCount}
                         </button>
@@ -1493,7 +1493,7 @@ export const AllJobsView = ({
                               type="button"
                               id={`company-follow-btn-${centerCompany.id}`}
                               onClick={() => handleToggleFollowCompany(centerCompany.id)}
-                              className={`w-full py-2.5 flex items-center justify-center space-x-1.5 font-semibold rounded-lg text-xs transition-all cursor-pointer select-none active:scale-[0.98] ${
+                              className={`w-full py-2.5 flex items-center justify-center space-x-1.5 font-semibold rounded-full text-xs transition-all cursor-pointer select-none active:scale-[0.98] ${
                                 isFollowed
                                   ? 'bg-white/25 hover:bg-white/30 border border-white/40 text-white shadow-xs backdrop-blur-xs'
                                   : 'bg-white/10 hover:bg-white/20 border border-white/25 text-white'

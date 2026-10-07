@@ -68,7 +68,7 @@ export const FilterSidebar = ({
           id="filter-reset-btn"
           onClick={onReset}
           title="Đặt lại bộ lọc"
-          className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center space-x-1 px-2 py-1 hover:bg-indigo-50 rounded-lg transition-colors font-medium cursor-pointer"
+          className="text-xs text-indigo-600 hover:text-indigo-800 flex items-center space-x-1 px-2.5 py-1 hover:bg-indigo-50 rounded-full transition-colors font-medium cursor-pointer"
         >
           <RotateCcw className="w-3.5 h-3.5" />
           <span>Đặt lại</span>
@@ -268,7 +268,7 @@ export const FilterSidebar = ({
           <button
             id="apply-filter-btn"
             onClick={onApply}
-            className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-xl shadow-sm shadow-indigo-200 transition-all flex items-center justify-center space-x-2 focus:outline-hidden cursor-pointer"
+            className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all flex items-center justify-center space-x-2 focus:outline-hidden cursor-pointer active:scale-95"
           >
             <span>Áp dụng bộ lọc</span>
           </button>

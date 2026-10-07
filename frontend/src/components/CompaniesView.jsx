@@ -127,7 +127,7 @@ export const CompaniesView = ({
           {/* Search Button */}
           <button
             type="submit"
-            className="w-full sm:w-auto px-6 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shrink-0 shadow-xs cursor-pointer active:scale-98"
+            className="w-full sm:w-auto px-7 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white text-xs sm:text-sm font-semibold rounded-full transition-all shrink-0 shadow-xs cursor-pointer active:scale-95"
           >
             Tìm kiếm
           </button>
@@ -135,7 +135,7 @@ export const CompaniesView = ({
 
         {/* Notice when navigated from recruiter */}
         {initialSearchQuery && searchTerm === initialSearchQuery && (
-          <div className="mt-4 inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 text-[#0A58CA] text-xs font-semibold px-3.5 py-1.5 rounded-xl animate-in fade-in duration-200">
+          <div className="mt-4 inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 text-[#0A58CA] text-xs font-semibold px-4 py-1.5 rounded-full animate-in fade-in duration-200">
             <Sparkles className="w-3.5 h-3.5 text-[#0A58CA]" />
             <span>Đang hiển thị thông tin công ty của Nhà tuyển dụng: <strong>{initialSearchQuery}</strong></span>
             <button
@@ -161,7 +161,7 @@ export const CompaniesView = ({
               setSearchTerm('');
               if (onResetSearch) onResetSearch();
             }}
-            className="mt-4 px-4 py-2 bg-indigo-600 text-white text-xs font-bold rounded-xl hover:bg-indigo-700 transition-colors cursor-pointer"
+            className="mt-4 px-5 py-2.5 bg-indigo-600 text-white text-xs font-bold rounded-full hover:bg-indigo-700 transition-all cursor-pointer active:scale-95 shadow-xs"
           >
             Xem toàn bộ công ty
           </button>
@@ -212,7 +212,7 @@ export const CompaniesView = ({
                     </div>
 
                     <div className="flex items-center space-x-2 shrink-0">
-                      <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200/80 px-2.5 py-1 rounded-xl text-xs font-bold text-amber-700">
+                      <div className="flex items-center space-x-1.5 bg-amber-50 border border-amber-200/80 px-3 py-1 rounded-full text-xs font-bold text-amber-700">
                         <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
                         <span>{company.rating}</span>
                         <span className="text-amber-600 font-normal">({company.reviewsCount})</span>
@@ -229,7 +229,7 @@ export const CompaniesView = ({
                         }}
                         title={isFollowed ? 'Bỏ yêu thích công ty' : 'Yêu thích công ty'}
                         aria-label="Yêu thích công ty"
-                        className={`p-2 rounded-xl border transition-all cursor-pointer ${
+                        className={`p-2 rounded-full border transition-all cursor-pointer ${
                           isFollowed
                             ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
                             : 'bg-slate-50/80 border-slate-200/80 text-slate-400 hover:text-rose-600 hover:bg-rose-50 hover:border-rose-200'
@@ -245,11 +245,11 @@ export const CompaniesView = ({
                   </div>
 
                   <div className="flex flex-wrap items-center gap-3 text-xs text-slate-500 mt-4">
-                    <div className="flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">
+                    <div className="flex items-center space-x-1.5 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
                       <MapPin className="w-3.5 h-3.5 text-slate-400" />
                       <span>{company.location}</span>
                     </div>
-                    <div className="flex items-center space-x-1.5 bg-slate-50 px-2.5 py-1 rounded-lg border border-slate-100">
+                    <div className="flex items-center space-x-1.5 bg-slate-50 px-3 py-1 rounded-full border border-slate-100">
                       <Users className="w-3.5 h-3.5 text-slate-400" />
                       <span>{company.employees}</span>
                     </div>
@@ -264,7 +264,7 @@ export const CompaniesView = ({
                     {company.highlights.map((h, i) => (
                       <span
                         key={i}
-                        className="inline-flex items-center space-x-1.5 text-xs bg-indigo-50/60 text-indigo-700 border border-indigo-100 px-2.5 py-1 rounded-lg font-medium"
+                        className="inline-flex items-center space-x-1.5 text-xs bg-indigo-50/60 text-indigo-700 border border-indigo-100 px-3 py-1 rounded-full font-medium"
                       >
                         <CheckCircle2 className="w-3 h-3 text-indigo-600" />
                         <span>{h}</span>
@@ -274,7 +274,7 @@ export const CompaniesView = ({
                 </div>
 
                 <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3 py-1 rounded-xl border border-emerald-200">
+                  <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-3.5 py-1 rounded-full border border-emerald-200">
                     {company.openJobsCount} vị trí đang tuyển
                   </span>
 
@@ -287,7 +287,7 @@ export const CompaniesView = ({
                         onSelectCompany(company);
                       }
                     }}
-                    className="inline-flex items-center space-x-1.5 text-xs font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] px-4 py-2 rounded-xl transition-all shadow-xs cursor-pointer"
+                    className="inline-flex items-center space-x-1.5 text-xs font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] px-5 py-2 rounded-full transition-all shadow-xs cursor-pointer active:scale-95"
                   >
                     <span>Xem chi tiết</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />

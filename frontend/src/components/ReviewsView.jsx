@@ -60,7 +60,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
         <button
           id="write-review-btn"
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-xl shadow-sm shadow-indigo-200 transition-all shrink-0"
+          className="inline-flex items-center space-x-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all shrink-0 active:scale-95 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Viết đánh giá</span>
@@ -136,7 +136,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
               <button
                 id={`like-review-btn-${review.id}`}
                 onClick={() => handleLike(review.id)}
-                className="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 px-3 py-1.5 rounded-lg transition-colors font-medium"
+                className="flex items-center space-x-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 px-4 py-1.5 rounded-full transition-colors font-medium cursor-pointer active:scale-95"
               >
                 <ThumbsUp className="w-3.5 h-3.5" />
                 <span>Hữu ích ({review.likes})</span>
@@ -251,13 +251,13 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900"
+                  className="px-5 py-2 text-sm text-slate-600 hover:text-slate-900 rounded-full hover:bg-slate-100 cursor-pointer"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-indigo-600 text-white rounded-xl font-medium text-sm hover:bg-indigo-700 shadow-sm shadow-indigo-200"
+                  className="px-6 py-2 bg-indigo-600 text-white rounded-full font-medium text-sm hover:bg-indigo-700 shadow-sm shadow-indigo-200 cursor-pointer active:scale-95"
                 >
                   Đăng đánh giá
                 </button>
