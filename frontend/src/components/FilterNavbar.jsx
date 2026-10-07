@@ -244,14 +244,14 @@ export const FilterNavbar = ({
                       setSalary(item.id);
                       setOpenDropdown(null);
                     }}
-                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs font-medium text-left transition-colors cursor-pointer ${
+                    className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer ${
                       filters.salary === item.id
-                        ? 'bg-indigo-50 text-indigo-700 font-bold'
-                        : 'text-slate-700 hover:bg-slate-50'
+                        ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                        : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                     }`}
                   >
                     <span>{item.label}</span>
-                    {filters.salary === item.id && <Check className="w-3.5 h-3.5 text-indigo-600" />}
+                    {filters.salary === item.id && <Check className="w-3.5 h-3.5 text-slate-950" />}
                   </button>
                 ))}
               </div>

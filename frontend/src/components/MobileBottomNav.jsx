@@ -1,12 +1,10 @@
 import React from 'react';
 import {
   Home,
-  Briefcase,
+  Search,
   Building2,
   MessageSquare,
-  Bookmark,
   User,
-  Sparkles,
 } from 'lucide-react';
 
 export const MobileBottomNav = ({
@@ -24,6 +22,11 @@ export const MobileBottomNav = ({
       icon: Home,
     },
     {
+      id: 'search',
+      label: 'Tìm việc',
+      icon: Search,
+    },
+    {
       id: 'companies',
       label: 'Công ty',
       icon: Building2,
@@ -33,12 +36,6 @@ export const MobileBottomNav = ({
       label: 'Tin nhắn',
       icon: MessageSquare,
       badge: true,
-    },
-    {
-      id: 'saved',
-      label: 'Đã lưu',
-      icon: Bookmark,
-      count: savedCount,
     },
   ];
 

@@ -34,15 +34,15 @@ export const Header = ({
     { id: 'jobs', label: 'Trang Chủ' },
     { id: 'search', label: 'Tìm việc' },
     { id: 'companies', label: 'Công ty' },
-    { id: 'reviews', label: 'Đánh giá' },
     { id: 'news', label: 'Tin tức' },
-    { id: 'cv-builder', label: 'Hồ sơ và tạo cv' },
+    { id: 'tools', label: 'Công cụ' },
+    { id: 'cv-builder', label: 'Hồ sơ và tạo CV' },
   ];
 
   return (
-    <header className="bg-white sticky top-0 z-40 border-b border-slate-200/90 shadow-2xs">
+    <header className="w-full bg-white sticky top-0 z-40 border-b border-slate-200/90 shadow-2xs shrink-0">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-18 relative">
+        <div className="flex items-center justify-between h-16 gap-3 lg:gap-6">
           {/* Left: Logo */}
           <div className="flex items-center shrink-0">
             <button
@@ -55,10 +55,10 @@ export const Header = ({
             </button>
           </div>
 
-          {/* Center Navigation Tabs (Symmetrically Centered) */}
+          {/* Center Navigation Tabs (Balanced Flex-1 Centering between Logo & Actions) */}
           <nav
             id="main-nav-tabs"
-            className="hidden md:flex items-center justify-center flex-row flex-nowrap space-x-6 lg:space-x-8 text-sm shrink-0"
+            className="hidden md:flex flex-1 h-full items-center justify-center flex-row flex-nowrap space-x-1 lg:space-x-2 xl:space-x-4 text-sm min-w-0"
           >
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
@@ -67,9 +67,9 @@ export const Header = ({
                   key={item.id}
                   id={`nav-tab-${item.id}`}
                   onClick={() => onTabChange(item.id)}
-                  className={`relative py-2.5 px-1 font-medium transition-colors cursor-pointer select-none text-[15px] whitespace-nowrap shrink-0 inline-flex items-center focus:outline-hidden ${
+                  className={`relative h-full px-2.5 lg:px-3.5 font-semibold transition-colors cursor-pointer select-none text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 inline-flex items-center justify-center focus:outline-hidden ${
                     isActive
-                      ? 'text-[#0A58CA] font-bold'
+                      ? 'text-[#0A58CA]'
                       : 'text-slate-700 hover:text-[#0A58CA]'
                   }`}
                 >
@@ -77,7 +77,7 @@ export const Header = ({
                   {isActive && (
                     <span
                       id={`nav-tab-indicator-${item.id}`}
-                      className="absolute bottom-0 left-0 w-full h-[2.5px] bg-[#0A58CA] rounded-full"
+                      className="absolute bottom-0 left-2.5 right-2.5 h-[2.5px] bg-[#0A58CA] rounded-full"
                     />
                   )}
                 </button>
@@ -88,14 +88,14 @@ export const Header = ({
           {/* Right: Actions & User Profile */}
           <div className="flex items-center justify-end shrink-0">
             {currentUser ? (
-              <div className="flex items-center space-x-2.5 sm:space-x-5">
+              <div className="flex items-center space-x-1.5 sm:space-x-2.5">
                 {/* Notification Bell with blue dot */}
-                <div className="relative">
+                <div className="relative flex items-center">
                   <button
                     id="header-notification-btn"
                     onClick={() => setNotifDropdownOpen(!notifDropdownOpen)}
                     title="Thông báo"
-                    className="relative p-2 text-slate-700 hover:text-[#0A58CA] rounded-full transition-colors cursor-pointer focus:outline-hidden"
+                    className="relative w-9 h-9 flex items-center justify-center text-slate-700 hover:text-[#0A58CA] rounded-full transition-colors cursor-pointer focus:outline-hidden"
                   >
                     <Bell className="w-5 h-5 stroke-[1.8]" />
                     <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#0A58CA] rounded-full ring-2 ring-white" />
@@ -105,7 +105,7 @@ export const Header = ({
                   {notifDropdownOpen && (
                     <div
                       id="header-notifications-menu"
-                      className="absolute right-0 mt-2 w-[calc(100vw-32px)] max-w-xs sm:w-80 sm:max-w-none bg-white rounded-2xl shadow-xl border border-slate-100 py-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                      className="absolute right-0 top-full mt-2 w-[calc(100vw-32px)] max-w-xs sm:w-80 sm:max-w-none bg-white rounded-2xl shadow-xl border border-slate-100 py-3 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
                     >
                       <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                         <span className="font-bold text-slate-900 text-sm">Thông báo mới</span>
@@ -136,18 +136,20 @@ export const Header = ({
                   id="header-messages-btn"
                   onClick={() => onTabChange('messages')}
                   title="Tin nhắn nhà tuyển dụng"
-                  className={`relative p-2 rounded-full transition-colors cursor-pointer focus:outline-hidden ${
+                  className={`relative w-9 h-9 flex items-center justify-center rounded-full transition-colors cursor-pointer focus:outline-hidden ${
                     activeTab === 'messages'
                       ? 'text-[#0A58CA]'
                       : 'text-slate-700 hover:text-[#0A58CA]'
                   }`}
                 >
                   <MessageSquare className="w-5 h-5 stroke-[1.8]" />
-                  <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#0A58CA] rounded-full ring-2 ring-white" />
+                  <span className="absolute top-1.5 right-1.5 w-2.5 h-2.5 bg-[#0A58CA] rounded-full ring-2 ring-white" />
                 </button>
 
+                <div className="hidden sm:block h-5 w-px bg-slate-200 mx-1" />
+
                 {/* User Profile Section replaced with Employer Pill Button */}
-                <div className="relative">
+                <div className="relative flex items-center">
                   <button
                     id="header-user-profile-btn"
                     onClick={() => {
@@ -157,9 +159,9 @@ export const Header = ({
                         setProfileDropdownOpen(!profileDropdownOpen);
                       }
                     }}
-                    className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px] group focus:outline-hidden select-none"
+                    className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-xs sm:text-[13px] font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[38px] group focus:outline-hidden select-none"
                   >
-                    <RefreshCw className="w-4 h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
+                    <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
                     <span>Dành cho nhà tuyển dụng</span>
                   </button>
 
@@ -270,9 +272,9 @@ export const Header = ({
                 key={item.id}
                 id={`mobile-nav-${item.id}`}
                 onClick={() => onTabChange(item.id)}
-                className={`relative px-3 py-2 whitespace-nowrap font-medium transition-colors cursor-pointer select-none ${
+                className={`relative px-3 py-2 whitespace-nowrap font-semibold transition-colors cursor-pointer select-none ${
                   isActive
-                    ? 'text-[#0A58CA] font-bold'
+                    ? 'text-[#0A58CA]'
                     : 'text-slate-700 hover:text-slate-900'
                 }`}
               >

@@ -46,7 +46,11 @@ import {
 } from 'lucide-react';
 import { JobCardSkeleton } from './JobCardSkeleton';
 import { ErrorBoundary } from './ErrorBoundary';
-import bannerImage from '../assets/images/jobcentral_banner_1787972791221.jpg';
+import bannerImage from '../assets/images/Banner.png';
+
+const HERO_TITLE_TEXT = 'Bứt phá sự nghiệp cùng nền tảng tìm việc thế hệ mới';
+let hasPlayedInitialHeroIntro = false;
+const revealedSectionMemory = new Set();
 
 export const AllJobsView = ({
   jobs,
@@ -92,6 +96,108 @@ export const AllJobsView = ({
   const [isExpandedIndustries, setIsExpandedIndustries] = useState(false);
 
   const INITIAL_CATEGORY_COUNT = 7;
+
+  // Antigravity-style Hero H1 typing animation (runs ONLY on initial website load)
+  // Uses module-level flag so animation survives tab switches but plays only once per session
+  const [typedTitle, setTypedTitle] = useState(() =>
+    hasPlayedInitialHeroIntro ? HERO_TITLE_TEXT : ''
+  );
+  const [isActivelyTyping, setIsActivelyTyping] = useState(false);
+  const [isTypingComplete, setIsTypingComplete] = useState(() => hasPlayedInitialHeroIntro);
+  const [revealedSections, setRevealedSections] = useState(
+    () => new Set(revealedSectionMemory)
+  );
+
+  useEffect(() => {
+    // Animation already played this session → skip (handles tab switch back)
+    if (hasPlayedInitialHeroIntro) {
+      return;
+    }
+
+    let typingInterval;
+    let completeTimer;
+    let cancelled = false;
+
+    // 1. Show only Navbar, Banner, and blinking cursor first (~500ms)
+    const startTimer = setTimeout(() => {
+      if (cancelled) return;
+      setIsActivelyTyping(true);
+      let currentIndex = 0;
+
+      // 2. Type out the H1 headline smoothly character by character
+      typingInterval = setInterval(() => {
+        if (cancelled) {
+          clearInterval(typingInterval);
+          return;
+        }
+        currentIndex += 1;
+        setTypedTitle(HERO_TITLE_TEXT.slice(0, currentIndex));
+
+        if (currentIndex >= HERO_TITLE_TEXT.length) {
+          clearInterval(typingInterval);
+          setIsActivelyTyping(false);
+          // 3. Mark as played ONLY after typing truly finishes
+          //    (StrictMode cleanup runs before this point, so flag stays false for remount)
+          hasPlayedInitialHeroIntro = true;
+          // 4. Reveal Hero elements & activate scroll-reveal observer
+          completeTimer = setTimeout(() => {
+            if (cancelled) return;
+            setIsTypingComplete(true);
+          }, 260);
+        }
+      }, 34);
+    }, 500);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(startTimer);
+      if (typingInterval) clearInterval(typingInterval);
+      if (completeTimer) clearTimeout(completeTimer);
+    };
+  }, []);
+
+  // Antigravity-style Scroll Reveal: reveal each section & its child cards as user scrolls down
+  useEffect(() => {
+    if (!isTypingComplete) return;
+
+    const elements = document.querySelectorAll('[data-scroll-reveal]');
+    if (!elements.length) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const key = entry.target.getAttribute('data-scroll-reveal');
+            if (key) {
+              revealedSectionMemory.add(key);
+              setRevealedSections((prev) => {
+                if (prev.has(key)) return prev;
+                const next = new Set(prev);
+                next.add(key);
+                return next;
+              });
+            }
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.12,
+        rootMargin: '0px 0px -55px 0px',
+      }
+    );
+
+    elements.forEach((el) => {
+      const key = el.getAttribute('data-scroll-reveal');
+      if (key && !revealedSectionMemory.has(key)) {
+        observer.observe(el);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, [isTypingComplete]);
+
+  const isSectionVisible = (key) => isTypingComplete && revealedSections.has(key);
 
   // Brief skeleton loading state trigger when search, filters or tabs change
   useEffect(() => {
@@ -452,6 +558,52 @@ export const AllJobsView = ({
   const handleSearchSubmit = (e) => {
     e.preventDefault();
     setOpenDropdown(null);
+    smoothScrollToJobs();
+  };
+
+  // Custom eased smooth scroll helper to #latest-jobs-section
+  const smoothScrollToJobs = () => {
+    revealedSectionMemory.add('industries');
+    revealedSectionMemory.add('latest-jobs');
+    setRevealedSections((prev) => {
+      const next = new Set(prev);
+      next.add('industries');
+      next.add('latest-jobs');
+      return next;
+    });
+
+    const targetEl = document.getElementById('latest-jobs-section');
+    if (!targetEl) return;
+
+    const headerOffset = 84;
+    const startY = window.scrollY;
+    const rect = targetEl.getBoundingClientRect();
+    const targetY = Math.max(0, rect.top + startY - headerOffset);
+    const distance = targetY - startY;
+
+    // Skip if already very close to target
+    if (Math.abs(distance) < 24) return;
+
+    const duration = Math.min(720, Math.max(420, Math.abs(distance) * 0.45));
+    let startTime = null;
+
+    // Ease-out-quart curve for a light, modern deceleration
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const easedProgress = easeOutQuart(progress);
+
+      window.scrollTo(0, startY + distance * easedProgress);
+
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+
+    window.requestAnimationFrame(step);
   };
 
   return (
@@ -461,37 +613,50 @@ export const AllJobsView = ({
         id="main-search-hero-section"
         className="relative overflow-hidden pt-12 sm:pt-16 pb-12 sm:pb-16 px-4 sm:px-6 lg:px-8 text-center bg-slate-900 border-b border-slate-200/50 shadow-xs"
       >
-        {/* Background Image with Layered Readability Overlays */}
+        {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img
             id="jobcentral-search-bg-image"
             src={bannerImage}
             alt="JobCentral Background"
             referrerPolicy="no-referrer"
-            className="w-full h-full object-cover object-center scale-105 filter blur-[1px] brightness-[0.45] contrast-[1.05]"
+            className="w-full h-full object-cover object-center"
           />
-          {/* Gradients for crisp contrast */}
-          <div className="absolute inset-0 bg-gradient-to-b from-slate-950/80 via-slate-900/75 to-slate-950/90" />
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-600/25 via-transparent to-transparent" />
         </div>
 
         <div className="relative z-10 max-w-5xl mx-auto">
-          <div className="inline-flex items-center space-x-2 px-3.5 py-1 rounded-full bg-white/15 backdrop-blur-md border border-white/20 text-white text-xs font-semibold mb-4 shadow-xs">
-            <Sparkles className="w-3.5 h-3.5 text-blue-400" />
-            <span>Nền tảng kết nối cơ hội việc làm & bứt phá sự nghiệp</span>
-          </div>
-
-          <h1 className="text-3xl sm:text-4xl lg:text-[48px] font-extrabold text-white tracking-tight leading-tight drop-shadow-xs">
-            Cầu Nối Sự Nghiệp <span className="text-[#38bdf8] sm:text-[#60a5fa]">Thế Hệ Mới</span>
+          <h1 className="text-2xl sm:text-4xl lg:text-[44px] font-extrabold text-[#ECFEFF] tracking-tight leading-tight text-balance min-h-[2.5em] sm:min-h-[1.3em] flex items-center justify-center flex-wrap [text-shadow:0_2px_6px_rgba(0,0,0,0.92),0_4px_20px_rgba(2,6,23,0.85),0_0_30px_rgba(56,189,248,0.9)]">
+            <span>
+              {typedTitle}
+              <span
+                aria-hidden="true"
+                className={`inline-block w-[3px] sm:w-[4px] h-[0.88em] ml-1.5 align-middle rounded-full bg-[#38BDF8] shadow-[0_0_16px_#38BDF8,0_0_6px_#ffffff] ${
+                  isActivelyTyping ? 'opacity-100' : 'animate-antigravity-cursor'
+                }`}
+              />
+            </span>
           </h1>
-          <p className="mt-3 text-slate-200 text-sm sm:text-base font-medium max-w-xl mx-auto leading-relaxed drop-shadow-xs">
+          <p
+            className={`mt-3 text-slate-200 text-sm sm:text-base font-medium max-w-xl mx-auto leading-relaxed drop-shadow-xs transition-all duration-700 ease-out ${
+              isTypingComplete
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-4 pointer-events-none select-none'
+            }`}
+          >
             Tìm kiếm liền tay — Nhận ngay công việc mơ ước
             <br />
-            Hơn <span className="text-amber-300 font-bold">10,000+</span> việc làm hấp dẫn đang chờ bạn ứng tuyển
+            Hơn <span className="text-slate-200 font-bold">10,000+</span> việc làm hấp dẫn đang chờ bạn ứng tuyển
           </p>
 
           {/* Enhanced Floating Search Bar with Multiple Options */}
-          <div ref={searchFormRef} className="mt-8 max-w-4xl mx-auto text-left relative z-20">
+          <div
+            ref={searchFormRef}
+            className={`mt-8 max-w-4xl mx-auto text-left relative z-20 transition-all duration-700 delay-150 ease-out ${
+              isTypingComplete
+                ? 'opacity-100 translate-y-0 scale-100'
+                : 'opacity-0 translate-y-5 scale-[0.98] pointer-events-none select-none'
+            }`}
+          >
             <form
               onSubmit={handleSearchSubmit}
               className="bg-white/95 backdrop-blur-md rounded-3xl md:rounded-full border border-white/40 p-1.5 sm:p-2 shadow-2xl flex flex-col md:flex-row items-center gap-1.5 ring-4 ring-black/15"
@@ -534,7 +699,7 @@ export const AllJobsView = ({
                     {industry || 'Ngành nghề'}
                   </span>
                 </div>
-                <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-150 ${openDropdown === 'industry' ? 'rotate-180 text-[#2170E4]' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-150 ${openDropdown === 'industry' ? 'rotate-180 text-slate-950' : ''}`} />
               </button>
 
               {openDropdown === 'industry' && (
@@ -542,7 +707,7 @@ export const AllJobsView = ({
                   <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 py-1.5">
                     Chọn ngành nghề
                   </div>
-                  <div className="max-h-60 overflow-y-auto space-y-0.5">
+                  <div className="max-h-60 overflow-y-auto smooth-scroll-container space-y-0.5">
                     {[
                       'Tất cả ngành nghề',
                       'Công nghệ thông tin / Phần mềm',
@@ -568,15 +733,16 @@ export const AllJobsView = ({
                           onClick={() => {
                             setIndustry(item === 'Tất cả ngành nghề' ? '' : item);
                             setOpenDropdown(null);
+                            smoothScrollToJobs();
                           }}
                           className={`w-full text-left px-3 py-2 text-xs rounded-full transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'bg-slate-100 text-[#2170E4] font-bold hover:bg-slate-200/70'
-                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                              ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium'
                           }`}
                         >
                           <span className="truncate">{item}</span>
-                          {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-[#2170E4]" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-slate-950" />}
                         </button>
                       );
                     })}
@@ -602,7 +768,7 @@ export const AllJobsView = ({
                     {location || 'Địa điểm'}
                   </span>
                 </div>
-                <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-150 ${openDropdown === 'location' ? 'rotate-180 text-[#2170E4]' : ''}`} />
+                <ChevronDown className={`w-4 h-4 text-slate-400 shrink-0 transition-transform duration-150 ${openDropdown === 'location' ? 'rotate-180 text-slate-950' : ''}`} />
               </button>
 
               {openDropdown === 'location' && (
@@ -610,7 +776,7 @@ export const AllJobsView = ({
                   <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 py-1.5">
                     Khu vực làm việc
                   </div>
-                  <div className="max-h-60 overflow-y-auto space-y-0.5">
+                  <div className="max-h-60 overflow-y-auto smooth-scroll-container space-y-0.5">
                     {[
                       'Tất cả địa điểm',
                       'TP. Hồ Chí Minh',
@@ -631,15 +797,16 @@ export const AllJobsView = ({
                           onClick={() => {
                             setLocation(item === 'Tất cả địa điểm' ? '' : item);
                             setOpenDropdown(null);
+                            smoothScrollToJobs();
                           }}
                           className={`w-full text-left px-3 py-2 text-xs rounded-full transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'bg-slate-100 text-[#2170E4] font-bold hover:bg-slate-200/70'
-                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
+                              ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                              : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900 font-medium'
                           }`}
                         >
                           <span className="truncate">{item}</span>
-                          {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-[#2170E4]" />}
+                          {isSelected && <Check className="w-3.5 h-3.5 shrink-0 text-slate-950" />}
                         </button>
                       );
                     })}
@@ -655,7 +822,7 @@ export const AllJobsView = ({
               title="Thêm bộ lọc nâng cao"
               className={`p-2.5 rounded-full border transition-colors cursor-pointer shrink-0 ${
                 showAdvancedFilters || salaryRange || experienceLevel || jobType
-                  ? 'border-slate-300 bg-slate-200/80 text-[#2170E4] hover:bg-slate-200'
+                  ? 'border-slate-300 bg-slate-200/80 text-slate-950 hover:bg-slate-200'
                   : 'border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300'
               }`}
             >
@@ -682,7 +849,10 @@ export const AllJobsView = ({
                 </label>
                 <select
                   value={salaryRange}
-                  onChange={(e) => setSalaryRange(e.target.value)}
+                  onChange={(e) => {
+                    setSalaryRange(e.target.value);
+                    smoothScrollToJobs();
+                  }}
                   className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
                 >
                   <option value="">Tất cả mức lương</option>
@@ -703,7 +873,10 @@ export const AllJobsView = ({
                 </label>
                 <select
                   value={experienceLevel}
-                  onChange={(e) => setExperienceLevel(e.target.value)}
+                  onChange={(e) => {
+                    setExperienceLevel(e.target.value);
+                    smoothScrollToJobs();
+                  }}
                   className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
                 >
                   <option value="">Tất cả kinh nghiệm</option>
@@ -724,7 +897,10 @@ export const AllJobsView = ({
                 </label>
                 <select
                   value={jobType}
-                  onChange={(e) => setJobType(e.target.value)}
+                  onChange={(e) => {
+                    setJobType(e.target.value);
+                    smoothScrollToJobs();
+                  }}
                   className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
                 >
                   <option value="">Tất cả hình thức</option>
@@ -739,8 +915,16 @@ export const AllJobsView = ({
           )}
 
           {/* Quick Popular Keywords & Suggested Tags */}
-          <div className="mt-3.5 flex flex-wrap items-center gap-1.5 text-xs">
-            <span className="text-slate-300 font-medium text-[11px] mr-1">Gợi ý tìm kiếm:</span>
+          <div
+            className={`mt-3.5 flex flex-wrap items-center gap-1.5 text-xs transition-all duration-700 delay-300 ease-out ${
+              isTypingComplete
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-3 pointer-events-none'
+            }`}
+          >
+            <span className="text-white font-bold text-xs sm:text-[13px] mr-1.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
+              Gợi ý tìm kiếm:
+            </span>
             {[
               'UI/UX Designer',
               'ReactJS',
@@ -760,11 +944,14 @@ export const AllJobsView = ({
               <button
                 key={tag}
                 type="button"
-                onClick={() => setKeyword(tag)}
-                className={`px-3 py-1 rounded-full text-xs transition-colors cursor-pointer ${
+                onClick={() => {
+                  setKeyword(keyword === tag ? '' : tag);
+                  smoothScrollToJobs();
+                }}
+                className={`px-3 py-1 rounded-full text-xs transition-all duration-200 cursor-pointer active:scale-95 ${
                   keyword === tag
                     ? 'bg-[#2170E4] text-white font-bold shadow-xs'
-                    : 'bg-slate-900/60 hover:bg-slate-500/40 text-slate-200 hover:text-white border border-white/20 backdrop-blur-xs'
+                    : 'bg-slate-900/75 hover:bg-slate-800/90 text-white font-medium border border-white/30 backdrop-blur-xs shadow-2xs'
                 }`}
               >
                 {tag}
@@ -787,7 +974,14 @@ export const AllJobsView = ({
     </section>
 
       {/* 2. VIỆC LÀM THEO NGÀNH NGHỀ (ĐA DẠNG NGHỀ NGHIỆP) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 text-center">
+      <section
+        data-scroll-reveal="industries"
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-12 text-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isSectionVisible('industries')
+            ? 'opacity-100 translate-y-0 scale-100 blur-0'
+            : 'opacity-0 translate-y-10 scale-[0.98] blur-[2px] pointer-events-none select-none'
+        }`}
+      >
         <div className="text-center mb-6">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Việc Làm Theo <span className="text-[#2170E4]">Ngành Nghề</span>
@@ -815,7 +1009,7 @@ export const AllJobsView = ({
           {(isExpandedIndustries
             ? industryCategories
             : industryCategories.slice(0, INITIAL_CATEGORY_COUNT)
-          ).map((cat) => {
+          ).map((cat, idx) => {
             const IconComp = cat.icon;
             const isCategoryActive =
               industry === cat.title ||
@@ -827,14 +1021,22 @@ export const AllJobsView = ({
               <button
                 key={cat.id}
                 type="button"
+                style={{
+                  transitionDelay: isSectionVisible('industries') ? `${idx * 45}ms` : '0ms',
+                }}
                 onClick={() => {
                   if (isCategoryActive) {
                     setIndustry('');
                   } else {
                     setIndustry(cat.title);
+                    smoothScrollToJobs();
                   }
                 }}
-                className={`relative rounded-xl p-4 flex flex-col items-center justify-center space-y-2.5 transition-colors duration-200 cursor-pointer group ${
+                className={`relative rounded-xl p-4 flex flex-col items-center justify-center space-y-2.5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group ${
+                  isSectionVisible('industries')
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-6'
+                } ${
                   isCategoryActive
                     ? 'bg-slate-200/80 border-2 border-[#2170E4] shadow-xs'
                     : 'bg-white hover:bg-slate-200/70 border border-slate-200/90 hover:border-slate-300'
@@ -886,7 +1088,12 @@ export const AllJobsView = ({
       {/* 4. VIỆC LÀM MỚI NHẤT */}
       <section
         id="latest-jobs-section"
-        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 text-center"
+        data-scroll-reveal="latest-jobs"
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 text-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isSectionVisible('latest-jobs')
+            ? 'opacity-100 translate-y-0 scale-100 blur-0'
+            : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
+        }`}
       >
         <h2 id="latest-jobs-heading" className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Việc Làm <span className="text-[#2170E4]">Mới Nhất</span>
@@ -962,12 +1169,19 @@ export const AllJobsView = ({
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-7 text-left">
-              {paginatedJobs.map((job) => (
+              {paginatedJobs.map((job, idx) => (
                 <div
                   key={job.id}
                   id={`alljobs-card-${job.id}`}
+                  style={{
+                    transitionDelay: isSectionVisible('latest-jobs') ? `${idx * 65}ms` : '0ms',
+                  }}
                   onClick={() => onViewDetails(job)}
-                  className="bg-white hover:bg-slate-200/65 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 transition-colors flex flex-col justify-between space-y-4 relative group cursor-pointer"
+                  className={`bg-white hover:bg-slate-200/65 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col justify-between space-y-4 relative group cursor-pointer ${
+                    isSectionVisible('latest-jobs')
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-8'
+                  }`}
                 >
                   {/* Header Row: Company Logo Placeholder + Title + Company + Bookmark */}
                   <div className="flex items-start justify-between gap-3">
@@ -1075,7 +1289,7 @@ export const AllJobsView = ({
                 onClick={() => {
                   if (currentPage > 1) {
                     setCurrentPage((p) => p - 1);
-                    document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    smoothScrollToJobs();
                   }
                 }}
                 disabled={currentPage === 1}
@@ -1094,7 +1308,7 @@ export const AllJobsView = ({
                   id={`jobs-pagination-page-${pageNum}`}
                   onClick={() => {
                     setCurrentPage(pageNum);
-                    document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    smoothScrollToJobs();
                   }}
                   className={`w-9 h-9 rounded-full flex items-center justify-center text-sm cursor-pointer select-none transition-colors ${
                     currentPage === pageNum
@@ -1113,7 +1327,7 @@ export const AllJobsView = ({
                 onClick={() => {
                   if (currentPage < 3) {
                     setCurrentPage((p) => p + 1);
-                    document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    smoothScrollToJobs();
                   }
                 }}
                 disabled={currentPage === 3}
@@ -1129,7 +1343,14 @@ export const AllJobsView = ({
       </section>
 
       {/* 5. CẬP NHẬT THỊ TRƯỜNG LAO ĐỘNG MỖI NGÀY */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14">
+      <section
+        data-scroll-reveal="market-trends"
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isSectionVisible('market-trends')
+            ? 'opacity-100 translate-y-0 scale-100 blur-0'
+            : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
+        }`}
+      >
         <div className="text-center mb-8">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
             Cập Nhật Thị Trường Lao Động <span className="text-[#2170E4]">Mỗi Ngày</span>
@@ -1211,7 +1432,10 @@ export const AllJobsView = ({
               ].map((item) => (
                 <div
                   key={item.name}
-                  onClick={() => setIndustry(item.name.split('&')[0].trim())}
+                  onClick={() => {
+                    setIndustry(item.name.split('&')[0].trim());
+                    smoothScrollToJobs();
+                  }}
                   className="px-3 py-2 -mx-3 rounded-xl hover:bg-slate-200/70 transition-colors cursor-pointer space-y-1.5"
                 >
                   <div className="flex items-center justify-between text-xs font-medium text-slate-700">
@@ -1228,10 +1452,20 @@ export const AllJobsView = ({
         </div>
 
         {/* 4 Metric Stats Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-5">
+        <div
+          data-scroll-reveal="market-stats"
+          className={`grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+            isSectionVisible('market-stats')
+              ? 'opacity-100 translate-y-0'
+              : 'opacity-0 translate-y-8'
+          }`}
+        >
           {/* Stat 1 */}
           <div
-            onClick={() => setIndustry('Marketing')}
+            onClick={() => {
+              setIndustry('Marketing');
+              smoothScrollToJobs();
+            }}
             className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
           >
             <div className="flex items-center justify-between">
@@ -1250,7 +1484,10 @@ export const AllJobsView = ({
 
           {/* Stat 2 */}
           <div
-            onClick={() => setIndustry('Tài chính')}
+            onClick={() => {
+              setIndustry('Tài chính');
+              smoothScrollToJobs();
+            }}
             className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
           >
             <div className="flex items-center justify-between">
@@ -1269,7 +1506,10 @@ export const AllJobsView = ({
 
           {/* Stat 3 */}
           <div
-            onClick={() => setIndustry('Công nghệ')}
+            onClick={() => {
+              setIndustry('Công nghệ');
+              smoothScrollToJobs();
+            }}
             className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
           >
             <div className="flex items-center justify-between">
@@ -1288,7 +1528,10 @@ export const AllJobsView = ({
 
           {/* Stat 4 */}
           <div
-            onClick={() => setIndustry('CSKH')}
+            onClick={() => {
+              setIndustry('CSKH');
+              smoothScrollToJobs();
+            }}
             className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
           >
             <div className="flex items-center justify-between">
@@ -1308,7 +1551,14 @@ export const AllJobsView = ({
       </section>
 
       {/* 6. PHÂN TÍCH CHUYÊN SÂU (AI INSIGHTS) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14">
+      <section
+        data-scroll-reveal="ai-insights"
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isSectionVisible('ai-insights')
+            ? 'opacity-100 translate-y-0 scale-100 blur-0'
+            : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
+        }`}
+      >
         <div className="flex items-center space-x-2.5 mb-6">
           <div className="w-7 h-7 rounded-lg bg-[#2170E4] flex items-center justify-center text-white">
             <Sparkles className="w-4 h-4" />
@@ -1376,7 +1626,14 @@ export const AllJobsView = ({
       </section>
 
       {/* 7. KẾT NỐI VỚI NHỮNG CÔNG TY HÀNG ĐẦU (3D ROTATING AXIS CAROUSEL) */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 text-center">
+      <section
+        data-scroll-reveal="top-companies"
+        className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 text-center transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          isSectionVisible('top-companies')
+            ? 'opacity-100 translate-y-0 scale-100 blur-0'
+            : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
+        }`}
+      >
         <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
           Kết Nối Với Những Công Ty <span className="text-[#2170E4]">Hàng Đầu</span>
         </h2>
@@ -1515,7 +1772,7 @@ export const AllJobsView = ({
                           id={`company-jobs-count-btn-${centerCompany.id}`}
                           onClick={() => {
                             setKeyword(centerCompany.name.split(' ')[0]);
-                            document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                            smoothScrollToJobs();
                           }}
                           className="w-full py-2.5 bg-white text-[#1d63cb] hover:bg-slate-200 active:scale-[0.98] font-semibold rounded-full text-xs shadow-xs transition-colors cursor-pointer"
                         >

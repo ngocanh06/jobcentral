@@ -38,6 +38,36 @@
   --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+  scroll-behavior: smooth;
+}
+
+#latest-jobs-section,
+#industry-categories-section,
+#favorite-companies-section {
+  scroll-margin-top: 5.5rem;
+}
+
+.smooth-scroll-container {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+@keyframes antigravity-cursor-blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+.animate-antigravity-cursor {
+  animation: antigravity-cursor-blink 0.9s infinite;
+}
+
 html, body {
   overflow-x: hidden;
   max-width: 100vw;

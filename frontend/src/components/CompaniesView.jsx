@@ -272,8 +272,8 @@ export const CompaniesView = ({
   const displayAvatar = catAvatar;
 
   return (
-    <div className="bg-[#f4f2ee] min-h-screen py-5 sm:py-6 px-3 sm:px-6 lg:px-8">
-      <div className="max-w-[1180px] mx-auto">
+    <div className="bg-[#f4f2ee] min-h-screen py-5 sm:py-6">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Notice when navigated from recruiter */}
         {initialSearchQuery && searchTerm === initialSearchQuery && (
           <div className="mb-4 flex items-center justify-between bg-white border border-slate-300/80 text-slate-800 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xs">

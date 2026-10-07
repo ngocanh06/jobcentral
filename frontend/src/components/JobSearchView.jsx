@@ -58,7 +58,60 @@ export const JobSearchView = ({
   const [showMobileFilterModal, setShowMobileFilterModal] = useState(false);
   const [isDetailHeaderCollapsed, setIsDetailHeaderCollapsed] = useState(false);
   const [openFilterDropdown, setOpenFilterDropdown] = useState(null);
+  const [isListTransitioning, setIsListTransitioning] = useState(false);
+  const sidebarScrollRef = useRef(null);
+  const jobListScrollRef = useRef(null);
   const detailScrollRef = useRef(null);
+
+  // Smooth eased scroll helper for internal scroll containers
+  const smoothScrollContainer = (el, targetTop = 0, duration = 420) => {
+    if (!el) return;
+    const startTop = el.scrollTop;
+    const distance = targetTop - startTop;
+    if (Math.abs(distance) < 8) {
+      el.scrollTop = targetTop;
+      return;
+    }
+
+    let startTime = null;
+    const easeOutQuart = (t) => 1 - Math.pow(1 - t, 4);
+
+    const step = (timestamp) => {
+      if (!startTime) startTime = timestamp;
+      const elapsed = timestamp - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      el.scrollTop = startTop + distance * easeOutQuart(progress);
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+
+    window.requestAnimationFrame(step);
+  };
+
+  // Gently scroll job list to top and animate list when filter criteria change
+  useEffect(() => {
+    setIsListTransitioning(true);
+    if (jobListScrollRef.current) {
+      smoothScrollContainer(jobListScrollRef.current, 0, 420);
+    }
+    const timer = setTimeout(() => {
+      setIsListTransitioning(false);
+    }, 220);
+    return () => clearTimeout(timer);
+  }, [
+    selectedIndustry,
+    selectedCity,
+    selectedSalaryRange,
+    selectedExperience,
+    selectedJobType,
+    isFeaturedOnly,
+    isUrgentOnly,
+    postedDateFilter,
+    isEasyApply,
+    isUnder10Applicants,
+    sortBy,
+  ]);
 
   // Filter options constants
   const industryList = [
@@ -277,11 +330,11 @@ export const JobSearchView = ({
     return jobs.find((j) => j.id === selectedJobId) || filteredJobs[0] || null;
   }, [jobs, selectedJobId, filteredJobs]);
 
-  // Reset detail scroll and collapsed header when switching jobs
+  // Smoothly reset detail scroll and collapsed header when switching jobs
   useEffect(() => {
     setIsDetailHeaderCollapsed(false);
     if (detailScrollRef.current) {
-      detailScrollRef.current.scrollTop = 0;
+      smoothScrollContainer(detailScrollRef.current, 0, 380);
     }
   }, [activeJob?.id]);
 
@@ -340,28 +393,92 @@ export const JobSearchView = ({
     setIsEasyApply(false);
     setIsUnder10Applicants(false);
     setOpenFilterDropdown(null);
+    smoothScrollContainer(sidebarScrollRef.current, 0, 420);
+    smoothScrollContainer(jobListScrollRef.current, 0, 420);
   };
 
   return (
     <div className="w-full bg-[#f4f2ee] text-slate-800 flex flex-col flex-1 h-full min-h-0 overflow-hidden">
-      {/* Top Filter & Breadcrumb Bar */}
-      <header className="w-full bg-white border-b border-slate-200/80 px-4 sm:px-6 py-2 flex flex-col gap-2 shrink-0 z-20 shadow-2xs">
-        {/* Row 1: Breadcrumbs & Quick Sort */}
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-2 text-xs text-slate-500">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3.5 pb-1 shrink-0 z-20">
+        {/* Top Filter Card (Separated from main navbar, aligned with max-w-7xl) */}
+        <div className="bg-white border border-slate-200/90 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2.5 shadow-2xs">
+          {/* Left: Quick Filter Pills */}
+          <div className="flex items-center space-x-2 overflow-x-auto no-scrollbar py-0.5">
+            {/* Pill 1: Ngày đăng ▼ */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={() => setDateDropdownOpen(!dateDropdownOpen)}
+                className="inline-flex items-center space-x-1 px-3.5 py-1.5 rounded-full text-xs font-medium bg-[#e5e7eb] hover:bg-[#dce0e5] text-slate-900 border border-slate-400/90 transition-colors cursor-pointer select-none"
+              >
+                <span>{dateFilterLabel}</span>
+                <ChevronDown className={`w-3.5 h-3.5 text-slate-800 transition-transform ${dateDropdownOpen ? 'rotate-180' : ''}`} />
+              </button>
+
+              {dateDropdownOpen && (
+                <>
+                  <div
+                    className="fixed inset-0 z-20"
+                    onClick={() => setDateDropdownOpen(false)}
+                  />
+                  <div className="absolute left-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-slate-200 p-1.5 z-30 text-xs space-y-0.5 animate-fadeIn">
+                    {[
+                      { value: 'all', label: 'Tất cả thời gian' },
+                      { value: '24h', label: '24 giờ qua' },
+                      { value: '1w', label: '1 tuần qua' },
+                      { value: '1m', label: '1 tháng qua' },
+                    ].map((opt) => (
+                      <button
+                        key={opt.value}
+                        type="button"
+                        onClick={() => {
+                          setPostedDateFilter(opt.value);
+                          setDateDropdownOpen(false);
+                        }}
+                        className={`w-full text-left px-3 py-2 rounded-xl transition-colors cursor-pointer flex items-center justify-between ${
+                          postedDateFilter === opt.value
+                            ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                            : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                        }`}
+                      >
+                        <span>{opt.label}</span>
+                        {postedDateFilter === opt.value && <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+
+            {/* Pill 2: Ứng tuyển nhanh */}
             <button
               type="button"
-              onClick={onNavigateHome}
-              className="hover:text-slate-900 transition-colors cursor-pointer"
+              onClick={() => setIsEasyApply(!isEasyApply)}
+              className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer select-none border ${
+                isEasyApply
+                  ? 'bg-slate-900 text-white border-slate-900 font-semibold shadow-xs'
+                  : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+              }`}
             >
-              Trang chủ
+              Ứng tuyển nhanh
             </button>
-            <span>/</span>
-            <span className="font-semibold text-slate-900">Tìm việc làm</span>
+
+            {/* Pill 3: Dưới 10 ứng viên */}
+            <button
+              type="button"
+              onClick={() => setIsUnder10Applicants(!isUnder10Applicants)}
+              className={`inline-flex items-center px-3.5 py-1.5 rounded-full text-xs font-medium transition-all cursor-pointer select-none border ${
+                isUnder10Applicants
+                  ? 'bg-slate-900 text-white border-slate-900 font-semibold shadow-xs'
+                  : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
+              }`}
+            >
+              Dưới 10 ứng viên
+            </button>
           </div>
 
-          <div className="flex items-center space-x-3">
-            {/* Quick Sort Dropdown */}
+          {/* Right: Quick Sort & Mobile Filter Toggle */}
+          <div className="flex items-center space-x-3 ml-auto">
             <div className="flex items-center space-x-2 text-xs relative">
               <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 shrink-0 hidden sm:block" />
               <span className="text-slate-500 hidden sm:inline">Sắp xếp:</span>
@@ -408,13 +525,13 @@ export const JobSearchView = ({
                           }}
                           className={`w-full text-left px-3 py-2 rounded-xl transition-colors cursor-pointer flex items-center justify-between ${
                             sortBy === opt.value
-                              ? 'font-bold text-[#0A58CA] bg-blue-50/80'
-                              : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                              ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                              : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                           }`}
                         >
                           <span>{opt.label}</span>
                           {sortBy === opt.value && (
-                            <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                            <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                           )}
                         </button>
                       ))}
@@ -440,85 +557,10 @@ export const JobSearchView = ({
             </button>
           </div>
         </div>
-
-        {/* Row 2: Filter Pills as in Screenshot */}
-        <div className="flex items-center space-x-2.5 overflow-x-auto no-scrollbar py-0.5">
-          {/* Pill 1: Ngày đăng ▼ */}
-          <div className="relative">
-            <button
-              type="button"
-              onClick={() => setDateDropdownOpen(!dateDropdownOpen)}
-              className="inline-flex items-center space-x-1 px-3.5 py-1 rounded-full text-xs font-medium bg-[#e5e7eb] hover:bg-[#dce0e5] text-slate-900 border border-slate-400/90 transition-colors cursor-pointer select-none"
-            >
-              <span>{dateFilterLabel}</span>
-              <ChevronDown className={`w-3.5 h-3.5 text-slate-800 transition-transform ${dateDropdownOpen ? 'rotate-180' : ''}`} />
-            </button>
-
-            {dateDropdownOpen && (
-              <>
-                <div
-                  className="fixed inset-0 z-20"
-                  onClick={() => setDateDropdownOpen(false)}
-                />
-                <div className="absolute left-0 mt-1 w-44 bg-white rounded-xl shadow-lg border border-slate-200 py-1 z-30 text-xs animate-fadeIn">
-                  {[
-                    { value: 'all', label: 'Tất cả thời gian' },
-                    { value: '24h', label: '24 giờ qua' },
-                    { value: '1w', label: '1 tuần qua' },
-                    { value: '1m', label: '1 tháng qua' },
-                  ].map((opt) => (
-                    <button
-                      key={opt.value}
-                      type="button"
-                      onClick={() => {
-                        setPostedDateFilter(opt.value);
-                        setDateDropdownOpen(false);
-                      }}
-                      className={`w-full text-left px-3.5 py-2 hover:bg-slate-50 cursor-pointer flex items-center justify-between ${
-                        postedDateFilter === opt.value
-                          ? 'font-bold text-[#0A58CA] bg-blue-50/50'
-                          : 'text-slate-700'
-                      }`}
-                    >
-                      <span>{opt.label}</span>
-                      {postedDateFilter === opt.value && <Check className="w-3.5 h-3.5 text-[#0A58CA]" />}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
-          </div>
-
-          {/* Pill 2: Ứng tuyển nhanh */}
-          <button
-            type="button"
-            onClick={() => setIsEasyApply(!isEasyApply)}
-            className={`inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer select-none border ${
-              isEasyApply
-                ? 'bg-slate-900 text-white border-slate-900 font-semibold shadow-xs'
-                : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
-            }`}
-          >
-            Ứng tuyển nhanh
-          </button>
-
-          {/* Pill 3: Dưới 10 ứng viên */}
-          <button
-            type="button"
-            onClick={() => setIsUnder10Applicants(!isUnder10Applicants)}
-            className={`inline-flex items-center px-3.5 py-1 rounded-full text-xs font-medium transition-all cursor-pointer select-none border ${
-              isUnder10Applicants
-                ? 'bg-slate-900 text-white border-slate-900 font-semibold shadow-xs'
-                : 'bg-white hover:bg-slate-50 text-slate-800 border-slate-300'
-            }`}
-          >
-            Dưới 10 ứng viên
-          </button>
-        </div>
-      </header>
+      </div>
 
       {/* Main 3-Zone Partitioned Body: Các vùng riêng biệt bo sơ sơ (rounded-xl) như LinkedIn, ẩn toàn bộ thanh cuộn */}
-      <div className="w-full flex-1 flex min-h-0 p-3 sm:p-4 lg:p-4.5 gap-3.5 xl:gap-4 overflow-hidden max-w-[1720px] mx-auto">
+      <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex min-h-0 py-2.5 pb-4 gap-3.5 xl:gap-4 overflow-hidden">
         
         {/* ========================================================================= */}
         {/* 1. VÙNG TRÁI: BỘ LỌC CƠ BẢN ĐẾN NÂNG CAO (Card riêng biệt bo sơ sơ)         */}
@@ -545,7 +587,10 @@ export const JobSearchView = ({
             )}
           </div>
 
-          <div className="p-4 pb-16 space-y-4 overflow-y-auto no-scrollbar flex-1">
+          <div
+            ref={sidebarScrollRef}
+            className="p-4 pb-16 space-y-4 overflow-y-auto no-scrollbar smooth-scroll-container flex-1"
+          >
             {/* Lọc cơ bản 1: Từ khóa */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
@@ -578,9 +623,16 @@ export const JobSearchView = ({
               </label>
               <button
                 type="button"
-                onClick={() =>
-                  setOpenFilterDropdown(openFilterDropdown === 'industry' ? null : 'industry')
-                }
+                onClick={(e) => {
+                  const next = openFilterDropdown === 'industry' ? null : 'industry';
+                  setOpenFilterDropdown(next);
+                  if (next) {
+                    const parentEl = e.currentTarget.parentElement;
+                    setTimeout(() => {
+                      parentEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 60);
+                  }
+                }}
                 className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
                   selectedIndustry || openFilterDropdown === 'industry'
                     ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
@@ -617,13 +669,13 @@ export const JobSearchView = ({
                           }}
                           className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
-                              : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                              ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                              : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                           }`}
                         >
                           <span className="truncate pr-2">{ind}</span>
                           {isSelected && (
-                            <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                            <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                           )}
                         </button>
                       );
@@ -640,9 +692,16 @@ export const JobSearchView = ({
               </label>
               <button
                 type="button"
-                onClick={() =>
-                  setOpenFilterDropdown(openFilterDropdown === 'city' ? null : 'city')
-                }
+                onClick={(e) => {
+                  const next = openFilterDropdown === 'city' ? null : 'city';
+                  setOpenFilterDropdown(next);
+                  if (next) {
+                    const parentEl = e.currentTarget.parentElement;
+                    setTimeout(() => {
+                      parentEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }, 60);
+                  }
+                }}
                 className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
                   selectedCity || openFilterDropdown === 'city'
                     ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
@@ -679,13 +738,13 @@ export const JobSearchView = ({
                           }}
                           className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
-                              : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                              ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                              : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                           }`}
                         >
                           <span className="truncate pr-2">{city}</span>
                           {isSelected && (
-                            <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                            <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                           )}
                         </button>
                       );
@@ -708,9 +767,16 @@ export const JobSearchView = ({
                 </label>
                 <button
                   type="button"
-                  onClick={() =>
-                    setOpenFilterDropdown(openFilterDropdown === 'salary' ? null : 'salary')
-                  }
+                  onClick={(e) => {
+                    const next = openFilterDropdown === 'salary' ? null : 'salary';
+                    setOpenFilterDropdown(next);
+                    if (next) {
+                      const parentEl = e.currentTarget.parentElement;
+                      setTimeout(() => {
+                        parentEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }, 60);
+                    }
+                  }}
                   className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
                     selectedSalaryRange || openFilterDropdown === 'salary'
                       ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
@@ -747,13 +813,13 @@ export const JobSearchView = ({
                             }}
                             className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
                               isSelected
-                                ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
-                                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                                ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                                : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                             }`}
                           >
                             <span className="truncate pr-2">{opt.label}</span>
                             {isSelected && (
-                              <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                              <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                             )}
                           </button>
                         );
@@ -770,11 +836,16 @@ export const JobSearchView = ({
                 </label>
                 <button
                   type="button"
-                  onClick={() =>
-                    setOpenFilterDropdown(
-                      openFilterDropdown === 'experience' ? null : 'experience'
-                    )
-                  }
+                  onClick={(e) => {
+                    const next = openFilterDropdown === 'experience' ? null : 'experience';
+                    setOpenFilterDropdown(next);
+                    if (next) {
+                      const parentEl = e.currentTarget.parentElement;
+                      setTimeout(() => {
+                        parentEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }, 60);
+                    }
+                  }}
                   className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
                     selectedExperience || openFilterDropdown === 'experience'
                       ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
@@ -811,13 +882,13 @@ export const JobSearchView = ({
                             }}
                             className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
                               isSelected
-                                ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
-                                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                                ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                                : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                             }`}
                           >
                             <span className="truncate pr-2">{opt.label}</span>
                             {isSelected && (
-                              <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                              <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                             )}
                           </button>
                         );
@@ -834,9 +905,16 @@ export const JobSearchView = ({
                 </label>
                 <button
                   type="button"
-                  onClick={() =>
-                    setOpenFilterDropdown(openFilterDropdown === 'jobType' ? null : 'jobType')
-                  }
+                  onClick={(e) => {
+                    const next = openFilterDropdown === 'jobType' ? null : 'jobType';
+                    setOpenFilterDropdown(next);
+                    if (next) {
+                      const parentEl = e.currentTarget.parentElement;
+                      setTimeout(() => {
+                        parentEl?.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                      }, 60);
+                    }
+                  }}
                   className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
                     selectedJobType || openFilterDropdown === 'jobType'
                       ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
@@ -873,13 +951,13 @@ export const JobSearchView = ({
                             }}
                             className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
                               isSelected
-                                ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
-                                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                                ? 'bg-slate-100 hover:bg-slate-200/80 text-slate-950 font-bold'
+                                : 'text-slate-600 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
                             }`}
                           >
                             <span className="truncate pr-2">{opt.label}</span>
                             {isSelected && (
-                              <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                              <Check className="w-3.5 h-3.5 text-slate-950 shrink-0" />
                             )}
                           </button>
                         );
@@ -939,7 +1017,12 @@ export const JobSearchView = ({
             </div>
 
             {/* List các thẻ việc làm: Ngăn cách bằng gạch ngang divide-y, không hiện thanh cuộn */}
-            <div className="flex-1 overflow-y-auto no-scrollbar divide-y divide-slate-100">
+            <div
+              ref={jobListScrollRef}
+              className={`flex-1 overflow-y-auto no-scrollbar smooth-scroll-container divide-y divide-slate-100 transition-opacity duration-200 ${
+                isListTransitioning ? 'opacity-65' : 'opacity-100'
+              }`}
+            >
               {filteredJobs.length === 0 ? (
                 <div className="p-8 text-center">
                   <div className="w-10 h-10 rounded-xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto mb-2">
@@ -964,9 +1047,13 @@ export const JobSearchView = ({
                     <div
                       key={job.id}
                       id={`job-card-item-${job.id}`}
-                      onClick={() => {
+                      onClick={(e) => {
                         setSelectedJobId(job.id);
                         setMobileDetailOpen(true);
+                        e.currentTarget.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'nearest',
+                        });
                       }}
                       className={`p-4 transition-colors cursor-pointer relative border-l-4 ${
                         isSelected
@@ -1046,7 +1133,7 @@ export const JobSearchView = ({
                     setIsDetailHeaderCollapsed(false);
                   }
                 }}
-                className="flex-1 flex flex-col overflow-y-auto no-scrollbar"
+                className="flex-1 flex flex-col overflow-y-auto no-scrollbar smooth-scroll-container"
               >
                 {/* Header chi tiết việc làm (Thu gọn khi cuộn xuống giống LinkedIn) */}
                 <div

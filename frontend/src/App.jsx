@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   INITIAL_JOBS,
   INITIAL_COMPANIES,
-  INITIAL_REVIEWS,
   INITIAL_ARTICLES,
 } from './data/mockData';
 import { Header } from './components/Header';
@@ -11,8 +10,8 @@ import { JobSearchView } from './components/JobSearchView';
 import { SavedJobsView } from './components/SavedJobsView';
 import { CompaniesView } from './components/CompaniesView';
 import { CompanyDetailView } from './components/CompanyDetailView';
-import { ReviewsView } from './components/ReviewsView';
 import { NewsView } from './components/NewsView';
+import { ToolsView } from './components/ToolsView';
 import { CVBuilderView } from './components/CVBuilderView';
 import { MessagesView } from './components/MessagesView';
 import { JobDetailModal } from './components/JobDetailModal';
@@ -323,12 +322,20 @@ export function App() {
           )
         )}
 
-        {activeTab === 'reviews' && (
-          <ReviewsView reviews={INITIAL_REVIEWS} />
-        )}
-
         {activeTab === 'news' && (
           <NewsView articles={INITIAL_ARTICLES} />
+        )}
+
+        {activeTab === 'tools' && (
+          <ToolsView
+            currentUser={currentUser}
+            savedCount={savedCount}
+            onTabChange={(tab) => {
+              setActiveTab(tab);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onShowToast={showToast}
+          />
         )}
 
         {activeTab === 'cv-builder' && (

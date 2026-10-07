@@ -28,7 +28,6 @@ export const Footer = () => {
               <li><a href="#jobs" className="hover:text-white transition-colors">Tìm việc làm mới nhất</a></li>
               <li><a href="#cv-builder" className="hover:text-white transition-colors">Tạo CV chuyên nghiệp</a></li>
               <li><a href="#companies" className="hover:text-white transition-colors">Danh sách công ty IT hàng đầu</a></li>
-              <li><a href="#reviews" className="hover:text-white transition-colors">Đánh giá môi trường làm việc</a></li>
             </ul>
           </div>
 
