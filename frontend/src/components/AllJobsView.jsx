@@ -494,10 +494,10 @@ export const AllJobsView = ({
           <div ref={searchFormRef} className="mt-8 max-w-4xl mx-auto text-left relative z-20">
             <form
               onSubmit={handleSearchSubmit}
-              className="bg-white/95 backdrop-blur-md rounded-3xl md:rounded-full border border-white/40 p-2 sm:pl-4 sm:pr-2 sm:py-2 shadow-2xl flex flex-col md:flex-row items-center gap-2 ring-4 ring-black/15"
+              className="bg-white/95 backdrop-blur-md rounded-3xl md:rounded-full border border-white/40 p-1.5 sm:p-2 shadow-2xl flex flex-col md:flex-row items-center gap-1.5 ring-4 ring-black/15"
             >
             {/* 1. Keyword Input */}
-            <div className="flex items-center space-x-2.5 px-3 py-2 flex-1 w-full text-left">
+            <div className="flex items-center space-x-2.5 px-4 py-2.5 flex-1 w-full text-left rounded-full hover:bg-slate-100 focus-within:bg-slate-100 transition-colors">
               <Search className="w-4 h-4 text-[#2170E4] shrink-0" />
               <input
                 type="text"
@@ -510,7 +510,7 @@ export const AllJobsView = ({
                 <button
                   type="button"
                   onClick={() => setKeyword('')}
-                  className="text-slate-400 hover:text-slate-700 p-0.5 transition-colors cursor-pointer"
+                  className="text-slate-400 hover:text-slate-800 hover:bg-slate-200/80 p-1 rounded-full transition-colors cursor-pointer"
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
@@ -524,7 +524,9 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'industry' ? null : 'industry')}
-                className="flex items-center justify-between space-x-2.5 px-3 py-2 w-full text-left cursor-pointer transition-colors text-slate-700 hover:text-slate-900"
+                className={`flex items-center justify-between space-x-2.5 px-4 py-2.5 w-full text-left cursor-pointer rounded-full transition-colors text-slate-700 hover:text-slate-900 ${
+                  openDropdown === 'industry' ? 'bg-slate-100' : 'hover:bg-slate-100'
+                }`}
               >
                 <div className="flex items-center space-x-2.5 truncate">
                   <Briefcase className="w-4 h-4 text-slate-400 shrink-0" />
@@ -536,8 +538,8 @@ export const AllJobsView = ({
               </button>
 
               {openDropdown === 'industry' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2.5 py-1.5">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 py-1.5">
                     Chọn ngành nghề
                   </div>
                   <div className="max-h-60 overflow-y-auto space-y-0.5">
@@ -567,10 +569,10 @@ export const AllJobsView = ({
                             setIndustry(item === 'Tất cả ngành nghề' ? '' : item);
                             setOpenDropdown(null);
                           }}
-                          className={`w-full text-left px-2.5 py-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-between ${
+                          className={`w-full text-left px-3 py-2 text-xs rounded-full transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'text-[#2170E4] font-bold'
-                              : 'text-slate-700 hover:text-[#2170E4]'
+                              ? 'bg-slate-100 text-[#2170E4] font-bold hover:bg-slate-200/70'
+                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                           }`}
                         >
                           <span className="truncate">{item}</span>
@@ -590,7 +592,9 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
-                className="flex items-center justify-between space-x-2.5 px-3 py-2 w-full text-left cursor-pointer transition-colors text-slate-700 hover:text-slate-900"
+                className={`flex items-center justify-between space-x-2.5 px-4 py-2.5 w-full text-left cursor-pointer rounded-full transition-colors text-slate-700 hover:text-slate-900 ${
+                  openDropdown === 'location' ? 'bg-slate-100' : 'hover:bg-slate-100'
+                }`}
               >
                 <div className="flex items-center space-x-2.5 truncate">
                   <MapPin className="w-4 h-4 text-slate-400 shrink-0" />
@@ -602,8 +606,8 @@ export const AllJobsView = ({
               </button>
 
               {openDropdown === 'location' && (
-                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
-                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-2.5 py-1.5">
+                <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-slate-200 p-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+                  <div className="text-[11px] font-bold text-slate-400 uppercase tracking-wider px-3 py-1.5">
                     Khu vực làm việc
                   </div>
                   <div className="max-h-60 overflow-y-auto space-y-0.5">
@@ -628,10 +632,10 @@ export const AllJobsView = ({
                             setLocation(item === 'Tất cả địa điểm' ? '' : item);
                             setOpenDropdown(null);
                           }}
-                          className={`w-full text-left px-2.5 py-2 text-xs rounded-md transition-colors cursor-pointer flex items-center justify-between ${
+                          className={`w-full text-left px-3 py-2 text-xs rounded-full transition-colors cursor-pointer flex items-center justify-between ${
                             isSelected
-                              ? 'text-[#2170E4] font-bold'
-                              : 'text-slate-700 hover:text-[#2170E4]'
+                              ? 'bg-slate-100 text-[#2170E4] font-bold hover:bg-slate-200/70'
+                              : 'text-slate-700 hover:bg-slate-100 hover:text-slate-900'
                           }`}
                         >
                           <span className="truncate">{item}</span>
@@ -651,8 +655,8 @@ export const AllJobsView = ({
               title="Thêm bộ lọc nâng cao"
               className={`p-2.5 rounded-full border transition-colors cursor-pointer shrink-0 ${
                 showAdvancedFilters || salaryRange || experienceLevel || jobType
-                  ? 'border-blue-300 bg-blue-50/70 text-[#2170E4]'
-                  : 'border-slate-200 text-slate-500 hover:text-slate-800 hover:border-slate-300'
+                  ? 'border-slate-300 bg-slate-200/80 text-[#2170E4] hover:bg-slate-200'
+                  : 'border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900 hover:border-slate-300'
               }`}
             >
               <SlidersHorizontal className="w-4 h-4" />
@@ -669,9 +673,9 @@ export const AllJobsView = ({
 
           {/* Advanced Filter Row (Salary, Experience, Job Format) */}
           {showAdvancedFilters && (
-            <div className="mt-2.5 p-3.5 bg-white/95 backdrop-blur-md rounded-lg border border-slate-200/90 shadow-lg grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in slide-in-from-top-1 duration-150">
+            <div className="mt-2.5 p-3.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 shadow-lg grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in slide-in-from-top-1 duration-150">
               {/* Option 1: Salary Range */}
-              <div className="relative">
+              <div className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
                 <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                   <Banknote className="w-3.5 h-3.5 text-emerald-600" />
                   <span>Mức lương</span>
@@ -679,7 +683,7 @@ export const AllJobsView = ({
                 <select
                   value={salaryRange}
                   onChange={(e) => setSalaryRange(e.target.value)}
-                  className="w-full text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 focus:outline-hidden focus:border-[#2170E4] cursor-pointer"
+                  className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
                 >
                   <option value="">Tất cả mức lương</option>
                   <option value="under10">Dưới 10 triệu</option>
@@ -692,7 +696,7 @@ export const AllJobsView = ({
               </div>
 
               {/* Option 2: Experience Level */}
-              <div className="relative">
+              <div className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
                 <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                   <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
                   <span>Kinh nghiệm</span>
@@ -700,7 +704,7 @@ export const AllJobsView = ({
                 <select
                   value={experienceLevel}
                   onChange={(e) => setExperienceLevel(e.target.value)}
-                  className="w-full text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 focus:outline-hidden focus:border-[#2170E4] cursor-pointer"
+                  className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
                 >
                   <option value="">Tất cả kinh nghiệm</option>
                   <option value="intern">Thực tập sinh / Sinh viên</option>
@@ -713,7 +717,7 @@ export const AllJobsView = ({
               </div>
 
               {/* Option 3: Work Format */}
-              <div className="relative">
+              <div className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
                 <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
                   <Clock className="w-3.5 h-3.5 text-amber-600" />
                   <span>Hình thức</span>
@@ -721,7 +725,7 @@ export const AllJobsView = ({
                 <select
                   value={jobType}
                   onChange={(e) => setJobType(e.target.value)}
-                  className="w-full text-xs font-medium text-slate-700 bg-slate-50 border border-slate-200 rounded-md px-3 py-2 focus:outline-hidden focus:border-[#2170E4] cursor-pointer"
+                  className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
                 >
                   <option value="">Tất cả hình thức</option>
                   <option value="fulltime">Toàn thời gian (Full-time)</option>
@@ -760,7 +764,7 @@ export const AllJobsView = ({
                 className={`px-3 py-1 rounded-full text-xs transition-colors cursor-pointer ${
                   keyword === tag
                     ? 'bg-[#2170E4] text-white font-bold shadow-xs'
-                    : 'bg-slate-900/60 hover:bg-slate-800/80 text-slate-200 hover:text-white border border-white/20 backdrop-blur-xs'
+                    : 'bg-slate-900/60 hover:bg-slate-500/40 text-slate-200 hover:text-white border border-white/20 backdrop-blur-xs'
                 }`}
               >
                 {tag}
@@ -771,7 +775,7 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="ml-auto inline-flex items-center space-x-1 text-rose-300 hover:text-rose-200 text-xs font-medium cursor-pointer bg-rose-950/60 px-3 py-1 rounded-full border border-rose-500/30"
+                className="ml-auto inline-flex items-center space-x-1 text-rose-200 hover:text-white text-xs font-medium cursor-pointer bg-rose-950/60 hover:bg-slate-600/50 px-3 py-1 rounded-full border border-rose-500/30 transition-colors"
               >
                 <RotateCcw className="w-3 h-3" />
                 <span>Đặt lại tất cả</span>
@@ -830,22 +834,22 @@ export const AllJobsView = ({
                     setIndustry(cat.title);
                   }
                 }}
-                className={`relative rounded-xl p-4 flex flex-col items-center justify-center space-y-2.5 transition-all duration-300 ease-out transform cursor-pointer group hover:-translate-y-1.5 ${
+                className={`relative rounded-xl p-4 flex flex-col items-center justify-center space-y-2.5 transition-colors duration-200 cursor-pointer group ${
                   isCategoryActive
-                    ? 'bg-blue-50/90 border-2 border-[#2170E4] shadow-md ring-2 ring-blue-500/20 -translate-y-1'
-                    : 'bg-white hover:bg-white border border-slate-200/90 hover:border-[#2170E4]/70 hover:shadow-lg hover:shadow-blue-500/10'
+                    ? 'bg-slate-200/80 border-2 border-[#2170E4] shadow-xs'
+                    : 'bg-white hover:bg-slate-200/70 border border-slate-200/90 hover:border-slate-300'
                 }`}
               >
                 {isCategoryActive && (
                   <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#2170E4]" />
                 )}
                 <div
-                  className={`w-11 h-11 rounded-xl ${cat.bgColor} flex items-center justify-center ${cat.iconColor} group-hover:scale-110 transition-transform duration-300 ease-out shadow-xs`}
+                  className={`w-11 h-11 rounded-xl ${cat.bgColor} flex items-center justify-center ${cat.iconColor} transition-transform duration-200 shadow-xs`}
                 >
                   <IconComp className="w-5 h-5 stroke-[2.2]" />
                 </div>
                 <span className={`text-xs font-bold leading-tight line-clamp-1 transition-colors ${
-                  isCategoryActive ? 'text-[#2170E4]' : 'text-slate-800 group-hover:text-[#2170E4]'
+                  isCategoryActive ? 'text-[#2170E4]' : 'text-slate-800 group-hover:text-slate-950'
                 }`}>
                   {cat.title}
                 </span>
@@ -862,7 +866,7 @@ export const AllJobsView = ({
             <button
               type="button"
               onClick={() => setIsExpandedIndustries((prev) => !prev)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-white border border-slate-200/90 rounded-full text-xs sm:text-sm font-semibold text-slate-700 shadow-xs cursor-pointer active:scale-95"
+              className="inline-flex items-center gap-2 px-6 py-2.5 bg-white hover:bg-slate-200/70 border border-slate-200/90 hover:border-slate-300 rounded-full text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 shadow-xs transition-colors cursor-pointer active:scale-95"
             >
               <span>
                 {isExpandedIndustries
@@ -950,7 +954,7 @@ export const AllJobsView = ({
               <button
                 type="button"
                 onClick={handleResetFilters}
-                className="inline-flex items-center space-x-2 px-6 py-2.5 bg-[#2170E4] text-white text-xs font-semibold rounded-full hover:bg-[#1a5bbd] transition-all cursor-pointer shadow-xs active:scale-95"
+                className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] text-white text-xs font-semibold rounded-full hover:bg-[#1a5bbd] transition-all cursor-pointer shadow-xs"
               >
                 <RotateCcw className="w-3.5 h-3.5" />
                 <span>Đặt lại bộ lọc tìm kiếm</span>
@@ -962,7 +966,8 @@ export const AllJobsView = ({
                 <div
                   key={job.id}
                   id={`alljobs-card-${job.id}`}
-                  className="bg-white rounded-2xl border border-slate-200/90 p-5 hover:border-[#2170E4]/60 hover:shadow-md transition-all flex flex-col justify-between space-y-4 relative group"
+                  onClick={() => onViewDetails(job)}
+                  className="bg-white hover:bg-slate-200/65 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 transition-colors flex flex-col justify-between space-y-4 relative group cursor-pointer"
                 >
                   {/* Header Row: Company Logo Placeholder + Title + Company + Bookmark */}
                   <div className="flex items-start justify-between gap-3">
@@ -981,8 +986,11 @@ export const AllJobsView = ({
                       </div>
                       <div className="min-w-0 flex-1">
                         <h3
-                          onClick={() => onViewDetails(job)}
-                          className="text-sm font-bold text-slate-900 truncate hover:text-[#2170E4] cursor-pointer transition-colors"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onViewDetails(job);
+                          }}
+                          className="text-sm font-bold text-slate-900 truncate group-hover:text-slate-950 cursor-pointer transition-colors"
                         >
                           {job.title}
                         </h3>
@@ -1001,7 +1009,7 @@ export const AllJobsView = ({
                             if (e) e.stopPropagation();
                             if (onShare) onShare(job, e);
                           }}
-                          className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
+                          className="p-2 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-300/70 transition-colors cursor-pointer"
                           title="Chia sẻ việc làm"
                           aria-label="Chia sẻ việc làm"
                         >
@@ -1012,7 +1020,7 @@ export const AllJobsView = ({
                           type="button"
                           id={`bookmark-btn-${job.id}`}
                           onClick={(e) => onToggleSave(job.id, e)}
-                          className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
+                          className="p-2 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-300/70 transition-colors cursor-pointer"
                           title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
                           aria-label="Lưu việc làm"
                         >
@@ -1026,21 +1034,21 @@ export const AllJobsView = ({
                     </div>
 
                     {/* Tags Row */}
-                    <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
-                      <span className="px-3 py-1 bg-blue-50 text-[#2170E4] rounded-full font-semibold">
+                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 font-medium">
+                      <span className="text-xs text-slate-500 font-medium">
                         {job.jobType || 'Full-time'}
                       </span>
-                      <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full font-semibold">
+                      <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
                         {job.salary}
                       </span>
-                      <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
+                      <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
                         {job.location?.split(',').pop()?.trim() || job.location}
                       </span>
                     </div>
 
                     {/* Footer Row: Posted Time & Apply Button */}
-                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
-                      <span className="text-slate-400 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
+                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 group-hover:border-slate-300/70 text-xs transition-colors">
+                      <span className="text-slate-400 group-hover:text-slate-600 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
                       <button
                         type="button"
                         onClick={(e) => onApply(job, e)}
@@ -1071,7 +1079,7 @@ export const AllJobsView = ({
                   }
                 }}
                 disabled={currentPage === 1}
-                className="w-8 h-8 flex items-center justify-center text-slate-400 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
+                className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-200/80 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer transition-colors"
                 title="Trang trước"
                 aria-label="Trang trước"
               >
@@ -1088,10 +1096,10 @@ export const AllJobsView = ({
                     setCurrentPage(pageNum);
                     document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
                   }}
-                  className={`w-8 h-8 flex items-center justify-center text-sm cursor-pointer select-none bg-transparent ${
+                  className={`w-9 h-9 rounded-full flex items-center justify-center text-sm cursor-pointer select-none transition-colors ${
                     currentPage === pageNum
-                      ? 'text-[#2170E4] font-bold text-base'
-                      : 'text-slate-500 font-medium'
+                      ? 'bg-[#2170E4] text-white font-bold shadow-xs'
+                      : 'text-slate-600 hover:text-slate-900 hover:bg-slate-200/80 font-medium'
                   }`}
                 >
                   {pageNum}
@@ -1109,7 +1117,7 @@ export const AllJobsView = ({
                   }
                 }}
                 disabled={currentPage === 3}
-                className="w-8 h-8 flex items-center justify-center text-slate-400 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer"
+                className="w-9 h-9 rounded-full flex items-center justify-center text-slate-500 hover:text-slate-900 hover:bg-slate-200/80 disabled:opacity-20 disabled:cursor-not-allowed cursor-pointer transition-colors"
                 title="Trang sau"
                 aria-label="Trang sau"
               >
@@ -1131,7 +1139,7 @@ export const AllJobsView = ({
         {/* 2 Big Analytics Cards */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
           {/* Left Chart: Xu hướng đăng tuyển */}
-          <div className="lg:col-span-6 bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+          <div className="lg:col-span-6 bg-white hover:bg-slate-100/70 transition-colors rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-sm sm:text-base font-bold text-slate-900">
                 Xu hướng đăng tuyển
@@ -1140,7 +1148,7 @@ export const AllJobsView = ({
                 <select
                   value={chartPeriod}
                   onChange={(e) => setChartPeriod(e.target.value)}
-                  className="text-xs bg-slate-50 border border-slate-200 rounded-lg px-2.5 py-1 text-slate-700 font-medium focus:outline-hidden cursor-pointer"
+                  className="text-xs bg-slate-50 hover:bg-slate-200/80 border border-slate-200 rounded-full px-3.5 py-1.5 text-slate-700 font-medium focus:outline-hidden transition-colors cursor-pointer"
                 >
                   <option value="6months">6 tháng qua</option>
                   <option value="1year">1 năm qua</option>
@@ -1150,8 +1158,8 @@ export const AllJobsView = ({
             </div>
 
             {/* Visual Bar Chart */}
-            <div className="pt-6 pb-2">
-              <div className="h-44 flex items-end justify-between gap-3 px-2">
+            <div className="pt-4 pb-2">
+              <div className="h-48 flex items-end justify-between gap-2 sm:gap-3 px-1">
                 {[
                   { month: 'Th. 6', height: 'h-24', val: '4,200' },
                   { month: 'Th. 9', height: 'h-28', val: '5,100' },
@@ -1159,13 +1167,16 @@ export const AllJobsView = ({
                   { month: 'Th. 3', height: 'h-36', val: '7,800' },
                   { month: 'Th. 5', height: 'h-40', val: '9,500' },
                 ].map((bar) => (
-                  <div key={bar.month} className="flex-1 flex flex-col items-center gap-2 group">
-                    <div className="w-full max-w-[42px] bg-slate-100 rounded-t-lg overflow-hidden flex items-end h-40">
+                  <div
+                    key={bar.month}
+                    className="flex-1 flex flex-col items-center gap-2 p-2 rounded-xl hover:bg-slate-200/70 transition-colors cursor-pointer group"
+                  >
+                    <div className="w-full max-w-[42px] bg-slate-100 group-hover:bg-slate-300/60 rounded-t-lg overflow-hidden flex items-end h-40 transition-colors">
                       <div
-                        className={`w-full ${bar.height} bg-gradient-to-t from-[#2170E4] to-blue-400 group-hover:brightness-110 rounded-t-lg transition-all`}
+                        className={`w-full ${bar.height} bg-gradient-to-t from-[#2170E4] to-blue-400 group-hover:brightness-105 rounded-t-lg transition-all`}
                       />
                     </div>
-                    <span className="text-[11px] text-slate-500 font-medium">{bar.month}</span>
+                    <span className="text-[11px] text-slate-500 group-hover:text-slate-900 font-medium transition-colors">{bar.month}</span>
                   </div>
                 ))}
               </div>
@@ -1173,17 +1184,24 @@ export const AllJobsView = ({
           </div>
 
           {/* Right Progress List: Ngành nghề nhu cầu cao */}
-          <div className="lg:col-span-6 bg-white rounded-2xl border border-slate-200/90 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
+          <div className="lg:col-span-6 bg-white hover:bg-slate-100/70 transition-colors rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center space-x-1.5">
                 <h3 className="text-sm sm:text-base font-bold text-slate-900">
                   Ngành nghề nhu cầu cao
                 </h3>
               </div>
-              <Info className="w-4 h-4 text-slate-400 cursor-pointer" />
+              <button
+                type="button"
+                className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/80 transition-colors cursor-pointer"
+                title="Thông tin thống kê"
+                aria-label="Thông tin thống kê"
+              >
+                <Info className="w-4 h-4" />
+              </button>
             </div>
 
-            <div className="space-y-3.5 py-1">
+            <div className="space-y-1.5 py-1">
               {[
                 { name: 'Công nghệ thông tin', percent: 32, width: 'w-[32%]' },
                 { name: 'Marketing & Sáng tạo', percent: 24, width: 'w-[24%]' },
@@ -1191,7 +1209,11 @@ export const AllJobsView = ({
                 { name: 'Y tế & Chăm sóc sức khỏe', percent: 15, width: 'w-[15%]' },
                 { name: 'Sản xuất & Vận tải', percent: 11, width: 'w-[11%]' },
               ].map((item) => (
-                <div key={item.name} className="space-y-1">
+                <div
+                  key={item.name}
+                  onClick={() => setIndustry(item.name.split('&')[0].trim())}
+                  className="px-3 py-2 -mx-3 rounded-xl hover:bg-slate-200/70 transition-colors cursor-pointer space-y-1.5"
+                >
                   <div className="flex items-center justify-between text-xs font-medium text-slate-700">
                     <span>{item.name}</span>
                     <span className="font-bold text-slate-900">{item.percent}%</span>
@@ -1208,7 +1230,10 @@ export const AllJobsView = ({
         {/* 4 Metric Stats Cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-5">
           {/* Stat 1 */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+          <div
+            onClick={() => setIndustry('Marketing')}
+            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
+          >
             <div className="flex items-center justify-between">
               <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-[#2170E4]">
                 <Briefcase className="w-4 h-4" />
@@ -1224,7 +1249,10 @@ export const AllJobsView = ({
           </div>
 
           {/* Stat 2 */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+          <div
+            onClick={() => setIndustry('Tài chính')}
+            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
+          >
             <div className="flex items-center justify-between">
               <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
                 <CreditCard className="w-4 h-4" />
@@ -1240,7 +1268,10 @@ export const AllJobsView = ({
           </div>
 
           {/* Stat 3 */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+          <div
+            onClick={() => setIndustry('Công nghệ')}
+            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
+          >
             <div className="flex items-center justify-between">
               <div className="w-8 h-8 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
                 <Rocket className="w-4 h-4" />
@@ -1256,7 +1287,10 @@ export const AllJobsView = ({
           </div>
 
           {/* Stat 4 */}
-          <div className="bg-white rounded-2xl border border-slate-200/90 p-4 sm:p-5 shadow-xs">
+          <div
+            onClick={() => setIndustry('CSKH')}
+            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
+          >
             <div className="flex items-center justify-between">
               <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
                 <Users className="w-4 h-4" />
@@ -1286,7 +1320,7 @@ export const AllJobsView = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Card 1 */}
-          <div className="bg-white rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-3">
+          <div className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer">
             <div>
               <h3 className="text-sm font-bold text-slate-900">Tương lai việc làm</h3>
               <p className="text-xs text-slate-600 leading-relaxed mt-2">
@@ -1296,7 +1330,7 @@ export const AllJobsView = ({
             <a
               href="#report"
               onClick={(e) => e.preventDefault()}
-              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] inline-flex items-center space-x-1"
+              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
             >
               <span>Đọc báo cáo đầy đủ</span>
               <span>&gt;</span>
@@ -1304,7 +1338,7 @@ export const AllJobsView = ({
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-3">
+          <div className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer">
             <div>
               <h3 className="text-sm font-bold text-slate-900">Kỹ năng vàng</h3>
               <p className="text-xs text-slate-600 leading-relaxed mt-2">
@@ -1314,7 +1348,7 @@ export const AllJobsView = ({
             <a
               href="#skills"
               onClick={(e) => e.preventDefault()}
-              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] inline-flex items-center space-x-1"
+              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
             >
               <span>Khám phá kỹ năng</span>
               <span>&gt;</span>
@@ -1322,7 +1356,7 @@ export const AllJobsView = ({
           </div>
 
           {/* Card 3 */}
-          <div className="bg-white rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 p-5 shadow-xs flex flex-col justify-between space-y-3">
+          <div className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer">
             <div>
               <h3 className="text-sm font-bold text-slate-900">Mức lương chuẩn</h3>
               <p className="text-xs text-slate-600 leading-relaxed mt-2">
@@ -1332,7 +1366,7 @@ export const AllJobsView = ({
             <a
               href="#salary"
               onClick={(e) => e.preventDefault()}
-              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] inline-flex items-center space-x-1"
+              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
             >
               <span>Xem biểu đồ lương</span>
               <span>&gt;</span>
@@ -1403,7 +1437,7 @@ export const AllJobsView = ({
                   type="button"
                   id="carousel-3d-prev-btn"
                   onClick={() => setCompanyCarouselIndex((prev) => (prev > 0 ? prev - 1 : total - 1))}
-                  className="w-11 h-11 rounded-full bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:text-[#2170E4] hover:bg-blue-50/50 hover:border-blue-200 shadow-sm cursor-pointer shrink-0 transition-all z-30"
+                  className="w-11 h-11 rounded-full bg-white hover:bg-slate-200/80 border border-slate-200/90 hover:border-slate-300 flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm cursor-pointer shrink-0 transition-colors z-30"
                   aria-label="Xoay trục sang trái"
                   title="Xoay sang trái"
                 >
@@ -1424,7 +1458,7 @@ export const AllJobsView = ({
                       whileHover={{ opacity: 0.95, rotateY: 18, scale: 0.92 }}
                       transition={{ type: 'spring', stiffness: 220, damping: 24 }}
                       onClick={() => setCompanyCarouselIndex(leftIdx)}
-                      className="hidden md:flex flex-col items-center justify-center bg-white rounded-2xl border border-slate-200/90 p-6 text-center shadow-md cursor-pointer hover:border-blue-300 transition-colors select-none"
+                      className="hidden md:flex flex-col items-center justify-center bg-white hover:bg-slate-200/80 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-6 text-center shadow-md cursor-pointer transition-colors select-none"
                       style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
                       title="Nhấn để xoay đến công ty này"
                     >
@@ -1479,10 +1513,11 @@ export const AllJobsView = ({
                         <button
                           type="button"
                           id={`company-jobs-count-btn-${centerCompany.id}`}
-                          onClick={() =>
-                            alert(`Đang mở ${centerCompany.jobsCount} của ${centerCompany.name}!`)
-                          }
-                          className="w-full py-2.5 bg-white text-[#1d63cb] hover:bg-blue-50/90 active:scale-[0.98] font-semibold rounded-full text-xs shadow-xs transition-all cursor-pointer"
+                          onClick={() => {
+                            setKeyword(centerCompany.name.split(' ')[0]);
+                            document.getElementById('latest-jobs-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                          }}
+                          className="w-full py-2.5 bg-white text-[#1d63cb] hover:bg-slate-200 active:scale-[0.98] font-semibold rounded-full text-xs shadow-xs transition-colors cursor-pointer"
                         >
                           {centerCompany.jobsCount}
                         </button>
@@ -1493,10 +1528,10 @@ export const AllJobsView = ({
                               type="button"
                               id={`company-follow-btn-${centerCompany.id}`}
                               onClick={() => handleToggleFollowCompany(centerCompany.id)}
-                              className={`w-full py-2.5 flex items-center justify-center space-x-1.5 font-semibold rounded-full text-xs transition-all cursor-pointer select-none active:scale-[0.98] ${
+                              className={`w-full py-2.5 flex items-center justify-center space-x-1.5 font-semibold rounded-full text-xs transition-colors cursor-pointer select-none active:scale-[0.98] ${
                                 isFollowed
-                                  ? 'bg-white/25 hover:bg-white/30 border border-white/40 text-white shadow-xs backdrop-blur-xs'
-                                  : 'bg-white/10 hover:bg-white/20 border border-white/25 text-white'
+                                  ? 'bg-white/25 hover:bg-slate-300/35 border border-white/40 text-white shadow-xs backdrop-blur-xs'
+                                  : 'bg-white/10 hover:bg-slate-300/30 border border-white/25 text-white'
                               }`}
                             >
                               {isFollowed ? (
@@ -1523,7 +1558,7 @@ export const AllJobsView = ({
                       whileHover={{ opacity: 0.95, rotateY: -18, scale: 0.92 }}
                       transition={{ type: 'spring', stiffness: 220, damping: 24 }}
                       onClick={() => setCompanyCarouselIndex(rightIdx)}
-                      className="hidden md:flex flex-col items-center justify-center bg-white rounded-2xl border border-slate-200/90 p-6 text-center shadow-md cursor-pointer hover:border-blue-300 transition-colors select-none"
+                      className="hidden md:flex flex-col items-center justify-center bg-white hover:bg-slate-200/80 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-6 text-center shadow-md cursor-pointer transition-colors select-none"
                       style={{ transformStyle: 'preserve-3d', willChange: 'transform' }}
                       title="Nhấn để xoay đến công ty này"
                     >
@@ -1548,7 +1583,7 @@ export const AllJobsView = ({
                   type="button"
                   id="carousel-3d-next-btn"
                   onClick={() => setCompanyCarouselIndex((prev) => (prev < total - 1 ? prev + 1 : 0))}
-                  className="w-11 h-11 rounded-full bg-white border border-slate-200/90 flex items-center justify-center text-slate-600 hover:text-[#2170E4] hover:bg-blue-50/50 hover:border-blue-200 shadow-sm cursor-pointer shrink-0 transition-all z-30"
+                  className="w-11 h-11 rounded-full bg-white hover:bg-slate-200/80 border border-slate-200/90 hover:border-slate-300 flex items-center justify-center text-slate-600 hover:text-slate-900 shadow-sm cursor-pointer shrink-0 transition-colors z-30"
                   aria-label="Xoay trục sang phải"
                   title="Xoay sang phải"
                 >

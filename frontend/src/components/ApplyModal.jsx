@@ -157,7 +157,7 @@ export const ApplyModal = ({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-900 rounded-full hover:bg-slate-100 transition-colors cursor-pointer"
+              className="px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
             >
               Hủy
             </button>
@@ -165,7 +165,7 @@ export const ApplyModal = ({
               id="submit-apply-form-btn"
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white font-semibold text-sm rounded-full shadow-md shadow-indigo-200 flex items-center space-x-2 transition-all disabled:opacity-70 cursor-pointer"
+              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-full shadow-md shadow-indigo-200 flex items-center space-x-2 transition-all disabled:opacity-70 cursor-pointer"
             >
               {isSubmitting ? (
                 <span>Đang gửi hồ sơ...</span>

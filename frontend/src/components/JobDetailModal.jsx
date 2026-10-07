@@ -170,7 +170,7 @@ export const JobDetailModal = ({
             <button
               id="modal-share-btn"
               onClick={(e) => onShare && onShare(job, e)}
-              className="px-3 sm:px-4 py-2 sm:py-2.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
+              className="px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full border border-slate-200 text-slate-700 hover:bg-slate-50 flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer"
               title="Chia sẻ tin tuyển dụng"
             >
               <Share2 className="w-4 h-4 text-slate-500" />
@@ -180,7 +180,7 @@ export const JobDetailModal = ({
             <button
               id="modal-bookmark-btn"
               onClick={(e) => onToggleSave(job.id, e)}
-              className={`px-3 sm:px-4.5 py-2 sm:py-2.5 rounded-full border flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+              className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full border flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                 job.isSaved
                   ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
                   : 'border-slate-200 text-slate-700 hover:bg-slate-50'
@@ -198,7 +198,7 @@ export const JobDetailModal = ({
                 onClose();
                 onApply(job, e);
               }}
-              className="w-full sm:w-auto px-6 sm:px-7 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-full shadow-md shadow-indigo-200 transition-all cursor-pointer text-center whitespace-nowrap active:scale-95"
+              className="w-full sm:w-auto px-5 sm:px-6 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-full shadow-md shadow-indigo-200 transition-all cursor-pointer text-center whitespace-nowrap"
             >
               Ứng tuyển ngay
             </button>

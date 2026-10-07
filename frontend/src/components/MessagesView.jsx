@@ -22,6 +22,7 @@ import {
   CheckCheck,
   ArrowLeft,
 } from 'lucide-react';
+import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export const MessagesView = ({
   currentUser,
@@ -38,8 +39,7 @@ export const MessagesView = ({
       companyName: 'TechFlow Solutions',
       companyLogo:
         'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=120&auto=format&fit=crop&q=80',
-      avatar:
-        'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarType: 'image',
       online: true,
       jobTitle: 'Senior UI/UX Designer',
@@ -82,9 +82,10 @@ export const MessagesView = ({
       companyName: 'VNG Corporation',
       companyLogo:
         'https://images.unsplash.com/photo-1551434678-e076c223a692?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarText: 'TV',
       avatarBg: 'bg-[#1877F2]',
-      avatarType: 'initials',
+      avatarType: 'image',
       online: false,
       jobTitle: 'Senior React / Next.js Frontend Developer',
       jobSalary: '35 - 50 triệu',
@@ -126,9 +127,10 @@ export const MessagesView = ({
       companyName: 'MoMo (M_Service)',
       companyLogo:
         'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarText: 'L',
       avatarBg: 'bg-[#1877F2]',
-      avatarType: 'initials',
+      avatarType: 'image',
       online: true,
       jobTitle: 'Product Growth Manager (Fintech)',
       jobSalary: '40 - 65 triệu',
@@ -170,8 +172,7 @@ export const MessagesView = ({
       companyName: 'Shopee Vietnam',
       companyLogo:
         'https://images.unsplash.com/photo-1556742049-0a67e55722c6?w=120&auto=format&fit=crop&q=80',
-      avatar:
-        'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarType: 'image',
       online: true,
       jobTitle: 'Fullstack Golang & React Engineer',
@@ -207,9 +208,10 @@ export const MessagesView = ({
       companyName: 'One Mount Group',
       companyLogo:
         'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarText: 'KN',
       avatarBg: 'bg-indigo-600',
-      avatarType: 'initials',
+      avatarType: 'image',
       online: false,
       jobTitle: 'Data Engineer & Analytics Specialist',
       jobSalary: '30 - 45 triệu',
@@ -244,8 +246,7 @@ export const MessagesView = ({
       companyName: 'Grab Vietnam',
       companyLogo:
         'https://images.unsplash.com/photo-1549923746-c502d488b3ea?w=120&auto=format&fit=crop&q=80',
-      avatar:
-        'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarType: 'image',
       online: true,
       jobTitle: 'Senior Frontend Web (GrabPay & Rewards)',
@@ -288,8 +289,7 @@ export const MessagesView = ({
       companyName: 'Tiki Corporation',
       companyLogo:
         'https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=120&auto=format&fit=crop&q=80',
-      avatar:
-        'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarType: 'image',
       online: true,
       jobTitle: 'Lead Product Designer (Checkout & Loyalty)',
@@ -332,9 +332,10 @@ export const MessagesView = ({
       companyName: 'VinAI Research',
       companyLogo:
         'https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarText: 'MT',
       avatarBg: 'bg-teal-600',
-      avatarType: 'initials',
+      avatarType: 'image',
       online: false,
       jobTitle: 'Generative AI & LLM Engineer',
       jobSalary: '50 - 75 triệu',
@@ -376,8 +377,7 @@ export const MessagesView = ({
       companyName: 'Navigos Group',
       companyLogo:
         'https://images.unsplash.com/photo-1497215728101-856f4ea42174?w=120&auto=format&fit=crop&q=80',
-      avatar:
-        'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarType: 'image',
       online: true,
       jobTitle: 'Fullstack Engineer (100% Remote - Singapore Fintech)',
@@ -427,9 +427,10 @@ export const MessagesView = ({
       companyName: 'FPT Software',
       companyLogo:
         'https://images.unsplash.com/photo-1451187580459-43490279c0fa?w=120&auto=format&fit=crop&q=80',
+      avatar: catAvatar,
       avatarText: 'VK',
       avatarBg: 'bg-amber-600',
-      avatarType: 'initials',
+      avatarType: 'image',
       online: false,
       jobTitle: 'Cloud DevOps Engineer (Kubernetes & CI/CD)',
       jobSalary: '35 - 50 triệu',
@@ -715,7 +716,7 @@ export const MessagesView = ({
                 onClick={() => setMobileView('list')}
                 title="Quay lại danh sách"
                 aria-label="Quay lại danh sách tin nhắn"
-                className="md:hidden p-1.5 -ml-1 text-slate-600 hover:text-slate-900 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
+                className="md:hidden p-1.5 -ml-1 text-slate-600 hover:text-slate-900 rounded-full hover:bg-slate-100 transition-colors cursor-pointer shrink-0"
               >
                 <ArrowLeft className="w-5 h-5" />
               </button>
@@ -767,7 +768,7 @@ export const MessagesView = ({
                     setShowInfoModal(true);
                   }
                 }}
-                className="px-3.5 py-1.5 border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 rounded-lg text-xs font-semibold text-slate-700 flex items-center space-x-1.5 transition-colors cursor-pointer shadow-2xs group"
+                className="px-4 py-1.5 border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 rounded-full text-xs font-semibold text-slate-700 flex items-center space-x-1.5 transition-colors cursor-pointer shadow-2xs group"
               >
                 <Briefcase className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#1877F2] transition-colors" />
                 <span className="group-hover:text-slate-900">Thông tin</span>
@@ -778,7 +779,7 @@ export const MessagesView = ({
                 <button
                   type="button"
                   onClick={() => setShowMoreMenu(!showMoreMenu)}
-                  className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+                  className="p-1.5 text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
                 >
                   <MoreVertical className="w-4 h-4" />
                 </button>
@@ -889,7 +890,7 @@ export const MessagesView = ({
           {/* Bottom Chat Input Bar - Sticky and Never Lost */}
           <div className="p-3 sm:px-6 sm:pb-4 sm:pt-3 bg-white border-t border-slate-200 shrink-0 sticky bottom-0 z-20">
             <form onSubmit={handleSendMessage}>
-              <div className="bg-[#eff4fc] border border-[#dbe6f6] rounded-xl px-3 py-2 sm:py-2.5 flex items-center space-x-2.5">
+              <div className="bg-[#eff4fc] border border-[#dbe6f6] rounded-full px-3.5 py-2 sm:py-2.5 flex items-center space-x-2.5">
                 {/* Paperclip Icon */}
                 <button
                   type="button"
@@ -910,7 +911,7 @@ export const MessagesView = ({
                       )
                     );
                   }}
-                  className="p-1 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer shrink-0"
+                  className="p-1.5 rounded-full text-slate-500 hover:text-slate-800 hover:bg-white/70 transition-colors cursor-pointer shrink-0"
                 >
                   <Paperclip className="w-4 h-4 stroke-[2]" />
                 </button>
@@ -935,7 +936,7 @@ export const MessagesView = ({
                       )
                     );
                   }}
-                  className="p-1 text-slate-500 hover:text-slate-800 transition-colors cursor-pointer shrink-0"
+                  className="p-1.5 rounded-full text-slate-500 hover:text-slate-800 hover:bg-white/70 transition-colors cursor-pointer shrink-0"
                 >
                   <ImageIcon className="w-4 h-4 stroke-[2]" />
                 </button>
@@ -954,7 +955,7 @@ export const MessagesView = ({
                 <button
                   type="submit"
                   disabled={!inputText.trim()}
-                  className="w-8 h-8 rounded-lg bg-[#1877F2] hover:bg-[#1565d8] disabled:bg-slate-300 disabled:cursor-not-allowed text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs"
+                  className="w-8 h-8 rounded-full bg-[#1877F2] hover:bg-[#1565d8] disabled:bg-slate-300 disabled:cursor-not-allowed text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs"
                 >
                   <Send className="w-3.5 h-3.5 -ml-0.5" />
                 </button>
@@ -976,7 +977,7 @@ export const MessagesView = ({
             <button
               type="button"
               onClick={() => setShowInfoModal(false)}
-              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
+              className="absolute top-4 right-4 p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -1037,7 +1038,7 @@ export const MessagesView = ({
               <button
                 type="button"
                 onClick={() => setShowInfoModal(false)}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-full transition-colors cursor-pointer"
               >
                 Đóng
               </button>
@@ -1049,7 +1050,7 @@ export const MessagesView = ({
                     onNavigateToCompany(activeConv.companyName);
                   }
                 }}
-                className="px-3 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-lg transition-colors cursor-pointer flex items-center space-x-1"
+                className="px-4 py-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-xs font-semibold rounded-full transition-colors cursor-pointer flex items-center space-x-1"
               >
                 <Building2 className="w-3.5 h-3.5" />
                 <span>Trang công ty</span>
@@ -1068,7 +1069,7 @@ export const MessagesView = ({
                     });
                   }
                 }}
-                className="px-4 py-2 bg-[#1877F2] hover:bg-[#1565d8] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer"
+                className="px-4 py-2 bg-[#1877F2] hover:bg-[#1565d8] text-white text-xs font-bold rounded-full transition-colors cursor-pointer"
               >
                 Xem chi tiết JD
               </button>

@@ -12,6 +12,7 @@ import {
   Building2,
   Sparkles,
   Smartphone,
+  RefreshCw,
 } from 'lucide-react';
 import { useDevice } from '../context/DeviceContext';
 
@@ -108,18 +109,18 @@ export const Header = ({
                     >
                       <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                         <span className="font-bold text-slate-900 text-sm">Thông báo mới</span>
-                        <span className="text-xs text-[#0A58CA] font-semibold cursor-pointer hover:underline">
+                        <span className="text-xs text-[#0A58CA] font-semibold cursor-pointer px-2.5 py-1 rounded-full hover:bg-slate-100 transition-colors">
                           Đánh dấu đã đọc
                         </span>
                       </div>
-                      <div className="max-h-64 overflow-y-auto divide-y divide-slate-50">
-                        <div className="px-4 py-3 hover:bg-slate-50 transition-colors cursor-pointer">
+                      <div className="max-h-64 overflow-y-auto divide-y divide-slate-50 px-1.5 py-1">
+                        <div className="px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer">
                           <p className="text-xs font-semibold text-slate-800">
                             VNG Corporation vừa đăng tin tuyển dụng mới phù hợp với bạn
                           </p>
                           <span className="text-[11px] text-slate-400 mt-1 block">10 phút trước</span>
                         </div>
-                        <div className="px-4 py-3 hover:bg-slate-50 transition-colors cursor-pointer">
+                        <div className="px-3 py-2.5 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer">
                           <p className="text-xs font-semibold text-slate-800">
                             Hồ sơ ứng tuyển của bạn đã được FPT Software tiếp nhận
                           </p>
@@ -145,7 +146,7 @@ export const Header = ({
                   <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#0A58CA] rounded-full ring-2 ring-white" />
                 </button>
 
-                {/* User Profile Section */}
+                {/* User Profile Section replaced with Employer Pill Button */}
                 <div className="relative">
                   <button
                     id="header-user-profile-btn"
@@ -156,26 +157,10 @@ export const Header = ({
                         setProfileDropdownOpen(!profileDropdownOpen);
                       }
                     }}
-                    className="flex items-center space-x-1.5 sm:space-x-2.5 group cursor-pointer focus:outline-hidden select-none py-1"
+                    className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px] group focus:outline-hidden select-none"
                   >
-                    <span className="text-sm font-semibold text-[#0A58CA] group-hover:text-[#084298] transition-colors hidden sm:inline max-w-[120px] truncate">
-                      {currentUser.name}
-                    </span>
-                    <div className="relative">
-                      {currentUser.avatar ? (
-                        <img
-                          src={currentUser.avatar}
-                          alt={currentUser.name}
-                          referrerPolicy="no-referrer"
-                          className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover ring-2 ring-[#0A58CA] group-hover:ring-[#084298] transition-all shadow-2xs"
-                        />
-                      ) : (
-                        <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-blue-50 flex items-center justify-center ring-2 ring-[#0A58CA] text-[#0A58CA] font-bold text-xs sm:text-sm shadow-2xs">
-                          {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
-                        </div>
-                      )}
-                    </div>
-                    <ChevronDown className="w-4 h-4 text-slate-700 group-hover:text-slate-900 transition-transform duration-200 hidden sm:block" />
+                    <RefreshCw className="w-4 h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
+                    <span>Dành cho nhà tuyển dụng</span>
                   </button>
 
                   {/* Profile dropdown menu (desktop mode) */}
@@ -188,13 +173,13 @@ export const Header = ({
                         <p className="text-sm font-bold text-slate-900 truncate">{currentUser.name}</p>
                         <p className="text-xs text-slate-500 truncate">{currentUser.email}</p>
                       </div>
-                      <div className="py-1">
+                      <div className="py-1 px-1.5 space-y-0.5">
                         <button
                           onClick={() => {
                             onTabChange('messages');
                             setProfileDropdownOpen(false);
                           }}
-                          className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                          className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer transition-colors"
                         >
                           <div className="flex items-center space-x-2">
                             <MessageSquare className="w-4 h-4 text-slate-500" />
@@ -207,7 +192,7 @@ export const Header = ({
                             onTabChange('cv-builder');
                             setProfileDropdownOpen(false);
                           }}
-                          className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center space-x-2 cursor-pointer"
+                          className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center space-x-2 cursor-pointer transition-colors"
                         >
                           <FileCheck className="w-4 h-4 text-slate-500" />
                           <span>Hồ sơ & CV của tôi</span>
@@ -218,7 +203,7 @@ export const Header = ({
                             onTabChange('saved');
                             setProfileDropdownOpen(false);
                           }}
-                          className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                          className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer transition-colors"
                         >
                           <div className="flex items-center space-x-2">
                             <Bookmark className="w-4 h-4 text-slate-500" />
@@ -234,7 +219,7 @@ export const Header = ({
                             onTabChange('favorite-companies');
                             setProfileDropdownOpen(false);
                           }}
-                          className="w-full px-4 py-2 text-left text-xs font-semibold text-slate-700 hover:bg-slate-50 flex items-center justify-between cursor-pointer"
+                          className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer transition-colors"
                         >
                           <div className="flex items-center space-x-2">
                             <Building2 className="w-4 h-4 text-slate-500" />
@@ -245,13 +230,13 @@ export const Header = ({
                           ) : null}
                         </button>
                       </div>
-                      <div className="border-t border-slate-100 pt-1">
+                      <div className="border-t border-slate-100 pt-1 px-1.5">
                         <button
                           onClick={() => {
                             setProfileDropdownOpen(false);
                             onLogout();
                           }}
-                          className="w-full px-4 py-2 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50 flex items-center space-x-2 cursor-pointer"
+                          className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-rose-600 hover:bg-slate-100 flex items-center space-x-2 cursor-pointer transition-colors"
                         >
                           <LogOut className="w-4 h-4" />
                           <span>Đăng xuất</span>
@@ -266,9 +251,9 @@ export const Header = ({
                 <button
                   id="header-employer-pill-btn"
                   onClick={() => onOpenAuth('login')}
-                  className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px]"
+                  className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px] group"
                 >
-                  <Building2 className="w-4 h-4 text-blue-200 shrink-0" />
+                  <RefreshCw className="w-4 h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
                   <span>Dành cho nhà tuyển dụng</span>
                 </button>
               </div>

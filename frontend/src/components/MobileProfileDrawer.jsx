@@ -14,6 +14,7 @@ import {
   ChevronRight,
 } from 'lucide-react';
 import { useDevice } from '../context/DeviceContext';
+import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export const MobileProfileDrawer = ({
   isOpen,
@@ -85,18 +86,12 @@ export const MobileProfileDrawer = ({
           <div className="p-5">
             <div className="bg-gradient-to-br from-blue-50/70 via-indigo-50/40 to-slate-50 rounded-2xl p-4 border border-blue-100 flex items-center space-x-3.5 mb-4">
               <div className="relative shrink-0">
-                {currentUser.avatar ? (
-                  <img
-                    src={currentUser.avatar}
-                    alt={currentUser.name}
-                    referrerPolicy="no-referrer"
-                    className="w-13 h-13 rounded-full object-cover ring-2 ring-[#0A58CA] shadow-xs"
-                  />
-                ) : (
-                  <div className="w-13 h-13 rounded-full bg-[#0A58CA] text-white text-base font-black flex items-center justify-center shadow-xs">
-                    {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
-                  </div>
-                )}
+                <img
+                  src={catAvatar}
+                  alt={currentUser.name}
+                  referrerPolicy="no-referrer"
+                  className="w-13 h-13 rounded-full object-cover ring-2 ring-[#0A58CA] shadow-xs"
+                />
                 <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-white" />
               </div>
               <div className="min-w-0 flex-1">
@@ -225,7 +220,7 @@ export const MobileProfileDrawer = ({
                     onClose();
                     onLogout();
                   }}
-                  className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-xl bg-rose-50 text-rose-600 font-bold text-xs hover:bg-rose-100 transition-colors"
+                  className="w-full flex items-center justify-center space-x-2 py-3 px-4 rounded-full bg-rose-50 text-rose-600 font-bold text-xs hover:bg-rose-100 transition-colors cursor-pointer"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>Đăng xuất khỏi tài khoản</span>
@@ -251,7 +246,7 @@ export const MobileProfileDrawer = ({
                   onClose();
                   onOpenAuth('login');
                 }}
-                className="w-full py-3 bg-[#0A58CA] text-white font-bold text-sm rounded-xl shadow-sm hover:bg-[#084298] transition-colors"
+                className="w-full py-3 bg-[#0A58CA] text-white font-bold text-sm rounded-full shadow-sm hover:bg-[#084298] transition-colors cursor-pointer"
               >
                 Đăng nhập ngay
               </button>
@@ -261,7 +256,7 @@ export const MobileProfileDrawer = ({
                   onClose();
                   onOpenAuth('register');
                 }}
-                className="w-full py-3 bg-slate-100 text-slate-700 font-bold text-sm rounded-xl hover:bg-slate-200 transition-colors"
+                className="w-full py-3 bg-slate-100 text-slate-700 font-bold text-sm rounded-full hover:bg-slate-200 transition-colors cursor-pointer"
               >
                 Tạo tài khoản mới
               </button>

@@ -22,6 +22,7 @@ import { Toast } from './components/Toast';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileProfileDrawer } from './components/MobileProfileDrawer';
 import { useDevice } from './context/DeviceContext';
+import catAvatar from './assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export function App() {
   const device = useDevice();
@@ -38,7 +39,11 @@ export function App() {
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('jobcentral_user');
-      return savedUser ? JSON.parse(savedUser) : null;
+      if (savedUser) {
+        const parsed = JSON.parse(savedUser);
+        return { ...parsed, avatar: catAvatar };
+      }
+      return null;
     } catch {
       return null;
     }
@@ -56,20 +61,22 @@ export function App() {
     if (e) e.stopPropagation();
     const company = INITIAL_COMPANIES.find((c) => c.id === companyId);
     const companyName = company ? company.name : 'Công ty';
+    const isAlreadyFollowed = followedCompanyIds.includes(companyId);
 
-    setFollowedCompanyIds((prev) => {
-      const isAlreadyFollowed = prev.includes(companyId);
-      if (isAlreadyFollowed) {
-        showToast(`Đã bỏ theo dõi công ty "${companyName}"`, 'info');
-        return prev.filter((id) => id !== companyId);
-      } else {
-        showToast(
-          `Đã theo dõi công ty "${companyName}"! Bạn sẽ nhận được thông báo khi có việc làm mới.`,
-          'success'
-        );
-        return [...prev, companyId];
-      }
-    });
+    setFollowedCompanyIds((prev) =>
+      prev.includes(companyId)
+        ? prev.filter((id) => id !== companyId)
+        : [...prev, companyId]
+    );
+
+    if (isAlreadyFollowed) {
+      showToast(`Đã bỏ theo dõi công ty "${companyName}"`, 'info');
+    } else {
+      showToast(
+        `Đã theo dõi công ty "${companyName}"! Bạn sẽ nhận được thông báo khi có việc làm mới.`,
+        'success'
+      );
+    }
   };
 
   // Open job details if URL contains jobId
@@ -128,19 +135,20 @@ export function App() {
 
   const handleToggleSave = (jobId, e) => {
     if (e) e.stopPropagation();
+    const targetJob = jobs.find((j) => j.id === jobId);
+    if (targetJob) {
+      const nextSaved = !targetJob.isSaved;
+      showToast(
+        nextSaved
+          ? `Đã lưu công việc "${targetJob.title}" thành công!`
+          : `Đã bỏ lưu công việc "${targetJob.title}"`
+      );
+    }
+
     setJobs((prevJobs) =>
-      prevJobs.map((job) => {
-        if (job.id === jobId) {
-          const nextSaved = !job.isSaved;
-          showToast(
-            nextSaved
-              ? `Đã lưu công việc "${job.title}" thành công!`
-              : `Đã bỏ lưu công việc "${job.title}"`
-          );
-          return { ...job, isSaved: nextSaved };
-        }
-        return job;
-      })
+      prevJobs.map((job) =>
+        job.id === jobId ? { ...job, isSaved: !job.isSaved } : job
+      )
     );
 
     if (selectedJobForDetail && selectedJobForDetail.id === jobId) {
@@ -166,7 +174,7 @@ export function App() {
   };
 
   const handleAuthSuccess = (user) => {
-    const loggedInUser = { ...user, isGuest: false };
+    const loggedInUser = { ...user, avatar: catAvatar, isGuest: false };
     setCurrentUser(loggedInUser);
     try {
       localStorage.setItem('jobcentral_user', JSON.stringify(loggedInUser));
@@ -295,6 +303,8 @@ export function App() {
           ) : (
             <CompaniesView
               companies={INITIAL_COMPANIES}
+              currentUser={currentUser}
+              savedCount={savedCount}
               initialSearchQuery={targetCompanyFilter}
               onResetSearch={() => setTargetCompanyFilter(null)}
               followedCompanyIds={followedCompanyIds}
@@ -304,6 +314,11 @@ export function App() {
                 window.scrollTo({ top: 0, behavior: 'smooth' });
               }}
               onExploreJobs={() => setActiveTab('jobs')}
+              onTabChange={(tab) => {
+                setActiveTab(tab);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              onShowToast={showToast}
             />
           )
         )}

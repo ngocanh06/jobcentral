@@ -130,7 +130,7 @@ export const FilterNavbar = ({
               id="filter-nav-location-btn"
               type="button"
               onClick={() => setOpenDropdown(openDropdown === 'location' ? null : 'location')}
-              className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium border transition-all cursor-pointer ${
+              className={`inline-flex items-center space-x-2 px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium border transition-all cursor-pointer ${
                 openDropdown === 'location' || (!filters.locations.includes('all_hcm') && filters.locations.length > 0)
                   ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 font-semibold shadow-xs'
                   : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
@@ -213,7 +213,7 @@ export const FilterNavbar = ({
               id="filter-nav-salary-btn"
               type="button"
               onClick={() => setOpenDropdown(openDropdown === 'salary' ? null : 'salary')}
-              className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium border transition-all cursor-pointer ${
+              className={`inline-flex items-center space-x-2 px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium border transition-all cursor-pointer ${
                 openDropdown === 'salary' || filters.salary !== 'all'
                   ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 font-semibold shadow-xs'
                   : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
@@ -264,7 +264,7 @@ export const FilterNavbar = ({
               id="filter-nav-jobtype-btn"
               type="button"
               onClick={() => setOpenDropdown(openDropdown === 'type' ? null : 'type')}
-              className={`inline-flex items-center space-x-2 px-4 py-2 rounded-full text-xs sm:text-sm font-medium border transition-all cursor-pointer ${
+              className={`inline-flex items-center space-x-2 px-3.5 py-2 rounded-full text-xs sm:text-sm font-medium border transition-all cursor-pointer ${
                 openDropdown === 'type' || filters.jobTypes.length > 0
                   ? 'border-indigo-600 bg-indigo-50/80 text-indigo-700 font-semibold shadow-xs'
                   : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
@@ -329,7 +329,7 @@ export const FilterNavbar = ({
               setOpenDropdown(null);
               onApply();
             }}
-            className="inline-flex items-center space-x-1.5 px-5 sm:px-6 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-full text-xs sm:text-sm font-semibold shadow-sm shadow-indigo-200 transition-all cursor-pointer active:scale-95"
+            className="inline-flex items-center space-x-1.5 px-4 sm:px-5 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-full text-xs sm:text-sm font-semibold shadow-sm shadow-indigo-200 transition-all cursor-pointer"
           >
             <span>Áp dụng</span>
             {activeFiltersCount > 0 && (
@@ -352,7 +352,7 @@ export const FilterNavbar = ({
             filters.locations.map((loc) => (
               <span
                 key={loc}
-                className="inline-flex items-center space-x-1 bg-white border border-indigo-200 text-indigo-700 px-3 py-1 rounded-full font-medium shadow-2xs"
+                className="inline-flex items-center space-x-1 bg-white border border-indigo-200 text-indigo-700 px-2.5 py-1 rounded-lg font-medium shadow-2xs"
               >
                 <span>{loc === 'q1' ? 'Quận 1' : loc === 'q7' ? 'Quận 7' : loc === 'tan_binh' ? 'Tân Bình' : loc}</span>
                 <button
@@ -365,7 +365,7 @@ export const FilterNavbar = ({
             ))}
 
           {filters.salary !== 'all' && (
-            <span className="inline-flex items-center space-x-1 bg-white border border-emerald-200 text-emerald-700 px-3 py-1 rounded-full font-medium shadow-2xs">
+            <span className="inline-flex items-center space-x-1 bg-white border border-emerald-200 text-emerald-700 px-2.5 py-1 rounded-lg font-medium shadow-2xs">
               <span>{getSalaryLabel()}</span>
               <button
                 onClick={() => setSalary('all')}
@@ -379,7 +379,7 @@ export const FilterNavbar = ({
           {filters.jobTypes.map((type) => (
             <span
               key={type}
-              className="inline-flex items-center space-x-1 bg-white border border-slate-200 text-slate-700 px-3 py-1 rounded-full font-medium shadow-2xs"
+              className="inline-flex items-center space-x-1 bg-white border border-slate-200 text-slate-700 px-2.5 py-1 rounded-lg font-medium shadow-2xs"
             >
               <span>{type}</span>
               <button

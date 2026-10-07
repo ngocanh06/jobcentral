@@ -95,7 +95,7 @@ export class ErrorBoundary extends React.Component {
               <button
                 type="button"
                 onClick={this.handleReset}
-                className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all cursor-pointer shadow-xs active:scale-95"
+                className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white text-xs sm:text-sm font-semibold rounded-full transition-all cursor-pointer shadow-xs active:scale-95"
               >
                 <RefreshCw className="w-4 h-4" />
                 <span>Thử tải lại</span>
@@ -104,7 +104,7 @@ export class ErrorBoundary extends React.Component {
               <button
                 type="button"
                 onClick={() => window.location.reload()}
-                className="inline-flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold rounded-xl transition-all cursor-pointer active:scale-95"
+                className="inline-flex items-center space-x-2 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs sm:text-sm font-semibold rounded-full transition-all cursor-pointer active:scale-95"
               >
                 <RotateCcw className="w-4 h-4 text-slate-500" />
                 <span>Làm mới trang</span>

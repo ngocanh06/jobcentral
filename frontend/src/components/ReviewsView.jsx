@@ -60,7 +60,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
         <button
           id="write-review-btn"
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center space-x-2 px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all shrink-0 active:scale-95 cursor-pointer"
+          className="inline-flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Viết đánh giá</span>
@@ -128,7 +128,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
             </div>
 
             <div className="pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <div className="flex items-center space-x-1.5 text-emerald-700 font-medium bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200/60">
+              <div className="flex items-center space-x-1.5 text-emerald-700 font-medium bg-emerald-50 px-3 py-1 rounded-full border border-emerald-200/60">
                 <ShieldCheck className="w-4 h-4 text-emerald-600" />
                 <span>Khuyên bạn bè nên ứng tuyển ({review.recommendPercentage}%)</span>
               </div>
@@ -136,7 +136,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
               <button
                 id={`like-review-btn-${review.id}`}
                 onClick={() => handleLike(review.id)}
-                className="flex items-center space-x-1.5 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 px-4 py-1.5 rounded-full transition-colors font-medium cursor-pointer active:scale-95"
+                className="flex items-center space-x-1 text-slate-600 hover:text-indigo-600 hover:bg-slate-100 px-3.5 py-1.5 rounded-full transition-colors font-medium cursor-pointer"
               >
                 <ThumbsUp className="w-3.5 h-3.5" />
                 <span>Hữu ích ({review.likes})</span>
@@ -192,10 +192,10 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
                       type="button"
                       key={s}
                       onClick={() => setSelectedRating(s)}
-                      className={`p-2 rounded-xl border flex items-center space-x-1 ${
+                      className={`px-3 py-1.5 rounded-full border flex items-center space-x-1 cursor-pointer transition-colors ${
                         selectedRating === s
                           ? 'bg-amber-50 border-amber-300 text-amber-600 font-bold'
-                          : 'border-slate-200 text-slate-600'
+                          : 'border-slate-200 text-slate-600 hover:bg-slate-50'
                       }`}
                     >
                       <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -251,13 +251,13 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-5 py-2 text-sm text-slate-600 hover:text-slate-900 rounded-full hover:bg-slate-100 cursor-pointer"
+                  className="px-4 py-2 text-sm text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
                 >
                   Hủy
                 </button>
                 <button
                   type="submit"
-                  className="px-6 py-2 bg-indigo-600 text-white rounded-full font-medium text-sm hover:bg-indigo-700 shadow-sm shadow-indigo-200 cursor-pointer active:scale-95"
+                  className="px-5 py-2 bg-indigo-600 text-white rounded-full font-medium text-sm hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition-colors cursor-pointer"
                 >
                   Đăng đánh giá
                 </button>

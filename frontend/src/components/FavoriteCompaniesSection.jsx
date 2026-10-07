@@ -72,7 +72,7 @@ export const FavoriteCompaniesSection = ({
               type="button"
               id="explore-companies-btn"
               onClick={onExploreCompanies}
-              className="mt-6 inline-flex items-center space-x-2 px-5 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white text-xs sm:text-sm font-semibold rounded-xl transition-all shadow-xs cursor-pointer"
+              className="mt-6 inline-flex items-center space-x-2 px-5 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white text-xs sm:text-sm font-semibold rounded-full transition-all shadow-xs cursor-pointer"
             >
               <Building2 className="w-4 h-4" />
               <span>Khám phá công ty hàng đầu ngay</span>
@@ -125,7 +125,7 @@ export const FavoriteCompaniesSection = ({
                       }}
                       title="Bỏ theo dõi công ty này"
                       aria-label="Bỏ theo dõi công ty"
-                      className="p-2 rounded-xl text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer shrink-0"
+                      className="p-2 rounded-full text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer shrink-0"
                     >
                       <Heart className="w-4 h-4 fill-rose-600 text-rose-600" />
                     </button>
@@ -170,7 +170,7 @@ export const FavoriteCompaniesSection = ({
 
                 {/* Footer Buttons */}
                 <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between gap-2">
-                  <span className="inline-flex items-center space-x-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-lg border border-emerald-200">
+                  <span className="inline-flex items-center space-x-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200">
                     <Briefcase className="w-3.5 h-3.5" />
                     <span>{company.openJobsCount} việc làm</span>
                   </span>
@@ -179,7 +179,7 @@ export const FavoriteCompaniesSection = ({
                     type="button"
                     id={`view-detail-fav-company-${company.id}`}
                     onClick={() => onSelectCompany && onSelectCompany(company)}
-                    className="inline-flex items-center space-x-1 text-xs font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] px-3.5 py-1.5 rounded-xl transition-all shadow-xs cursor-pointer"
+                    className="inline-flex items-center space-x-1 text-xs font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] px-3.5 py-1.5 rounded-full transition-all shadow-xs cursor-pointer"
                   >
                     <span>Xem công ty</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />

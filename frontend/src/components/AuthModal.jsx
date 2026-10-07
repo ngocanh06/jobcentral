@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { X, Mail, Lock, User, Sparkles, ArrowRight, Eye, EyeOff, Smartphone, ShieldCheck } from 'lucide-react';
 import { useDevice } from '../context/DeviceContext';
+import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export const AuthModal = ({
   initialMode = 'login',
@@ -17,9 +18,9 @@ export const AuthModal = ({
   const handleSubmit = (e) => {
     e.preventDefault();
     onSuccess({
-      name: name.trim() || (email ? email.split('@')[0] : 'Minh Nguyễn'),
-      email: email.trim() || 'minh.nguyen@example.com',
-      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80',
+      name: name.trim() || (email ? email.split('@')[0] : 'Nhiên Nguyễn Viết'),
+      email: email.trim() || 'vietnhiennguyen91@gmail.com',
+      avatar: catAvatar,
       provider: 'email',
     });
   };
@@ -184,7 +185,7 @@ export const AuthModal = ({
           <button
             type="submit"
             id="auth-submit-btn"
-            className="w-full py-3 sm:py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-[0.98] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs transition-all flex items-center justify-center space-x-2 mt-4 cursor-pointer"
+            className="w-full py-3 sm:py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs transition-all flex items-center justify-center space-x-2 mt-4 cursor-pointer"
           >
             <span>{mode === 'login' ? 'Đăng nhập ngay' : 'Tạo tài khoản'}</span>
             <ArrowRight className="w-4 h-4" />

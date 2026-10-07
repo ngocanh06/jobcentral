@@ -451,7 +451,7 @@ export const CompanyDetailView = ({
                   handleCopyLink();
                 }
               }}
-              className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
+              className="p-1.5 rounded-full text-slate-400 hover:text-[#2170E4] hover:bg-blue-50/60 transition-colors cursor-pointer"
               title="Chia sẻ việc làm"
               aria-label="Chia sẻ việc làm"
             >
@@ -465,7 +465,7 @@ export const CompanyDetailView = ({
                 if (e) e.stopPropagation();
                 toggleSave(job.id);
               }}
-              className="p-1.5 text-slate-400 hover:text-[#2170E4] transition-colors cursor-pointer"
+              className="p-1.5 rounded-full text-slate-400 hover:text-[#2170E4] hover:bg-blue-50/60 transition-colors cursor-pointer"
               title={isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
               aria-label="Lưu việc làm"
             >
@@ -479,14 +479,14 @@ export const CompanyDetailView = ({
         </div>
 
         {/* Tags Row */}
-        <div className="flex flex-wrap items-center gap-2 text-[11px] font-medium">
-          <span className="px-3 py-1 bg-blue-50 text-[#2170E4] rounded-full font-semibold">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-slate-500 font-medium">
+          <span className="text-xs text-slate-500 font-medium">
             {job.jobType || job.type || 'Full-time'}
           </span>
-          <span className="px-3 py-1 bg-emerald-50 text-emerald-700 rounded-full font-semibold">
+          <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
             {job.salary}
           </span>
-          <span className="px-3 py-1 bg-slate-100 text-slate-700 rounded-full">
+          <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
             {job.location?.split(',').pop()?.trim() || job.location}
           </span>
         </div>
@@ -509,7 +509,7 @@ export const CompanyDetailView = ({
                 });
               }
             }}
-            className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs hover:shadow-sm active:scale-95 transition-all cursor-pointer"
+            className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs transition-all cursor-pointer"
           >
             Ứng tuyển ngay
           </button>
@@ -538,7 +538,7 @@ export const CompanyDetailView = ({
               type="button"
               onClick={onBack}
               title="Quay lại danh sách công ty"
-              className="absolute top-4 left-4 z-20 inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full bg-white/95 hover:bg-white text-slate-700 hover:text-[#2170E4] text-xs font-semibold shadow-xs backdrop-blur-xs transition-all cursor-pointer border border-slate-200/60 active:scale-95"
+              className="absolute top-4 left-4 z-20 inline-flex items-center space-x-1.5 px-3.5 py-1.5 rounded-full bg-white/95 hover:bg-white text-slate-700 hover:text-[#2170E4] text-xs font-semibold shadow-xs backdrop-blur-xs transition-all cursor-pointer border border-slate-200/60"
             >
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Quay lại</span>
@@ -607,7 +607,7 @@ export const CompanyDetailView = ({
                         setInternalFollowing(!internalFollowing);
                       }
                     }}
-                    className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer shadow-2xs active:scale-95 ${
+                    className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer shadow-2xs ${
                       isFollowing
                         ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
                         : 'bg-white border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50'
@@ -633,7 +633,7 @@ export const CompanyDetailView = ({
                 href={currentCompany.website}
                 target="_blank"
                 rel="noreferrer"
-                className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-[#2170E4] hover:bg-[#1a5bbd] text-white transition-all shadow-2xs flex items-center space-x-2 cursor-pointer active:scale-95"
+                className="px-6 py-2.5 rounded-full text-xs sm:text-sm font-semibold bg-[#2170E4] hover:bg-[#1a5bbd] text-white transition-colors shadow-2xs flex items-center space-x-2 cursor-pointer"
               >
                 <Globe className="w-4 h-4" />
                 <span>Website</span>
@@ -746,7 +746,7 @@ export const CompanyDetailView = ({
                         value={jobSearchTerm}
                         onChange={(e) => setJobSearchTerm(e.target.value)}
                         placeholder="Tìm theo chức danh, kỹ năng (React, Golang, Figma, AWS...)"
-                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0A58CA]"
+                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0A58CA]"
                       />
                     </div>
 
@@ -754,7 +754,7 @@ export const CompanyDetailView = ({
                     <select
                       value={selectedJobType}
                       onChange={(e) => setSelectedJobType(e.target.value)}
-                      className="px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-700 font-medium focus:outline-hidden focus:border-[#0A58CA]"
+                      className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-700 font-medium focus:outline-hidden focus:border-[#0A58CA]"
                     >
                       <option value="all">Tất cả hình thức</option>
                       <option value="fulltime">Full-time</option>
@@ -858,7 +858,7 @@ export const CompanyDetailView = ({
                           setSelectedDepartment('all');
                           setSelectedJobType('all');
                         }}
-                        className="mt-4 px-5 py-2.5 bg-[#0A58CA] text-white text-xs font-bold rounded-full hover:bg-[#084298] transition-all cursor-pointer active:scale-95 shadow-xs"
+                        className="mt-4 px-5 py-2 bg-[#0A58CA] text-white text-xs font-bold rounded-full cursor-pointer"
                       >
                         Xem toàn bộ 12 công việc
                       </button>
@@ -1035,7 +1035,7 @@ export const CompanyDetailView = ({
               <button
                 type="button"
                 onClick={() => setShowGalleryModal(true)}
-                className="w-full py-2.5 px-4 rounded-full border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-colors text-center cursor-pointer shadow-2xs active:scale-95"
+                className="w-full py-2.5 px-4 rounded-full border border-slate-200 text-xs sm:text-sm font-semibold text-slate-700 bg-white hover:bg-slate-50 hover:border-slate-300 transition-colors text-center cursor-pointer shadow-2xs"
               >
                 Xem tất cả hình ảnh
               </button>
@@ -1143,7 +1143,7 @@ export const CompanyDetailView = ({
               </h3>
               <button
                 onClick={() => setShowGalleryModal(false)}
-                className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-lg cursor-pointer"
+                className="p-2 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full cursor-pointer"
               >
                 ✕
               </button>

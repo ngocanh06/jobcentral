@@ -48,7 +48,7 @@ export const JobCard = ({
               if (onShare) onShare(job, e);
             }}
             title="Chia sẻ việc làm"
-            className="p-2 text-slate-400 hover:text-indigo-600 transition-colors focus:outline-hidden cursor-pointer"
+            className="p-2 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/60 transition-colors focus:outline-hidden cursor-pointer"
             aria-label="Chia sẻ việc làm"
           >
             <Share2 className="w-5 h-5" />
@@ -59,7 +59,7 @@ export const JobCard = ({
             type="button"
             onClick={(e) => onToggleSave(job.id, e)}
             title={job.isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
-            className={`p-2 transition-colors focus:outline-hidden cursor-pointer ${
+            className={`p-2 rounded-full hover:bg-indigo-50/60 transition-colors focus:outline-hidden cursor-pointer ${
               job.isSaved
                 ? 'text-indigo-600'
                 : 'text-slate-400 hover:text-indigo-600'
@@ -75,28 +75,20 @@ export const JobCard = ({
         </div>
       </div>
 
-      {/* Meta Pills Row */}
-      <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 mt-4">
-        {/* Location badge */}
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-slate-100 text-slate-700 text-xs font-medium">
-          <MapPin className="w-3.5 h-3.5 text-slate-500" />
-          <span>{job.location}</span>
-        </div>
-
-        {/* Salary badge */}
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/70 text-emerald-700 text-xs font-semibold">
-          <Banknote className="w-3.5 h-3.5 text-emerald-600" />
-          <span>{job.salary}</span>
-        </div>
-
-        {/* Job Type badge */}
-        <div className="inline-flex items-center space-x-1.5 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-medium">
-          <Briefcase className="w-3.5 h-3.5 text-indigo-600" />
-          <span>{job.jobType}</span>
-        </div>
+      {/* Meta Row */}
+      <div className="flex flex-wrap items-center gap-x-2 gap-y-1 mt-4 text-xs text-slate-500 font-medium">
+        <span className="text-xs text-slate-500 font-medium">
+          {job.jobType || 'Full-time'}
+        </span>
+        <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
+          {job.salary}
+        </span>
+        <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
+          {job.location}
+        </span>
 
         {/* Posted time */}
-        <div className="inline-flex items-center space-x-1 text-xs text-slate-400 ml-auto sm:ml-0 font-medium">
+        <div className="inline-flex items-center space-x-1 text-xs text-slate-400 ml-auto font-medium">
           <Clock className="w-3.5 h-3.5 text-slate-400" />
           <span>{job.postedTime}</span>
         </div>

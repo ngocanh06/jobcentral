@@ -57,6 +57,7 @@ export const JobSearchView = ({
   const [mobileDetailOpen, setMobileDetailOpen] = useState(false);
   const [showMobileFilterModal, setShowMobileFilterModal] = useState(false);
   const [isDetailHeaderCollapsed, setIsDetailHeaderCollapsed] = useState(false);
+  const [openFilterDropdown, setOpenFilterDropdown] = useState(null);
   const detailScrollRef = useRef(null);
 
   // Filter options constants
@@ -338,6 +339,7 @@ export const JobSearchView = ({
     setPostedDateFilter('all');
     setIsEasyApply(false);
     setIsUnder10Applicants(false);
+    setOpenFilterDropdown(null);
   };
 
   return (
@@ -360,18 +362,66 @@ export const JobSearchView = ({
 
           <div className="flex items-center space-x-3">
             {/* Quick Sort Dropdown */}
-            <div className="flex items-center space-x-2 text-xs">
+            <div className="flex items-center space-x-2 text-xs relative">
               <ArrowUpDown className="w-3.5 h-3.5 text-slate-400 shrink-0 hidden sm:block" />
               <span className="text-slate-500 hidden sm:inline">Sắp xếp:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-slate-50 border border-slate-200 rounded-full px-3 py-1.5 text-xs font-semibold text-slate-700 focus:outline-hidden focus:border-slate-900 cursor-pointer"
-              >
-                <option value="newest">Mới nhất</option>
-                <option value="salaryHigh">Lương cao nhất</option>
-                <option value="featured">Việc làm nổi bật</option>
-              </select>
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenFilterDropdown(openFilterDropdown === 'sort' ? null : 'sort')
+                  }
+                  className="bg-slate-50 hover:bg-slate-100 border border-slate-200 rounded-full px-3.5 py-1.5 text-xs font-semibold text-slate-700 focus:outline-hidden focus:border-slate-900 cursor-pointer inline-flex items-center space-x-1.5 transition-colors"
+                >
+                  <span>
+                    {sortBy === 'salaryHigh'
+                      ? 'Lương cao nhất'
+                      : sortBy === 'featured'
+                      ? 'Việc làm nổi bật'
+                      : 'Mới nhất'}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-150 ${
+                      openFilterDropdown === 'sort' ? 'rotate-180 text-slate-900' : ''
+                    }`}
+                  />
+                </button>
+
+                {openFilterDropdown === 'sort' && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-20"
+                      onClick={() => setOpenFilterDropdown(null)}
+                    />
+                    <div className="absolute right-0 mt-1.5 w-44 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-30 text-xs space-y-0.5 animate-fadeIn">
+                      {[
+                        { value: 'newest', label: 'Mới nhất' },
+                        { value: 'salaryHigh', label: 'Lương cao nhất' },
+                        { value: 'featured', label: 'Việc làm nổi bật' },
+                      ].map((opt) => (
+                        <button
+                          key={opt.value}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(opt.value);
+                            setOpenFilterDropdown(null);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl transition-colors cursor-pointer flex items-center justify-between ${
+                            sortBy === opt.value
+                              ? 'font-bold text-[#0A58CA] bg-blue-50/80'
+                              : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                          }`}
+                        >
+                          <span>{opt.label}</span>
+                          {sortBy === opt.value && (
+                            <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
             </div>
 
             {/* Mobile Filter Toggle Button */}
@@ -495,7 +545,7 @@ export const JobSearchView = ({
             )}
           </div>
 
-          <div className="p-4 space-y-4 overflow-y-auto no-scrollbar flex-1">
+          <div className="p-4 pb-16 space-y-4 overflow-y-auto no-scrollbar flex-1">
             {/* Lọc cơ bản 1: Từ khóa */}
             <div className="space-y-1.5">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
@@ -507,13 +557,13 @@ export const JobSearchView = ({
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="VD: ReactJS, UI/UX, Sales..."
-                  className="w-full bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-hidden focus:border-slate-900 focus:bg-white transition-colors"
+                  className="w-full bg-slate-50/90 hover:bg-slate-100/70 border border-slate-200 rounded-full px-3.5 py-2 text-xs text-slate-800 placeholder-slate-400 focus:outline-hidden focus:border-slate-900 focus:bg-white transition-all"
                 />
                 {keyword && (
                   <button
                     type="button"
                     onClick={() => setKeyword('')}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 p-0.5 cursor-pointer"
                   >
                     <X className="w-3.5 h-3.5" />
                   </button>
@@ -522,39 +572,127 @@ export const JobSearchView = ({
             </div>
 
             {/* Lọc cơ bản 2: Ngành nghề */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 relative">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                 Ngành nghề
               </label>
-              <select
-                value={selectedIndustry}
-                onChange={(e) => setSelectedIndustry(e.target.value)}
-                className="w-full bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-hidden focus:border-slate-900 focus:bg-white cursor-pointer"
+              <button
+                type="button"
+                onClick={() =>
+                  setOpenFilterDropdown(openFilterDropdown === 'industry' ? null : 'industry')
+                }
+                className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
+                  selectedIndustry || openFilterDropdown === 'industry'
+                    ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
+                    : 'bg-slate-50/90 hover:bg-slate-100/80 border-slate-200 text-slate-700 font-medium'
+                }`}
               >
-                {industryList.map((ind) => (
-                  <option key={ind} value={ind === 'Tất cả ngành nghề' ? '' : ind}>
-                    {ind}
-                  </option>
-                ))}
-              </select>
+                <span className="truncate pr-2">
+                  {selectedIndustry || 'Tất cả ngành nghề'}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${
+                    openFilterDropdown === 'industry' ? 'rotate-180 text-slate-900' : ''
+                  }`}
+                />
+              </button>
+
+              {openFilterDropdown === 'industry' && (
+                <>
+                  <div
+                    className="fixed inset-0 z-20"
+                    onClick={() => setOpenFilterDropdown(null)}
+                  />
+                  <div className="absolute left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-30 max-h-56 overflow-y-auto no-scrollbar space-y-0.5 animate-fadeIn">
+                    {industryList.map((ind) => {
+                      const val = ind === 'Tất cả ngành nghề' ? '' : ind;
+                      const isSelected = selectedIndustry === val;
+                      return (
+                        <button
+                          key={ind}
+                          type="button"
+                          onClick={() => {
+                            setSelectedIndustry(val);
+                            setOpenFilterDropdown(null);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
+                            isSelected
+                              ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
+                              : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                          }`}
+                        >
+                          <span className="truncate pr-2">{ind}</span>
+                          {isSelected && (
+                            <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* Lọc cơ bản 3: Địa điểm */}
-            <div className="space-y-1.5">
+            <div className="space-y-1.5 relative">
               <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                 Địa điểm
               </label>
-              <select
-                value={selectedCity}
-                onChange={(e) => setSelectedCity(e.target.value)}
-                className="w-full bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-hidden focus:border-slate-900 focus:bg-white cursor-pointer"
+              <button
+                type="button"
+                onClick={() =>
+                  setOpenFilterDropdown(openFilterDropdown === 'city' ? null : 'city')
+                }
+                className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
+                  selectedCity || openFilterDropdown === 'city'
+                    ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
+                    : 'bg-slate-50/90 hover:bg-slate-100/80 border-slate-200 text-slate-700 font-medium'
+                }`}
               >
-                {cityList.map((city) => (
-                  <option key={city} value={city === 'Tất cả địa điểm' ? '' : city}>
-                    {city}
-                  </option>
-                ))}
-              </select>
+                <span className="truncate pr-2">
+                  {selectedCity || 'Tất cả địa điểm'}
+                </span>
+                <ChevronDown
+                  className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${
+                    openFilterDropdown === 'city' ? 'rotate-180 text-slate-900' : ''
+                  }`}
+                />
+              </button>
+
+              {openFilterDropdown === 'city' && (
+                <>
+                  <div
+                    className="fixed inset-0 z-20"
+                    onClick={() => setOpenFilterDropdown(null)}
+                  />
+                  <div className="absolute left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-30 max-h-56 overflow-y-auto no-scrollbar space-y-0.5 animate-fadeIn">
+                    {cityList.map((city) => {
+                      const val = city === 'Tất cả địa điểm' ? '' : city;
+                      const isSelected = selectedCity === val;
+                      return (
+                        <button
+                          key={city}
+                          type="button"
+                          onClick={() => {
+                            setSelectedCity(val);
+                            setOpenFilterDropdown(null);
+                          }}
+                          className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
+                            isSelected
+                              ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
+                              : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                          }`}
+                        >
+                          <span className="truncate pr-2">{city}</span>
+                          {isSelected && (
+                            <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
             </div>
 
             {/* PHẦN LỌC NÂNG CAO */}
@@ -564,57 +702,191 @@ export const JobSearchView = ({
               </div>
 
               {/* Lọc nâng cao 4: Mức lương */}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative">
                 <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                   Mức lương
                 </label>
-                <select
-                  value={selectedSalaryRange}
-                  onChange={(e) => setSelectedSalaryRange(e.target.value)}
-                  className="w-full bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-hidden focus:border-slate-900 focus:bg-white cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenFilterDropdown(openFilterDropdown === 'salary' ? null : 'salary')
+                  }
+                  className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
+                    selectedSalaryRange || openFilterDropdown === 'salary'
+                      ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
+                      : 'bg-slate-50/90 hover:bg-slate-100/80 border-slate-200 text-slate-700 font-medium'
+                  }`}
                 >
-                  {salaryOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  <span className="truncate pr-2">
+                    {salaryOptions.find((o) => o.value === selectedSalaryRange)?.label ||
+                      'Tất cả mức lương'}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${
+                      openFilterDropdown === 'salary' ? 'rotate-180 text-slate-900' : ''
+                    }`}
+                  />
+                </button>
+
+                {openFilterDropdown === 'salary' && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-20"
+                      onClick={() => setOpenFilterDropdown(null)}
+                    />
+                    <div className="absolute left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-30 max-h-56 overflow-y-auto no-scrollbar space-y-0.5 animate-fadeIn">
+                      {salaryOptions.map((opt) => {
+                        const isSelected = selectedSalaryRange === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => {
+                              setSelectedSalaryRange(opt.value);
+                              setOpenFilterDropdown(null);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
+                              isSelected
+                                ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
+                                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                            }`}
+                          >
+                            <span className="truncate pr-2">{opt.label}</span>
+                            {isSelected && (
+                              <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Lọc nâng cao 5: Kinh nghiệm */}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative">
                 <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                   Kinh nghiệm
                 </label>
-                <select
-                  value={selectedExperience}
-                  onChange={(e) => setSelectedExperience(e.target.value)}
-                  className="w-full bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-hidden focus:border-slate-900 focus:bg-white cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenFilterDropdown(
+                      openFilterDropdown === 'experience' ? null : 'experience'
+                    )
+                  }
+                  className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
+                    selectedExperience || openFilterDropdown === 'experience'
+                      ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
+                      : 'bg-slate-50/90 hover:bg-slate-100/80 border-slate-200 text-slate-700 font-medium'
+                  }`}
                 >
-                  {experienceOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  <span className="truncate pr-2">
+                    {experienceOptions.find((o) => o.value === selectedExperience)?.label ||
+                      'Tất cả kinh nghiệm'}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${
+                      openFilterDropdown === 'experience' ? 'rotate-180 text-slate-900' : ''
+                    }`}
+                  />
+                </button>
+
+                {openFilterDropdown === 'experience' && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-20"
+                      onClick={() => setOpenFilterDropdown(null)}
+                    />
+                    <div className="absolute left-0 right-0 mt-1.5 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-30 max-h-56 overflow-y-auto no-scrollbar space-y-0.5 animate-fadeIn">
+                      {experienceOptions.map((opt) => {
+                        const isSelected = selectedExperience === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => {
+                              setSelectedExperience(opt.value);
+                              setOpenFilterDropdown(null);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
+                              isSelected
+                                ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
+                                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                            }`}
+                          >
+                            <span className="truncate pr-2">{opt.label}</span>
+                            {isSelected && (
+                              <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Lọc nâng cao 6: Hình thức */}
-              <div className="space-y-1.5">
+              <div className="space-y-1.5 relative">
                 <label className="text-[11px] font-bold text-slate-700 uppercase tracking-wider block">
                   Hình thức làm việc
                 </label>
-                <select
-                  value={selectedJobType}
-                  onChange={(e) => setSelectedJobType(e.target.value)}
-                  className="w-full bg-slate-50/80 border border-slate-200 rounded-lg px-3 py-2 text-xs font-medium text-slate-700 focus:outline-hidden focus:border-slate-900 focus:bg-white cursor-pointer"
+                <button
+                  type="button"
+                  onClick={() =>
+                    setOpenFilterDropdown(openFilterDropdown === 'jobType' ? null : 'jobType')
+                  }
+                  className={`w-full border rounded-full px-3.5 py-2 text-xs flex items-center justify-between transition-all cursor-pointer text-left ${
+                    selectedJobType || openFilterDropdown === 'jobType'
+                      ? 'bg-white border-slate-900 text-slate-900 font-semibold shadow-2xs'
+                      : 'bg-slate-50/90 hover:bg-slate-100/80 border-slate-200 text-slate-700 font-medium'
+                  }`}
                 >
-                  {jobTypeOptions.map((opt) => (
-                    <option key={opt.value} value={opt.value}>
-                      {opt.label}
-                    </option>
-                  ))}
-                </select>
+                  <span className="truncate pr-2">
+                    {jobTypeOptions.find((o) => o.value === selectedJobType)?.label ||
+                      'Tất cả hình thức'}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 text-slate-500 shrink-0 transition-transform duration-200 ${
+                      openFilterDropdown === 'jobType' ? 'rotate-180 text-slate-900' : ''
+                    }`}
+                  />
+                </button>
+
+                {openFilterDropdown === 'jobType' && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-20"
+                      onClick={() => setOpenFilterDropdown(null)}
+                    />
+                    <div className="absolute left-0 right-0 bottom-full mb-1.5 bg-white rounded-2xl shadow-xl border border-slate-200/90 p-1.5 z-30 max-h-56 overflow-y-auto no-scrollbar space-y-0.5 animate-fadeIn">
+                      {jobTypeOptions.map((opt) => {
+                        const isSelected = selectedJobType === opt.value;
+                        return (
+                          <button
+                            key={opt.value}
+                            type="button"
+                            onClick={() => {
+                              setSelectedJobType(opt.value);
+                              setOpenFilterDropdown(null);
+                            }}
+                            className={`w-full text-left px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer flex items-center justify-between ${
+                              isSelected
+                                ? 'bg-blue-50/80 text-[#0A58CA] font-bold'
+                                : 'text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 font-medium'
+                            }`}
+                          >
+                            <span className="truncate pr-2">{opt.label}</span>
+                            {isSelected && (
+                              <Check className="w-3.5 h-3.5 text-[#0A58CA] shrink-0" />
+                            )}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Lọc nâng cao 7: Checkbox */}
@@ -735,14 +1007,14 @@ export const JobSearchView = ({
                       </div>
 
                       {/* Salary, Location, Type */}
-                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs">
-                        <span className="text-slate-600 font-medium text-[11px]">
+                      <div className="mt-2 flex flex-wrap items-center gap-2 text-xs text-slate-500 font-medium">
+                        <span className="text-xs text-slate-500 font-medium">
                           {job.salary}
                         </span>
-                        <span className="text-slate-500 text-[11px] truncate max-w-[140px] before:content-['•'] before:mr-2 before:text-slate-300">
+                        <span className="text-xs text-slate-500 font-medium truncate max-w-[140px] before:content-['•'] before:mr-2 before:text-slate-300">
                           {job.location}
                         </span>
-                        <span className="text-slate-500 text-[11px] before:content-['•'] before:mr-2 before:text-slate-300">
+                        <span className="text-xs text-slate-500 font-medium before:content-['•'] before:mr-2 before:text-slate-300">
                           {job.jobType}
                         </span>
                       </div>
@@ -862,7 +1134,7 @@ export const JobSearchView = ({
                           <button
                             type="button"
                             onClick={(e) => onToggleSave && onToggleSave(activeJob.id, e)}
-                            className={`p-1.5 transition-all duration-200 cursor-pointer active:scale-75 hover:scale-115 flex items-center justify-center ${
+                            className={`p-2 rounded-full transition-all duration-200 cursor-pointer active:scale-75 hover:scale-115 hover:bg-slate-100 flex items-center justify-center ${
                               activeJob.isSaved
                                 ? 'text-rose-600'
                                 : 'text-slate-400 hover:text-slate-800'
@@ -874,7 +1146,7 @@ export const JobSearchView = ({
                           <button
                             type="button"
                             onClick={(e) => onShare && onShare(activeJob, e)}
-                            className="p-1.5 text-slate-400 hover:text-slate-800 transition-all duration-200 cursor-pointer active:scale-75 hover:scale-115 flex items-center justify-center"
+                            className="p-2 rounded-full text-slate-400 hover:text-slate-800 hover:bg-slate-100 transition-all duration-200 cursor-pointer active:scale-75 hover:scale-115 flex items-center justify-center"
                             title="Chia sẻ tin"
                           >
                             <Share2 className="w-5 h-5" />
@@ -1030,7 +1302,7 @@ export const JobSearchView = ({
               <button
                 type="button"
                 onClick={() => setMobileDetailOpen(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-md cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1088,7 +1360,7 @@ export const JobSearchView = ({
               <button
                 type="button"
                 onClick={() => setShowMobileFilterModal(false)}
-                className="p-1.5 text-slate-400 hover:text-slate-600 rounded-md cursor-pointer"
+                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-full cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -1102,7 +1374,7 @@ export const JobSearchView = ({
                   value={keyword}
                   onChange={(e) => setKeyword(e.target.value)}
                   placeholder="Vị trí, kỹ năng..."
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-full px-3.5 py-2 text-xs"
                 />
               </div>
 
@@ -1111,7 +1383,7 @@ export const JobSearchView = ({
                 <select
                   value={selectedIndustry}
                   onChange={(e) => setSelectedIndustry(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-full px-3.5 py-2 text-xs"
                 >
                   {industryList.map((ind) => (
                     <option key={ind} value={ind === 'Tất cả ngành nghề' ? '' : ind}>
@@ -1126,7 +1398,7 @@ export const JobSearchView = ({
                 <select
                   value={selectedCity}
                   onChange={(e) => setSelectedCity(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-full px-3.5 py-2 text-xs"
                 >
                   {cityList.map((c) => (
                     <option key={c} value={c === 'Tất cả địa điểm' ? '' : c}>
@@ -1141,7 +1413,7 @@ export const JobSearchView = ({
                 <select
                   value={selectedSalaryRange}
                   onChange={(e) => setSelectedSalaryRange(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-full px-3.5 py-2 text-xs"
                 >
                   {salaryOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -1156,7 +1428,7 @@ export const JobSearchView = ({
                 <select
                   value={selectedExperience}
                   onChange={(e) => setSelectedExperience(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-full px-3.5 py-2 text-xs"
                 >
                   {experienceOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
@@ -1171,7 +1443,7 @@ export const JobSearchView = ({
                 <select
                   value={selectedJobType}
                   onChange={(e) => setSelectedJobType(e.target.value)}
-                  className="w-full bg-slate-50 border border-slate-200 rounded-lg px-3 py-2 text-xs"
+                  className="w-full bg-slate-50 border border-slate-200 rounded-full px-3.5 py-2 text-xs"
                 >
                   {jobTypeOptions.map((opt) => (
                     <option key={opt.value} value={opt.value}>
