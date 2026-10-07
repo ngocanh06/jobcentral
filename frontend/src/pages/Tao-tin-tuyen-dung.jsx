@@ -9,6 +9,7 @@ import {
   Check,
   Plus,
   X,
+  StarIcon,
   GripVertical,
   MessageCircle,
   Phone,
@@ -16,7 +17,12 @@ import {
   Italic,
   List,
   Send,
+  ArrowRight,
+  Sparkles,
+  PenLine,
+  Briefcase,
 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const STEPS = [
   { id: 1, label: "Thông tin cơ bản" },
@@ -94,7 +100,111 @@ function Field({ label, children }) {
 const inputClass =
   "w-full rounded-lg border border-slatborder border-slate-300 rounded-lg px-3 py-2e-300 px-3 py-2 text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#2170e4]/40 focus:border-[#2170e4] transition";
 
-export default function JobPostingForm() {
+const postingOptions = [
+  {
+    title: "Tạo tin bằng AI",
+    description:
+      "Soạn nội dung nhanh hơn với trợ lý AI và xem trước tin tuyển dụng ngay khi chỉnh sửa.",
+    to: "/Dashboard/Tao-tin-tuyen-dung/ai",
+    icon: Sparkles,
+    label: "NEW",
+    color: "text-[#2170e4]",
+    iconBg: "bg-blue-200",
+    bgimg:"/picture/pic_PostJob1.png",
+  },
+  {
+    title: "Tạo tin thủ công",
+    description:
+      "Tự nhập thông tin, mô tả công việc và yêu cầu ứng viên theo cách của bạn.",
+    to: "/Dashboard/Tao-tin-tuyen-dung/manual",
+    icon: PenLine,
+    label: "",
+    color: "text-violet-600",
+    iconBg: "bg-violet-50",
+    bgimg:"/picture/pic_PostJob2.png",
+  },
+  {
+    title: "Tuyển dụng Job Parttime",
+    description:
+      "Quy trình xử lý nhanh chóng, HIRA chọn lựa ứng viên ngay lập tức với độ chính xác cao",
+    to: "/Dashboard/Tao-tin-tuyen-dung/manual",
+    icon: StarIcon,
+    label: "",
+    color: "text-rose-600",
+    iconBg: "bg-rose-50",
+    bgimg:"/picture/pic_PostJob3.png",
+  },
+  {
+    title: "Tin đã đăng",
+    description:
+      "Quay lại danh sách để theo dõi, chỉnh sửa và quản lý các tin tuyển dụng.",
+    to: "/Dashboard/Quan-li-tin-tuyen-dung",
+    icon: Briefcase,
+    label: "",
+    color: "text-emerald-600",
+    iconBg: "bg-emerald-50",
+    bgimg:"/picture/pic_PostJob4.png",
+  },
+];
+
+export function JobPostingOptions() {
+  return (
+    <div className="min-h-full bg-slate-50 px-4 py-10 md:px-8 md:py-16">
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-10 text-center">
+          <h1 className="text-3xl font-bold text-slate-900 md:text-5xl">
+            Tạo tin tuyển dụng cùng <span className="bg-gradient-to-b from-[#5973f7] to-[#62c8f0] bg-clip-text text-transparent" >JobCentral HIRA</span>
+          </h1>
+          <p className="mx-auto mt-3 max-w-xl text-sm leading-6 text-slate-500">
+            Chọn một cách để tiếp tục quy trình đăng tuyển của bạn.
+          </p>
+        </div>
+
+        <div className="grid gap-5 md:grid-cols-2">
+          {postingOptions.map((option) => {
+            const Icon = option.icon;
+            return (
+              <Link
+                key={option.title}
+                to={option.to}
+                style={{ backgroundImage: `url(${option.bgimg})` }}
+                className={`group relative flex min-h-64 flex-col rounded-2xl border border-slate-200 p-6 shadow-sm transition-all hover:-translate-y-1 hover:border-blue-200 hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-[#2170e4]/40`}
+              >
+                {option.label && (
+                  <span className="absolute right-5 top-5 rounded-full bg-blue-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wide text-[#2170e4]">
+                    {option.label}
+                  </span>
+                )}
+                {/* <div
+                  className={`mb-6 flex h-12 w-12 items-center justify-center rounded-xl ${option.iconBg} ${option.color}`}
+                >
+                  <Icon size={22} />
+                </div> */}
+                <h2 className="text-2xl font-bold text-white">
+                  {option.title}
+                </h2>
+                <p className="mt-2 flex-1 text-lg leading-6 w-[360px] text-slate-100">
+                  {option.description}
+                </p>
+                <span
+                  className={`mt-5 inline-flex items-center gap-2 text-sm font-semibold text-white`}
+                >
+                  Tiếp tục
+                  <ArrowRight
+                    size={16}
+                    className="transition-transform group-hover:translate-x-1"
+                  />
+                </span>
+              </Link>
+            );
+          })}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function JobPostingForm({ mode = "ai" }) {
   const [step, setStep] = useState(1);
   const [form, setForm] = useState({
     title: "",
@@ -169,12 +279,22 @@ export default function JobPostingForm() {
         <div>
           <h1 className="text-base font-semibold text-slate-900">
             Tạo tin tuyển dụng{" "}
-            <span className="text-[#2170e4]">với Trợ lý AI</span>
+            <span className="text-[#2170e4]">
+              {mode === "ai" ? "với Trợ lý AI" : "thủ công"}
+            </span>
           </h1>
           <p className="text-xs text-slate-400">
-            Phân tích dữ liệu, đề xuất giải pháp
+            {mode === "ai"
+              ? "Phân tích dữ liệu, đề xuất giải pháp"
+              : "Chủ động nhập và quản lý nội dung tin tuyển dụng"}
           </p>
         </div>
+        <Link
+          to="/Dashboard/Tao-tin-tuyen-dung"
+          className="rounded-lg px-3 py-2 text-sm font-medium text-slate-500 transition hover:bg-slate-100 hover:text-[#2170e4]"
+        >
+          Đổi cách tạo tin
+        </Link>
       </div>
 
       <StepIndicator
@@ -598,47 +718,7 @@ export default function JobPostingForm() {
             💡 Mẹo cho nhà tuyển dụng: mô tả công việc rõ ràng, cụ thể sẽ thu
             hút gấp 2 lần số ứng viên phù hợp và rút ngắn thời gian tuyển dụng.
           </div>
-
-          {/* Chat widget */}
-          <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
-            <div className="bg-[#2170e4] text-white px-3 py-2.5 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-medium">
-                <MessageCircle size={14} /> StickyAI
-              </div>
-              <X size={14} className="cursor-pointer opacity-80" />
-            </div>
-
-            <div className="p-3 space-y-2 bg-slate-50 h-[200px]">
-              <div className="bg-white rounded-lg rounded-tl-none px-3 py-2 text-xs text-slate-600 max-w-[85%] shadow-sm">
-                Chào! Tôi bạn tôi là AI hỗ trợ! bạn cần giúp gì ?
-              </div>
-              {/* <div className="bg-[#2170e4] text-white rounded-lg rounded-tr-none px-3 py-2 text-xs max-w-[85%] ml-auto shadow-sm">
-                Tôi muốn tìm hiểu thêm về gói Doanh nghiệp.
-              </div>
-              <div className="bg-white rounded-lg rounded-tl-none px-3 py-2 text-xs text-slate-600 max-w-[85%] shadow-sm">
-                Được chứ! Gói Doanh nghiệp của chúng tôi bao gồm hỗ trợ 24/7. Bạn có muốn đặt lịch demo không?
-              </div> */}
-            </div>
-            <div className="flex items-center gap-2 px-3 py-2 border-t border-slate-200">
-              <input
-                placeholder="Nhập tin nhắn..."
-                className="flex-1 text-xs outline-none placeholder:text-slate-400"
-              />
-              <button className="text-[#2170e4]">
-                <Send size={15} />
-              </button>
-            </div>
-          </div>
-
-          <div className="flex justify-end gap-2">
-            <button className="h-9 w-9 rounded-full bg-[#2170e4] text-white flex items-center justify-center shadow">
-              <MessageCircle size={16} />
-            </button>
-            <button className="h-9 w-9 rounded-full bg-[#2170e4] text-white flex items-center justify-center shadow">
-              <Phone size={16} />
-            </button>
-          </div>
-        </div>
+       </div>
       </div>
 
       {/* Footer actions */}

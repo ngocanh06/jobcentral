@@ -6,9 +6,17 @@ import {
   UserRound,
   ShieldCheck,
   LogOut,
+  ShoppingCart,
   MonitorCog,
   BriefcaseBusiness,
+  User,
+  info,
   ArrowLeftRight,
+  Search,
+  Mail,
+  Info,
+  Cog,
+  SquarePen,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
@@ -44,35 +52,41 @@ export default function NavBar() {
   ];
 
   const links = [
-    { label: t("nav.product"), href: "#product" },
-    { label: t("Tạo tin tuyển dụng"), href: "/Tao-tin-tuyen-dung" },
-    { label: t("nav.handbook"), href: "/cam-nang-tuyen-dung" },
-    { label: t("nav.contact"), href: "/Ho-tro-intro" },
+    {
+      icon: <SquarePen />,
+      label: "Tạo tin tuyển dụng",
+      href: "/Dashboard/Tao-tin-tuyen-dung",
+    },
+    { icon: <Search />, label: "Tra cứu CV", href: "/Dashboard/Hint-Ung-Vien" },
+    { icon: <Mail />, label: "Tin Nhắn", href: "Dashboard/tin-nhan" },
+    { icon: <Info />, label: "Gợi ý", href: "#product" },
   ];
 
   return (
-    <header className="bg-white border-b border-slate-200 pl-8 py-3 flex items-center justify-between sticky top-0 z-10">
-      <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
+    <header className="bg-[#212f3f] border-b border-[#354456] py-3 flex items-center justify-end sticky top-0 z-10">
+      <nav className="hidden items-center gap-7 text-sm font-medium text-white lg:flex">
         {links.map((link) => (
           <Link
             key={link.href}
             to={link.href}
-            className={`relative py-1 transition-colors
-      after:absolute after:bottom-0 after:left-0 after:h-[2px]
-      after:bg-blue-600 after:transition-all after:duration-300
-      `}
+            className="flex items-center gap-2 bg-[#354456] rounded-full px-4 py-2.5 text-gray-300 transition-all duration-200 hover:bg-[#354470] hover:text-white"
           >
-            {link.label}
+            <span className="flex items-center">{link.icon}</span>
+            <span>{link.label}</span>
           </Link>
         ))}
+
         <div className="group relative">
           <button
             type="button"
             aria-haspopup="true"
-            className="flex items-center gap-1 py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+            className="flex items-center gap-2 bg-[#354456] rounded-full px-4 py-2.5 text-gray-300 transition-all duration-200 hover:bg-[#354470] hover:text-white"
           >
-            {t("nav.utilities")}
-            <span className="text-xs text-slate-400">▼</span>
+            <span className="group inline-flex">
+              <Cog className="transition-transform duration-700 group-hover:rotate-180" />
+            </span>
+            {"Công cụ"}
+            <span className="text-xs text-white">▼</span>
           </button>
           <div className="invisible absolute left-0 top-full z-50 mt-2 w-64 translate-y-1 rounded-xl border border-slate-200 bg-white p-1.5 text-sm opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
             <Link
@@ -115,7 +129,7 @@ export default function NavBar() {
 
       <div
         ref={menuRef}
-        className="w-72 flex justify-end items-center gap-3 relative"
+        className="w-60 flex justify-end items-center gap-3 relative"
       >
         <div className="relative">
           <button
@@ -123,9 +137,9 @@ export default function NavBar() {
             onClick={() =>
               setOpenMenu(openMenu === "notifications" ? null : "notifications")
             }
-            className="relative p-2 rounded-full hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-2 bg-[#354456] rounded-full px-4 py-2.5 transition-all duration-200 hover:bg-[#354470] hover:text-white"
           >
-            <Bell size={18} className="text-slate-400" />
+            <Bell size={18} className="text-white" />
             <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-red-500 border-2 border-white" />
           </button>
 
@@ -185,9 +199,9 @@ export default function NavBar() {
             onClick={() =>
               setOpenMenu(openMenu === "settings" ? null : "settings")
             }
-            className="p-2 rounded-full hover:bg-slate-100 transition-colors"
+            className="flex items-center gap-2 bg-[#354456] rounded-full px-4 py-2.5 text-gray-300 transition-all duration-200 hover:bg-[#354470] hover:text-white"
           >
-            <SettingsIcon size={18} className="text-slate-400" />
+            <ShoppingCart size={18} className="text-[#fff]" />
           </button>
 
           {openMenu === "settings" && (
@@ -216,16 +230,13 @@ export default function NavBar() {
             onClick={() =>
               setOpenMenu(openMenu === "profile" ? null : "profile")
             }
-            className="flex items-center gap-2 rounded-full px-2 py-1.5 hover:bg-slate-50 transition-colors"
+            className="mr-1 flex items-center gap-2 bg-[#354456] rounded-full px-4 py-2.5 text-gray-300 transition-all duration-200 hover:bg-[#354470] hover:text-white"
           >
-            <div className="w-9 h-9 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-semibold text-indigo-600">
+            <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-sm font-semibold text-indigo-600">
               U
             </div>
-            <div className="text-xs text-right leading-tight">
-              <p className="font-medium text-slate-700">User</p>
-              <p className="text-slate-400">MANAGER</p>
-            </div>
-            <ChevronDown size={14} className="text-slate-400" />
+            <div className="text-xs text-right leading-tight"></div>
+            <ChevronDown size={14} className="text-[#fff]" />
           </button>
 
           {openMenu === "profile" && (

@@ -56,28 +56,28 @@ const navItems = [
   {
     icon: LayoutDashboard,
     label: "DashBoard",
-    path: "dashboard",
+    path: "Dashboard",
     active: true,
   },
 
   {
     icon: ClipboardList,
     label: "Quản lý đăng tuyển",
-    path: "/quan-li-tin-tuyen-dung",
+    path: "Dashboard/Quan-li-tin-tuyen-dung",
   },
-  { icon: MessageSquare, label: "Tin nhắn", path: "/tin-nhan" },
-  { icon: Users, label: "Quản lý ứng viên", path: "/quan-li-ung-vien" },
-  { icon: Sparkles, label: "Tra cứu ứng viên", path: "/Hint-Ung-Vien" },
-  { icon: Calendar, label: "Lịch phỏng vấn", path: "/lich-phong-van" },
-  { icon: CheckCircle2, label: "Truth Score", path: "/Truth-Score" },
-  { icon: Bot, label: "ChatBox", path: "/ChatBox" },
-  { icon: Package, label: "Gói dịch vụ", path: "/goi-dich-vu" },
-  { icon: UserCog, label: "Quản lý tài khoản", path: "/quan-li-tai-khoan" },
+  // { icon: MessageSquare, label: "Tin nhắn", path: "Dashboard/tin-nhan" },
+  { icon: Users, label: "Quản lý ứng viên", path: "Dashboard/quan-li-ung-vien" },
+  { icon: Sparkles, label: "Tra cứu ứng viên", path: "Dashboard/Hint-Ung-Vien" },
+  { icon: Calendar, label: "Lịch phỏng vấn", path: "Dashboard/lich-phong-van" },
+  { icon: CheckCircle2, label: "Truth Score", path: "Dashboard/Truth-Score" },
+  { icon: Bot, label: "ChatBox", path: "Dashboard/ChatBox" },
+  { icon: Package, label: "Gói dịch vụ", path: "Dashboard/goi-dich-vu" },
+  { icon: UserCog, label: "Quản lý tài khoản", path: "Dashboard/quan-li-tai-khoan" },
 ];
 
 const systemNavItems = [
-  { icon: Settings, label: "Cài đặt", path: "/cai-dat" },
-  { icon: HelpCircle, label: "Hỗ trợ", path: "/ho-tro" },
+  { icon: Settings, label: "Cài đặt", path: "Dashboard/cai-dat" },
+  { icon: HelpCircle, label: "Hỗ trợ", path: "Dashboard/ho-tro" },
 ];
 
 export default function SideBar() {

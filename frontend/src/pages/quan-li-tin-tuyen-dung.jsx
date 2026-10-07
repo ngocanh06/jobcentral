@@ -108,12 +108,13 @@ export default function Quan_li_tin_tuyen_dung() {
           </div>
 
 
-          <Link to={"/Tao-tin-tuyen-dung"}>
-              <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
-                <span className="text-lg leading-none">+</span> Tạo tin tuyển
-                dụng mới
-              </button>
-            </Link>
+          <Link
+            to="/Dashboard/Tao-tin-tuyen-dung"
+            className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2"
+          >
+            <span className="text-lg leading-none">+</span> Tạo tin tuyển dụng
+            mới
+          </Link>
         </div>
 
         {/* Search */}

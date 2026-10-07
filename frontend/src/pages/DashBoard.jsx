@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
 import TimeOfDay from "../components/GetTime";
-import { Book, laptop } from "lucide-react";
+import { Book } from "lucide-react";
 
 const session = TimeOfDay();
 const statCards = [
@@ -132,7 +132,7 @@ export default function RecruiterDashboard() {
                 Theo dõi tổng quan và quản lý hiệu quả hoạt động tuyển dụng.
               </p>
             </div>
-            <Link to={"/Tao-tin-tuyen-dung"}>
+            <Link to="/Dashboard/Tao-tin-tuyen-dung">
               <button className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2">
                 <span className="text-lg leading-none">+</span> Tạo tin tuyển
                 dụng mới
@@ -187,53 +187,53 @@ export default function RecruiterDashboard() {
             </div>
 
             {/* Funnel */}
-          <div
-  className="relative overflow-hidden rounded-2xl bg-cover bg-center p-5 shadow-lg border border-white/10"
-  style={{
-    backgroundImage: "url('/picture/funnel1.png')",
-  }}
->
-  {/* Lớp overlay tối mờ giúp tương phản chữ tốt và tạo chiều sâu */}
-  <div className="absolute inset-0 bg-gradient-to-r from-blue-950/85 to-slate-900/50" />
+            <div
+              className="relative overflow-hidden rounded-2xl bg-cover bg-center p-5 shadow-lg border border-white/10"
+              style={{
+                backgroundImage: "url('/picture/funnel1.png')",
+              }}
+            >
+              {/* Lớp overlay tối mờ giúp tương phản chữ tốt và tạo chiều sâu */}
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-950/85 to-slate-900/50" />
 
-  {/* Nội dung chính bên trong */}
-  <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    {/* Cột chữ & danh sách link */}
-    <div className="space-y-2.5 text-white">
-      <div>
-        <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
-          Good {session},{" "}
-          <span className="bg-gradient-to-r from-rose-400 to-pink-300 bg-clip-text text-transparent">
-            User!
-          </span>{" "}
-          👋
-        </h3>
-        <p className="text-xs text-slate-300/90">
-          Đây là một số thông tin hướng dẫn nhanh:
-        </p>
-      </div>
+              {/* Nội dung chính bên trong */}
+              <div className="relative z-10 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                {/* Cột chữ & danh sách link */}
+                <div className="space-y-2.5 text-white">
+                  <div>
+                    <h3 className="text-lg font-bold tracking-tight text-white flex items-center gap-1.5">
+                      Good {session},{" "}
+                      <span className="bg-gradient-to-r from-rose-400 to-pink-300 bg-clip-text text-transparent">
+                        User!
+                      </span>{" "}
+                      👋
+                    </h3>
+                    <p className="text-xs text-slate-300/90">
+                      Đây là một số thông tin hướng dẫn nhanh:
+                    </p>
+                  </div>
 
-      {/* Danh sách link dạng viên thuốc (badge/pill) mờ nhẹ */}
-      <div className="flex flex-col gap-3 pt-1 pt-9 ">
-        <a
-          href="/huong-dan-su-dung"
-          className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/20 hover:text-white"
-        >
-          <Book className="h-4.5 w-4.5 text-rose-400 transition-transform group-hover:scale-110" />
-          <span>FAQ / Hướng dẫn sử dụng</span>
-        </a>
+                  {/* Danh sách link dạng viên thuốc (badge/pill) mờ nhẹ */}
+                  <div className="flex flex-col gap-3 pt-1 pt-9 ">
+                    <Link
+                      to="/Ho-tro"
+                      className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/20 hover:text-white"
+                    >
+                      <Book className="h-4.5 w-4.5 text-rose-400 transition-transform group-hover:scale-110" />
+                      <span>Hỗ trợ / Hướng dẫn sử dụng</span>
+                    </Link>
 
-        <a
-          href="/danh-muc-san-pham"
-          className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/20 hover:text-white"
-        >
-          <Laptop className="h-4.5 w-4.5 text-rose-400 transition-transform group-hover:scale-110" />
-          <span>Danh mục sản phẩm</span>
-        </a>
-      </div>
-    </div>
-  </div>
-</div>
+                    <Link
+                      to="/Goi-dich-vu"
+                      className="group inline-flex items-center gap-2 rounded-lg border border-white/10 bg-white/10 px-3 py-1.5 text-sm font-medium text-slate-200 backdrop-blur-sm transition-all duration-200 hover:border-rose-400/40 hover:bg-rose-500/20 hover:text-white"
+                    >
+                      <Laptop className="h-4.5 w-4.5 text-rose-400 transition-transform group-hover:scale-110" />
+                      <span>Danh mục gói dịch vụ</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </div>
             {/* Chart */}
             <div className="bg-white rounded-xl border border-slate-200 p-5">
               <div className="flex items-center justify-between mb-4">
@@ -366,10 +366,15 @@ export default function RecruiterDashboard() {
               </div>
             </div>
             {/* vị trí đặt thông báo hoặc quảng cáo */}
-            <div className="lg:col-span-2 bg-[#2170e4] rounded-xl p-6 text-white flex items-center justify-between gap-6">
+            <div
+              className="lg:col-span-2 rounded-xl p-6 text-xl text-xl text-[#244ae0] flex items-center justify-between gap-6"
+              style={{
+                backgroundImage: "url('/picture/banner_qc.jpg')",
+              }}
+            >
               <div>
-                <h3 className="font-semibold mb-2">Thông tin thị trường</h3>
-                <p className="text-sm text-indigo-100 max-w-md">
+                <h3 className="font-bold text-2xl mb-2">Thông tin thị trường</h3>
+                <p className="text-sm text- max-w-md">
                   Dự báo dựa trên trí tuệ nhân tạo cho thấy nhu cầu tuyển dụng
                   nhân sự công nghệ ở Đông Nam Á sẽ tăng 15% trong quý tới.
                 </p>
@@ -410,7 +415,7 @@ export default function RecruiterDashboard() {
               </p>
             </div>
 
-            <Link to={"/Goi-dich-vu"} className="relative z-10">
+            <Link to="/Goi-dich-vu" className="relative z-10">
               <button className="bg-[#2170e4] text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2 whitespace-nowrap">
                 <Rocket size={15} /> Nâng cấp ngay
               </button>

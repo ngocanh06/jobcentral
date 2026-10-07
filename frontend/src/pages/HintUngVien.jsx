@@ -210,7 +210,7 @@ const extraCategories = [
       "Sản xuất video / Nhiếp ảnh",
     ],
   },
-    {
+  {
     name: "Tài chính / Ngân hàng",
     items: [
       "Kế toán / Kiểm toán",
@@ -269,7 +269,17 @@ const candidateDataByIndustry = Object.fromEntries(
 // ĐẶT DỮ LIỆU TẠI ĐÂY: thêm hồ sơ vào mảng của ngành tương ứng.
 
 // dataDemo
-candidateDataByIndustry["Bán hàng / Kinh doanh"].push({ id:1, industry: "Sales", candidateName:"Kiệt", experience: "1 năm", location: "đà nẵng", desiredSalary:"300$", lastAccessed:"1 day", email:"ktv", skills:"quickly" });
+candidateDataByIndustry["Bán hàng / Kinh doanh"].push({
+  id: 1,
+  industry: "Sales",
+  candidateName: "Kiệt",
+  experience: "1 năm",
+  location: "đà nẵng",
+  desiredSalary: "300$",
+  lastAccessed: "1 day",
+  email: "ktv",
+  skills: "quickly",
+});
 
 // Trả về số cột theo kích thước màn hình: 1 (mobile), 2 (tablet), 3 (desktop)
 function useColumnCount() {
@@ -474,7 +484,14 @@ export default function CandidateSearchPage() {
                 <Search className="h-3.5 w-3.5" />
                 Tìm Hồ Sơ
               </button>
-              <button
+            </div>
+          </div>
+                
+
+
+
+{/* 
+<button
                 onClick={() => setActiveTab("parttime")}
                 aria-pressed={activeTab === "parttime"}
                 className={`flex items-center gap-1.5 rounded-md px-3.5 py-1.5 text-xs font-bold transition-colors ${
@@ -485,9 +502,11 @@ export default function CandidateSearchPage() {
               >
                 <Users className="h-3.5 w-3.5" />
                 Tuyển Dụng PartTime
-              </button>
-            </div>
-          </div>
+              </button> */}
+
+
+
+
 
           <div className="grid gap-x-6 gap-y-6 md:grid-cols-2 lg:grid-cols-3">
             {activeFilters.map((f) => (
@@ -582,7 +601,7 @@ export default function CandidateSearchPage() {
                       candidateCount={c.items.reduce(
                         (total, industry) =>
                           total +
-                        // tóng số lượng ứng viên của cả ngành
+                          // tóng số lượng ứng viên của cả ngành
                           (candidateDataByIndustry[industry]?.length || 0),
                         0,
                       )}
