@@ -131,7 +131,7 @@ export const ApplyJobView = ({
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#0A58CA] transition-colors cursor-pointer py-1 px-2.5 rounded-lg hover:bg-white"
+            className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#0A58CA] transition-colors cursor-pointer py-1 px-2.5 rounded-lg"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Quay lại chi tiết công việc</span>
@@ -347,7 +347,7 @@ export const ApplyJobView = ({
                   onClick={() => setSearchVisibility('urgent')}
                   className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-1.5 transition-all cursor-pointer ${
                     searchVisibility === 'urgent'
-                      ? 'bg-amber-500 text-slate-950 shadow-xs'
+                      ? 'bg-yellow-400 hover:bg-yellow-500 text-slate-900 shadow-xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                   }`}
                 >
@@ -362,13 +362,13 @@ export const ApplyJobView = ({
               </p>
             </div>
 
-            {/* Block 4: NÚT GỬI ỨNG TUYỂN VÀNG GOLD NỔI BẬT THEO YÊU CẦU */}
+            {/* Block 4: NÚT GỬI ỨNG TUYỂN */}
             <div className="pt-2">
               <button
                 type="submit"
                 id="submit-standard-application-btn"
                 disabled={isSubmitting}
-                className="w-full py-4 px-8 rounded-2xl font-black text-sm sm:text-base uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-lg active:scale-98 disabled:opacity-75 flex items-center justify-center space-x-2 bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 hover:from-amber-500 hover:via-yellow-500 hover:to-amber-600 text-slate-950 border border-yellow-300 shadow-amber-400/25 hover:shadow-amber-400/40 hover:shadow-xl"
+                className="w-full py-4 px-8 rounded-2xl font-black text-sm sm:text-base uppercase tracking-wider transition-all duration-200 cursor-pointer shadow-xs active:scale-98 disabled:opacity-75 flex items-center justify-center space-x-2 bg-yellow-400 hover:bg-yellow-500 text-slate-900"
               >
                 {isSubmitting ? (
                   <>
@@ -376,10 +376,7 @@ export const ApplyJobView = ({
                     <span>ĐANG GỬI HỒ SƠ ỨNG TUYỂN...</span>
                   </>
                 ) : (
-                  <>
-                    <Sparkles className="w-5 h-5 fill-slate-900 text-slate-900" />
-                    <span>ỨNG TUYỂN VỊ TRÍ NÀY</span>
-                  </>
+                  <span>ỨNG TUYỂN VỊ TRÍ NÀY</span>
                 )}
               </button>
               <p className="text-[11px] text-center text-slate-400 mt-2.5">

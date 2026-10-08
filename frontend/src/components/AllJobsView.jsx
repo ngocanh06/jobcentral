@@ -1619,7 +1619,7 @@ export const AllJobsView = ({
             : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
         }`}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+        <div className="flex flex-col items-start gap-4 mb-6">
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-left">
             Kết Nối Với Những Công Ty <span className="text-[#2170E4]">Hàng Đầu</span>
           </h2>
