@@ -7,7 +7,99 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@keyframes zalo-widget-open {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.zalo-widget-open {
+  animation: zalo-widget-open 280ms ease-out both;
+  transform-origin: bottom right;
+}
+
+@keyframes clients-page-enter {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.clients-page-enter {
+  animation: clients-page-enter 500ms ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clients-page-enter,
+  .zalo-widget-open {
+    animation: none;
+  }
+}
+
+html.dark,
+html.dark body,
+html.dark #root {
+  background-color: #0f172a;
+  color: #e2e8f0;
+}
+
+html.dark input,
+html.dark textarea,
+html.dark select {
+  background-color: #1e293b;
+  border-color: #475569;
+  color: #e2e8f0;
+}
+
+html.dark .bg-white {
+  background-color: #1e293b !important;
+}
+
+html.dark .bg-slate-50,
+html.dark .bg-gray-50 {
+  background-color: #0f172a !important;
+}
+
+html.dark .text-slate-900,
+html.dark .text-gray-900,
+html.dark .text-slate-800 {
+  color: #f8fafc !important;
+}
+
+html.dark .text-slate-600,
+html.dark .text-slate-500,
+html.dark .text-gray-500 {
+  color: #94a3b8 !important;
+}
+
+html.dark .border-slate-200,
+html.dark .border-gray-200 {
+  border-color: #334155 !important;
 }
