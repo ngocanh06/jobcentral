@@ -11,6 +11,7 @@ import {
   Share2,
   Award,
   Sparkles,
+  Zap,
 } from 'lucide-react';
 
 export const JobDetailModal = ({
@@ -23,10 +24,10 @@ export const JobDetailModal = ({
   if (!job) return null;
 
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 md:p-6 animate-fadeIn">
       <div
         id={`job-detail-modal-${job.id}`}
-        className="bg-white rounded-2xl sm:rounded-3xl max-w-3xl w-full max-h-[92vh] sm:max-h-[90vh] overflow-hidden shadow-2xl border border-slate-200 flex flex-col my-auto"
+        className="bg-white rounded-2xl sm:rounded-3xl max-w-3xl w-full max-h-[92vh] sm:max-h-[90vh] overflow-hidden overscroll-contain shadow-2xl border border-slate-200 flex flex-col my-auto"
       >
         {/* Modal Sticky Header */}
         <div className="p-4 sm:p-7 border-b border-slate-100 bg-slate-50/60 flex items-start justify-between gap-3 sm:gap-4 sticky top-0 z-10 backdrop-blur-md">
@@ -40,9 +41,17 @@ export const JobDetailModal = ({
               />
             </div>
             <div className="min-w-0">
-              <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[11px] sm:text-xs font-semibold mb-1">
-                <Sparkles className="w-3 h-3" />
-                <span className="truncate">{job.category}</span>
+              <div className="flex flex-wrap items-center gap-1.5 mb-1">
+                <div className="inline-flex items-center space-x-1.5 px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-[11px] sm:text-xs font-semibold">
+                  <Sparkles className="w-3 h-3" />
+                  <span className="truncate">{job.category}</span>
+                </div>
+                {job.isQuickApply && (
+                  <span className="inline-flex items-center space-x-1 px-2.5 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 text-[11px] font-bold">
+                    <Zap className="w-3 h-3 fill-amber-500 text-amber-500" />
+                    <span>Ứng tuyển nhanh (30 giây)</span>
+                  </span>
+                )}
               </div>
               <h2 className="text-base sm:text-2xl font-extrabold text-slate-900 leading-tight">
                 {job.title}
@@ -182,26 +191,40 @@ export const JobDetailModal = ({
               onClick={(e) => onToggleSave(job.id, e)}
               className={`px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-full border flex items-center space-x-1 sm:space-x-2 text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
                 job.isSaved
-                  ? 'border-indigo-200 bg-indigo-50 text-indigo-700'
-                  : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                  ? 'border-slate-300 bg-slate-100 text-slate-700 hover:bg-slate-200'
+                  : 'border-slate-200 text-slate-700 hover:bg-slate-100 hover:border-slate-300'
               }`}
             >
-              <Bookmark className={`w-4 h-4 ${job.isSaved ? 'fill-indigo-600 text-indigo-600' : ''}`} />
+              <Bookmark className={`w-4 h-4 ${job.isSaved ? 'fill-amber-400 text-amber-500' : 'text-slate-500'}`} />
               <span>{job.isSaved ? 'Đã lưu' : 'Lưu'}</span>
             </button>
           </div>
 
           <div className="flex items-center flex-1 sm:flex-initial justify-end">
-            <button
-              id="modal-apply-btn"
-              onClick={(e) => {
-                onClose();
-                onApply(job, e);
-              }}
-              className="w-full sm:w-auto px-5 sm:px-6 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-full shadow-md shadow-indigo-200 transition-all cursor-pointer text-center whitespace-nowrap"
-            >
-              Ứng tuyển ngay
-            </button>
+            {job.isQuickApply ? (
+              <button
+                id="modal-apply-btn"
+                onClick={(e) => {
+                  onClose();
+                  onApply(job, e);
+                }}
+                className="w-full sm:w-auto px-5 sm:px-6 py-2 sm:py-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs sm:text-sm rounded-full shadow-md shadow-amber-200 transition-all cursor-pointer text-center whitespace-nowrap flex items-center justify-center space-x-1.5 active:scale-95"
+              >
+                <Zap className="w-4 h-4 fill-white text-white" />
+                <span>Ứng tuyển nhanh (30 giây)</span>
+              </button>
+            ) : (
+              <button
+                id="modal-apply-btn"
+                onClick={(e) => {
+                  onClose();
+                  onApply(job, e);
+                }}
+                className="w-full sm:w-auto px-5 sm:px-6 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-full shadow-md shadow-indigo-200 transition-all cursor-pointer text-center whitespace-nowrap"
+              >
+                Ứng tuyển ngay
+              </button>
+            )}
           </div>
         </div>
       </div>

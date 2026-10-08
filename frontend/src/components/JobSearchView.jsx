@@ -22,6 +22,7 @@ import {
   Check,
   X,
   Filter,
+  Zap,
 } from 'lucide-react';
 
 export const JobSearchView = ({
@@ -1109,9 +1110,17 @@ export const JobSearchView = ({
                       {/* Bottom row: Time + Indicator */}
                       <div className="mt-2 pt-2 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-400">
                         <span>{job.postedTime}</span>
-                        <span className="text-slate-600 hover:text-slate-900 font-medium flex items-center transition-colors">
-                          Xem chi tiết <ChevronRight className="w-3 h-3 ml-0.5" />
-                        </span>
+                        <button
+                          type="button"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (onViewDetails) onViewDetails(job);
+                          }}
+                          className="text-slate-600 hover:text-[#0A58CA] font-semibold flex items-center transition-colors cursor-pointer"
+                        >
+                          <span>Xem chi tiết</span>
+                          <ChevronRight className="w-3 h-3 ml-0.5" />
+                        </button>
                       </div>
                     </div>
                   );
@@ -1158,10 +1167,10 @@ export const JobSearchView = ({
                         <button
                           type="button"
                           onClick={(e) => onToggleSave && onToggleSave(activeJob.id, e)}
-                          className={`px-3.5 py-1.5 rounded-full font-bold text-xs transition-all cursor-pointer active:scale-95 ${
+                          className={`px-3.5 py-1.5 rounded-full font-semibold text-xs transition-colors cursor-pointer ${
                             activeJob.isSaved
-                              ? 'bg-rose-50 text-rose-600 border border-rose-200'
-                              : 'border border-[#0A58CA] text-[#0A58CA] hover:bg-blue-50/60'
+                              ? 'bg-slate-100 text-slate-800 border border-slate-300'
+                              : 'border border-slate-200 text-slate-600 hover:bg-slate-100 hover:text-slate-900'
                           }`}
                         >
                           {activeJob.isSaved ? 'Đã lưu' : 'Lưu'}
@@ -1169,11 +1178,20 @@ export const JobSearchView = ({
 
                         <button
                           type="button"
-                          onClick={() => onApply && onApply(activeJob)}
+                          onClick={() => onApply && onApply(activeJob, { isQuickApply: isEasyApply })}
                           className="py-1.5 px-4 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs rounded-full transition-all flex items-center space-x-1.5 cursor-pointer active:scale-95 shadow-2xs"
                         >
-                          <Send className="w-3.5 h-3.5" />
-                          <span>Ứng tuyển nhanh</span>
+                          {isEasyApply ? (
+                            <>
+                              <Zap className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                              <span>Ứng tuyển nhanh</span>
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-3.5 h-3.5" />
+                              <span>Ứng tuyển ngay</span>
+                            </>
+                          )}
                         </button>
 
                         <button
@@ -1189,7 +1207,7 @@ export const JobSearchView = ({
                           type="button"
                           onClick={() => onViewDetails && onViewDetails(activeJob)}
                           className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
-                          title="Toàn màn hình"
+                          title="Xem trang chi tiết việc làm"
                         >
                           <ExternalLink className="w-4 h-4" />
                         </button>
@@ -1221,14 +1239,17 @@ export const JobSearchView = ({
                           <button
                             type="button"
                             onClick={(e) => onToggleSave && onToggleSave(activeJob.id, e)}
-                            className={`p-2 rounded-full transition-all duration-200 cursor-pointer active:scale-75 hover:scale-115 hover:bg-slate-100 flex items-center justify-center ${
-                              activeJob.isSaved
-                                ? 'text-rose-600'
-                                : 'text-slate-400 hover:text-slate-800'
-                            }`}
+                            className="p-2 rounded-full hover:bg-slate-100 transition-colors cursor-pointer flex items-center justify-center"
                             title={activeJob.isSaved ? 'Bỏ lưu tin' : 'Lưu tin tuyển dụng'}
+                            aria-label="Lưu tin tuyển dụng"
                           >
-                            <Bookmark className={`w-5 h-5 ${activeJob.isSaved ? 'fill-rose-600' : ''}`} />
+                            <Bookmark
+                              className={`w-5 h-5 transition-colors ${
+                                activeJob.isSaved
+                                  ? 'fill-amber-400 text-amber-500'
+                                  : 'text-slate-400 hover:text-amber-500'
+                              }`}
+                            />
                           </button>
                           <button
                             type="button"
@@ -1276,20 +1297,30 @@ export const JobSearchView = ({
                         <button
                           type="button"
                           id="search-apply-btn"
-                          onClick={() => onApply && onApply(activeJob)}
+                          onClick={() => onApply && onApply(activeJob, { isQuickApply: isEasyApply })}
                           className="flex-1 py-2.5 px-5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs sm:text-sm rounded-full transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 shadow-sm shadow-blue-500/20"
                         >
-                          <Send className="w-4 h-4" />
-                          <span>Ứng Tuyển Ngay</span>
+                          {isEasyApply ? (
+                            <>
+                              <Zap className="w-4 h-4 fill-amber-300 text-amber-300" />
+                              <span>Ứng tuyển nhanh</span>
+                            </>
+                          ) : (
+                            <>
+                              <Send className="w-4 h-4" />
+                              <span>Ứng Tuyển Ngay</span>
+                            </>
+                          )}
                         </button>
 
                         <button
                           type="button"
                           onClick={() => onViewDetails && onViewDetails(activeJob)}
                           className="py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 hover:border-[#0A58CA] hover:text-[#0A58CA] hover:bg-blue-50/40 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center space-x-1.5 shrink-0 group"
+                          title="Xem chi tiết việc làm"
                         >
                           <ExternalLink className="w-3.5 h-3.5 transition-colors group-hover:text-[#0A58CA]" />
-                          <span>Toàn màn hình</span>
+                          <span>Xem chi tiết</span>
                         </button>
                       </div>
                     </>
@@ -1426,12 +1457,21 @@ export const JobSearchView = ({
                 type="button"
                 onClick={() => {
                   setMobileDetailOpen(false);
-                  onApply && onApply(activeJob);
+                  onApply && onApply(activeJob, { isQuickApply: isEasyApply });
                 }}
                 className="flex-1 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs rounded-full flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm shadow-blue-500/20"
               >
-                <Send className="w-3.5 h-3.5" />
-                <span>Ứng tuyển ngay</span>
+                {isEasyApply ? (
+                  <>
+                    <Zap className="w-3.5 h-3.5 fill-amber-300 text-amber-300" />
+                    <span>Ứng tuyển nhanh</span>
+                  </>
+                ) : (
+                  <>
+                    <Send className="w-3.5 h-3.5" />
+                    <span>Ứng tuyển ngay</span>
+                  </>
+                )}
               </button>
             </div>
           </div>

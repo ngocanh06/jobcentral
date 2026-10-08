@@ -619,13 +619,13 @@ export const CompaniesView = ({
                         onClick={() => handleToggleFollowRecruiter(rec)}
                         className={`shrink-0 inline-flex items-center space-x-1 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer ${
                           isFollowing
-                            ? 'border-slate-400 bg-slate-100 text-slate-800 hover:bg-slate-200'
+                            ? 'border-slate-300 bg-slate-100 text-slate-800 hover:bg-slate-200'
                             : 'border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50/80 hover:border-[#004182]'
                         }`}
                       >
                         {isFollowing ? (
                           <>
-                            <Check className="w-4 h-4 stroke-[2.5]" />
+                            <Check className="w-4 h-4 text-amber-600 stroke-[2.5]" />
                             <span>Đang theo dõi</span>
                           </>
                         ) : (

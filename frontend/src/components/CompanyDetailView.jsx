@@ -465,13 +465,17 @@ export const CompanyDetailView = ({
                 if (e) e.stopPropagation();
                 toggleSave(job.id);
               }}
-              className="p-1.5 rounded-full text-slate-400 hover:text-[#2170E4] hover:bg-blue-50/60 transition-colors cursor-pointer"
+              className={`p-1.5 rounded-full transition-colors cursor-pointer ${
+                isSaved
+                  ? 'bg-slate-100 hover:bg-slate-200 text-amber-500'
+                  : 'text-slate-400 hover:text-amber-500 hover:bg-slate-100'
+              }`}
               title={isSaved ? 'Bỏ lưu việc làm' : 'Lưu việc làm'}
               aria-label="Lưu việc làm"
             >
               <Bookmark
                 className={`w-4 h-4 ${
-                  isSaved ? 'text-[#2170E4] fill-[#2170E4]' : ''
+                  isSaved ? 'text-amber-500 fill-amber-400' : ''
                 }`}
               />
             </button>
@@ -494,25 +498,40 @@ export const CompanyDetailView = ({
         {/* Footer Row: Posted Time & Apply Button */}
         <div className="flex items-center justify-between pt-2 border-t border-slate-100 text-xs">
           <span className="text-slate-400 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
-          <button
-            type="button"
-            id={`apply-btn-${job.id}`}
-            onClick={(e) => {
-              if (e) e.stopPropagation();
-              if (onApplyJob) {
-                onApplyJob({
-                  id: job.id,
-                  title: job.title,
-                  company: job.company,
-                  salary: job.salary,
-                  location: job.location,
-                });
-              }
-            }}
-            className="px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs transition-all cursor-pointer"
-          >
-            Ứng tuyển ngay
-          </button>
+          <div className="flex items-center space-x-2">
+            <button
+              type="button"
+              id={`view-detail-btn-${job.id}`}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                if (onViewJobDetail) {
+                  onViewJobDetail(job);
+                }
+              }}
+              className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-[#2170E4] font-semibold rounded-full text-xs transition-colors cursor-pointer"
+            >
+              Chi tiết
+            </button>
+            <button
+              type="button"
+              id={`apply-btn-${job.id}`}
+              onClick={(e) => {
+                if (e) e.stopPropagation();
+                if (onApplyJob) {
+                  onApplyJob({
+                    id: job.id,
+                    title: job.title,
+                    company: job.company,
+                    salary: job.salary,
+                    location: job.location,
+                  });
+                }
+              }}
+              className="px-4 py-1.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs transition-all cursor-pointer"
+            >
+              Ứng tuyển
+            </button>
+          </div>
         </div>
       </div>
     );
@@ -609,13 +628,13 @@ export const CompanyDetailView = ({
                     }}
                     className={`px-5 py-2.5 rounded-full text-xs sm:text-sm font-semibold border transition-all flex items-center space-x-1.5 cursor-pointer shadow-2xs ${
                       isFollowing
-                        ? 'bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100'
-                        : 'bg-white border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-50'
+                        ? 'bg-slate-100 border-slate-300 text-slate-800 hover:bg-slate-200'
+                        : 'bg-white border-slate-300 hover:border-slate-400 text-slate-700 hover:bg-slate-100'
                     }`}
                   >
                     {isFollowing ? (
                       <>
-                        <Check className="w-4 h-4 text-rose-600" />
+                        <Check className="w-4 h-4 text-amber-600 stroke-[2.5]" />
                         <span>Đang theo dõi</span>
                       </>
                     ) : (

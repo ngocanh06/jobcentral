@@ -1,16 +1,15 @@
 import React, { useState } from 'react';
-import { X, Upload, CheckCircle2, FileText, Send, Sparkles } from 'lucide-react';
+import { X } from 'lucide-react';
+import defaultAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export const ApplyModal = ({
   job,
+  currentUser = null,
   onClose,
   onSubmit,
 }) => {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [coverLetter, setCoverLetter] = useState('');
-  const [fileName, setFileName] = useState('My_Resume_CV_2024.pdf');
+  const [fullName, setFullName] = useState(currentUser?.name || 'Nhiên Nguyễn Viết');
+  const [phone, setPhone] = useState('0905 123 456');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!job) return null;
@@ -21,143 +20,111 @@ export const ApplyModal = ({
 
     setTimeout(() => {
       setIsSubmitting(false);
-      onSubmit({
-        jobId: job.id,
-        fullName,
-        email,
-        phone,
-        coverLetter,
-      });
+      if (onSubmit) {
+        onSubmit({
+          jobId: job.id,
+          company: job.company,
+          fullName,
+          phone,
+        });
+      }
     }, 600);
   };
 
+  const userAvatar = currentUser?.avatar || defaultAvatar;
+  const userName = currentUser?.name || 'Nhiên Nguyễn Viết';
+  const userHeadline = currentUser?.headline || 'Sinh viên tại Duy Tan University';
+  const userLocation = currentUser?.location || 'Đà Nẵng, Da Nang City, Vietnam';
+  const companyTitle = job.company ? job.company.toUpperCase() : 'BROSUP DIGITAL CO., LTD';
+
   return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-2 sm:p-4 animate-fadeIn">
+    <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4 animate-fadeIn">
       <div
         id={`apply-modal-${job.id}`}
-        className="bg-white rounded-2xl sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col my-auto"
+        className="bg-white rounded-2xl sm:rounded-3xl max-w-xl w-full max-h-[92vh] overflow-hidden shadow-2xl border border-slate-200 flex flex-col my-auto"
       >
-        {/* Header */}
-        <div className="p-4 sm:p-6 border-b border-slate-100 bg-slate-50/70 flex items-start justify-between sticky top-0 z-10 backdrop-blur-md">
-          <div className="min-w-0">
-            <div className="inline-flex items-center space-x-1.5 px-2.5 py-0.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold mb-1.5">
-              <Sparkles className="w-3 h-3" />
-              <span>Nộp hồ sơ ứng tuyển</span>
-            </div>
-            <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 leading-tight truncate">
-              {job.title}
-            </h2>
-            <p className="text-xs font-medium text-slate-500 mt-0.5">
-              Tại: <strong className="text-slate-800">{job.company}</strong>
-            </p>
-          </div>
+        {/* 1. Header (Matching: Ứng tuyển vào BROSUP DIGITAL CO., LTD + Close X) */}
+        <div className="px-5 sm:px-7 py-4.5 border-b border-slate-200 bg-white flex items-center justify-between shrink-0">
+          <h2 className="text-base sm:text-lg font-bold text-slate-900 truncate pr-4">
+            Ứng tuyển vào {companyTitle}
+          </h2>
 
           <button
             id="close-apply-modal-btn"
+            type="button"
             onClick={onClose}
-            className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-200/60 rounded-full transition-colors shrink-0"
+            className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors shrink-0 cursor-pointer"
+            aria-label="Đóng cửa sổ"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
-        {/* Form Form */}
-        <form onSubmit={handleSubmit} className="p-4 sm:p-6 space-y-3.5 text-sm">
+        {/* 2. Scrollable Body */}
+        <form onSubmit={handleSubmit} className="overflow-y-auto p-5 sm:p-7 space-y-6 flex-1">
+          {/* Section: Contact info */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Họ và tên *
+            <h3 className="text-sm sm:text-base font-bold text-slate-900 mb-3.5">
+              Contact info
+            </h3>
+
+            {/* Profile Row */}
+            <div className="flex items-start space-x-3.5">
+              <img
+                src={userAvatar}
+                alt={userName}
+                className="w-12 h-12 rounded-full object-cover shrink-0 border border-slate-200 shadow-2xs"
+              />
+              <div className="min-w-0 flex-1">
+                <h4 className="text-sm sm:text-base font-bold text-slate-900 leading-snug">
+                  {userName}
+                </h4>
+                <p className="text-xs text-slate-600 mt-0.5 leading-snug">
+                  {userHeadline}
+                </p>
+                <p className="text-xs text-slate-500 mt-0.5">
+                  {userLocation}
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Form Fields: Nhập họ và tên */}
+          <div>
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Họ và tên*
             </label>
             <input
               type="text"
               required
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
-              placeholder="Nguyễn Văn A"
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
+              placeholder="Nhập họ và tên của bạn..."
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-[#0A58CA] focus:ring-1 focus:ring-[#0A58CA] shadow-2xs transition-all"
             />
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                Email nhận phản hồi *
-              </label>
-              <input
-                type="email"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@example.com"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                Số điện thoại *
-              </label>
-              <input
-                type="tel"
-                required
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="0912 345 678"
-                className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all"
-              />
-            </div>
-          </div>
-
-          {/* CV upload box */}
+          {/* Form Fields: Số điện thoại */}
           <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Đính kèm CV / Hồ sơ năng lực (PDF, DOCX)
+            <label className="block text-xs font-semibold text-slate-700 mb-1.5">
+              Số điện thoại*
             </label>
-            <div className="p-3.5 border-2 border-dashed border-indigo-200 rounded-2xl bg-indigo-50/40 hover:bg-indigo-50/70 transition-colors flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-xs">
-                  <FileText className="w-5 h-5" />
-                </div>
-                <div>
-                  <p className="text-xs font-bold text-slate-900">{fileName}</p>
-                  <p className="text-[11px] text-slate-400">Đã sẵn sàng tải lên • 1.4 MB</p>
-                </div>
-              </div>
-
-              <label className="px-3.5 py-1.5 bg-white border border-slate-200 text-xs font-semibold text-indigo-700 rounded-full hover:bg-slate-50 cursor-pointer shadow-2xs">
-                <span>Thay đổi</span>
-                <input
-                  type="file"
-                  accept=".pdf,.doc,.docx"
-                  className="hidden"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      setFileName(e.target.files[0].name);
-                    }
-                  }}
-                />
-              </label>
-            </div>
-          </div>
-
-          {/* Cover Letter */}
-          <div>
-            <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Thư giới thiệu (Không bắt buộc)
-            </label>
-            <textarea
-              rows={3}
-              value={coverLetter}
-              onChange={(e) => setCoverLetter(e.target.value)}
-              placeholder="Chia sẻ lý do bạn hào hứng và phù hợp với vị trí này..."
-              className="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-indigo-500 focus:ring-2 focus:ring-indigo-100 transition-all resize-none"
+            <input
+              type="tel"
+              required
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Nhập số điện thoại của bạn..."
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-[#0A58CA] focus:ring-1 focus:ring-[#0A58CA] shadow-2xs transition-all"
             />
           </div>
 
-          {/* Bottom Actions */}
-          <div className="pt-2 flex items-center justify-end space-x-3">
+          {/* 3. Footer Actions */}
+          <div className="pt-4 border-t border-slate-200 flex items-center justify-end space-x-3">
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
+              className="px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-slate-900 hover:bg-slate-100 rounded-full transition-colors cursor-pointer"
             >
               Hủy
             </button>
@@ -165,15 +132,12 @@ export const ApplyModal = ({
               id="submit-apply-form-btn"
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-full shadow-md shadow-indigo-200 flex items-center space-x-2 transition-all disabled:opacity-70 cursor-pointer"
+              className="px-6 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs sm:text-sm rounded-full shadow-sm shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-70 cursor-pointer flex items-center space-x-2"
             >
               {isSubmitting ? (
                 <span>Đang gửi hồ sơ...</span>
               ) : (
-                <>
-                  <Send className="w-4 h-4" />
-                  <span>Gửi hồ sơ ngay</span>
-                </>
+                <span>Gửi hồ sơ ứng tuyển</span>
               )}
             </button>
           </div>
@@ -182,3 +146,5 @@ export const ApplyModal = ({
     </div>
   );
 };
+
+export default ApplyModal;

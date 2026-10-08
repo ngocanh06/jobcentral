@@ -53,6 +53,29 @@ html {
 .smooth-scroll-container {
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* Prevent scroll chaining (overscroll) on all scrollable elements, dropdowns, and dialogs */
+.overflow-y-auto,
+.overflow-x-auto,
+.overflow-auto,
+.overflow-y-scroll,
+.overflow-x-scroll,
+.overflow-scroll,
+[class*="overflow-y-auto"],
+[class*="overflow-x-auto"],
+[class*="overflow-auto"],
+[class*="overflow-y-scroll"],
+[class*="overflow-x-scroll"],
+[class*="overflow-scroll"],
+[role="listbox"],
+[role="menu"],
+[role="dialog"] {
+  overscroll-behavior: contain;
+  overscroll-behavior-y: contain;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 @keyframes antigravity-cursor-blink {

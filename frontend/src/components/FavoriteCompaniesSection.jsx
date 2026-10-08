@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Building2,
   Heart,
+  Bookmark,
   Star,
   MapPin,
   Users,
@@ -113,7 +114,7 @@ export const FavoriteCompaniesSection = ({
                       </div>
                     </div>
 
-                    {/* Unfollow Heart Action */}
+                    {/* Unfollow Bookmark Action */}
                     <button
                       type="button"
                       id={`unfollow-btn-${company.id}`}
@@ -125,9 +126,9 @@ export const FavoriteCompaniesSection = ({
                       }}
                       title="Bỏ theo dõi công ty này"
                       aria-label="Bỏ theo dõi công ty"
-                      className="p-2 rounded-full text-rose-600 bg-rose-50 hover:bg-rose-100 transition-colors cursor-pointer shrink-0"
+                      className="p-2 rounded-full text-amber-500 bg-slate-100 hover:bg-slate-200 transition-colors cursor-pointer shrink-0"
                     >
-                      <Heart className="w-4 h-4 fill-rose-600 text-rose-600" />
+                      <Bookmark className="w-4 h-4 fill-amber-400 text-amber-500" />
                     </button>
                   </div>
 

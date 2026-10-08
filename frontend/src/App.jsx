@@ -14,6 +14,8 @@ import { NewsView } from './components/NewsView';
 import { ToolsView } from './components/ToolsView';
 import { CVBuilderView } from './components/CVBuilderView';
 import { MessagesView } from './components/MessagesView';
+import { JobDetailView } from './components/JobDetailView';
+import { ApplyJobView } from './components/ApplyJobView';
 import { JobDetailModal } from './components/JobDetailModal';
 import { ApplyModal } from './components/ApplyModal';
 import { AuthModal } from './components/AuthModal';
@@ -30,6 +32,7 @@ export function App() {
   const [activeTab, setActiveTab] = useState('jobs');
   const [selectedJobForDetail, setSelectedJobForDetail] = useState(null);
   const [selectedJobForApply, setSelectedJobForApply] = useState(null);
+  const [selectedJobForStandardApply, setSelectedJobForStandardApply] = useState(null);
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authMode, setAuthMode] = useState('login');
   const [mobileProfileDrawerOpen, setMobileProfileDrawerOpen] = useState(false);
@@ -157,9 +160,26 @@ export function App() {
     }
   };
 
-  const handleApplyClick = (job, e) => {
-    if (e) e.stopPropagation();
-    setSelectedJobForApply(job);
+  const handleViewJobDetails = (job) => {
+    setSelectedJobForDetail(job);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleApplyClick = (job, eOrOptions, maybeOptions) => {
+    let options = {};
+    if (eOrOptions && eOrOptions.stopPropagation) {
+      eOrOptions.stopPropagation();
+      if (maybeOptions) options = maybeOptions;
+    } else if (eOrOptions && typeof eOrOptions === 'object') {
+      options = eOrOptions;
+    }
+
+    if (options.isQuickApply) {
+      setSelectedJobForApply({ ...job, ...options });
+    } else {
+      setSelectedJobForStandardApply({ ...job, ...options });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
   };
 
   const handleApplySubmit = (data) => {
@@ -199,16 +219,22 @@ export function App() {
 
   return (
     <div
-      className={`bg-[#F8FAFC] flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 ${
-        activeTab === 'messages' || activeTab === 'search'
+      className={`flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 ${
+        selectedJobForStandardApply || selectedJobForDetail || activeTab === 'search' || activeTab === 'companies'
+          ? 'bg-[#f4f2ee]'
+          : 'bg-[#F8FAFC]'
+      } ${
+        (activeTab === 'messages' || activeTab === 'search') && !selectedJobForDetail && !selectedJobForStandardApply
           ? 'h-dvh overflow-hidden'
           : 'min-h-screen'
       }`}
     >
       {/* Top Main Navigation Header */}
       <Header
-        activeTab={activeTab}
+        activeTab={selectedJobForStandardApply || selectedJobForDetail ? 'search' : activeTab}
         onTabChange={(tab) => {
+          setSelectedJobForStandardApply(null);
+          setSelectedJobForDetail(null);
           if (tab === 'favorite-companies') {
             setSelectedCompany(null);
             setTargetCompanyFilter(null);
@@ -239,139 +265,220 @@ export function App() {
       {/* Main View Display Body */}
       <main
         className={
-          activeTab === 'messages' || activeTab === 'search'
+          (activeTab === 'messages' || activeTab === 'search') && !selectedJobForDetail && !selectedJobForStandardApply
             ? 'flex-1 overflow-hidden flex flex-col min-h-0 pb-16 md:pb-0'
             : 'flex-1 pb-16 md:pb-0'
         }
       >
-        {activeTab === 'jobs' && (
-          <AllJobsView
-            jobs={jobs}
-            onToggleSave={handleToggleSave}
-            onApply={handleApplyClick}
-            onViewDetails={(job) => setSelectedJobForDetail(job)}
-            onShare={handleShareJob}
-          />
-        )}
-
-        {activeTab === 'search' && (
-          <JobSearchView
-            jobs={jobs}
+        {selectedJobForStandardApply ? (
+          <ApplyJobView
+            job={selectedJobForStandardApply}
             currentUser={currentUser}
-            onToggleSave={handleToggleSave}
-            onApply={handleApplyClick}
-            onViewDetails={(job) => setSelectedJobForDetail(job)}
-            onShare={handleShareJob}
-            onOpenAuth={(mode) => {
-              setAuthMode(mode || 'login');
-              setAuthModalOpen(true);
-            }}
-            onOpenProfileDrawer={() => setMobileProfileDrawerOpen(true)}
-            onNavigateHome={() => setActiveTab('jobs')}
-            onExploreJobs={() => setActiveTab('jobs')}
-          />
-        )}
-
-        {activeTab === 'saved' && (
-          <SavedJobsView
-            jobs={jobs}
-            onToggleSave={handleToggleSave}
-            onApply={handleApplyClick}
-            onViewDetails={(job) => setSelectedJobForDetail(job)}
-            onShare={handleShareJob}
-            onExploreMore={() => setActiveTab('jobs')}
-          />
-        )}
-
-        {activeTab === 'companies' && (
-          selectedCompany ? (
-            <CompanyDetailView
-              company={selectedCompany}
-              allJobs={jobs}
-              followedCompanyIds={followedCompanyIds}
-              onToggleFollowCompany={handleToggleFollowCompany}
-              onBack={() => {
-                setSelectedCompany(null);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              onApplyJob={handleApplyClick}
-              onViewJobDetail={(job) => setSelectedJobForDetail(job)}
-              onToggleSaveJob={(jobId) => handleToggleSave(jobId)}
-              onShareJob={handleShareJob}
-            />
-          ) : (
-            <CompaniesView
-              companies={INITIAL_COMPANIES}
-              currentUser={currentUser}
-              savedCount={savedCount}
-              initialSearchQuery={targetCompanyFilter}
-              onResetSearch={() => setTargetCompanyFilter(null)}
-              followedCompanyIds={followedCompanyIds}
-              onToggleFollowCompany={handleToggleFollowCompany}
-              onSelectCompany={(c) => {
-                setSelectedCompany(c);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              onExploreJobs={() => setActiveTab('jobs')}
-              onTabChange={(tab) => {
-                setActiveTab(tab);
-                window.scrollTo({ top: 0, behavior: 'smooth' });
-              }}
-              onShowToast={showToast}
-            />
-          )
-        )}
-
-        {activeTab === 'news' && (
-          <NewsView articles={INITIAL_ARTICLES} />
-        )}
-
-        {activeTab === 'tools' && (
-          <ToolsView
-            currentUser={currentUser}
-            savedCount={savedCount}
-            onTabChange={(tab) => {
-              setActiveTab(tab);
+            onBack={() => {
+              setSelectedJobForStandardApply(null);
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
-            onShowToast={showToast}
+            onNavigateHome={() => {
+              setSelectedJobForStandardApply(null);
+              setSelectedJobForDetail(null);
+              setActiveTab('jobs');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateJobs={() => {
+              setSelectedJobForStandardApply(null);
+              setSelectedJobForDetail(null);
+              setActiveTab('search');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onViewJobDetail={(targetJob) => {
+              setSelectedJobForStandardApply(null);
+              setSelectedJobForDetail(targetJob);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onSubmitSuccess={(data) => {
+              setSelectedJobForStandardApply(null);
+              showToast(`Đã gửi hồ sơ ứng tuyển vị trí "${data.jobTitle || 'việc làm'}" thành công!`, 'success');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
           />
-        )}
-
-        {activeTab === 'cv-builder' && (
-          <CVBuilderView
-            onSavedJobsClick={() => setActiveTab('saved')}
-          />
-        )}
-
-        {activeTab === 'messages' && (
-          <MessagesView
-            currentUser={currentUser}
-            onViewJobDetail={(job) => setSelectedJobForDetail(job)}
-            onNavigateToJobs={() => setActiveTab('jobs')}
-            onNavigateToCompany={(companyName) => {
+        ) : selectedJobForDetail ? (
+          <JobDetailView
+            job={selectedJobForDetail}
+            allJobs={jobs}
+            onBack={() => {
+              setSelectedJobForDetail(null);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateHome={() => {
+              setSelectedJobForDetail(null);
+              setActiveTab('jobs');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onNavigateJobs={() => {
+              setSelectedJobForDetail(null);
+              setActiveTab('search');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onSelectRelatedJob={(relJob) => {
+              const fullJob = jobs.find((j) => j.id === relJob.id) || relJob;
+              setSelectedJobForDetail(fullJob);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            onViewCompany={(compName) => {
               const matched = INITIAL_COMPANIES.find(
                 (c) =>
-                  c.name.toLowerCase().includes(companyName.toLowerCase()) ||
-                  companyName.toLowerCase().includes(c.name.toLowerCase())
+                  c.name.toLowerCase().includes(compName.toLowerCase()) ||
+                  compName.toLowerCase().includes(c.name.toLowerCase())
               );
               if (matched) {
                 setSelectedCompany(matched);
               } else {
-                setTargetCompanyFilter(companyName);
+                setTargetCompanyFilter(compName);
                 setSelectedCompany(null);
               }
+              setSelectedJobForDetail(null);
               setActiveTab('companies');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            onToggleSave={handleToggleSave}
+            onApply={handleApplyClick}
+            onShare={handleShareJob}
+            onShowToast={showToast}
           />
+        ) : (
+          <>
+            {activeTab === 'jobs' && (
+              <AllJobsView
+                jobs={jobs}
+                onToggleSave={handleToggleSave}
+                onApply={handleApplyClick}
+                onViewDetails={handleViewJobDetails}
+                onShare={handleShareJob}
+              />
+            )}
+
+            {activeTab === 'search' && (
+              <JobSearchView
+                jobs={jobs}
+                currentUser={currentUser}
+                onToggleSave={handleToggleSave}
+                onApply={handleApplyClick}
+                onViewDetails={handleViewJobDetails}
+                onShare={handleShareJob}
+                onOpenAuth={(mode) => {
+                  setAuthMode(mode || 'login');
+                  setAuthModalOpen(true);
+                }}
+                onOpenProfileDrawer={() => setMobileProfileDrawerOpen(true)}
+                onNavigateHome={() => setActiveTab('jobs')}
+                onExploreJobs={() => setActiveTab('jobs')}
+              />
+            )}
+
+            {activeTab === 'saved' && (
+              <SavedJobsView
+                jobs={jobs}
+                onToggleSave={handleToggleSave}
+                onApply={handleApplyClick}
+                onViewDetails={handleViewJobDetails}
+                onShare={handleShareJob}
+                onExploreMore={() => setActiveTab('jobs')}
+              />
+            )}
+
+            {activeTab === 'companies' && (
+              selectedCompany ? (
+                <CompanyDetailView
+                  company={selectedCompany}
+                  allJobs={jobs}
+                  followedCompanyIds={followedCompanyIds}
+                  onToggleFollowCompany={handleToggleFollowCompany}
+                  onBack={() => {
+                    setSelectedCompany(null);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  onApplyJob={handleApplyClick}
+                  onViewJobDetail={handleViewJobDetails}
+                  onToggleSaveJob={(jobId) => handleToggleSave(jobId)}
+                  onShareJob={handleShareJob}
+                />
+              ) : (
+                <CompaniesView
+                  companies={INITIAL_COMPANIES}
+                  currentUser={currentUser}
+                  savedCount={savedCount}
+                  initialSearchQuery={targetCompanyFilter}
+                  onResetSearch={() => setTargetCompanyFilter(null)}
+                  followedCompanyIds={followedCompanyIds}
+                  onToggleFollowCompany={handleToggleFollowCompany}
+                  onSelectCompany={(c) => {
+                    setSelectedCompany(c);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  onExploreJobs={() => setActiveTab('jobs')}
+                  onTabChange={(tab) => {
+                    setActiveTab(tab);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  onShowToast={showToast}
+                />
+              )
+            )}
+
+            {activeTab === 'news' && (
+              <NewsView articles={INITIAL_ARTICLES} />
+            )}
+
+            {activeTab === 'tools' && (
+              <ToolsView
+                currentUser={currentUser}
+                savedCount={savedCount}
+                onTabChange={(tab) => {
+                  setActiveTab(tab);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onShowToast={showToast}
+              />
+            )}
+
+            {activeTab === 'cv-builder' && (
+              <CVBuilderView
+                onSavedJobsClick={() => setActiveTab('saved')}
+              />
+            )}
+
+            {activeTab === 'messages' && (
+              <MessagesView
+                currentUser={currentUser}
+                onViewJobDetail={handleViewJobDetails}
+                onNavigateToJobs={() => setActiveTab('jobs')}
+                onNavigateToCompany={(companyName) => {
+                  const matched = INITIAL_COMPANIES.find(
+                    (c) =>
+                      c.name.toLowerCase().includes(companyName.toLowerCase()) ||
+                      companyName.toLowerCase().includes(c.name.toLowerCase())
+                  );
+                  if (matched) {
+                    setSelectedCompany(matched);
+                  } else {
+                    setTargetCompanyFilter(companyName);
+                    setSelectedCompany(null);
+                  }
+                  setActiveTab('companies');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            )}
+          </>
         )}
       </main>
 
       {/* Mobile Bottom Navigation Bar (Phone-Optimized) */}
       <MobileBottomNav
-        activeTab={activeTab}
+        activeTab={selectedJobForStandardApply || selectedJobForDetail ? 'search' : activeTab}
         onTabChange={(tab) => {
+          setSelectedJobForStandardApply(null);
+          setSelectedJobForDetail(null);
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
@@ -407,19 +514,10 @@ export function App() {
       />
 
       {/* Modals & Portals */}
-      {selectedJobForDetail && (
-        <JobDetailModal
-          job={selectedJobForDetail}
-          onClose={() => setSelectedJobForDetail(null)}
-          onToggleSave={handleToggleSave}
-          onApply={handleApplyClick}
-          onShare={handleShareJob}
-        />
-      )}
-
       {selectedJobForApply && (
         <ApplyModal
           job={selectedJobForApply}
+          currentUser={currentUser}
           onClose={() => setSelectedJobForApply(null)}
           onSubmit={handleApplySubmit}
         />

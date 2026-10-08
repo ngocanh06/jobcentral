@@ -18,6 +18,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: false,
     category: 'Thiết kế',
     industry: 'Thiết kế UI / UX / Đồ họa',
     description:
@@ -60,6 +61,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Công nghệ',
     industry: 'Công nghệ thông tin / Phần mềm',
     description:
@@ -102,6 +104,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: false,
     category: 'AI & ML',
     industry: 'Dữ liệu & Trí tuệ nhân tạo (AI)',
     description:
@@ -142,6 +145,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Tài chính',
     industry: 'Tài chính / Kế toán / Ngân hàng',
     description:
@@ -181,6 +185,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Công nghệ',
     industry: 'Công nghệ thông tin / Phần mềm',
     description:
@@ -220,6 +225,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: false,
     category: 'Marketing',
     industry: 'Marketing / Truyền thông / PR',
     description:
@@ -259,6 +265,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: false,
     isIntern: true,
+    isQuickApply: true,
     category: 'Thiết kế',
     industry: 'Thiết kế UI / UX / Đồ họa',
     description:
@@ -298,6 +305,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: false,
     isIntern: true,
+    isQuickApply: true,
     category: 'Công nghệ',
     industry: 'Công nghệ thông tin / Phần mềm',
     description:
@@ -336,6 +344,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: false,
     category: 'Công nghệ',
     industry: 'Công nghệ thông tin / Phần mềm',
     description:
@@ -375,6 +384,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Thiết kế',
     industry: 'Thiết kế UI / UX / Đồ họa',
     description:
@@ -414,6 +424,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: false,
     category: 'Công nghệ',
     industry: 'Công nghệ thông tin / Phần mềm',
     description:
@@ -453,6 +464,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Dữ liệu',
     industry: 'Dữ liệu & Trí tuệ nhân tạo (AI)',
     description:
@@ -492,6 +504,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: false,
     category: 'Nhân sự',
     industry: 'Nhân sự / Tuyển dụng (HR)',
     description:
@@ -531,6 +544,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Công nghệ',
     industry: 'Công nghệ thông tin / Phần mềm',
     description:
@@ -570,6 +584,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: true,
     category: 'Kinh doanh',
     industry: 'Kinh doanh / Bán hàng (Sales)',
     description:
@@ -609,6 +624,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: true,
     category: 'Y tế',
     industry: 'Y tế / Dược phẩm / Chăm sóc sức khỏe',
     description:
@@ -648,6 +664,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: false,
     category: 'Giáo dục',
     industry: 'Giáo dục / Đào tạo / Giảng dạy',
     description:
@@ -687,6 +704,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: true,
     isIntern: false,
+    isQuickApply: false,
     category: 'Bất động sản',
     industry: 'Bất động sản / Xây dựng / Kiến trúc',
     description:
@@ -726,6 +744,7 @@ export const INITIAL_JOBS = [
     isFeatured: false,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: true,
     category: 'Logistics',
     industry: 'Logistics / Xuất nhập khẩu / Chuỗi cung ứng',
     description:
@@ -765,6 +784,7 @@ export const INITIAL_JOBS = [
     isFeatured: true,
     isUrgent: false,
     isIntern: false,
+    isQuickApply: true,
     category: 'Marketing',
     industry: 'Marketing / Truyền thông / PR',
     description:
@@ -783,6 +803,86 @@ export const INITIAL_JOBS = [
       'Thu nhập 18 - 30 triệu + Thưởng nóng theo lượt xem và hiệu quả chiến dịch.',
       'Trang bị máy quay phim 4K, phòng thu studio hiện đại.',
       'Thường xuyên tham gia các sự kiện giải trí và công nghệ tầm cỡ.',
+    ],
+  },
+  {
+    id: 'job-21',
+    title: 'Nhân Viên Tư Vấn & Chăm Sóc Khách Hàng (Đi Làm Ngay)',
+    company: 'FPT Telecom',
+    companyLogo: 'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=120&auto=format&fit=crop&q=80',
+    location: 'Cầu Giấy, Hà Nội',
+    district: 'cau_giay',
+    city: 'Hà Nội',
+    salary: '12 - 20 triệu',
+    salaryCategory: '10to20',
+    salaryUsd: '$500 - $850',
+    jobType: 'Full-time',
+    experience: 'fresher',
+    postedTime: '1 giờ trước',
+    requirementsSummary: 'Giao tiếp tốt, giọng nói truyền cảm, chỉ cần Họ tên và SĐT phỏng vấn ngay',
+    isSaved: false,
+    isFeatured: true,
+    isUrgent: true,
+    isIntern: false,
+    isQuickApply: true,
+    category: 'Kinh doanh',
+    industry: 'Kinh doanh / Bán hàng (Sales)',
+    description:
+      'Tuyển dụng gấp nhân viên tư vấn gói cước Internet & truyền hình FPT. Đào tạo từ đầu có lương, hỗ trợ ứng tuyển nhanh không cần chuẩn bị CV hay thư giới thiệu.',
+    responsibilities: [
+      'Tiếp nhận cuộc gọi và tư vấn gói dịch vụ viễn thông phù hợp cho khách hàng.',
+      'Giải đáp thắc mắc và chăm sóc khách hàng sau khi kích hoạt dịch vụ.',
+      'Phối hợp với kỹ thuật viên khu vực để hoàn tất thủ tục hợp đồng.',
+    ],
+    requirements: [
+      'Giọng nói dễ nghe, không nói ngọng hoặc nói lắp.',
+      'Thái độ nhiệt tình, trung thực, có tinh thần cầu tiến.',
+      'Không yêu cầu kinh nghiệm, chấp nhận sinh viên mới tốt nghiệp.',
+    ],
+    benefits: [
+      'Lương cứng 8.5 triệu + Thưởng năng suất (Tổng thu nhập 12 - 20 triệu/tháng).',
+      'Được đóng đầy đủ BHXH, BHYT sau 2 tháng thử việc.',
+      'Hỗ trợ máy tính, tai nghe và điện thoại làm việc.',
+    ],
+  },
+  {
+    id: 'job-22',
+    title: 'Giám Sát Cửa Hàng Bán Lẻ (Fast-Track Store Supervisor)',
+    company: 'Highlands Coffee',
+    companyLogo: 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=120&auto=format&fit=crop&q=80',
+    location: 'Quận 1, TP. Hồ Chí Minh',
+    district: 'q1',
+    city: 'TP. Hồ Chí Minh',
+    salary: '14 - 22 triệu',
+    salaryCategory: '10to20',
+    salaryUsd: '$600 - $900',
+    jobType: 'Full-time',
+    experience: 'middle',
+    postedTime: '3 giờ trước',
+    requirementsSummary: 'Quản lý ca, Kiểm soát tồn kho, Dịch vụ F&B, Ứng tuyển nhanh qua điện thoại',
+    isSaved: false,
+    isFeatured: true,
+    isUrgent: true,
+    isIntern: false,
+    isQuickApply: true,
+    category: 'Dịch vụ',
+    industry: 'Nhà hàng / Khách sạn / Du lịch',
+    description:
+      'Chương trình tuyển dụng Fast-Track dành cho ứng viên tiềm năng gia nhập hệ thống chuỗi cà phê Highlands Coffee tại TP.HCM. Phỏng vấn nhanh, nhận việc ngay trong tuần.',
+    responsibilities: [
+      'Quản lý vận hành ca làm việc, chất lượng đồ uống và dịch vụ khách hàng.',
+      'Kiểm kê nguyên vật liệu, điều phối nhân sự pha chế và thu ngân.',
+      'Báo cáo doanh thu ca cho Quản lý cửa hàng trưởng.',
+    ],
+    requirements: [
+      'Từ 1 năm kinh nghiệm làm việc trong ngành F&B hoặc bán lẻ.',
+      'Kỹ năng quản lý thời gian, giao tiếp tự tin và xử lý tình huống khéo léo.',
+      'Sẵn sàng làm việc xoay ca linh hoạt.',
+    ],
+    benefits: [
+      'Mức thu nhập 14 - 22 triệu + Thưởng doanh số cửa hàng mỗi tháng.',
+      'Giảm giá 50% toàn menu đồ uống Highlands Coffee trên toàn quốc.',
+      'Cơ hội thăng tiến lên Cửa hàng trưởng sau 6 tháng.',
     ],
   },
 ];
