@@ -21,7 +21,7 @@ import {
 import { Link } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 import { href, useNavigate } from "react-router-dom";
 import { Navigate } from "react-router-dom";
@@ -46,19 +46,24 @@ export default function NavBar() {
 
   const menuItems = [
     { label: "Hồ sơ cá nhân", icon: UserRound, href: "" },
-    { label: "Dành cho ứng viên", icon: ArrowLeftRight },
-    { label: "Quản lý công việc", icon: BriefcaseBusiness },
+    { label: "Dành cho ứng viên", icon: ArrowLeftRight, href: "/" },
+    { label: "Quản lý công việc", icon: BriefcaseBusiness, href: "/Dashboard/Quan-li-tin-tuyen-dung" },
     { label: "Đăng xuất", icon: LogOut, danger: true },
   ];
 
   const links = [
+    {
+      icon: <ArrowLeftRight size={16} />,
+      label: "Cổng tìm việc",
+      href: "/",
+    },
     {
       icon: <SquarePen />,
       label: "Tạo tin tuyển dụng",
       href: "/Dashboard/Tao-tin-tuyen-dung",
     },
     { icon: <Search />, label: "Tra cứu CV", href: "/Dashboard/Hint-Ung-Vien" },
-    { icon: <Mail />, label: "Tin Nhắn", href: "Dashboard/tin-nhan" },
+    { icon: <Mail />, label: "Tin Nhắn", href: "/Dashboard/tin-nhan" },
     { icon: <Info />, label: "Gợi ý", href: "#product" },
   ];
 

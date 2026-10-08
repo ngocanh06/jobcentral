@@ -1,7 +1,7 @@
 import React from 'react';
 import { Briefcase, Heart, Shield, HelpCircle, Mail, Phone, MapPin } from 'lucide-react';
 
-export default function Footer(){
+export const Footer = () => {
   return (
     <footer className="bg-slate-900 text-slate-400 text-xs border-t border-slate-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -10,12 +10,12 @@ export default function Footer(){
           <div className="space-y-3">
             <div className="flex items-center space-x-2 text-white font-bold text-base">
               <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center text-white">
-                <img src="/picture/Logo_JobCentral.png" alt="logo" />
+                <Briefcase className="w-4 h-4" />
               </div>
               <span className="text-lg">JobCentral</span>
             </div>
             <p className="text-slate-400 text-xs leading-relaxed">
-              Nền tảng tuyển dụng và kết nối việc làm công nghệ & thiết kế hàng đầu TP. Đà Nẵng
+              Nền tảng tuyển dụng và kết nối việc làm công nghệ & thiết kế hàng đầu TP. Hồ Chí Minh.
             </p>
           </div>
 
@@ -28,7 +28,6 @@ export default function Footer(){
               <li><a href="#jobs" className="hover:text-white transition-colors">Tìm việc làm mới nhất</a></li>
               <li><a href="#cv-builder" className="hover:text-white transition-colors">Tạo CV chuyên nghiệp</a></li>
               <li><a href="#companies" className="hover:text-white transition-colors">Danh sách công ty IT hàng đầu</a></li>
-              <li><a href="#reviews" className="hover:text-white transition-colors">Đánh giá môi trường làm việc</a></li>
             </ul>
           </div>
 
@@ -53,7 +52,7 @@ export default function Footer(){
             <ul className="space-y-2 text-xs">
               <li className="flex items-center space-x-2">
                 <MapPin className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                <span>Thanh Khê, TP. Đà Nẵng</span>
+                <span>Quận 1, TP. Hồ Chí Minh</span>
               </li>
               <li className="flex items-center space-x-2">
                 <Mail className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
@@ -61,14 +60,14 @@ export default function Footer(){
               </li>
               <li className="flex items-center space-x-2">
                 <Phone className="w-3.5 h-3.5 text-indigo-400 shrink-0" />
-                <span>0962522881</span>
+                <span>028 3822 9999</span>
               </li>
             </ul>
           </div>
         </div>
 
         <div className="pt-8 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-4 text-slate-500 text-xs">
-          <p>© {new Date().getFullYear()} JobCentral Vietnam. Tất cả quyền được bảo lưu.</p>
+          <p>© 2024 JobCentral Vietnam. Tất cả quyền được bảo lưu.</p>
           <div className="flex items-center space-x-4">
             <a href="#privacy" className="hover:text-slate-400">Chính sách bảo mật</a>
             <a href="#terms" className="hover:text-slate-400">Điều khoản sử dụng</a>
@@ -80,3 +79,4 @@ export default function Footer(){
   );
 };
 
+export default Footer;

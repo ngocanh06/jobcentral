@@ -16,8 +16,8 @@ import {
 } from "lucide-react";
 
 import * as XLSX from "xlsx";
-import pic from "../picture_sec/pic_default.jpg";
-import { getManagedCandidates } from "../candidateStorage";
+import pic from "../../picture_sec/pic_default.jpg";
+import { getManagedCandidates } from "../../candidateStorage";
 
 // Dữ liệu mẫu — thay bằng dữ liệu thật của bạn (props / API) khi tích hợp
 

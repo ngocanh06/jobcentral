@@ -1,9 +1,9 @@
-import SideBar from "../components/SideBar";
-import NavBar from "../components/NavBar";
+import SideBar from "../components/employer/SideBar";
+import NavBar from "../components/employer/NavBar";
 import { Outlet, useLocation } from "react-router-dom";
-import Footer from "../components/Footer";
-import ZaloChatWidget from "../components/ZaloWidget";
-import FeedbackWidget from "../components/FeedBack";
+import Footer from "../components/common/Footer";
+import ZaloChatWidget from "../components/employer/ZaloWidget";
+import FeedbackWidget from "../components/employer/FeedBack";
 export default function RecruiterLayout() {
   const { pathname } = useLocation();
   const isMessagesPage = pathname.toLowerCase().endsWith("/tin-nhan");

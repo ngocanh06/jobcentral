@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import picdef from "../picture_sec/pic_default.jpg";
+import picdef from "../../picture_sec/pic_default.jpg";
 import {
   ChevronRight,
   MoreHorizontal,
@@ -9,7 +9,7 @@ import {
   Laptop,
 } from "lucide-react";
 import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
-import TimeOfDay from "../components/GetTime";
+import TimeOfDay from "../../components/employer/GetTime";
 import { Book } from "lucide-react";
 
 const session = TimeOfDay();

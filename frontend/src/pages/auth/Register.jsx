@@ -20,9 +20,9 @@ import {
   Headset,
 } from "lucide-react";
 import { Link } from "lucide-react";
-import pic_logo from "d:/Recruitment Website/jobcentral_role_r9t/jobcentral/frontend/src/picture_sec/Logo_JobCentral.png";
+import pic_logo from "../../picture_sec/Logo_JobCentral.png";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../context/AuthContext";
+import { useAuth } from "../../context/AuthContext";
 
 const PROVINCES = [
   "TP. Hồ Chí Minh",

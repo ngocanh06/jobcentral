@@ -20,7 +20,7 @@ import {
   Check,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
-import { addManagedCandidate, getManagedCandidates } from "../candidateStorage";
+import { addManagedCandidate, getManagedCandidates } from "../../candidateStorage";
 
 const profileFilters = [
   {
