@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Bookmark,
   Bell,
@@ -15,6 +15,7 @@ import {
   RefreshCw,
 } from 'lucide-react';
 import { useDevice } from '../context/DeviceContext';
+import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export const Header = ({
   activeTab,
@@ -29,19 +30,36 @@ export const Header = ({
   const device = useDevice();
   const [profileDropdownOpen, setProfileDropdownOpen] = useState(false);
   const [notifDropdownOpen, setNotifDropdownOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 4);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const navItems = [
-    { id: 'jobs', label: 'Trang Chủ' },
-    { id: 'search', label: 'Tìm việc' },
+    { id: 'jobs', label: 'Trang chủ' },
+    { id: 'search', label: 'Việc làm' },
     { id: 'companies', label: 'Công ty' },
-    { id: 'news', label: 'Tin tức' },
     { id: 'tools', label: 'Công cụ' },
-    { id: 'cv-builder', label: 'Hồ sơ và tạo CV' },
+    { id: 'news', label: 'Tin tức' },
+    { id: 'cv-builder', label: 'Hồ sơ & CV' },
   ];
 
   return (
-    <header className="w-full bg-white sticky top-0 z-40 border-b border-slate-200/90 shadow-2xs shrink-0">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <header
+      id="main-top-navbar"
+      className={`w-full bg-white sticky top-0 z-50 border-b transition-all duration-200 shrink-0 ${
+        isScrolled
+          ? 'border-slate-200/90 shadow-sm'
+          : 'border-slate-200/70 shadow-2xs'
+      }`}
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-white">
         <div className="flex items-center justify-between h-16 gap-3 lg:gap-6">
           {/* Left: Logo */}
           <div className="flex items-center shrink-0">
@@ -55,10 +73,10 @@ export const Header = ({
             </button>
           </div>
 
-          {/* Center Navigation Tabs (Balanced Flex-1 Centering between Logo & Actions) */}
+          {/* Center: Navigation Tabs */}
           <nav
             id="main-nav-tabs"
-            className="hidden md:flex flex-1 h-full items-center justify-center flex-row flex-nowrap space-x-1 lg:space-x-2 xl:space-x-4 text-sm min-w-0"
+            className="hidden lg:flex flex-1 items-center justify-center space-x-1 xl:space-x-2.5 text-xs lg:text-[13px] xl:text-[14px]"
           >
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
@@ -67,7 +85,7 @@ export const Header = ({
                   key={item.id}
                   id={`nav-tab-${item.id}`}
                   onClick={() => onTabChange(item.id)}
-                  className={`relative h-full px-2.5 lg:px-3.5 font-semibold transition-colors cursor-pointer select-none text-[14px] lg:text-[15px] whitespace-nowrap shrink-0 inline-flex items-center justify-center focus:outline-hidden ${
+                  className={`relative py-2 px-2.5 xl:px-3 font-semibold transition-colors cursor-pointer select-none whitespace-nowrap shrink-0 inline-flex items-center justify-center focus:outline-hidden ${
                     isActive
                       ? 'text-[#0A58CA]'
                       : 'text-slate-700 hover:text-[#0A58CA]'
@@ -77,7 +95,7 @@ export const Header = ({
                   {isActive && (
                     <span
                       id={`nav-tab-indicator-${item.id}`}
-                      className="absolute bottom-0 left-2.5 right-2.5 h-[2.5px] bg-[#0A58CA] rounded-full"
+                      className="absolute bottom-0 left-2 right-2 h-[2.5px] bg-[#0A58CA] rounded-full"
                     />
                   )}
                 </button>
@@ -148,7 +166,7 @@ export const Header = ({
 
                 <div className="hidden sm:block h-5 w-px bg-slate-200 mx-1" />
 
-                {/* User Profile Section replaced with Employer Pill Button */}
+                {/* Logged in: User Profile Pill Button with dropdown */}
                 <div className="relative flex items-center">
                   <button
                     id="header-user-profile-btn"
@@ -159,17 +177,28 @@ export const Header = ({
                         setProfileDropdownOpen(!profileDropdownOpen);
                       }
                     }}
-                    className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-xs sm:text-[13px] font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[38px] group focus:outline-hidden select-none"
+                    className="inline-flex items-center space-x-2 px-2.5 sm:px-3 py-1 sm:py-1.5 bg-slate-100 hover:bg-slate-200/80 rounded-full transition-all cursor-pointer select-none border border-slate-200/90 active:scale-95 group focus:outline-hidden"
                   >
-                    <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
-                    <span>Dành cho nhà tuyển dụng</span>
+                    <img
+                      src={currentUser.avatar || catAvatar}
+                      alt={currentUser.name}
+                      className="w-7 h-7 rounded-full object-cover ring-1 ring-slate-200 shrink-0"
+                    />
+                    <span className="hidden sm:inline-block text-xs sm:text-[13px] font-bold text-slate-800 max-w-[120px] truncate">
+                      {currentUser.name}
+                    </span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 text-slate-500 transition-transform duration-200 ${
+                        profileDropdownOpen ? 'rotate-180' : ''
+                      }`}
+                    />
                   </button>
 
                   {/* Profile dropdown menu (desktop mode) */}
                   {profileDropdownOpen && !device.isPhone && (
                     <div
                       id="header-profile-menu"
-                      className="absolute right-0 mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-in-from-top-2 duration-150"
+                      className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-from-top-2 duration-150"
                     >
                       <div className="px-4 py-2.5 border-b border-slate-100">
                         <p className="text-sm font-bold text-slate-900 truncate">{currentUser.name}</p>
@@ -249,22 +278,43 @@ export const Header = ({
                 </div>
               </div>
             ) : (
-              <div className="flex items-center">
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {/* Nút Đăng nhập dạng Pill */}
+                <button
+                  id="header-login-pill-btn"
+                  onClick={() => onOpenAuth('login')}
+                  className="inline-flex items-center justify-center px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-xs sm:text-sm font-semibold text-slate-700 hover:text-[#0A58CA] bg-white hover:bg-slate-50 border border-slate-300 hover:border-[#0A58CA] rounded-full transition-all cursor-pointer whitespace-nowrap shadow-2xs active:scale-95"
+                >
+                  <span>Đăng nhập</span>
+                </button>
+
+                {/* Nút Đăng ký dạng Pill */}
+                <button
+                  id="header-register-pill-btn"
+                  onClick={() => onOpenAuth('register')}
+                  className="inline-flex items-center justify-center px-3.5 sm:px-4.5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-[#0A58CA] hover:text-[#084298] bg-blue-50/80 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-full transition-all cursor-pointer whitespace-nowrap shadow-2xs active:scale-95"
+                >
+                  <span>Đăng ký</span>
+                </button>
+
+                {/* Nút Dành cho nhà tuyển dụng */}
                 <button
                   id="header-employer-pill-btn"
-                  onClick={() => onOpenAuth('login')}
-                  className="inline-flex items-center space-x-1.5 sm:space-x-2 px-3.5 sm:px-5 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[40px] group"
+                  onClick={() => onOpenAuth('employer')}
+                  className="hidden sm:inline-flex items-center space-x-1.5 sm:space-x-2 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-bold text-white bg-[#0A58CA] hover:bg-[#084298] rounded-full shadow-xs hover:shadow-md transition-all cursor-pointer whitespace-nowrap min-h-[36px] sm:min-h-[38px] group select-none ml-1 sm:ml-1.5"
+                  title="Kênh dành riêng cho nhà tuyển dụng"
                 >
-                  <RefreshCw className="w-4 h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
-                  <span>Dành cho nhà tuyển dụng</span>
+                  <RefreshCw className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-blue-200 shrink-0 group-hover:rotate-180 transition-transform duration-500" />
+                  <span className="hidden xl:inline">Dành cho nhà tuyển dụng</span>
+                  <span className="xl:hidden">Nhà tuyển dụng</span>
                 </button>
               </div>
             )}
           </div>
         </div>
 
-        {/* Mobile Navigation bar */}
-        <div className="flex md:hidden overflow-x-auto py-2 border-t border-slate-100 space-x-2 no-scrollbar text-xs">
+        {/* Mobile & Tablet Navigation bar for screens under lg (1024px) */}
+        <div className="flex lg:hidden overflow-x-auto py-2 border-t border-slate-100 space-x-2 no-scrollbar text-xs">
           {navItems.map((item) => {
             const isActive = activeTab === item.id;
             return (

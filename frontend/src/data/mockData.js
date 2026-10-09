@@ -1093,56 +1093,153 @@ export const INITIAL_REVIEWS = [
 
 export const INITIAL_ARTICLES = [
   {
-    id: 'art-1',
-    title: 'Bí quyết xây dựng Portfolio UI/UX chinh phục các công ty công nghệ 2024',
+    id: 'art-featured-1',
+    isFeatured: true,
+    badge: 'NỔI BẬT',
+    title: 'Báo cáo Thị trường Tuyển dụng 2024: Những kỹ năng "vàng" được săn đón',
     summary:
-      'Khám phá cách kể câu chuyện thiết kế (Storytelling), trình bày Case Study chuẩn ATS và làm nổi bật tư duy giải quyết vấn đề qua các dự án thực tế.',
+      'Khám phá các xu hướng mới nhất về lương bổng và những kỹ năng công nghệ đang thay đổi diện mạo thị trường lao động toàn cầu.',
     content:
-      'Một Portfolio xuất sắc không chỉ nằm ở hình ảnh giao diện bắt mắt, mà quan trọng hơn là quá trình tư duy (Design Process): từ xác định vấn đề người dùng, phân tích dữ liệu, xây dựng nguyên mẫu đến đo lường tác động kinh doanh.',
-    imageUrl: 'https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?w=800&auto=format&fit=crop&q=80',
-    category: 'Cẩm nang nghề nghiệp',
-    readTime: '5 phút đọc',
-    author: 'Hoàng Minh',
-    date: '12 Tháng 6, 2024',
-  },
-  {
-    id: 'art-2',
-    title: 'Báo cáo xu hướng lương và kỹ năng CNTT được săn đón nhất tại Việt Nam',
-    summary:
-      'Báo cáo thị trường tuyển dụng quý 2/2024: Nhu cầu về nhân lực AI, Full-stack, DevOps và Product Manager tăng trưởng đột biến với mức lương cạnh tranh.',
-    content:
-      'Thị trường việc làm công nghệ đang chuyển dịch mạnh mẽ sang các kỹ năng tích hợp AI và tự động hóa. Những ứng viên có khả năng ứng dụng Generative AI vào quy trình làm việc thường đạt mức lương cao hơn từ 20-30%.',
-    imageUrl: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop&q=80',
-    category: 'Xu hướng thị trường',
-    readTime: '7 phút đọc',
+      'Báo cáo toàn cảnh thị trường lao động 2024 từ JobCentral cho thấy sự bùng nổ của trí tuệ nhân tạo tạo sinh (GenAI), điện toán đám mây và an ninh mạng đang tái định hình yêu cầu tuyển dụng. Hơn 72% nhà tuyển dụng cho biết họ ưu tiên ứng viên sở hữu khả năng kết hợp giữa kỹ năng chuyên môn sâu và tư duy ứng dụng công nghệ tự động hóa. Mức lương cho các vị trí liên quan đến AI và dữ liệu lớn tiếp tục duy trì mức tăng trưởng ấn tượng từ 18% đến 25% so với cùng kỳ năm trước.',
+    category: 'Xu hướng nghề nghiệp',
+    categoryKey: 'market-trends',
+    readTime: '8 phút đọc',
     author: 'Ban Biên Tập JobCentral',
-    date: '08 Tháng 6, 2024',
+    date: '15 Tháng 10, 2023',
+    views: '12.8k',
   },
   {
-    id: 'art-3',
-    title: 'Làm thế nào để đàm phán mức lương xứng đáng trong buổi phỏng vấn cuối?',
+    id: 'art-top-1',
+    title: '5 Cách để Xây dựng Thương hiệu Cá nhân trên LinkedIn',
     summary:
-      'Chiến lược nghiên cứu mặt bằng thu nhập, làm nổi bật giá trị bản thân và kỹ năng thương lượng thông minh giúp bạn đạt được mức đãi ngộ mong muốn.',
+      'Làm thế nào để hồ sơ của bạn nổi bật giữa hàng triệu ứng viên khác chỉ với vài thay đổi nhỏ...',
     content:
-      'Đàm phán lương là một cuộc đối thoại cùng có lợi. Hãy bắt đầu bằng việc nắm vững dữ liệu thị trường, liệt kê những giá trị đóng góp trực tiếp cho doanh nghiệp và giữ thái độ chuyên nghiệp, tự tin.',
-    imageUrl: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&auto=format&fit=crop&q=80',
-    category: 'Kỹ năng phỏng vấn',
+      'LinkedIn không chỉ là một chiếc CV trực tuyến mà còn là nền tảng kết nối quyền lực nhất dành cho chuyên gia. Để tối ưu hóa profile cá nhân: 1. Đặt tiêu đề (Headline) nhấn mạnh giá trị cốt lõi thay vì chỉ ghi chức danh. 2. Tối ưu ảnh đại diện chuyên nghiệp và banner cá nhân hóa. 3. Chia sẻ các bài học kinh nghiệm, case study thực chiến tối thiểu 2 lần/tuần. 4. Chủ động tương tác trong cộng đồng chuyên môn. 5. Tận dụng mục Featured để khoe các sản phẩm tiêu biểu.',
+    category: 'Phát triển bản thân',
+    categoryKey: 'self-dev',
+    readTime: '5 phút đọc',
+    author: 'Hương Giang',
+    date: '14 Tháng 10, 2023',
+    views: '8.4k',
+  },
+  {
+    id: 'art-top-2',
+    title: 'Mẫu CV Chuyên nghiệp dành cho Ngành Công nghệ',
+    summary:
+      'Tải ngay bộ mẫu CV chuẩn ATS giúp bạn vượt qua vòng sàng lọc của những công ty công nghệ',
+    content:
+      'Hệ thống theo dõi hồ sơ ứng viên (ATS) hiện được hơn 85% các tập đoàn công nghệ lớn áp dụng. Một bản CV công nghệ chuẩn cần đảm bảo: Định dạng 1 cột rõ ràng, phông chữ tiêu chuẩn, tích hợp từ khóa kỹ thuật tương ứng với Job Description, trình bày thành tựu theo mô hình STAR (Situation - Task - Action - Result) cùng số liệu định lượng cụ thể về tác động sản phẩm.',
+    category: 'Bí quyết tìm việc',
+    categoryKey: 'job-tips',
     readTime: '4 phút đọc',
-    author: 'Trần Thanh Hằng',
-    date: '01 Tháng 6, 2024',
+    author: 'Minh Anh',
+    date: '13 Tháng 10, 2023',
+    views: '9.2k',
   },
   {
-    id: 'art-4',
-    title: 'Chiến lược chuẩn bị phỏng vấn kỹ thuật (System Design & Live Coding) hiệu quả',
+    id: 'art-latest-1',
+    title: 'Làm việc từ xa vs. Hybrid: Đâu là lựa chọn tối ưu?',
     summary:
-      'Hướng dẫn từng bước cấu trúc câu trả lời bài toán thiết kế hệ thống lớn và giữ bình tĩnh khi Live Coding trước hội đồng tuyển dụng.',
+      'Phân tích sâu về ưu và nhược điểm của các mô hình làm việc hiện đại dựa trên khảo sát từ 5.000 nhân sự tại Việt Nam.',
     content:
-      'Phỏng vấn System Design là nơi bạn thể hiện tầm nhìn kiến trúc phần mềm. Hãy bắt đầu bằng việc làm rõ yêu cầu chức năng và phi chức năng, ước tính dung lượng dữ liệu và chia nhỏ hệ thống thành các thành phần độc lập.',
-    imageUrl: 'https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?w=800&auto=format&fit=crop&q=80',
-    category: 'Kỹ năng chuyên môn',
+      'Khảo sát diện rộng với hơn 5.000 nhân sự ngành công nghệ và tài chính tại Việt Nam cho thấy mô hình Hybrid (2-3 ngày tại văn phòng) đang chiếm ưu thế vượt trội với 68% người tham gia bình chọn là hình thức lý tưởng nhất. Làm việc từ xa hoàn toàn (Full-remote) mang lại sự tự do cao nhưng đối mặt với thách thức gắn kết văn hóa doanh nghiệp, trong khi Hybrid cân bằng hoàn hảo giữa hiệu suất cá nhân và sự hợp tác trực tiếp.',
+    category: 'Xu hướng nghề nghiệp',
+    categoryKey: 'market-trends',
+    categoryDisplay: 'XU HƯỚNG',
     readTime: '6 phút đọc',
-    author: 'Lê Quốc Bảo',
-    date: '20 Tháng 5, 2024',
+    author: 'Minh Anh',
+    date: '12 Tháng 10, 2023',
+    views: '6.7k',
+  },
+  {
+    id: 'art-latest-2',
+    title: 'Kỹ năng lãnh đạo trong kỷ nguyên AI',
+    summary:
+      'Làm thế nào để các nhà quản lý thích nghi và dẫn dắt đội ngũ khi trí tuệ nhân tạo đang thay đổi quy trình làm việc hàng ngày.',
+    content:
+      'Thời đại AI đòi hỏi các nhà lãnh đạo phải chuyển đổi từ tư duy giám sát công việc sang tư duy trao quyền và định hướng chiến lược. Người lãnh đạo thành công không cần phải viết code AI giỏi nhất, mà là người biết cách đặt ra các bài toán đúng, thúc đẩy văn hóa thử nghiệm và trang bị kỹ năng Prompt Engineering cho toàn bộ thành viên trong tổ chức.',
+    category: 'Góc chuyên gia',
+    categoryKey: 'expert-corner',
+    categoryDisplay: 'GÓC CHUYÊN GIA',
+    readTime: '7 phút đọc',
+    author: 'Quốc Bảo',
+    date: '10 Tháng 10, 2023',
+    views: '7.1k',
+  },
+  {
+    id: 'art-latest-3',
+    title: 'Vượt qua nỗi sợ khi đàm phán lương',
+    summary:
+      'Các bước chuẩn bị tâm lý và dữ liệu để bạn tự tin yêu cầu mức thu nhập xứng đáng với năng lực của mình.',
+    content:
+      'Nhiều ứng viên bỏ lỡ cơ hội tăng 15-30% thu nhập chỉ vì e ngại đàm phán lương. Bí quyết nằm ở sự chuẩn bị: Thu thập bảng lương thị trường từ các nguồn đáng tin cậy, chuẩn bị danh mục thành tích đo lường được trong quá khứ, luyện tập phản xạ trước các câu hỏi nhạy cảm và luôn thể hiện tinh thần xây dựng giá trị lâu dài cho công ty.',
+    category: 'Bí quyết tìm việc',
+    categoryKey: 'job-tips',
+    categoryDisplay: 'BÍ QUYẾT',
+    readTime: '5 phút đọc',
+    author: 'Thùy Dương',
+    date: '08 Tháng 10, 2023',
+    views: '5.9k',
+  },
+  {
+    id: 'art-latest-4',
+    title: 'Chuyển ngành ở tuổi 30: Không bao giờ là muộn',
+    summary:
+      'Câu chuyện cảm hứng từ những người đã thành công khi quyết định thay đổi định hướng nghề nghiệp ở cột mốc quan trọng.',
+    content:
+      'Bước sang tuổi 30 không phải là rào cản mà chính là lợi thế cạnh tranh khi bạn đã tích lũy được sự điềm tĩnh, kỹ năng giao tiếp và vốn sống phong phú. Bằng việc xác định rõ kỹ năng chuyển đổi (transferable skills), lên lộ trình học tập tập trung 6-12 tháng và chấp nhận khởi đầu với sự khiêm tốn, hàng nghìn chuyên gia đã bứt phá thành công sang các lĩnh vực mới như Product Management, Data Analytics và UI/UX Design.',
+    category: 'Phát triển bản thân',
+    categoryKey: 'self-dev',
+    categoryDisplay: 'SỰ NGHIỆP',
+    readTime: '6 phút đọc',
+    author: 'Hoàng Nam',
+    date: '05 Tháng 10, 2023',
+    views: '6.3k',
+  },
+  {
+    id: 'art-trending-1',
+    rank: '01',
+    title: 'Top 10 công ty có môi trường làm việc tốt nhất 2023',
+    summary:
+      'Bảng xếp hạng tôn vinh các doanh nghiệp có chính sách đãi ngộ, văn hóa cởi mở và cơ hội thăng tiến vượt trội cho nhân sự.',
+    content:
+      'Dựa trên khảo sát độc lập từ 50.000 người lao động, các tập đoàn dẫn đầu về môi trường làm việc năm 2023 đã tạo dựng sự khác biệt nhờ chính sách chăm sóc sức khỏe toàn diện, văn hóa đa dạng & hòa nhập (D&I), cùng ngân sách đào tạo và phát triển năng lực cá nhân không giới hạn.',
+    category: 'Xu hướng nghề nghiệp',
+    categoryKey: 'market-trends',
+    readTime: '5 phút đọc',
+    author: 'Ban Biên Tập JobCentral',
+    date: '03 Tháng 10, 2023',
+    views: '4.5k lượt xem',
+  },
+  {
+    id: 'art-trending-2',
+    rank: '02',
+    title: 'Cách trả lời câu hỏi "Điểm yếu của bạn là gì?"',
+    summary:
+      'Chiến lược biến câu hỏi khó nhằn nhất trong phòng phỏng vấn thành cơ hội thể hiện sự tự nhận thức và tinh thần cầu tiến.',
+    content:
+      'Đừng trả lời "tôi là người quá cầu toàn" - đó là câu trả lời sáo rỗng nhất! Thay vào đó, hãy chọn một điểm yếu thật nhưng không làm ảnh hưởng trực tiếp đến nhiệm vụ cốt lõi của vị trí ứng tuyển, và quan trọng nhất: Hãy trình bày cụ thể hành động bạn đang thực hiện để cải thiện điểm yếu đó mỗi ngày.',
+    category: 'Bí quyết tìm việc',
+    categoryKey: 'job-tips',
+    readTime: '4 phút đọc',
+    author: 'Lê Minh Khang',
+    date: '02 Tháng 10, 2023',
+    views: '3.8k lượt xem',
+  },
+  {
+    id: 'art-trending-3',
+    rank: '03',
+    title: 'Cẩm nang chuẩn bị cho vòng phỏng vấn kỹ thuật',
+    summary:
+      'Hướng dẫn ôn luyện thuật toán, kiến trúc hệ thống và cách giao tiếp hiệu quả khi live coding với hội đồng phỏng vấn.',
+    content:
+      'Bí quyết vượt qua vòng phỏng vấn kỹ thuật không chỉ là giải đúng bài toán, mà là cách bạn tư duy thành tiếng (think out loud). Hãy luôn làm rõ các giả định biên (edge cases), trao đổi với người phỏng vấn về độ phức tạp thuật toán (Time & Space Complexity) trước khi bắt tay viết dòng mã đầu tiên.',
+    category: 'Góc chuyên gia',
+    categoryKey: 'expert-corner',
+    readTime: '6 phút đọc',
+    author: 'Trần Vũ Hoàng',
+    date: '01 Tháng 10, 2023',
+    views: '3.2k lượt xem',
   },
 ];
 

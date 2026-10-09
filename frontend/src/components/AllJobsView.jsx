@@ -128,6 +128,7 @@ export const AllJobsView = ({
   onApply,
   onViewDetails,
   onShare,
+  onNavigateNews,
 }) => {
   // Search state & Advanced Filters
   const [keyword, setKeyword] = useState('');
@@ -167,7 +168,8 @@ export const AllJobsView = ({
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
   const [chartPeriod, setChartPeriod] = useState('6months');
   const [followedCompanyIds, setFollowedCompanyIds] = useState(['c2']);
-  const [isExpandedIndustries, setIsExpandedIndustries] = useState(false);
+  const [industrySlideIndex, setIndustrySlideIndex] = useState(0);
+  const CATEGORIES_PER_PAGE = 8; // 2 rows x 4 columns = 8 cards per slide
 
   // Auto-rotating 3D axis carousel animation
   useEffect(() => {
@@ -177,8 +179,6 @@ export const AllJobsView = ({
     }, 3200);
     return () => clearInterval(interval);
   }, [isCarouselPaused, companiesList.length]);
-
-  const INITIAL_CATEGORY_COUNT = 7;
 
   // Antigravity-style Hero H1 typing animation (runs ONLY on initial website load)
   // Uses module-level flag so animation survives tab switches but plays only once per session
@@ -620,7 +620,7 @@ export const AllJobsView = ({
   };
 
   return (
-    <div className="bg-[#F8FAFC] pb-20">
+    <div className="bg-[#FAF9FF] pb-20">
       {/* 1. HERO SEARCH SECTION WITH BACKGROUND IMAGE */}
       <section
         id="main-search-hero-section"
@@ -950,104 +950,131 @@ export const AllJobsView = ({
             : 'opacity-0 translate-y-10 scale-[0.98] blur-[2px] pointer-events-none select-none'
         }`}
       >
-        <div className="text-left mb-6">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            Việc Làm Theo <span className="text-[#2170E4]">Ngành Nghề</span>
-          </h2>
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+          <div className="text-left">
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Top ngành nghề <span className="text-[#2170E4]">nổi bật</span>
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 mt-1.5 font-medium">
+              Bạn muốn tìm việc mới? Khám phá ngay các ngành nghề hàng đầu đang được tuyển dụng nhiều nhất
+            </p>
 
-          {industry && (
-            <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-xs text-[#2170E4] font-medium">
-              <span>Đang lọc: <strong>{industry}</strong></span>
+            {industry && (
+              <div className="mt-3 inline-flex items-center gap-2 px-3.5 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-xs text-[#2170E4] font-medium">
+                <span>Đang lọc: <strong>{industry}</strong></span>
+                <button
+                  type="button"
+                  onClick={() => setIndustry('')}
+                  className="hover:bg-blue-200/60 p-0.5 rounded-full cursor-pointer transition-colors"
+                  title="Bỏ lọc ngành nghề"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Navigation carousel arrows like in the reference layout */}
+          {Math.ceil(industryCategories.length / CATEGORIES_PER_PAGE) > 1 && (
+            <div className="flex items-center space-x-2 shrink-0 self-end sm:self-auto">
               <button
                 type="button"
-                onClick={() => setIndustry('')}
-                className="hover:bg-blue-200/60 p-0.5 rounded-full cursor-pointer transition-colors"
-                title="Bỏ lọc ngành nghề"
+                onClick={() => setIndustrySlideIndex((prev) => Math.max(0, prev - 1))}
+                disabled={industrySlideIndex === 0}
+                title="Trang ngành nghề trước"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer active:scale-95"
               >
-                <X className="w-3.5 h-3.5" />
+                <ChevronLeft className="w-5 h-5 stroke-[2]" />
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  setIndustrySlideIndex((prev) =>
+                    Math.min(Math.ceil(industryCategories.length / CATEGORIES_PER_PAGE) - 1, prev + 1)
+                  )
+                }
+                disabled={
+                  industrySlideIndex >= Math.ceil(industryCategories.length / CATEGORIES_PER_PAGE) - 1
+                }
+                title="Trang ngành nghề tiếp theo"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 hover:text-slate-900 disabled:opacity-30 disabled:cursor-not-allowed transition-all shadow-2xs cursor-pointer active:scale-95"
+              >
+                <ChevronRight className="w-5 h-5 stroke-[2]" />
               </button>
             </div>
           )}
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 sm:gap-3.5">
-          {(isExpandedIndustries
-            ? industryCategories
-            : industryCategories.slice(0, INITIAL_CATEGORY_COUNT)
-          ).map((cat, idx) => {
-            const IconComp = cat.icon;
-            const isCategoryActive =
-              industry === cat.title ||
-              industry === cat.fullName ||
-              (industry && cat.title.toLowerCase().includes(industry.toLowerCase())) ||
-              (industry && industry.toLowerCase().includes(cat.title.toLowerCase()));
+        {/* 4 Cards Per Row Grid with Balanced Spacing and Proportions */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          {industryCategories
+            .slice(
+              industrySlideIndex * CATEGORIES_PER_PAGE,
+              industrySlideIndex * CATEGORIES_PER_PAGE + CATEGORIES_PER_PAGE
+            )
+            .map((cat, idx) => {
+              const IconComp = cat.icon;
+              const isCategoryActive =
+                industry === cat.title ||
+                industry === cat.fullName ||
+                (industry && cat.title.toLowerCase().includes(industry.toLowerCase())) ||
+                (industry && industry.toLowerCase().includes(cat.title.toLowerCase()));
 
-            return (
-              <button
-                key={cat.id}
-                type="button"
-                style={{
-                  transitionDelay: isSectionVisible('industries') ? `${idx * 45}ms` : '0ms',
-                }}
-                onClick={() => {
-                  if (isCategoryActive) {
-                    setIndustry('');
-                  } else {
-                    setIndustry(cat.title);
-                    smoothScrollToJobs();
-                  }
-                }}
-                className={`relative rounded-xl p-4 flex flex-col items-center justify-center space-y-2.5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] cursor-pointer group ${
-                  isSectionVisible('industries')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-6'
-                } ${
-                  isCategoryActive
-                    ? 'bg-slate-200/80 border-2 border-[#2170E4] shadow-xs'
-                    : 'bg-white hover:bg-slate-200/70 border border-slate-200/90 hover:border-slate-300'
-                }`}
-              >
-                {isCategoryActive && (
-                  <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#2170E4]" />
-                )}
-                <div
-                  className={`w-11 h-11 rounded-xl ${cat.bgColor} flex items-center justify-center ${cat.iconColor} transition-transform duration-200 shadow-xs`}
+              return (
+                <button
+                  key={cat.id}
+                  type="button"
+                  style={{
+                    transitionDelay: isSectionVisible('industries') ? `${idx * 40}ms` : '0ms',
+                  }}
+                  onClick={() => {
+                    if (isCategoryActive) {
+                      setIndustry('');
+                    } else {
+                      setIndustry(cat.title);
+                      smoothScrollToJobs();
+                    }
+                  }}
+                  className={`relative rounded-2xl p-4 sm:p-5 min-h-[140px] sm:min-h-[150px] flex flex-col items-center justify-center space-y-2.5 transition-all duration-300 ease-out cursor-pointer group text-center ${
+                    isSectionVisible('industries')
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-6'
+                  } ${
+                    isCategoryActive
+                      ? 'bg-blue-50/90 border-2 border-[#2170E4] shadow-sm'
+                      : 'bg-white hover:bg-white border border-slate-200/90 shadow-2xs hover:border-[#EFF6FF] hover:ring-4 hover:ring-[#EFF6FF] hover:shadow-[0_0_20px_6px_#EFF6FF,0_6px_20px_rgba(33,112,228,0.06)] hover:-translate-y-0.5'
+                  }`}
                 >
-                  <IconComp className="w-5 h-5 stroke-[2.2]" />
-                </div>
-                <span className={`text-xs font-bold leading-tight line-clamp-1 transition-colors ${
-                  isCategoryActive ? 'text-[#2170E4]' : 'text-slate-800 group-hover:text-slate-950'
-                }`}>
-                  {cat.title}
-                </span>
-                <span className="text-[10.5px] text-slate-400 group-hover:text-slate-600 font-medium">
-                  {cat.jobsCount} việc
-                </span>
-              </button>
-            );
-          })}
-        </div>
+                  {isCategoryActive && (
+                    <span className="absolute top-2.5 right-2.5 w-2 h-2 rounded-full bg-[#2170E4]" />
+                  )}
 
-        {industryCategories.length > INITIAL_CATEGORY_COUNT && (
-          <div className="mt-6 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setIsExpandedIndustries((prev) => !prev)}
-              className="inline-flex items-center gap-2 px-6 py-2.5 bg-white hover:bg-slate-200/70 border border-slate-200/90 hover:border-slate-300 rounded-full text-xs sm:text-sm font-semibold text-slate-700 hover:text-slate-900 shadow-xs transition-colors cursor-pointer active:scale-95"
-            >
-              <span>
-                {isExpandedIndustries
-                  ? 'Thu gọn danh mục ngành nghề'
-                  : `Xem thêm ${industryCategories.length - INITIAL_CATEGORY_COUNT} ngành nghề khác`}
-              </span>
-              {isExpandedIndustries ? (
-                <ChevronUp className="w-4 h-4 text-slate-400" />
-              ) : (
-                <ChevronDown className="w-4 h-4 text-slate-400" />
-              )}
-            </button>
-          </div>
-        )}
+                  {/* Balanced Icon Box */}
+                  <div
+                    className={`w-12 h-12 sm:w-13 sm:h-13 rounded-xl ${cat.bgColor} flex items-center justify-center ${cat.iconColor} transition-transform duration-300 group-hover:scale-105 shadow-2xs`}
+                  >
+                    <IconComp className="w-6 h-6 sm:w-6.5 sm:h-6.5 stroke-[2]" />
+                  </div>
+
+                  {/* Title */}
+                  <h3
+                    className={`text-xs sm:text-sm font-bold leading-snug line-clamp-1 transition-colors ${
+                      isCategoryActive
+                        ? 'text-[#2170E4]'
+                        : 'text-slate-800 group-hover:text-[#2170E4]'
+                    }`}
+                  >
+                    {cat.title}
+                  </h3>
+
+                  {/* Jobs Count */}
+                  <span className="text-[11px] sm:text-xs font-medium text-slate-500 group-hover:text-slate-600 leading-none">
+                    {cat.jobsCount} việc làm
+                  </span>
+                </button>
+              );
+            })}
+        </div>
       </section>
 
       {/* 4. VIỆC LÀM MỚI NHẤT */}
@@ -1144,7 +1171,7 @@ export const AllJobsView = ({
                     transitionDelay: isSectionVisible('latest-jobs') ? `${idx * 65}ms` : '0ms',
                   }}
                   onClick={() => onViewDetails(job)}
-                  className={`bg-white hover:bg-slate-200/65 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] flex flex-col justify-between space-y-4 relative group cursor-pointer ${
+                  className={`bg-white hover:bg-white rounded-2xl border border-slate-200/90 hover:border-[#2170E4] hover:shadow-md p-5 transition-all duration-300 ease-out flex flex-col justify-between space-y-4 relative group cursor-pointer ${
                     isSectionVisible('latest-jobs')
                       ? 'opacity-100 translate-y-0'
                       : 'opacity-0 translate-y-8'
@@ -1171,7 +1198,7 @@ export const AllJobsView = ({
                             e.stopPropagation();
                             onViewDetails(job);
                           }}
-                          className="text-sm font-bold text-slate-900 truncate group-hover:text-slate-950 cursor-pointer transition-colors"
+                          className="text-sm font-bold text-slate-900 truncate group-hover:text-[#2170E4] cursor-pointer transition-colors"
                         >
                           {job.title}
                         </h3>
@@ -1231,30 +1258,11 @@ export const AllJobsView = ({
                       </span>
                     </div>
 
-                    {/* Footer Row: Posted Time & Action Buttons */}
-                    <div className="flex items-center justify-between pt-2 border-t border-slate-100 group-hover:border-slate-300/70 text-xs transition-colors">
-                      <span className="text-slate-400 group-hover:text-slate-600 font-medium">{job.postedTime || 'Mới cập nhật'}</span>
-                      <div className="flex items-center space-x-2">
-                        <button
-                          type="button"
-                          id={`view-detail-btn-${job.id}`}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onViewDetails(job);
-                          }}
-                          className="px-3.5 py-1.5 bg-blue-50 hover:bg-blue-100 text-[#2170E4] font-semibold rounded-full text-xs transition-colors cursor-pointer"
-                        >
-                          Chi tiết
-                        </button>
-                        <button
-                          type="button"
-                          id={`apply-btn-${job.id}`}
-                          onClick={(e) => onApply(job, e)}
-                          className="px-4 py-1.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-xs shadow-xs hover:shadow-sm active:scale-95 transition-all cursor-pointer"
-                        >
-                          Ứng tuyển
-                        </button>
-                      </div>
+                    {/* Footer Row: Posted Time */}
+                    <div className="flex items-center justify-between pt-2.5 border-t border-slate-100 group-hover:border-slate-200 text-xs transition-colors">
+                      <span className="text-slate-400 group-hover:text-slate-600 font-medium">
+                        {job.postedTime || 'Mới cập nhật'}
+                      </span>
                     </div>
                   </div>
               ))}
@@ -1555,7 +1563,10 @@ export const AllJobsView = ({
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
           {/* Card 1 */}
-          <div className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer">
+          <div
+            onClick={() => onNavigateNews && onNavigateNews()}
+            className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer"
+          >
             <div>
               <h3 className="text-sm font-bold text-slate-900">Tương lai việc làm</h3>
               <p className="text-xs text-slate-600 leading-relaxed mt-2">
@@ -1564,7 +1575,11 @@ export const AllJobsView = ({
             </div>
             <a
               href="#report"
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (onNavigateNews) onNavigateNews();
+              }}
               className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
             >
               <span>Đọc báo cáo đầy đủ</span>
@@ -1573,7 +1588,10 @@ export const AllJobsView = ({
           </div>
 
           {/* Card 2 */}
-          <div className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer">
+          <div
+            onClick={() => onNavigateNews && onNavigateNews()}
+            className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer"
+          >
             <div>
               <h3 className="text-sm font-bold text-slate-900">Kỹ năng vàng</h3>
               <p className="text-xs text-slate-600 leading-relaxed mt-2">
@@ -1582,7 +1600,11 @@ export const AllJobsView = ({
             </div>
             <a
               href="#skills"
-              onClick={(e) => e.preventDefault()}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (onNavigateNews) onNavigateNews();
+              }}
               className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
             >
               <span>Khám phá kỹ năng</span>

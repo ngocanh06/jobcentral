@@ -12,6 +12,7 @@ import {
   CheckCircle2,
   ShieldCheck,
   ChevronRight,
+  BookOpen,
 } from 'lucide-react';
 import { useDevice } from '../context/DeviceContext';
 import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
@@ -210,6 +211,23 @@ export const MobileProfileDrawer = ({
                   )}
                   <ChevronRight className="w-4 h-4 text-slate-400" />
                 </div>
+              </button>
+
+              <button
+                type="button"
+                onClick={() => {
+                  onClose();
+                  onTabChange('news');
+                }}
+                className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0A58CA] flex items-center justify-center">
+                    <BookOpen className="w-4 h-4" />
+                  </div>
+                  <span>Tin tức & Cẩm nang nghề nghiệp</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
               </button>
 
               {/* Logout */}

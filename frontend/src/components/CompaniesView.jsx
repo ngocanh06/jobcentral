@@ -272,7 +272,7 @@ export const CompaniesView = ({
   const displayAvatar = catAvatar;
 
   return (
-    <div className="bg-[#f4f2ee] min-h-screen py-5 sm:py-6">
+    <div className="bg-[#FAF9FF] min-h-screen py-5 sm:py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Notice when navigated from recruiter */}
         {initialSearchQuery && searchTerm === initialSearchQuery && (
@@ -297,7 +297,7 @@ export const CompaniesView = ({
           </div>
         )}
 
-        {/* 3-Column LinkedIn-style Layout: Các vùng nổi ra so với background (#f4f2ee) và tách biệt với nhau */}
+        {/* 3-Column LinkedIn-style Layout: Các vùng nổi ra so với background (#FAF9FF) và tách biệt với nhau */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
           {/* =================================================================== */}
           {/* CỘT TRÁI (3 cols): TỪ TÀI KHOẢN ĐẾN THÔNG TIN Y NGUYÊN NHƯ TRONG HÌNH */}

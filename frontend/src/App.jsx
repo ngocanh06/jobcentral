@@ -3,6 +3,7 @@ import {
   INITIAL_JOBS,
   INITIAL_COMPANIES,
   INITIAL_ARTICLES,
+  INITIAL_REVIEWS,
 } from './data/mockData';
 import { Header } from './components/Header';
 import { AllJobsView } from './components/AllJobsView';
@@ -11,6 +12,7 @@ import { SavedJobsView } from './components/SavedJobsView';
 import { CompaniesView } from './components/CompaniesView';
 import { CompanyDetailView } from './components/CompanyDetailView';
 import { NewsView } from './components/NewsView';
+import { ReviewsView } from './components/ReviewsView';
 import { ToolsView } from './components/ToolsView';
 import { CVBuilderView } from './components/CVBuilderView';
 import { MessagesView } from './components/MessagesView';
@@ -193,7 +195,11 @@ export function App() {
   };
 
   const handleAuthSuccess = (user) => {
-    const loggedInUser = { ...user, avatar: catAvatar, isGuest: false };
+    const loggedInUser = {
+      ...user,
+      avatar: user.avatar || catAvatar,
+      isGuest: false,
+    };
     setCurrentUser(loggedInUser);
     try {
       localStorage.setItem('jobcentral_user', JSON.stringify(loggedInUser));
@@ -219,11 +225,7 @@ export function App() {
 
   return (
     <div
-      className={`flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 ${
-        selectedJobForStandardApply || selectedJobForDetail || activeTab === 'search' || activeTab === 'companies'
-          ? 'bg-[#f4f2ee]'
-          : 'bg-[#F8FAFC]'
-      } ${
+      className={`flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 bg-[#FAF9FF] ${
         (activeTab === 'messages' || activeTab === 'search') && !selectedJobForDetail && !selectedJobForStandardApply
           ? 'h-dvh overflow-hidden'
           : 'min-h-screen'
@@ -354,6 +356,10 @@ export function App() {
                 onApply={handleApplyClick}
                 onViewDetails={handleViewJobDetails}
                 onShare={handleShareJob}
+                onNavigateNews={() => {
+                  setActiveTab('news');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
               />
             )}
 
@@ -427,6 +433,10 @@ export function App() {
 
             {activeTab === 'news' && (
               <NewsView articles={INITIAL_ARTICLES} />
+            )}
+
+            {activeTab === 'reviews' && (
+              <ReviewsView reviews={INITIAL_REVIEWS} />
             )}
 
             {activeTab === 'tools' && (

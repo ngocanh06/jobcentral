@@ -39,7 +39,6 @@
 }
 
 html {
-  overflow-y: scroll;
   scrollbar-gutter: stable;
   scroll-behavior: smooth;
 }
@@ -91,9 +90,16 @@ html {
   animation: antigravity-cursor-blink 0.9s infinite;
 }
 
-html, body {
-  overflow-x: hidden;
+html {
   max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: #FAF9FF;
+  overflow-x: clip;
+  max-width: 100vw;
+  min-height: 100%;
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }

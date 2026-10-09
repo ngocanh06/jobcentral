@@ -538,7 +538,7 @@ export const CompanyDetailView = ({
   };
 
   return (
-    <div className="w-full bg-[#f8fafd] min-h-screen text-slate-800 pb-16">
+    <div className="w-full bg-[#FAF9FF] min-h-screen text-slate-800 pb-16">
       {/* Main Container */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-6">
         {/* Top Banner Section */}

@@ -337,7 +337,7 @@ export const ToolsView = ({
     : filteredDevTools.slice(0, 3);
 
   return (
-    <div className="bg-[#f4f2ee] min-h-screen py-5 sm:py-6">
+    <div className="bg-[#FAF9FF] min-h-screen py-5 sm:py-6">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* 3-Column LinkedIn-style Layout: Đồng bộ phong cách với trang Công ty */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">

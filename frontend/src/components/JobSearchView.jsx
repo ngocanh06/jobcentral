@@ -399,7 +399,7 @@ export const JobSearchView = ({
   };
 
   return (
-    <div className="w-full bg-[#f4f2ee] text-slate-800 flex flex-col flex-1 h-full min-h-0 overflow-hidden">
+    <div className="w-full bg-[#FAF9FF] text-slate-800 flex flex-col flex-1 h-full min-h-0 overflow-hidden">
       <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-3.5 pb-1 shrink-0 z-20">
         {/* Top Filter Card (Separated from main navbar, aligned with max-w-7xl) */}
         <div className="bg-white border border-slate-200/90 rounded-xl px-4 py-2.5 flex flex-wrap items-center justify-between gap-2.5 shadow-2xs">

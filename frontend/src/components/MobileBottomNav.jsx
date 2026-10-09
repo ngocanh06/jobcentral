@@ -23,7 +23,7 @@ export const MobileBottomNav = ({
     },
     {
       id: 'search',
-      label: 'Tìm việc',
+      label: 'Việc làm',
       icon: Search,
     },
     {
