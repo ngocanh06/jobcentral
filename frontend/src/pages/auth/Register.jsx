@@ -1,528 +1,626 @@
-import React, { useState, useEffect } from "react";
-import {
-  Building2,
-  Sparkles,
-  Zap,
-  Ticket,
-  Search,
-  Target,
-  CheckCircle2,
-  User,
-  Phone,
-  Mail,
-  MapPin,
-  Lock,
-  Eye,
-  EyeOff,
-  ChevronDown,
-  LogIn,
-  UserPlus,
-  Headset,
-} from "lucide-react";
-import { Link } from "lucide-react";
-import pic_logo from "../../picture_sec/Logo_JobCentral.png";
+import React, { useState, useEffect, useMemo } from "react";
+import { MapPin, Eye, EyeOff, ChevronDown, Headset } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
+import { Link } from "react-router-dom";
+// const { login } = useAuth();
+// const navigate = useNavigate();
 
-const PROVINCES = [
-  "TP. Hồ Chí Minh",
-  "Hà Nội",
-  "Đà Nẵng",
-  "Cần Thơ",
-  "Hải Phòng",
-  "Bình Dương",
-];
+const STEPS = ["Thông tin", "Công ty", "Xác thực"];
 
-const CLIENT_LOGOS = [
-  "HSBC",
-  "VIETTEL",
-  "FPT SOFT",
-  "VINGROUP",
-  "TIKI",
-  "TECHCOM",
-];
+/* =====================================================================
+ * Các component dùng chung — ĐẶT NGOÀI RightPanel.
+ * Nếu khai báo bên trong RightPanel, mỗi lần gõ phím React sẽ tạo lại
+ * component mới => ô input bị mất focus sau mỗi ký tự.
+ * ===================================================================== */
 
-function LeftPanel() {
+const inputCls = (err) =>
+  `h-12 w-full rounded-lg border bg-white px-4 text-base text-slate-900 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-100 ${
+    err ? "border-red-400" : "border-slate-300"
+  }`;
+
+function Field({ label, error, children, tooltip }) {
   return (
-    <div className="relative flex h-full flex-col justify-between overflow-hidden bg-[#0B1220] px-8 py-10 text-slate-100 lg:px-12 lg:py-12">
-      {/* ambient glow */}
-      <div className="pointer-events-none absolute -top-24 -left-24 h-72 w-72 rounded-full bg-blue-600/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-emerald-500/10 blur-3xl" />
-
-      <div className="relative z-10">
-        {/* Brand row */}
-        <div className="mb-8 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600">
-              <img
-                src={pic_logo}
-                alt="Logo JobCentral"
-                className="h-full w-full rounded-lg object-contain"
-              />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-lg font-semibold leading-tight text-white">
-                  JobCentral
-                </span>
-                <span className="rounded-md bg-blue-500/20 px-2 py-0.5 text-[10px] font-semibold tracking-wide text-blue-300">
-                  HR CENTRAL
-                </span>
-              </div>
-              <p className="text-[11px] leading-tight text-slate-400">
-                Cổng doanh nghiệp &amp; tuyển dụng V5.0
-              </p>
-            </div>
-          </div>
-          <div className="hidden items-center gap-2 rounded-full border border-slate-700/70 bg-slate-800/50 px-3 py-1.5 sm:flex">
-            <span className="h-2 w-2 rounded-full bg-emerald-400" />
-            <span className="text-xs text-slate-300">
-              Hệ thống phân tích AI trực tuyến
+    <div>
+      <label className="mb-1.5 flex items-center gap-1.5 text-[14px] font-medium text-slate-700">
+        {label}
+        <span className="text-red-500">*</span>
+        {tooltip && (
+          <span className="group relative">
+            <span className="flex h-4 w-4 cursor-help items-center justify-center rounded-full bg-slate-500 text-[10px] font-bold text-white">
+              ?
             </span>
-          </div>
-        </div>
-
-        {/* Eyebrow pill */}
-        <div className="mb-5 inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-3 py-1.5 text-xs font-medium text-emerald-300 ring-1 ring-inset ring-emerald-500/20">
-          <Zap className="h-3.5 w-3.5" />
-          Gia nhập mạng lưới tuyển dụng số 1
-        </div>
-
-        {/* Headline */}
-        <h1 className="text-4xl font-bold leading-[1.15] text-white sm:text-[42px]">
-          Bắt đầu tuyển dụng nhân tài cùng JobCentral
-        </h1>
-
-        <p className="mt-5 max-w-md text-[15px] leading-relaxed text-slate-300">
-          Đăng ký tài khoản doanh nghiệp nhận ngay{" "}
-          <span className="font-semibold text-emerald-400">
-            01 tin đăng tuyển miễn phí
-          </span>{" "}
-          &amp;{" "}
-          <span className="font-semibold text-emerald-400">
-            30 ngày trải nghiệm
-          </span>{" "}
-          thuật toán AI Talent Matching.
-        </p>
-
-        {/* Gift card */}
-        <div className="mt-8 rounded-2xl border border-slate-700/60 bg-slate-800/40 p-5 backdrop-blur-sm">
-          <div className="mb-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 text-sm font-medium text-white">
-              <span className="h-2 w-2 rounded-full bg-emerald-400" />
-              Gói quà tặng khởi động doanh nghiệp mới
-            </div>
-            <span className="rounded-md bg-amber-400/90 px-2 py-1 text-[11px] font-bold text-slate-900">
-              TRỊ GIÁ 2.850.000đ
+            <span className="pointer-events-none absolute left-6 top-1/2 z-10 hidden w-60 -translate-y-1/2 rounded bg-slate-800 p-2 text-xs font-normal text-white group-hover:block">
+              {tooltip}
             </span>
-          </div>
-
-          <div className="grid grid-cols-3 gap-3">
-            <div className="rounded-xl bg-slate-900/60 p-3">
-              <Ticket className="mb-2 h-5 w-5 text-blue-400" />
-              <p className="text-[13px] font-semibold text-white">
-                01 Tin Đăng Tuyển
-              </p>
-              <p className="mt-1 text-[11px] leading-snug text-slate-400">
-                Tiêu chuẩn 30 ngày hiển thị ưu tiên
-              </p>
-            </div>
-            <div className="rounded-xl bg-slate-900/60 p-3">
-              <Search className="mb-2 h-5 w-5 text-blue-400" />
-              <p className="text-[13px] font-semibold text-white">
-                05 Điểm Lọc CV
-              </p>
-              <p className="mt-1 text-[11px] leading-snug text-slate-400">
-                Mở khoá bộ ứng viên chất lượng cao
-              </p>
-            </div>
-            <div className="rounded-xl bg-slate-900/60 p-3">
-              <Target className="mb-2 h-5 w-5 text-blue-400" />
-              <p className="text-[13px] font-semibold text-white">
-                AI Candidate Score
-              </p>
-              <p className="mt-1 text-[11px] leading-snug text-slate-400">
-                Đánh giá độ phù hợp tự động
-              </p>
-            </div>
-          </div>
-
-          <div className="mt-4 grid grid-cols-2 gap-2 border-t border-slate-700/60 pt-4">
-            <div className="flex items-center gap-2 text-[13px] text-slate-300">
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
-              5.000.000+ Hồ sơ chuyên môn
-            </div>
-            <div className="flex items-center gap-2 text-[13px] text-slate-300">
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
-              Tích hợp hệ thống ATS hiện đại
-            </div>
-            <div className="flex items-center gap-2 text-[13px] text-slate-300">
-              <CheckCircle2 className="h-4 w-4 shrink-0 text-emerald-400" />
-              Chuyên viên HR tư vấn 1:1
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Bottom trust row */}
-      <div className="relative z-10 mt-10">
-        <p className="mb-3 text-[11px] font-medium tracking-wide text-slate-500">
-          20.000+ doanh nghiệp &amp; tập đoàn tin dùng
-        </p>
-        <div className="flex flex-wrap gap-2">
-          {CLIENT_LOGOS.map((name) => (
-            <span
-              key={name}
-              className="rounded-lg border border-slate-700/60 bg-slate-800/40 px-3 py-1.5 text-[11px] font-semibold text-slate-300"
-            >
-              {name}
-            </span>
-          ))}
-        </div>
-
-        <div className="mt-5 flex flex-wrap items-center gap-x-5 gap-y-2 text-[11px] text-slate-500">
-          <span>ISO/IEC 27001 Certified</span>
-          <span>Tuân thủ Nghị định 13/2023/NĐ-CP</span>
-          <span>Mã hóa SSL 256-Bit</span>
-        </div>
-      </div>
+          </span>
+        )}
+      </label>
+      {children}
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
     </div>
   );
 }
 
-function TextField({
-  icon: Icon,
-  label,
-  placeholder,
-  type = "text",
-  required,
-}) {
-  const [value, setValue] = useState("");
-  return (
-    <label className="block">
-      <span className="mb-1.5 block text-[13px] font-medium text-slate-700">
-        {label} {required && <span className="text-blue-600">*</span>}
-      </span>
-      <span className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2.5 transition focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-        <Icon className="h-4 w-4 shrink-0 text-slate-400" />
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={placeholder}
-          className="w-full bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
-        />
-      </span>
-    </label>
-  );
-}
-
-function PasswordField({ label, placeholder }) {
-  const [value, setValue] = useState("");
+function PasswordInput({ value, onChange, onBlur, error }) {
   const [visible, setVisible] = useState(false);
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-[13px] font-medium text-slate-700">
-        {label} <span className="text-blue-600">*</span>
-      </span>
-      <span className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2.5 transition focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-        <Lock className="h-4 w-4 shrink-0 text-slate-400" />
-        <input
-          type={visible ? "text" : "password"}
-          value={value}
-          onChange={(e) => setValue(e.target.value)}
-          placeholder={placeholder}
-          className="w-full bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
-        />
-        <button
-          type="button"
-          onClick={() => setVisible((v) => !v)}
-          className="text-slate-400 hover:text-slate-600"
-          aria-label={visible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
-        >
-          {visible ? (
-            <EyeOff className="h-4 w-4" />
-          ) : (
-            <Eye className="h-4 w-4" />
-          )}
-        </button>
-      </span>
-    </label>
+    <div className="relative">
+      <input
+        type={visible ? "text" : "password"}
+        value={value}
+        onChange={onChange}
+        onBlur={onBlur}
+        className={`${inputCls(error)} pr-12`}
+        autoComplete="new-password"
+      />
+      <button
+        type="button"
+        onClick={() => setVisible((v) => !v)}
+        aria-label={visible ? "Ẩn mật khẩu" : "Hiện mật khẩu"}
+        className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700"
+      >
+        {visible ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+      </button>
+    </div>
   );
 }
 
-function ProvinceField() {
-  const [value, setValue] = useState("");
-  const [provinces, setProvinces] = useState([]); // State để lưu danh sách tỉnh từ API
-  const [loading, setLoading] = useState(true);   // State hiển thị trạng thái đang tải
+function Stepper({ current = 0 }) {
+  return (
+    <div className="flex w-full items-stretch">
+      {STEPS.map((label, i) => {
+        const active = i === current;
+        const first = i === 0;
+        const last = i === STEPS.length - 1;
+        const d = 18; // độ sâu mũi tên (px)
+
+        const clip = `polygon(
+          0 0,
+          ${last ? "100% 0, 100% 100%" : `calc(100% - ${d}px) 0, 100% 50%, calc(100% - ${d}px) 100%`},
+          0 100%
+          ${first ? "" : `, ${d}px 50%`}
+        )`;
+
+        return (
+          <div
+            key={label}
+            style={{ clipPath: clip }}
+            className={`flex h-12 flex-1 items-center justify-center gap-2 whitespace-nowrap text-sm ${
+              first ? "" : "-ml-1"
+            } ${
+              active
+                ? "bg-blue-600 font-medium text-white"
+                : "bg-slate-200 text-slate-600"
+            }`}
+          >
+            <span
+              className={`flex h-6 w-6 items-center justify-center rounded-full text-xs ${
+                active ? "bg-white/25" : "bg-slate-300"
+              }`}
+            >
+              {i + 1}
+            </span>
+            {label}
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+/* Dùng cho bước 2 (Công ty) — chưa hiển thị ở bước 1 */
+
+function ProvinceField({ value, onChange, onBlur, error }) {
+  const [provinces, setProvinces] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
-    const effectiveDate = "2025-07-01";
-    // Đã sửa lại đúng cấu trúc URL của AddressKit by Casso
-    const url = `https://cas.so{effectiveDate}/provinces`;
+    const date = "2025-07-01";
+    const url_connect = `/address-kit/${date}/provinces`;
+    const controller = new AbortController();
+    setLoading(true);
+    setLoadError("");
 
-    fetch(url)
+    fetch(url_connect, { signal: controller.signal })
       .then((res) => {
-        if (!res.ok) throw new Error("Không thể tải danh sách tỉnh thành");
+        if (!res.ok) {
+          throw new Error(`Không thể tải danh sách tỉnh thành ${res.status}`);
+        }
         return res.json();
       })
+
       .then((data) => {
-        // AddressKit trả về một mảng các object: [{ code: "01", name: "Thành phố Hà Nội", ... }]
-        setProvinces(data);
-        setLoading(false);
+        const items = data.provinces ?? data;
+        if (!Array.isArray(items)) {
+          throw new Error(`Dữ liệu tỉnh thành không hợp lệ`.data);
+        }
+        setProvinces(items);
+        console.log("dữ liệu đầu ra", data.provinces);
       })
       .catch((err) => {
-        console.error("Lỗi fetch API:", err);
-        setLoading(false);
+        if (err.name !== "AbortError") {
+          console.error("Lỗi tải danh sách tỉnh thành:", err);
+          setLoadError("Không thể tải danh sách tỉnh thành. Vui lòng thử lại.");
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
       });
-  }, []);
+    return () => controller.abort();
+  }, [attempt]);
 
   return (
-    <label className="block">
-      <span className="mb-1.5 block text-[13px] font-medium text-slate-700">
-        Tỉnh / Thành phố <span className="text-blue-600">*</span>
-      </span>
-      <span className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2.5 transition focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-        <MapPin className="h-4 w-4 shrink-0 text-slate-400" />
+    <Field label="Tỉnh / Thành phố" error={error || loadError}>
+      <span className="relative flex items-center">
+        <MapPin className="pointer-events-none absolute left-3 h-4 w-4 text-slate-400" />
         <select
           value={value}
-          onChange={(e) => setValue(e.target.value)}
-          className="w-full appearance-none bg-transparent text-sm text-slate-800 focus:outline-none disabled:opacity-50"
-          disabled={loading} // Khóa select khi chưa tải xong dữ liệu
+          onChange={onChange}
+          onBlur={onBlur}
+          disabled={loading || Boolean(loadError)}
+          className={`${inputCls(error || loadError)} appearance-none pl-9 disabled:opacity-50`}
         >
           <option value="" disabled>
-            {loading ? "Đang tải dữ liệu..." : "Chọn Tỉnh / Thành phố"}
+            {loading
+              ? "Đang tải dữ liệu..."
+              : loadError
+                ? "Không thể tải danh sách"
+                : "Chọn Tỉnh / Thành phố"}
           </option>
-          
-          {/* Lặp qua danh sách tỉnh thành lấy từ API */}
           {provinces.map((p) => (
             <option key={p.code} value={p.code}>
               {p.name}
             </option>
           ))}
         </select>
-        <ChevronDown className="h-4 w-4 shrink-0 text-slate-400" />
+        <ChevronDown className="pointer-events-none absolute right-3 h-4 w-4 text-slate-400" />
       </span>
-    </label>
+      {loadError && (
+        <button
+          type="button"
+          onClick={() => setAttempt((current) => current + 1)}
+          className="mt-2 text-sm font-medium text-blue-600 hover:text-blue-700"
+        >
+          Tải lại danh sách
+        </button>
+      )}
+    </Field>
   );
 }
 
-function SSOButton({ label, children }) {
+/* ============================ Panel trái ============================ */
+const slideshowSlides = [
+  {
+    image: "/picture/banner_outside1.png",
+    text: "Nền tảng bứt phá – Nâng tầm sự nghiệp",
+  },
+  {
+    image: "/picture/banner_outside3.png",
+    text: "Tuyển dụng hiệu quả cùng HIRA hỗ trợ",
+  },
+  {
+    image: "/picture/banner_outside2.png",
+    text: "Tuyển dụng thông minh – Hiệu quả vượt trội",
+  },
+];
+
+function LeftPanel() {
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
+
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setActiveImageIndex(
+        (currentIndex) => (currentIndex + 1) % slideshowSlides.length,
+      );
+    }, 7000);
+
+    return () => clearInterval(intervalId);
+  }, [activeImageIndex]);
+
+  const showImage = (index) => {
+    setActiveImageIndex(
+      (index + slideshowSlides.length) % slideshowSlides.length,
+    );
+  };
+
   return (
-    <button
-      type="button"
-      className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white py-2.5 text-sm font-medium text-slate-700 transition hover:border-slate-400 hover:bg-slate-50"
-    >
-      {children}
-      {label}
-    </button>
+    <div className="relative flex h-full flex-col justify-between overflow-hidden bg-[#0a131c] bg-gradient-to-t from-[#0a131c] from-0% to-[#1e85d4] to-[85%] px-8 py-10 text-slate-100 lg:px-12 lg:py-12">
+      <div className="relative z-10">
+        <div className="mb-8 flex items-center gap-3">
+          <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-blue-600">
+            <img
+              src={"/picture/Logo_JobCentral.png"}
+              alt="Logo JobCentral"
+              className="h-full w-full rounded-lg object-contain"
+            />
+          </div>
+          <span className="text-lg font-semibold leading-tight text-white">
+            JobCentral
+          </span>
+        </div>
+
+        <h1 className="text-4xl font-bold leading-[1.15] text-white sm:text-[42px]">
+          Bắt đầu tuyển dụng nhân tài cùng JobCentral
+        </h1>
+
+        <div className="mt-8 rounded-2xl border border-slate-700/60 bg-slate-800/40 p-5 backdrop-blur-sm">
+          <div className="overflow-hidden rounded-xl">
+            <img
+              key={activeImageIndex}
+              src={slideshowSlides[activeImageIndex].image}
+              alt={`Minh họa JobCentral ${activeImageIndex + 1}`}
+              className="w-full rounded-xl animate-[slideshowFade_500ms_ease-in-out]"
+            />
+          </div>
+
+          <div className="mt-3 flex items-center justify-center">
+            <div className="flex items-center gap-2" aria-label="Chọn ảnh">
+              {slideshowSlides.map((slide, index) => (
+                <button
+                  key={slide.image}
+                  type="button"
+                  onClick={() => showImage(index)}
+                  aria-label={`Chuyển đến ảnh ${index + 1}`}
+                  aria-current={index === activeImageIndex ? "true" : undefined}
+                  className={`h-2 rounded-full transition-all duration-300 ${
+                    index === activeImageIndex
+                      ? "w-6 bg-white"
+                      : "w-2 bg-white/40 hover:bg-white/70"
+                  }`}
+                />
+              ))}
+            </div>
+          </div>
+          <div className="mt-4 flex justify-center border-t border-slate-700/60 pt-4">
+            <span
+              key={activeImageIndex}
+              className="text-center font-semibold text-lg animate-[slideshowFade_500ms_ease-in-out]"
+            >
+              {slideshowSlides[activeImageIndex].text}
+            </span>
+          </div>
+          <style>{`
+            @keyframes slideshowFade {
+              from { opacity: 0.35; transform: scale(0.985); }
+              to { opacity: 1; transform: scale(1); }
+            }
+          `}</style>
+        </div>
+      </div>
+
+      <div className="flex justify-center">
+        <img
+          src="/picture/Powered.png"
+          alt="Powered by"
+          className="h-20 w-60 rounded-xl"
+        />
+      </div>
+    </div>
   );
 }
+
+/* ============================ Panel phải ============================ */
 
 function RightPanel() {
-  const [agreed, setAgreed] = useState(false);
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const [step, setStep] = useState(0);
 
-  function handleRegister(event) {
-    event.preventDefault();
-    login();
-    navigate("/Dashboard", { replace: true });
-  }
+  const [form, setForm] = useState({
+    firstName: "",
+    lastName: "",
+    phone: "",
+    email: "",
+    password: "",
+    confirm: "",
+  });
+  const [company, setCompany] = useState({
+    name: "",
+    website: "",
+    province: "",
+    address: "",
+  });
+  const [verificationCode, setVerificationCode] = useState("");
+  const [touched, setTouched] = useState({});
+  const [companyTouched, setCompanyTouched] = useState({});
+
+  const set = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
+  const blur = (k) => () => setTouched((t) => ({ ...t, [k]: true }));
+  const setCompanyField = (k) => (e) =>
+    setCompany((c) => ({ ...c, [k]: e.target.value }));
+  const blurCompanyField = (k) => () =>
+    setCompanyTouched((t) => ({ ...t, [k]: true }));
+
+  const errors = useMemo(() => {
+    const e = {};
+    if (!form.firstName.trim()) e.firstName = "Vui lòng nhập tên";
+    if (!form.lastName.trim()) e.lastName = "Vui lòng nhập họ";
+    if (!/^(0|\+84)\d{9}$/.test(form.phone.replace(/\s/g, "")))
+      e.phone = "Số điện thoại không hợp lệ";
+    if (!/^\S+@\S+\.\S+$/.test(form.email))
+      e.email = "Địa chỉ email không hợp lệ";
+    if (form.password.length < 8) e.password = "Mật khẩu tối thiểu 8 ký tự";
+    if (!form.confirm || form.confirm !== form.password)
+      e.confirm = "Mật khẩu nhập lại không khớp";
+    return e;
+  }, [form]);
+
+  const companyErrors = useMemo(() => {
+    const e = {};
+    if (!company.name.trim()) e.name = "Vui lòng nhập tên công ty";
+    if (!company.province) e.province = "Vui lòng chọn tỉnh / thành phố";
+    if (!company.address.trim()) e.address = "Vui lòng nhập địa chỉ công ty";
+    return e;
+  }, [company]);
+
+  const valid = Object.keys(errors).length === 0;
+  const show = (k) => (touched[k] ? errors[k] : undefined);
+
+  const handleAccountSubmit = (ev) => {
+    ev.preventDefault();
+    if (!valid) {
+      setTouched({
+        firstName: true,
+        lastName: true,
+        phone: true,
+        email: true,
+        password: true,
+        confirm: true,
+      });
+      return;
+    }
+    setStep(1);
+  };
+
+  const handleCompanySubmit = (ev) => {
+    ev.preventDefault();
+    if (Object.keys(companyErrors).length > 0) {
+      setCompanyTouched({
+        name: true,
+        website: true,
+        province: true,
+        address: true,
+      });
+      return;
+    }
+    setStep(2);
+  };
 
   return (
     <div className="flex h-full flex-col bg-white px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
       {/* Top bar */}
-      <div className="mb-8 flex items-center justify-between text-sm">
-        <button
-          onClick={() => navigate("/")}
-          className="group flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
-        >
-          <User className="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-          <span>Dành cho Nhà tuyển dụng</span>
-        </button>
-        <div className="flex items-center gap-1.5 text-slate-500">
-          <Headset className="h-4 w-4" />
-          Hỗ trợ Doanh nghiệp:
-          <a href="tel:0962522881" className="font-semibold text-blue-600">
-            0962 522 881
-          </a>
-        </div>
-      </div>
-
-      <div className="mx-auto w-full max-w-md">
+      <div className="mx-auto w-full max-w-lg">
         <h2 className="text-2xl font-bold text-slate-900">
           Đăng ký Tài khoản Doanh nghiệp
         </h2>
-        <p className="mt-1.5 text-sm text-slate-500">
-          Truy cập bộ công cụ tuyển dụng chuyên nghiệp và kết nối nhân tài toàn
-          diện.
-        </p>
+        <div className="mt-8">
+          <Stepper current={step} />
+        </div>
 
-        {/* Form */}
-        <form onSubmit={handleRegister} className="mt-6 space-y-4">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <TextField
-              icon={User}
-              label="Họ và tên người liên hệ"
-              placeholder="VD: Nguyễn Hoàng Long"
-              required
-            />
-            <TextField
-              icon={Phone}
-              label="Số điện thoại liên hệ"
-              placeholder="VD: 0987 654 321"
-              type="tel"
-              required
-            />
-          </div>
-
-          <div>
-            <div className="mb-1.5 flex items-center justify-between">
-              <span className="text-[13px] font-medium text-slate-700">
-                Email doanh nghiệp (@company.com){" "}
-                <span className="text-blue-600">*</span>
-              </span>
-              <span className="text-[11px] text-slate-400">
-                Khuyến dùng tên miền công ty
-              </span>
+        {step === 0 && (
+          <form
+            onSubmit={handleAccountSubmit}
+            noValidate
+            className="mt-8 space-y-4"
+          >
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <Field label="Tên" error={show("firstName")}>
+                <input
+                  className={inputCls(show("firstName"))}
+                  value={form.firstName}
+                  onChange={set("firstName")}
+                  onBlur={blur("firstName")}
+                />
+              </Field>
+              <Field label="Họ" error={show("lastName")}>
+                <input
+                  className={inputCls(show("lastName"))}
+                  value={form.lastName}
+                  onChange={set("lastName")}
+                  onBlur={blur("lastName")}
+                />
+              </Field>
             </div>
-            <span className="flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-3 py-2.5 transition focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100">
-              <Mail className="h-4 w-4 shrink-0 text-slate-400" />
+
+            <Field label="Điện thoại" error={show("phone")}>
+              <input
+                type="tel"
+                className={inputCls(show("phone"))}
+                value={form.phone}
+                onChange={set("phone")}
+                onBlur={blur("phone")}
+              />
+            </Field>
+
+            <Field label="Địa chỉ email" error={show("email")}>
               <input
                 type="email"
-                placeholder="talent.acquisition@congty.com"
-                className="w-full bg-transparent text-sm text-slate-800 placeholder:text-slate-400 focus:outline-none"
+                className={inputCls(show("email"))}
+                value={form.email}
+                onChange={set("email")}
+                onBlur={blur("email")}
               />
-            </span>
-          </div>
+            </Field>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <TextField
-              icon={Building2}
-              label="Tên công ty / Doanh nghiệp"
-              placeholder="VD: Công ty Cổ phần TechVN"
-              required
-            />
-            <ProvinceField />
-          </div>
+            <Field
+              label="Mật khẩu"
+              error={show("password")}
+              tooltip="Mật khẩu tối thiểu 8 ký tự, nên gồm chữ hoa, chữ thường và số."
+            >
+              <PasswordInput
+                value={form.password}
+                onChange={set("password")}
+                onBlur={blur("password")}
+                error={show("password")}
+              />
+            </Field>
 
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <PasswordField label="Mật khẩu" placeholder="Tối thiểu 8 ký tự" />
-            <PasswordField
-              label="Xác nhận mật khẩu"
-              placeholder="Nhập lại mật khẩu"
-            />
-          </div>
+            <Field label="Nhập lại mật khẩu" error={show("confirm")}>
+              <PasswordInput
+                value={form.confirm}
+                onChange={set("confirm")}
+                onBlur={blur("confirm")}
+                error={show("confirm")}
+              />
+            </Field>
 
-          <label className="flex items-start gap-2 text-[13px] text-slate-600">
-            <input
-              type="checkbox"
-              checked={agreed}
-              onChange={(e) => setAgreed(e.target.checked)}
-              className="mt-0.5 h-4 w-4 rounded border-slate-300 text-blue-600 focus:ring-blue-500"
-            />
-            <span>
-              Tôi đồng ý với{" "}
-              <a href="#" className="font-medium text-blue-600 hover:underline">
-                Điều khoản dịch vụ
-              </a>{" "}
-              và{" "}
-              <a href="#" className="font-medium text-blue-600 hover:underline">
-                Chính sách bảo mật dữ liệu
-              </a>{" "}
-              B2B của JobCentral.
-            </span>
-          </label>
+            <div className="flex justify-end pt-2">
+              <button
+                type="submit"
+                disabled={!valid}
+                className="h-12 rounded-lg bg-orange-600 px-8 text-base font-medium text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-orange-300"
+              >
+                Tiếp tục
+              </button>
+            </div>
+          </form>
+        )}
 
-          <button
-            type="submit"
-            className="flex w-full items-center justify-center gap-2 rounded-lg bg-blue-600 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-blue-700"
+        {step === 1 && (
+          <form
+            onSubmit={handleCompanySubmit}
+            noValidate
+            className="mt-8 space-y-4"
           >
-            Hoàn tất đăng ký &amp; Nhận ưu đãi
-            <span aria-hidden>→</span>
-          </button>
-        </form>
+            <Field
+              label="Tên công ty"
+              error={companyTouched.name && companyErrors.name}
+            >
+              <input
+                className={inputCls(companyTouched.name && companyErrors.name)}
+                value={company.name}
+                onChange={setCompanyField("name")}
+                onBlur={blurCompanyField("name")}
+                autoComplete="organization"
+              />
+            </Field>
+
+            <Field
+              label="Website công ty"
+              error={companyTouched.website && companyErrors.website}
+              tooltip="Không bắt buộc. Có thể nhập example.com hoặc https://example.com."
+            >
+              <input
+                type="url"
+                className={inputCls(
+                  companyTouched.website && companyErrors.website,
+                )}
+                value={company.website}
+                onChange={setCompanyField("website")}
+                onBlur={blurCompanyField("website")}
+                autoComplete="url"
+              />
+            </Field>
+
+            <ProvinceField
+              value={company.province}
+              onChange={setCompanyField("province")}
+              onBlur={blurCompanyField("province")}
+              error={companyTouched.province && companyErrors.province}
+            />
+
+            <Field
+              label="Địa chỉ cụ thể"
+              error={companyTouched.address && companyErrors.address}
+            >
+              <input
+                className={inputCls(
+                  companyTouched.address && companyErrors.address,
+                )}
+                value={company.address}
+                onChange={setCompanyField("address")}
+                onBlur={blurCompanyField("address")}
+                autoComplete="street-address"
+              />
+            </Field>
+
+            <div className="flex justify-between gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setStep(0)}
+                className="h-12 rounded-lg border border-slate-300 px-6 text-base font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                Quay lại
+              </button>
+              <button
+                type="submit"
+                disabled={Object.keys(companyErrors).length > 0}
+                className="h-12 rounded-lg bg-orange-600 px-8 text-base font-medium text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-orange-300"
+              >
+                Tiếp tục
+              </button>
+            </div>
+          </form>
+        )}
+
+        {step === 2 && (
+          <div className="mt-8 space-y-5">
+            <div className="rounded-xl border border-blue-100 bg-blue-50/70 p-4 text-sm text-slate-700">
+              <p>
+                Mã xác thực sẽ được gửi tới <strong>{form.email}</strong> sau
+                khi hệ thống tích hợp API gửi email.
+              </p>
+            </div>
+
+            <Field label="Mã xác thực email">
+              <input
+                inputMode="numeric"
+                autoComplete="one-time-code"
+                maxLength={6}
+                value={verificationCode}
+                onChange={(e) =>
+                  setVerificationCode(
+                    e.target.value.replace(/\D/g, "").slice(0, 6),
+                  )
+                }
+                placeholder="XXX-XXX"
+                className={inputCls()}
+              />
+            </Field>
+
+            <p role="status" className="text-sm text-amber-700">
+              Chưa thể gửi hoặc xác minh mã: cần tích hợp API backend trước khi
+              hoàn tất đăng ký.
+            </p>
+
+            <div className="flex justify-between gap-3 pt-2">
+              <button
+                type="button"
+                onClick={() => setStep(1)}
+                className="h-12 rounded-lg border border-slate-300 px-6 text-base font-medium text-slate-700 transition hover:bg-slate-50"
+              >
+                Quay lại
+              </button>
+              <button
+                type="button"
+                disabled
+                title="Cần tích hợp API xác thực email"
+                className="h-12 cursor-not-allowed rounded-lg bg-orange-300 px-8 text-base font-medium text-white"
+              >
+                Xác thực
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Divider */}
         <div className="my-6 flex items-center gap-3">
           <span className="h-px flex-1 bg-slate-200" />
-          <span className="text-[11px] font-medium text-slate-400">
-            HOẶC ĐĂNG KÝ NHANH BẰNG SSO
-          </span>
-          <span className="h-px flex-1 bg-slate-200" />
         </div>
 
-        {/* SSO buttons */}
-        <div className="flex gap-3">
-          <SSOButton label="Workspace">
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
-              />
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.99.66-2.26 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.85A11 11 0 0 0 12 23z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.1a6.6 6.6 0 0 1 0-4.2V7.05H2.18a11 11 0 0 0 0 9.9z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1a11 11 0 0 0-9.82 6.05l3.66 2.85C6.71 7.31 9.14 5.38 12 5.38z"
-              />
-            </svg>
-          </SSOButton>
-          <SSOButton label="Azure AD">
-            <svg className="h-4 w-4" viewBox="0 0 24 24">
-              <rect x="2" y="2" width="9" height="9" fill="#F35325" />
-              <rect x="13" y="2" width="9" height="9" fill="#81BC06" />
-              <rect x="2" y="13" width="9" height="9" fill="#05A6F0" />
-              <rect x="13" y="13" width="9" height="9" fill="#FFBA08" />
-            </svg>
-          </SSOButton>
-          <SSOButton label="LinkedIn">
-            <svg className="h-4 w-4" viewBox="0 0 24 24" fill="#0A66C2">
-              <path d="M20.45 20.45h-3.55v-5.57c0-1.33-.02-3.04-1.85-3.04-1.86 0-2.15 1.45-2.15 2.95v5.66H9.35V9h3.41v1.56h.05c.47-.9 1.63-1.85 3.36-1.85 3.6 0 4.27 2.37 4.27 5.45v6.29zM5.34 7.43a2.06 2.06 0 1 1 0-4.12 2.06 2.06 0 0 1 0 4.12zM7.12 20.45H3.56V9h3.56v11.45z" />
-            </svg>
-          </SSOButton>
-        </div>
+        {/* Đã có tài khoản */}
 
-        {/* Existing account banner */}
-        <div className="mt-6 flex items-center justify-between rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3">
-          <div>
-            <p className="text-[13px] font-semibold text-slate-800">
-              Đã có tài khoản tuyển dụng HR Central?
-            </p>
-            <p className="text-[12px] text-slate-500">
-              Đăng nhập để quản lý tin tuyển dụng và CV ngay.
-            </p>
-          </div>
-          <button
-            type="button"
-            className="shrink-0 rounded-lg border border-blue-200 bg-white px-3.5 py-2 text-[13px] font-medium text-blue-600 transition-all duration-200 hover:border-blue-300 hover:bg-blue-50 hover:shadow-sm active:scale-95"
-            onClick={() => navigate("/LogIn")}
+        <div className="mt-6 flex items-center justify-center gap-1.5 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3.5 text-sm">
+          <p className="text-slate-600">Bạn đã có tài khoản?</p>
+
+          <Link
+            to="/LogIn"
+            className="font-semibold text-blue-600 underline-offset-4 transition hover:text-blue-700 hover:underline"
           >
             Đăng nhập ngay
-          </button>
+          </Link>
         </div>
-      </div>
-
-      {/* Footer */}
-      <div className="mt-auto flex flex-col items-center gap-2 pt-8 text-[11px] text-slate-400 sm:flex-row sm:justify-between">
-        <span>
-          © {new Date().getFullYear()} JobCentral. All rights reserved.
-        </span>
-        <span className="flex gap-4">
-          <a href="#" className="hover:text-slate-600">
-            Điều khoản dịch vụ
-          </a>
-          <a href="#" className="hover:text-slate-600">
-            Chính sách bảo mật B2B
-          </a>
-        </span>
       </div>
     </div>
   );
@@ -531,10 +629,10 @@ function RightPanel() {
 export default function BusinessSignupPage() {
   return (
     <div className="min-h-screen w-full bg-slate-100">
-      <div className="grid min-h-screen w-full overflow-hidden lg:grid-cols-2">
+      <div className="grid min-h-screen w-full overflow-hidden lg:grid-cols-[minmax(360px,36%)_1fr]">
         <LeftPanel />
         <RightPanel />
-      </div>  
+      </div>
     </div>
   );
 }

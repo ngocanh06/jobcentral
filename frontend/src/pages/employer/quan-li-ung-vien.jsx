@@ -16,7 +16,6 @@ import {
 } from "lucide-react";
 
 import * as XLSX from "xlsx";
-import pic from "../../picture_sec/pic_default.jpg";
 import { getManagedCandidates } from "../../candidateStorage";
 
 // Dữ liệu mẫu — thay bằng dữ liệu thật của bạn (props / API) khi tích hợp
@@ -26,7 +25,7 @@ const CANDIDATES = [
     id: 1,
     name: "Nguyen Thanh Cong",
     email: "thanhcong123@gmail.com",
-    avatar: pic,
+    avatar: "/picture/pic_default.jpg",
     role: "Senior Backend Engineer",
     location: "HaiChau, DN",
     tags: ["Remote-friendly"],
@@ -34,7 +33,7 @@ const CANDIDATES = [
     score: 86,
     stage: "Interviewing",
     recruiter: "Thu Hoai",
-    recruiterAvatar: pic,
+    recruiterAvatar: "/picture/pic_default.jpg",
     skills: ["DEV"],
     resume: "thanhcong_resume_2026.pdf",
 

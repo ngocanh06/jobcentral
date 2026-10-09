@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import picdef from "../../picture_sec/pic_default.jpg";
 import {
   ChevronRight,
   MoreHorizontal,
@@ -71,7 +70,7 @@ const activeJobs = [
 const newCandidates = [
   {
     name: "Nguyễn Hồng Hạnh",
-    avatarDefault: picdef,
+    avatarDefault: "/picture/pic_default.jpg" ,
     role: "Product Designer",
     time: "15 phút trước",
     tags: [
@@ -81,7 +80,7 @@ const newCandidates = [
   },
   {
     name: "Trần Hoàng Long",
-    avatarDefault: picdef,
+    avatarDefault: "/picture/pic_default.jpg",
     role: "Senior React Developer",
     time: "1 giờ trước",
     tags: [
@@ -91,7 +90,7 @@ const newCandidates = [
   },
   {
     name: "Phạm Minh Anh",
-    avatarDefault: picdef,
+    avatarDefault: "/picture/pic_default.jpg",
     role: "Marketing Manager",
     time: "3 giờ trước",
     tags: [{ label: "Exp 8y", color: "bg-slate-100 text-slate-500" }],

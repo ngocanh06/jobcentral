@@ -63,19 +63,19 @@ import { PermissionProvider } from "./context/PermissionContext";
 
 function RecruiterHomeRoute() {
   const { isAuthenticated } = useAuth();
-
   return isAuthenticated ? <Navigate to="/Dashboard" replace /> : <Intro />;
 }
 
 function ProtectedRecruiterLayout() {
   const { isAuthenticated } = useAuth();
-
   return isAuthenticated ? (
     <RecruiterLayout />
   ) : (
     <Navigate to="/LogIn" replace />
   );
 }
+
+// cổng bên trong nhà tuyển dụng
 
 const recruiterRoutes = [
   {
