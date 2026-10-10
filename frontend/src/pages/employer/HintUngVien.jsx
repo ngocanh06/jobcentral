@@ -442,11 +442,11 @@ export default function CandidateSearchPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+    <div className="min-h-screen bg-[#e8edf2] font-sans text-slate-800">
       {/* Header */}
-      <header className="bg-white px-6 pb-8 pt-8 lg:px-8">
-        <div className="mx-auto max-w-7xl">
-          <h1 className="text-3xl font-extrabold tracking-tight text-[#2170e4]">
+      <header className="bg-[#e8edf2] px-6 pb-8 pt-8 lg:px-8">
+        <div>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
             Tra Cứu &amp; Tìm Kiếm Hồ Sơ Ứng Viên Hàng Đầu
           </h1>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500">
@@ -457,7 +457,7 @@ export default function CandidateSearchPage() {
         </div>
       </header>
 
-      <main className="mx-auto max-w-7xl space-y-6 px-4 py-6 lg:px-8">
+      <main className="space-y-6 px-4 py-6 lg:px-8">
         {/* Search card */}
         <section className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
           <div className="mb-6 flex flex-wrap items-center justify-between gap-4">

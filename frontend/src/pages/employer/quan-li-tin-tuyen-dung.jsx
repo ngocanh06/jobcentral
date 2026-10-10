@@ -67,7 +67,7 @@ const jobs = [
   {
     icon: Code2,
     // default
-    iconBg: "bg-blue-50", 
+    iconBg: "bg-blue-50",
     iconColor: "text-blue-600",
 
     title: "Dev FullStack",
@@ -94,49 +94,51 @@ export default function Quan_li_tin_tuyen_dung() {
   const [page, setPage] = useState(1);
 
   return (
-    <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-800">
-      <div className="max-w-6xl mx-auto space-y-6">
+    <div className="min-h-screen bg-[#e8edf2] p-4 md:p-8 font-sans text-slate-800">
+      <div className="space-y-6">
         {/* Header */}
         <div className="flex justify-between">
           <div>
             <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
-              Quản lý đăng tuyển
+              Quản lý tin tuyển dụng
             </h1>
             <p className="text-slate-400 text-sm mt-1">
-              Tạo, theo dõi, chỉnh sửa và quản lý các chiến dịch tuyển dụng của bạn.
+              Tạo, theo dõi, chỉnh sửa và quản lý các chiến dịch tuyển dụng của
+              bạn.
             </p>
           </div>
+        </div>
+        {/* Search */}
+        <div className="flex items-center justify-between gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-sm">
+          <div className="flex-1">
+            <label className="mb-2 block text-sm font-semibold text-slate-700">
+              Tìm kiếm tin tuyển dụng
+            </label>
 
+            <div className="relative max-w-md">
+              <Search
+                size={18}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              />
+
+              <input
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Tên vị trí hoặc mã số..."
+                className="w-full rounded-xl border border-slate-200 bg-slate-50/70 py-2.5 pl-10 pr-4 text-sm text-slate-700 placeholder:text-slate-400 transition-all duration-200 focus:border-[#2170E4] focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-100"
+              />
+            </div>
+          </div>
 
           <Link
             to="/Dashboard/Tao-tin-tuyen-dung"
-            className="bg-[#2170E4] hover:bg-[#1c5edc] transition-colors text-white text-sm font-medium px-4 py-2.5 rounded-lg flex items-center gap-2"
+            className="inline-flex shrink-0 items-center gap-2 rounded-xl bg-[#2170E4] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-all duration-200 hover:bg-[#1c5edc] hover:shadow-md active:scale-[0.98]"
           >
-            <span className="text-lg leading-none">+</span> Tạo tin tuyển dụng
-            mới
+            <span className="text-lg leading-none">+</span>
+            Tạo tin tuyển dụng mới
           </Link>
         </div>
-
-        {/* Search */}
-        <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
-          <label className="text-sm font-medium text-slate-600 mb-2 block">
-            Tìm kiếm tin tuyển dụng
-          </label>
-          <div className="relative max-w-md">
-            <Search
-              size={18}
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-300"
-            />
-            <input
-              type="text"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Tên vị trí hoặc mã số..."
-              className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-200 text-sm placeholder:text-slate-300 focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400"
-            />
-          </div>
-        </div>
-
         {/* Stat cards */}
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {stats.map((s, i) => {
@@ -148,7 +150,9 @@ export default function Quan_li_tin_tuyen_dung() {
                 className="bg-white rounded-2xl border border-slate-100 shadow-sm p-5"
               >
                 <div className="flex items-center justify-between mb-4">
-                  <div className={`${s.iconBg} ${s.iconColor} rounded-lg p-2.5`}>
+                  <div
+                    className={`${s.iconBg} ${s.iconColor} rounded-lg p-2.5`}
+                  >
                     <Icon size={20} />
                   </div>
                   <span
@@ -158,7 +162,9 @@ export default function Quan_li_tin_tuyen_dung() {
                     {BadgeIcon && <BadgeIcon size={14} />}
                   </span>
                 </div>
-                <div className="text-2xl font-bold text-slate-800">{s.value}</div>
+                <div className="text-2xl font-bold text-slate-800">
+                  {s.value}
+                </div>
                 <div className="text-[11px] tracking-wide text-slate-400 font-medium mt-1">
                   {s.label}
                 </div>
@@ -166,7 +172,6 @@ export default function Quan_li_tin_tuyen_dung() {
             );
           })}
         </div>
-
         {/* Job list */}
         <div className="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
           <div className="flex items-center justify-between px-6 py-5">
@@ -190,9 +195,15 @@ export default function Quan_li_tin_tuyen_dung() {
                     VỊ TRÍ TUYỂN DỤNG
                   </th>
                   <th className="text-left px-4 py-3 font-semibold">BỘ PHẬN</th>
-                  <th className="text-left px-4 py-3 font-semibold">NGÀY ĐĂNG</th>
-                  <th className="text-left px-4 py-3 font-semibold">ỨNG TUYỂN</th>
-                  <th className="text-left px-4 py-3 font-semibold">TRẠNG THÁI</th>
+                  <th className="text-left px-4 py-3 font-semibold">
+                    NGÀY ĐĂNG
+                  </th>
+                  <th className="text-left px-4 py-3 font-semibold">
+                    ỨNG TUYỂN
+                  </th>
+                  <th className="text-left px-4 py-3 font-semibold">
+                    TRẠNG THÁI
+                  </th>
                   <th className="text-left px-6 py-3 font-semibold">GHI CHÚ</th>
                 </tr>
               </thead>
@@ -202,11 +213,15 @@ export default function Quan_li_tin_tuyen_dung() {
                   return (
                     <tr
                       key={i}
-                      className={i !== jobs.length - 1 ? "border-b border-slate-100" : ""}
+                      className={
+                        i !== jobs.length - 1 ? "border-b border-slate-100" : ""
+                      }
                     >
                       <td className="px-6 py-4">
                         <div className="flex items-start gap-3">
-                          <div className={`${job.iconBg} ${job.iconColor} rounded-lg p-2 shrink-0`}>
+                          <div
+                            className={`${job.iconBg} ${job.iconColor} rounded-lg p-2 shrink-0`}
+                          >
                             <Icon size={18} />
                           </div>
                           <div>
@@ -229,7 +244,9 @@ export default function Quan_li_tin_tuyen_dung() {
                         <div className="font-bold text-blue-600">
                           {job.applicants}
                         </div>
-                        <div className="text-xs text-slate-400">{job.views}</div>
+                        <div className="text-xs text-slate-400">
+                          {job.views}
+                        </div>
                       </td>
                       <td className="px-4 py-4 align-top pt-4">
                         <span
@@ -280,13 +297,14 @@ export default function Quan_li_tin_tuyen_dung() {
             </div>
           </div>
         </div>
-
         {/* Bottom charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           {/* Applications by position */}
           <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="font-bold text-slate-800">Ứng tuyển theo vị trí</h3>
+              <h3 className="font-bold text-slate-800">
+                Ứng tuyển theo vị trí
+              </h3>
               <BarChart3 size={18} className="text-slate-300" />
             </div>
             <div className="space-y-5">

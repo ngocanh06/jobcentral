@@ -70,7 +70,7 @@ const activeJobs = [
 const newCandidates = [
   {
     name: "Nguyễn Hồng Hạnh",
-    avatarDefault: "/picture/pic_default.jpg" ,
+    avatarDefault: "/picture/pic_default.jpg",
     role: "Product Designer",
     time: "15 phút trước",
     tags: [
@@ -119,7 +119,7 @@ function StatCard({ label, value, change, up }) {
 export default function RecruiterDashboard() {
   const maxVal = Math.max(...weeklyApplicants.map((d) => d.value));
   return (
-    <div className="min-h-screen overflow-auto no-scrollbar bg-slate-50 font-sans text-slate-900 flex">
+    <div className="min-h-screen overflow-auto no-scrollbar bg-[#e8edf2] font-sans text-slate-900 flex">
       <div className="flex-1 min-w-0">
         <main className="p-6 space-y-6">
           <div className="flex justify-between">
@@ -237,7 +237,18 @@ export default function RecruiterDashboard() {
             <div className="bg-white rounded-xl border border-slate-200 p-5">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="font-semibold text-sm">Số lượng ứng viên</h3>
-                <span className="text-xs text-slate-400">7 Ngày qua</span>
+
+                <select
+                  defaultValue=""
+                  className="w-45 cursor-pointer rounded-lg border border-slate-200 bg-white px-3 py-2 text-sm font-medium text-slate-600 shadow-sm outline-none transition-all duration-300 ease-out hover:border-blue-300 hover:shadow-md focus:border-blue-500 focus:ring-2 focus:ring-blue-100 focus:shadow-md"
+                >
+                  <option value="" disabled className="font-semibold">
+                    Chọn chiến dịch tuyển dụng
+                  </option>
+                  <option value="demo_DevOps">Demo DevOps</option>
+                  <option value="demo_Design">Demo Design</option>
+                  <option value="demo_HR">Demo HR</option>
+                </select>
               </div>
               <ResponsiveContainer width="100%" height={180}>
                 <BarChart data={weeklyApplicants} barCategoryGap="30%">
@@ -372,7 +383,9 @@ export default function RecruiterDashboard() {
               }}
             >
               <div>
-                <h3 className="font-bold text-2xl mb-2">Thông tin thị trường</h3>
+                <h3 className="font-bold text-2xl mb-2">
+                  Thông tin thị trường
+                </h3>
                 <p className="text-sm text- max-w-md">
                   Dự báo dựa trên trí tuệ nhân tạo cho thấy nhu cầu tuyển dụng
                   nhân sự công nghệ ở Đông Nam Á sẽ tăng 15% trong quý tới.

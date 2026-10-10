@@ -270,7 +270,7 @@ function CandidateDetailPanel({ candidate, onClose }) {
   ];
 
   return (
-    <aside className="w-[380px] flex-shrink-0 border-l border-gray-200 bg-white h-full overflow-y-auto animate-[slideIn_0.22s_ease-out]">
+    <aside className="w-[380px] flex-shrink-0 border-l border-gray-200 bg-[#e8edf2] h-full overflow-y-auto animate-[slideIn_0.22s_ease-out]">
       <style>{`
         @keyframes slideIn {
           from { transform: translateX(24px); opacity: 0; }

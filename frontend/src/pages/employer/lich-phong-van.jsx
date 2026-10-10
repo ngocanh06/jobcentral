@@ -106,7 +106,7 @@ export default function InterviewCalendar() {
     const startOffset = (firstOfMonth.getDay() + 6) % 7;
     const daysInMonth = new Date(year, month + 1, 0).getDate();
     const daysInPrevMonth = new Date(year, month, 0).getDate();
-    const cells = []
+    const cells = [];
     for (let i = 0; i < startOffset; i++) {
       const d = daysInPrevMonth - startOffset + i + 1;
       const m = month === 0 ? 11 : month - 1;
@@ -195,13 +195,13 @@ export default function InterviewCalendar() {
   /* ---------------------------------------------------------------- */
 
   return (
-    <div className="min-h-screen w-full bg-[#f4f6fb] font-[Inter,sans-serif] text-slate-800 p-6">
+    <div className="min-h-screen w-full bg-[#e8edf2] font-[Inter,sans-serif] text-slate-800 p-6">
       <style>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap');
         .font-display { font-family: 'Plus Jakarta Sans', Inter, sans-serif; }
       `}</style>
 
-      <div className="max-w-5xl mx-auto">
+      <div>
         <div className="mb-6">
           <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
             Lịch phỏng vấn
@@ -213,7 +213,7 @@ export default function InterviewCalendar() {
         </div>
 
         {/* Calendar card */}
-        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-5">
+        <div className="bg-white rounded-2xl border border-slate-200/80 shadow-sm p-8">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
               <h2 className="text-[17px] font-semibold text-slate-900">
@@ -288,7 +288,7 @@ export default function InterviewCalendar() {
 
                   <div className="mt-1.5 flex flex-col gap-1">
                     {dayEvents.map((evt) => {
-                      const t = TYPES[evt.type]; // t hiện đang underfined 
+                      const t = TYPES[evt.type]; // t hiện đang underfined
 
                       console.log("evt: ", evt);
                       console.log("t", t);

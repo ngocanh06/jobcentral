@@ -34,7 +34,7 @@ const HISTORY = [
 
 function Sidebar() {
   return (
-    <aside className="flex w-64 sm:w-72 shrink-0 flex-col border-r border-neutral-200 bg-white px-3 py-4">
+    <aside className="flex w-64 sm:w-72 shrink-0 flex-col border-r border-neutral-200 bg-[#e8edf2] px-3 py-4">
       <button className="flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700">
         <span className="text-lg leading-none">+</span>
         Cuộc trò chuyện mới

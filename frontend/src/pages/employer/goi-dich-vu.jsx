@@ -109,7 +109,7 @@ export default function PricingPage() {
   const [cycle, setCycle] = useState("month");
 
   return (
-    <div className="min-h-screen bg-slate-50 py-16 px-4">
+    <div className="min-h-screen bg-[#e8edf2] py-16 px-4">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="text-center mb-14">

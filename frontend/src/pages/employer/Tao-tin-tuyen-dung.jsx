@@ -35,7 +35,7 @@ const STEPS = [
 
 function StepIndicator({ current, Completed, onChange }) {
   return (
-    <div className="flex items-center w-full px-6 py-3 bg-white border-b border-slate-200">
+    <div className="flex items-center w-full px-6 py-3 bg-[#e8edf2] border-b border-slate-200">
       {STEPS.map((step, idx) => {
         const isDone = Completed[step.id];
         return (
@@ -74,7 +74,7 @@ function StepIndicator({ current, Completed, onChange }) {
 
 function SectionCard({ icon: Icon, title, children }) {
   return (
-    <div className="bg-white border border-slate-200 rounded-xl p-5 shadow-sm">
+    <div className="bg-[#e8edf2] border border-slate-200 rounded-xl p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <div className="h-6 w-6 rounded-md bg-[#2170e4]/10 text-[#2170e4] flex items-center justify-center">
           <Icon size={14} />
@@ -162,7 +162,6 @@ export function JobPostingOptions() {
 
         <div className="grid gap-5 md:grid-cols-2">
           {postingOptions.map((option) => {
-            const Icon = option.icon;
             return (
               <Link
                 key={option.title}
@@ -175,11 +174,6 @@ export function JobPostingOptions() {
                     {option.label}
                   </span>
                 )}
-                {/* <div
-                  className={`mb-6 flex h-12 w-12 items-center justify-center rounded-xl ${option.iconBg} ${option.color}`}
-                >
-                  <Icon size={22} />
-                </div> */}
                 <h2 className="text-2xl font-bold text-white">
                   {option.title}
                 </h2>
@@ -273,7 +267,7 @@ export default function JobPostingForm({ mode = "ai" }) {
     setQuestions((q) => q.filter((item) => item.id !== id));
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-slate-800">
+    <div className="min-h-screen bg-[#e8edf2] font-sans text-slate-800">
       {/* Top bar */}
       <div className="bg-white border-b border-slate-200 px-6 py-3 flex items-center justify-between">
         <div>

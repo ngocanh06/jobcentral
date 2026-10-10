@@ -459,7 +459,7 @@ export default function AccountSettings() {
   const showToast = (msg) => setToast(msg);
 
   return (
-    <div className="min-h-screen w-full bg-slate-100 py-8">
+    <div className="min-h-screen w-full bg-[#e8edf2] py-8">
       <div className="px-4">
         {/* Header */}
         <div className="mb-4">

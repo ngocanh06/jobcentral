@@ -52,11 +52,11 @@ export default function NavBar() {
   ];
 
   const links = [
-    {
-      icon: <ArrowLeftRight size={16} />,
-      label: "Cổng tìm việc",
-      href: "/",
-    },
+    // {
+    //   icon: <ArrowLeftRight size={16} />,
+    //   label: "Cổng tìm việc",
+    //   href: "/",
+    // },
     {
       icon: <SquarePen />,
       label: "Tạo tin tuyển dụng",
@@ -95,38 +95,31 @@ export default function NavBar() {
           </button>
           <div className="invisible absolute left-0 top-full z-50 mt-2 w-64 translate-y-1 rounded-xl border border-slate-200 bg-white p-1.5 text-sm opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
             <Link
-              to="/Truth-Score"
+              to="/"
               className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
             >
-              {t("utilities.truthScore")}
+              {"Tích hợp ATS"}
             </Link>
 
             <Link
-              to="/Goi-dich-vu"
+              to="/"
               className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
             >
-              {t("utilities.servicePlans")}
+              {"Tự động gia hạn"}
             </Link>
 
             <Link
-              // to={/BoTinhLuong}
+              to="/DashBoard/Cai-dat"
               className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
             >
-              {t("utilities.Calculator_salary")}
+              {"Cài đặt"}
             </Link>
 
             <Link
-              // to={/BoTinhLuong}
+              to="/Dashboard/ho-tro"
               className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
             >
-              {t("utilities.Personal_IncomeTax")}
-            </Link>
-
-            <Link
-              // to={/BoTinhLuong}
-              className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
-            >
-              {t("utilities.industry_specific_base_salary")}
+              {"Hỗ trợ & Liên hệ"}
             </Link>
           </div>
         </div>
