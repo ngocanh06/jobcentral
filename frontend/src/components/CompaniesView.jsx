@@ -1,197 +1,223 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Building2,
-  Star,
-  MapPin,
-  Users,
-  ArrowRight,
-  CheckCircle2,
-  Search,
-  X,
-  Sparkles,
-  ChevronDown,
-  ChevronRight,
-  Bookmark,
-  Newspaper,
-  Calendar,
-  Plus,
-  Check,
-  UserPlus,
-  TrendingUp,
-  Clock,
-  Info,
-  SquarePlay,
-  Image,
-  FileText,
-  ShieldCheck,
-} from 'lucide-react';
-import { FavoriteCompaniesSection } from './FavoriteCompaniesSection';
-import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 
-const INITIAL_RECRUITERS = [
+const DEFAULT_CORPORATE_COMPANIES = [
   {
-    id: 'rec-1',
-    name: 'June Nguyen',
-    verified: false,
-    headline:
-      '[IT jobs for Foreigners in Vietnam] Java/NodeJS/AngularJS/.NET Outsystems/ Power BI...',
-    companyName: 'FPT Software',
-    badgeText: 'FPT',
-    reason: 'Dựa trên hồ sơ của bạn',
-    avatar: catAvatar,
+    id: 'c2',
+    name: 'VNG Corporation',
+    coverImage:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAkDPP66YNjzGLU47-Bp2VqWA1BFe0qcZAofRioa_rrDx9LfM732tZZBmR9gyhwPXLHAyd2QLD0G4mIgyRA6r1aj7hvwgyyeeoUYc1MImtFjCfM57gkt8ipUCcdvunCX8A1xPnQgXHQmvwAohNYNbcQ8h_fcuOkusR7ITrGOmL57JCs5OsGjMg9XAvLbLWxC1ow8YAg9osLtWRNXPX2AtvQVHc_0gF1BvSuJQFzddKi4jH8s3b6_Cj7',
+    logo:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuAkDPP66YNjzGLU47-Bp2VqWA1BFe0qcZAofRioa_rrDx9LfM732tZZBmR9gyhwPXLHAyd2QLD0G4mIgyRA6r1aj7hvwgyyeeoUYc1MImtFjCfM57gkt8ipUCcdvunCX8A1xPnQgXHQmvwAohNYNbcQ8h_fcuOkusR7ITrGOmL57JCs5OsGjMg9XAvLbLWxC1ow8YAg9osLtWRNXPX2AtvQVHc_0gF1BvSuJQFzddKi4jH8s3b6_Cj7',
+    altText:
+      'A modern tech campus interior with glass walls, ambient soft blue LED illumination, ergonomic desks, and indoor green plants representing VNG high-tech workplace in Vietnam.',
+    badgeText: 'Top Tech',
+    badgeClass: 'bg-secondary-container text-on-secondary-container',
+    avatarCode: 'VNG',
+    avatarBgClass: 'bg-primary-container text-on-primary font-display-lg text-headline-md',
+    rating: 4.8,
+    reviewsCount: 240,
+    industry: 'Internet & Game Software • Kỳ lân công nghệ',
+    employees: '2.000+ nhân sự',
+    location: 'Quận 7, TP. HCM',
+    openJobsCount: 18,
+    jobsLabel: '18 việc làm đang tuyển',
+    industryFilter: 'it',
+    modelFilter: 'product',
+    sizeFilter: '2000+',
+    cityFilter: 'TP. HCM',
+    quickTags: ['featured', 'top-tech', 'benefits', 'international'],
   },
   {
-    id: 'rec-2',
-    name: 'Ngọc Vũ Hồng',
-    verified: true,
-    headline:
-      'Talent Acquisition Specialist tại Viettel Aerospace Institute - VTX',
-    companyName: 'Viettel Group',
-    badgeText: 'VTX',
-    reason: 'Dựa trên hồ sơ của bạn',
-    avatar: catAvatar,
+    id: 'c1',
+    name: 'TechFlow Solutions',
+    coverImage:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuC1iQ9CokCCY2EDiI4DuLiymIYqgnzVtbC1Jz-fpyzaHx0JyXbjiToH6sbcYWzyEhMs1O3zhTNUMSLnwkZvlbdLXt4p9AUHMIJFHZVJuHyNQApBJrc0M2Ly-B6nEumGtxDPLKm8LxGM6RBbcXYf6ikXYdFXq4B2uvtF7bsGXv9rmWBEICdF7wIGe48mqeSHZt4gvyANvsvcsysSD07sw1cgLieF7i7dvpTBwK7o5EBIvUvYqfZYa79K',
+    logo:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuC1iQ9CokCCY2EDiI4DuLiymIYqgnzVtbC1Jz-fpyzaHx0JyXbjiToH6sbcYWzyEhMs1O3zhTNUMSLnwkZvlbdLXt4p9AUHMIJFHZVJuHyNQApBJrc0M2Ly-B6nEumGtxDPLKm8LxGM6RBbcXYf6ikXYdFXq4B2uvtF7bsGXv9rmWBEICdF7wIGe48mqeSHZt4gvyANvsvcsysSD07sw1cgLieF7i7dvpTBwK7o5EBIvUvYqfZYa79K',
+    altText:
+      'A clean, collaborative SaaS development studio with wide glass windows overlooking Saigon skyline, developers engaged in whiteboard product design and code discussion.',
+    badgeText: 'Hot Culture',
+    badgeClass: 'bg-tertiary-fixed text-on-tertiary-fixed-variant',
+    avatarCode: 'TF',
+    avatarBgClass: 'bg-surface-tint text-on-primary font-headline-lg',
+    rating: 4.9,
+    reviewsCount: 85,
+    industry: 'SaaS & Enterprise AI Solutions',
+    employees: '150 - 300 nhân sự',
+    location: 'Quận 1, TP. HCM',
+    openJobsCount: 8,
+    jobsLabel: '8 vị trí đang tuyển',
+    industryFilter: 'it',
+    modelFilter: 'product',
+    sizeFilter: '50-300',
+    cityFilter: 'TP. HCM',
+    quickTags: ['featured', 'top-tech', 'benefits', 'international'],
   },
   {
-    id: 'rec-3',
-    name: 'Le Duy Dung',
-    verified: true,
-    headline:
-      'Program Director of the B.Sc. in Data Science cum Associate Program Director of the B.Sc. in Computer Science',
-    companyName: 'VNG Corporation',
-    badgeText: 'VNG',
-    reason: 'Dựa trên hồ sơ của bạn',
-    avatar: catAvatar,
+    id: 'c4',
+    name: 'Nexus AI Lab',
+    coverImage:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCU4vADMTfmdOs_yA71bh9VddfqmK13lLdUMHDZcmh0ZMcFtzeubdP2nEw7dTRr-K5ZCPqu-29nl0TfbpYR5xUt4MN9EHVrat0nIZN8wkTaFbnrSYwnnCd3nAjjMSCnsUkbZgkigsR1MMVhAK-v9YRHYBfLLzfPXq1CSRGBScbPyjRD51X--QprnBfDypF89V57shpHTarGgLmjQDsYv_U4WRdsZa4FA6K2-h-jADIpOEmslhplLV2N',
+    logo:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuCU4vADMTfmdOs_yA71bh9VddfqmK13lLdUMHDZcmh0ZMcFtzeubdP2nEw7dTRr-K5ZCPqu-29nl0TfbpYR5xUt4MN9EHVrat0nIZN8wkTaFbnrSYwnnCd3nAjjMSCnsUkbZgkigsR1MMVhAK-v9YRHYBfLLzfPXq1CSRGBScbPyjRD51X--QprnBfDypF89V57shpHTarGgLmjQDsYv_U4WRdsZa4FA6K2-h-jADIpOEmslhplLV2N',
+    altText:
+      'Futuristic artificial intelligence laboratory in Hanoi with holographic server visual displays, modern clean minimal glass partitions and engineering workbenches.',
+    badgeText: null,
+    badgeClass: '',
+    avatarCode: 'NX',
+    avatarBgClass: 'bg-inverse-surface text-on-primary font-headline-lg',
+    rating: 4.7,
+    reviewsCount: 62,
+    industry: 'DeepTech / LLM Research & Computer Vision',
+    employees: '50 - 100 nhân sự',
+    location: 'Cầu Giấy, Hà Nội',
+    openJobsCount: 12,
+    jobsLabel: '12 vị trí đang tuyển',
+    industryFilter: 'it',
+    modelFilter: 'product',
+    sizeFilter: '50-300',
+    cityFilter: 'Hà Nội',
+    quickTags: ['featured', 'top-tech', 'benefits', 'urgent'],
   },
   {
-    id: 'rec-4',
-    name: 'Trần Thu Hà',
-    verified: true,
-    headline:
-      'Head of Talent Acquisition tại VNG Corporation • Tuyển dụng Senior AI / Backend Engineers',
-    companyName: 'VNG Corporation',
-    badgeText: 'VNG',
-    reason: 'Dựa trên hồ sơ của bạn',
-    avatar: catAvatar,
+    id: 'c3',
+    name: 'FinX Digital Bank',
+    coverImage:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDrqLP3vq8L__EK-8I6ohEFJMiQ01r8u9h-ToZA4DRdl631_wTQ_yW0j9EKwvEderscJwYzCG38kPwiD6915dcqRKKz0AuB3-UUgL2eDmQidOLdtcswhlT2KRgzY5ruThffRA6XyU8Z7RE1KMpVMN598aC5CjCXrddVx097DThobnrbhOx8Xd3JEeB9V1fho5PvdmCD7RZA_eXd111J5hOrtFxpM3naNX-EzqPnYWUTGmUBKEphITsw',
+    logo:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDrqLP3vq8L__EK-8I6ohEFJMiQ01r8u9h-ToZA4DRdl631_wTQ_yW0j9EKwvEderscJwYzCG38kPwiD6915dcqRKKz0AuB3-UUgL2eDmQidOLdtcswhlT2KRgzY5ruThffRA6XyU8Z7RE1KMpVMN598aC5CjCXrddVx097DThobnrbhOx8Xd3JEeB9V1fho5PvdmCD7RZA_eXd111J5hOrtFxpM3naNX-EzqPnYWUTGmUBKEphITsw',
+    altText:
+      'High modern financial corporate headquarters lounge in Ho Chi Minh City with executive marble tables, digital tickers, elegant blue mood architectural lights.',
+    badgeText: 'Fintech',
+    badgeClass: 'bg-secondary-fixed text-on-secondary-fixed',
+    avatarCode: 'FX',
+    avatarBgClass: 'bg-secondary text-on-secondary font-headline-lg',
+    rating: 4.6,
+    reviewsCount: 110,
+    industry: 'Ngân hàng số Thế hệ mới & Ví điện tử',
+    employees: '800 - 1.200 nhân sự',
+    location: 'Quận 1, TP. HCM',
+    openJobsCount: 25,
+    jobsLabel: '25 vị trí đang tuyển',
+    industryFilter: 'finance',
+    modelFilter: 'product',
+    sizeFilter: '800-1200',
+    cityFilter: 'TP. HCM',
+    quickTags: ['featured', 'benefits', 'urgent'],
   },
   {
-    id: 'rec-5',
-    name: 'Nguyễn Minh Tuấn',
-    verified: true,
-    headline:
-      'Senior IT Recruiter tại Techcombank (TCB) • Chuyên săn nhân tài Khối Công nghệ & Dữ liệu',
-    companyName: 'Techcombank',
-    badgeText: 'TCB',
-    reason: 'Dựa trên hồ sơ của bạn',
-    avatar: catAvatar,
+    id: 'c9',
+    name: 'Shopee Vietnam',
+    coverImage:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuC6qtHeY8XsbWQV-AhwKW8YZcQ0FfPPgg1leGjP7b8y-8kn3n7gGZ-eniixrKOKpQVyuPWu6kxm8Aue5XnQz3rFBbRee0FHIm1uwukWQzC-VQNYKhd9_QKpIvH9DE1jSVRykk5TACyRaHsEmuxAWDLXE1xrDqJAbyeDLSSs5ouq5bqsyJEQR9MskTJw4NYUEP3EKw4M3zK3bdXVYgI68hN-6bZuXuxsQe66LFEJv8FDTzrX1gE9iIkn',
+    logo:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuC6qtHeY8XsbWQV-AhwKW8YZcQ0FfPPgg1leGjP7b8y-8kn3n7gGZ-eniixrKOKpQVyuPWu6kxm8Aue5XnQz3rFBbRee0FHIm1uwukWQzC-VQNYKhd9_QKpIvH9DE1jSVRykk5TACyRaHsEmuxAWDLXE1xrDqJAbyeDLSSs5ouq5bqsyJEQR9MskTJw4NYUEP3EKw4M3zK3bdXVYgI68hN-6bZuXuxsQe66LFEJv8FDTzrX1gE9iIkn',
+    altText:
+      'Energetic open floor workspace with vibrant orange accents, youth tech professionals smiling, collaboration coffee bar, modern e-commerce corporate building.',
+    badgeText: 'E-Commerce',
+    badgeClass: 'bg-tertiary text-on-tertiary',
+    avatarCode: 'SP',
+    avatarBgClass: 'bg-tertiary-container text-on-primary font-headline-lg',
+    rating: 4.7,
+    reviewsCount: 318,
+    industry: 'Sàn thương mại điện tử & Chuỗi Logistics hàng đầu',
+    employees: '3.000+ nhân sự',
+    location: 'Quận 7, TP. HCM',
+    openJobsCount: 32,
+    jobsLabel: '32 vị trí đang tuyển',
+    industryFilter: 'ecommerce',
+    modelFilter: 'mnc',
+    sizeFilter: '2000+',
+    cityFilter: 'TP. HCM',
+    quickTags: ['featured', 'top-tech', 'urgent', 'international'],
+  },
+  {
+    id: 'c5',
+    name: 'FPT Software',
+    coverImage:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDforfHKfZAw_uOSU60GiKlxQ_Qalgw3rPnpcW-s2fl409WqKlNEQAMuU53cwTfSLpTrrCfrpUg6V63vfRGReVMS-f3MDsohk37XS-935sLR8zTYO_J3iTftqAHMsBgP24-mVJo13cGHD3xPr7Q6oFhO5cRZlmkbtK7tuYUmL3jkBv_r9huLI7cFCu8jTPwqFGje1TytYFNjj3w5UYnmLqKwosnMkyWqQl2xyESS_rBDh05ysCBUE_u',
+    logo:
+      'https://lh3.googleusercontent.com/aida-public/AB6AXuDforfHKfZAw_uOSU60GiKlxQ_Qalgw3rPnpcW-s2fl409WqKlNEQAMuU53cwTfSLpTrrCfrpUg6V63vfRGReVMS-f3MDsohk37XS-935sLR8zTYO_J3iTftqAHMsBgP24-mVJo13cGHD3xPr7Q6oFhO5cRZlmkbtK7tuYUmL3jkBv_r9huLI7cFCu8jTPwqFGje1TytYFNjj3w5UYnmLqKwosnMkyWqQl2xyESS_rBDh05ysCBUE_u',
+    altText:
+      'Expansive software technology park campus building with green lawns, modern solar panels, contemporary architecture representing FPT Software in Da Nang and Hanoi.',
+    badgeText: 'Global Scale',
+    badgeClass: 'bg-surface-container-highest text-on-primary-fixed-variant',
+    avatarCode: 'FPT',
+    avatarBgClass: 'bg-primary text-on-primary font-headline-lg',
+    rating: 4.5,
+    reviewsCount: 450,
+    industry: 'Xuất khẩu phần mềm & Chuyển đổi số toàn cầu',
+    employees: '30.000+ nhân sự',
+    location: 'Hà Nội • TP. HCM • Đà Nẵng',
+    openJobsCount: 50,
+    jobsLabel: '50+ việc làm đang tuyển',
+    industryFilter: 'it',
+    modelFilter: 'outsource',
+    sizeFilter: '2000+',
+    cityFilter: 'Đà Nẵng',
+    quickTags: ['featured', 'top-tech', 'urgent', 'international'],
   },
 ];
 
-const INITIAL_CANDIDATES = [
-  {
-    id: 'cand-1',
-    name: 'Manh Hung',
-    verified: true,
-    headline: 'DevOps Engineer • AWS / Kubernetes / CI-CD Cloud Infrastructure',
-    activity: 'Hoạt động gần đây trên bảng tin',
-    activityType: 'clock',
-    avatar: catAvatar,
-  },
-  {
-    id: 'cand-2',
-    name: 'Vinh Đặng Quang',
-    verified: true,
-    headline: 'Fullstack Software Engineer • ReactJS / Node.js / TypeScript',
-    activity: 'Hoạt động gần đây trên bảng tin',
-    activityType: 'clock',
-    avatar: catAvatar,
-  },
-  {
-    id: 'cand-3',
-    name: 'Hoàng Minh Khôi',
-    verified: true,
-    headline: 'Frontend Developer (React / Next.js) • Đang tìm kiếm cơ hội mới',
-    activity: 'Cùng học tại Duy Tan University',
-    activityType: 'trend',
-    avatar: catAvatar,
-  },
-  {
-    id: 'cand-4',
-    name: 'Phạm Thảo Vy',
-    verified: true,
-    headline: 'Product Designer (UI/UX) • Figma / Design Systems',
-    activity: 'Dựa trên hồ sơ của bạn',
-    activityType: 'trend',
-    avatar: catAvatar,
-  },
-  {
-    id: 'cand-5',
-    name: 'Đỗ Quốc Bảo',
-    verified: false,
-    headline: 'Data Analyst & AI Engineer • Python / SQL / Machine Learning',
-    activity: 'Hoạt động gần đây trên bảng tin',
-    activityType: 'clock',
-    avatar: catAvatar,
-  },
+const INDUSTRY_OPTIONS = [
+  { id: 'it', label: 'Công nghệ thông tin' },
+  { id: 'finance', label: 'Ngân hàng & Tài chính' },
+  { id: 'ecommerce', label: 'Thương mại điện tử' },
+  { id: 'marketing', label: 'Marketing & Media' },
+  { id: 'realestate', label: 'Bất động sản & Du lịch' },
 ];
 
-const TRENDING_NEWS = [
-  {
-    id: 'n1',
-    title: 'Google inks major nuclear power deal with...',
-    meta: '2 giờ trước • 885 người đọc',
-  },
-  {
-    id: 'n2',
-    title: 'Apple prepares new smart home devices ...',
-    meta: '2 giờ trước • 427 người đọc',
-  },
-  {
-    id: 'n3',
-    title: 'Tech stocks propel S&P 500, Nasdaq to ...',
-    meta: '2 giờ trước • 14.305 người đọc',
-  },
-  {
-    id: 'n4',
-    title: 'Skydance officially merges Paramount, ...',
-    meta: '2 giờ trước • 6.972 người đọc',
-  },
-  {
-    id: 'n5',
-    title: "HubSpot announces layoffs 'not driven b...",
-    meta: '2 giờ trước • 6.566 người đọc',
-  },
-  {
-    id: 'n6',
-    title: 'FPT Software và VNG mở rộng tuyển dụng kỹ sư AI...',
-    meta: '3 giờ trước • 3.410 người đọc',
-  },
-  {
-    id: 'n7',
-    title: 'Nhu cầu tuyển dụng nhân sự Fintech tăng mạnh quý 4...',
-    meta: '4 giờ trước • 1.920 người đọc',
-  },
+const MODEL_OPTIONS = [
+  { id: 'all', label: 'Tất cả mô hình' },
+  { id: 'product', label: 'Product & SaaS Platform' },
+  { id: 'outsource', label: 'Software Outsource' },
+  { id: 'mnc', label: 'Tập đoàn Đa quốc gia (MNC)' },
+];
+
+const LOCATION_OPTIONS = [
+  { id: 'all', label: 'Tất cả địa điểm' },
+  { id: 'TP. HCM', label: 'TP. Hồ Chí Minh' },
+  { id: 'Hà Nội', label: 'Hà Nội' },
+  { id: 'Đà Nẵng', label: 'Đà Nẵng' },
+];
+
+const SIZE_OPTIONS = [
+  { id: 'all', label: 'Tất cả quy mô' },
+  { id: '50-300', label: '50 - 300 nhân sự' },
+  { id: '800-1200', label: '800 - 1.200 nhân sự' },
+  { id: '2000+', label: '2.000+ nhân sự' },
+];
+
+const SORT_OPTIONS = [
+  { id: 'popular', label: 'Phổ biến nhất' },
+  { id: 'rating', label: 'Đánh giá cao nhất' },
+  { id: 'jobs', label: 'Nhiều việc làm nhất' },
 ];
 
 export const CompaniesView = ({
   companies = [],
-  currentUser,
-  savedCount = 0,
   onSelectCompany,
-  onExploreJobs,
   onTabChange,
   onShowToast,
   initialSearchQuery = '',
   onResetSearch,
-  followedCompanyIds = [],
-  onToggleFollowCompany,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchQuery || '');
-  const [followedRecruiterIds, setFollowedRecruiterIds] = useState([]);
-  const [connectedCandidateIds, setConnectedCandidateIds] = useState([]);
-  const [showAllRecruiters, setShowAllRecruiters] = useState(false);
-  const [showAllCandidates, setShowAllCandidates] = useState(false);
-  const [showAllNews, setShowAllNews] = useState(false);
-  const [showAllCompanies, setShowAllCompanies] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState('all');
+  const [selectedSize, setSelectedSize] = useState('all');
+  const [activeQuickTag, setActiveQuickTag] = useState(null);
+  const [selectedIndustries, setSelectedIndustries] = useState(['it', 'finance']);
+  const [hasModifiedIndustry, setHasModifiedIndustry] = useState(false);
+  const [selectedModel, setSelectedModel] = useState('all');
+  const [minRating, setMinRating] = useState(4.5);
+  const [sortBy, setSortBy] = useState('popular');
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [locationMenuOpen, setLocationMenuOpen] = useState(false);
+  const [sizeMenuOpen, setSizeMenuOpen] = useState(false);
+  const [sortMenuOpen, setSortMenuOpen] = useState(false);
+
+  const searchBarRef = useRef(null);
 
   useEffect(() => {
     if (initialSearchQuery) {
@@ -199,801 +225,1175 @@ export const CompaniesView = ({
     }
   }, [initialSearchQuery]);
 
-  const handleToggleFollowRecruiter = (recruiter) => {
-    const exists = followedRecruiterIds.includes(recruiter.id);
-    setFollowedRecruiterIds((prev) =>
-      prev.includes(recruiter.id)
-        ? prev.filter((id) => id !== recruiter.id)
-        : [...prev, recruiter.id]
+  // Close dropdowns on outside click
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (searchBarRef.current && !searchBarRef.current.contains(e.target)) {
+        setLocationMenuOpen(false);
+        setSizeMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleToggleIndustry = (industryId) => {
+    setHasModifiedIndustry(true);
+    setSelectedIndustries((prev) =>
+      prev.includes(industryId)
+        ? prev.filter((id) => id !== industryId)
+        : [...prev, industryId]
     );
+    setCurrentPage(1);
+  };
+
+  const handleResetFilters = () => {
+    setSearchTerm('');
+    setSelectedLocation('all');
+    setSelectedSize('all');
+    setActiveQuickTag(null);
+    setSelectedIndustries(['it', 'finance']);
+    setHasModifiedIndustry(false);
+    setSelectedModel('all');
+    setMinRating(4.5);
+    setSortBy('popular');
+    setCurrentPage(1);
+    if (onResetSearch) {
+      onResetSearch();
+    }
     if (onShowToast) {
-      onShowToast(
-        exists
-          ? `Đã bỏ theo dõi nhà tuyển dụng ${recruiter.name}`
-          : `Đã theo dõi nhà tuyển dụng ${recruiter.name}!`,
-        exists ? 'info' : 'success'
-      );
+      onShowToast('Đã đặt lại bộ lọc tìm kiếm về mặc định', 'info');
     }
   };
 
-  const handleToggleConnectCandidate = (candidate) => {
-    const exists = connectedCandidateIds.includes(candidate.id);
-    setConnectedCandidateIds((prev) =>
-      prev.includes(candidate.id)
-        ? prev.filter((id) => id !== candidate.id)
-        : [...prev, candidate.id]
-    );
-    if (onShowToast) {
-      onShowToast(
-        exists
-          ? `Đã hủy lời mời kết nối với ${candidate.name}`
-          : `Đã gửi lời mời kết nối tới ứng viên ${candidate.name}!`,
-        exists ? 'info' : 'success'
-      );
+  const handleSearchButtonClick = () => {
+    setLocationMenuOpen(false);
+    setSizeMenuOpen(false);
+    const feedEl = document.getElementById('company-feed-section');
+    if (feedEl) {
+      feedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   };
 
-  const filteredRecruiters = INITIAL_RECRUITERS.filter(
-    (r) =>
-      !searchTerm.trim() ||
-      r.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.headline.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.companyName.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const mergedCompanies = useMemo(() => {
+    return DEFAULT_CORPORATE_COMPANIES.map((defComp) => {
+      const matched = companies.find((c) => c.id === defComp.id || c.name === defComp.name);
+      return matched ? { ...matched, ...defComp } : defComp;
+    });
+  }, [companies]);
 
-  const filteredCandidates = INITIAL_CANDIDATES.filter(
-    (c) =>
-      !searchTerm.trim() ||
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.headline.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredCompanies = useMemo(() => {
+    let result = [...mergedCompanies];
 
-  const filteredCompanies = companies.filter(
-    (c) =>
-      !searchTerm.trim() ||
-      c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.industry.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+    // Keyword filter
+    if (searchTerm.trim()) {
+      const q = searchTerm.toLowerCase().trim();
+      result = result.filter(
+        (c) =>
+          c.name.toLowerCase().includes(q) ||
+          c.industry.toLowerCase().includes(q) ||
+          c.location.toLowerCase().includes(q) ||
+          (c.badgeText && c.badgeText.toLowerCase().includes(q))
+      );
+    }
 
-  const visibleRecruiters = showAllRecruiters
-    ? filteredRecruiters
-    : filteredRecruiters.slice(0, 3);
+    // Location filter
+    if (selectedLocation !== 'all') {
+      result = result.filter((c) =>
+        c.location.toLowerCase().includes(selectedLocation.toLowerCase())
+      );
+    }
 
-  const visibleCandidates = showAllCandidates
-    ? filteredCandidates
-    : filteredCandidates.slice(0, 3);
+    // Size filter
+    if (selectedSize !== 'all') {
+      result = result.filter((c) => c.sizeFilter === selectedSize);
+    }
 
-  const visibleCompanies = showAllCompanies
-    ? filteredCompanies
-    : filteredCompanies.slice(0, 4);
+    // Quick Tag filter
+    if (activeQuickTag) {
+      result = result.filter(
+        (c) => c.quickTags && c.quickTags.includes(activeQuickTag)
+      );
+    }
 
-  const displayName = currentUser?.name || 'Nhiên Nguyễn Viết';
-  const displayAvatar = catAvatar;
+    // Industry checkbox filter (applies when user actively modifies checkboxes)
+    if (hasModifiedIndustry && selectedIndustries.length > 0) {
+      result = result.filter((c) =>
+        selectedIndustries.includes(c.industryFilter)
+      );
+    }
+
+    // Company model radio filter
+    if (selectedModel !== 'all') {
+      result = result.filter((c) => c.modelFilter === selectedModel);
+    }
+
+    // Minimum rating filter
+    if (minRating) {
+      result = result.filter((c) => c.rating >= minRating);
+    }
+
+    // Sort
+    if (sortBy === 'rating') {
+      result.sort((a, b) => b.rating - a.rating);
+    } else if (sortBy === 'jobs') {
+      result.sort((a, b) => b.openJobsCount - a.openJobsCount);
+    }
+
+    return result;
+  }, [
+    mergedCompanies,
+    searchTerm,
+    selectedLocation,
+    selectedSize,
+    activeQuickTag,
+    hasModifiedIndustry,
+    selectedIndustries,
+    selectedModel,
+    minRating,
+    sortBy,
+  ]);
+
+  const activeLocationLabel =
+    LOCATION_OPTIONS.find((o) => o.id === selectedLocation)?.label ||
+    'Tất cả địa điểm';
+  const activeSizeLabel =
+    SIZE_OPTIONS.find((o) => o.id === selectedSize)?.label || 'Tất cả quy mô';
+  const activeSortLabel =
+    SORT_OPTIONS.find((o) => o.id === sortBy)?.label || 'Phổ biến nhất';
 
   return (
-    <div className="bg-[#FAF9FF] min-h-screen py-5 sm:py-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Notice when navigated from recruiter */}
-        {initialSearchQuery && searchTerm === initialSearchQuery && (
-          <div className="mb-4 flex items-center justify-between bg-white border border-slate-300/80 text-slate-800 text-xs font-semibold px-4 py-2.5 rounded-xl shadow-2xs">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-4 h-4 text-[#0a66c2]" />
-              <span>
-                Đang lọc theo từ khóa:{' '}
-                <strong className="text-[#0a66c2]">{initialSearchQuery}</strong>
-              </span>
-            </div>
-            <button
-              type="button"
-              onClick={() => {
-                setSearchTerm('');
-                if (onResetSearch) onResetSearch();
-              }}
-              className="px-3 py-1 rounded-full text-xs font-bold text-[#0a66c2] hover:bg-slate-100 transition-colors cursor-pointer"
-            >
-              Xem tất cả
-            </button>
+    <div className="flex flex-col w-full bg-surface font-body-md text-body-md text-on-surface antialiased">
+      {/* 1. HERO & ENTERPRISE SEARCH SECTION */}
+      <section className="w-full bg-gradient-to-b from-surface-container-high/40 via-surface-container-low/20 to-surface pb-space-xl">
+        <div className="max-w-7xl mx-auto px-margin pt-space-xl">
+          <div className="max-w-3xl mb-space-lg">
+            <h1 className="font-display-lg text-display-lg text-on-surface tracking-tight mb-space-xs">
+              Khám phá 1.000+ Doanh nghiệp nổi bật &amp; Môi trường làm việc lý tưởng
+            </h1>
+            <p className="font-body-lg text-body-lg text-on-surface-variant">
+              Tìm hiểu văn hóa doanh nghiệp, chế độ đãi ngộ minh bạch và kết nối cơ hội nghề nghiệp phù hợp nhất với hành trình sự nghiệp của bạn.
+            </p>
           </div>
-        )}
 
-        {/* 3-Column LinkedIn-style Layout: Các vùng nổi ra so với background (#FAF9FF) và tách biệt với nhau */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-          {/* =================================================================== */}
-          {/* CỘT TRÁI (3 cols): TỪ TÀI KHOẢN ĐẾN THÔNG TIN Y NGUYÊN NHƯ TRONG HÌNH */}
-          {/* =================================================================== */}
-          <aside className="lg:col-span-3 space-y-2.5">
-            {/* Card 1: Thông tin Tài khoản (Profile Card) */}
-            <div className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden">
-              {/* Cover Banner */}
-              <div className="h-14 bg-[#a0b4b7] relative overflow-hidden">
-                <div className="absolute -left-6 -top-6 w-28 h-28 rounded-full bg-[#cbd6d8]/70" />
-                <div className="absolute left-12 -bottom-8 w-28 h-28 rounded-full bg-[#b6c7c9]/80" />
-                <div className="absolute right-0 top-0 w-24 h-full bg-[#8fa5a8]/60" />
-              </div>
-
-              {/* Avatar & User Info */}
-              <div className="px-4 pb-4 relative">
-                <div className="relative -mt-9 mb-2.5 w-18 h-18">
-                  <img
-                    src={displayAvatar}
-                    alt={displayName}
-                    referrerPolicy="no-referrer"
-                    className="w-18 h-18 rounded-full object-cover border-2 border-white shadow-xs"
-                  />
-                </div>
-
-                <h2
-                  onClick={() => onTabChange && onTabChange('cv-builder')}
-                  className="text-[17px] font-bold text-slate-900 leading-snug hover:underline cursor-pointer"
-                >
-                  {displayName}
-                </h2>
-                <p className="text-xs text-slate-700 mt-0.5 leading-snug">
-                  Sinh viên tại Duy Tan University
-                </p>
-                <p className="text-xs text-slate-500 mt-1">
-                  Đà Nẵng, Da Nang City
-                </p>
-
-                {/* School / Organization Badge */}
-                <div className="mt-3 flex items-center space-x-2">
-                  <div className="w-5 h-4 rounded-[3px] bg-rose-800 text-white flex items-center justify-center text-[7px] font-black shrink-0 tracking-tighter">
-                    DTU
-                  </div>
-                  <span className="text-xs font-semibold text-slate-900 truncate">
-                    Duy Tan University
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            {/* Card 2: Truy cập công cụ & Dùng thử Premium */}
-            <div
-              onClick={() =>
-                onShowToast &&
-                onShowToast(
-                  'Tính năng dùng thử Premium 0đ đã sẵn sàng cho tài khoản của bạn!',
-                  'info'
-                )
-              }
-              className="bg-white hover:bg-slate-50 rounded-xl border border-slate-300/80 p-3.5 shadow-2xs transition-colors cursor-pointer group"
-            >
-              <p className="text-xs text-slate-500 leading-snug">
-                Truy cập các công cụ và thông tin chuyên sâu độc quyền
-              </p>
-              <div className="mt-1.5 flex items-center space-x-2">
-                <span className="w-3.5 h-3.5 rounded-[3px] bg-gradient-to-tr from-amber-600 via-amber-500 to-amber-300 inline-block shrink-0 shadow-2xs" />
-                <span className="text-xs font-bold text-slate-900 group-hover:text-[#0a66c2] transition-colors">
-                  Dùng thử Premium cho 0 đ
+          {/* Main Search Console */}
+          <div
+            ref={searchBarRef}
+            className="bg-surface-container-lowest shadow-[0_8px_30px_rgb(0,0,0,0.06)] p-space-md mb-space-md rounded-3xl md:rounded-full"
+          >
+            <div className="grid grid-cols-1 md:grid-cols-12 gap-space-sm items-center">
+              {/* Keyword input */}
+              <div className="md:col-span-5 flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container-lowest rounded-full">
+                <span className="material-symbols-outlined text-primary text-[22px]">
+                  search
                 </span>
-              </div>
-            </div>
-
-            {/* Card 3: Kết nối - Phát triển mạng lưới của bạn */}
-            <div className="bg-white hover:bg-slate-50 rounded-xl border border-slate-300/80 p-3.5 shadow-2xs transition-colors cursor-pointer">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-xs font-bold text-slate-900">Kết nối</p>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Phát triển mạng lưới của bạn
-                  </p>
-                </div>
-                <span className="text-xs font-bold text-[#0a66c2]">
-                  {connectedCandidateIds.length + followedRecruiterIds.length}
-                </span>
-              </div>
-            </div>
-
-            {/* Card 4: Các mục đã lưu, Nhóm, Bản tin, Sự kiện */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-2 shadow-2xs space-y-0.5">
-              <button
-                type="button"
-                onClick={() => onTabChange && onTabChange('saved')}
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center justify-between text-left transition-colors cursor-pointer"
-              >
-                <div className="flex items-center space-x-3">
-                  <Bookmark className="w-4 h-4 text-slate-700 fill-slate-700 shrink-0" />
-                  <span className="text-xs font-bold text-slate-800">
-                    Các mục đã lưu
-                  </span>
-                </div>
-                {savedCount > 0 && (
-                  <span className="text-[11px] font-bold text-[#0a66c2]">
-                    {savedCount}
-                  </span>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  onShowToast &&
-                  onShowToast('Đang mở danh sách Nhóm chuyên môn của bạn', 'info')
-                }
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center space-x-3 text-left transition-colors cursor-pointer"
-              >
-                <Users className="w-4 h-4 text-slate-700 shrink-0" />
-                <span className="text-xs font-bold text-slate-800">Nhóm</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onTabChange && onTabChange('news')}
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center space-x-3 text-left transition-colors cursor-pointer"
-              >
-                <Newspaper className="w-4 h-4 text-slate-700 shrink-0" />
-                <span className="text-xs font-bold text-slate-800">Bản tin</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  onShowToast &&
-                  onShowToast('Đang mở lịch Sự kiện tuyển dụng sắp tới', 'info')
-                }
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center space-x-3 text-left transition-colors cursor-pointer"
-              >
-                <Calendar className="w-4 h-4 text-slate-700 shrink-0" />
-                <span className="text-xs font-bold text-slate-800">Sự kiện</span>
-              </button>
-            </div>
-          </aside>
-
-          {/* =================================================================== */}
-          {/* CỘT GIỮA / BÊN PHẢI CỘT TÀI KHOẢN (6 cols):                          */}
-          {/* - Thanh bắt đầu bài đăng / tìm kiếm                                  */}
-          {/* - Ở TRÊN: Kết nối với Nhà tuyển dụng                                 */}
-          {/* - Ở DƯỚI: Kết nối với các Ứng viên khác                              */}
-          {/* - Danh sách Công ty & Doanh nghiệp                                   */}
-          {/* =================================================================== */}
-          <div className="lg:col-span-6 space-y-3">
-            {/* Top Card: Bắt đầu bài đăng / Tìm kiếm nhanh (y hệt trong hình) */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-3.5 shadow-2xs">
-              <div className="flex items-center space-x-2.5">
-                <div className="relative w-12 h-12 shrink-0">
-                  <img
-                    src={displayAvatar}
-                    alt={displayName}
-                    referrerPolicy="no-referrer"
-                    className="w-12 h-12 rounded-full object-cover border border-slate-200"
-                  />
-                </div>
-
-                {/* Pill Input */}
-                <div className="flex-1 relative flex items-center">
+                <div className="flex-1 min-w-0">
+                  <label className="block font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">
+                    Tên công ty hoặc ngành nghề
+                  </label>
                   <input
                     type="text"
                     value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Bắt đầu bài đăng hoặc tìm kiếm nhà tuyển dụng, ứng viên, công ty..."
-                    className="w-full py-3 px-4 pr-9 rounded-full border border-slate-400/90 hover:bg-slate-100/80 focus:bg-white text-xs sm:text-sm font-semibold text-slate-800 placeholder:text-slate-600 focus:outline-hidden focus:border-slate-700 transition-colors"
+                    onChange={(e) => {
+                      setSearchTerm(e.target.value);
+                      setCurrentPage(1);
+                    }}
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleSearchButtonClick();
+                    }}
+                    placeholder="VD: FPT Software, Shopee, VNG, Fintech..."
+                    className="w-full bg-transparent font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none"
                   />
-                  {searchTerm ? (
+                </div>
+              </div>
+
+              {/* Location Dropdown */}
+              <div className="md:col-span-3 relative">
+                <div
+                  onClick={() => {
+                    setLocationMenuOpen((prev) => !prev);
+                    setSizeMenuOpen(false);
+                  }}
+                  className="flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors rounded-full select-none"
+                >
+                  <span className="material-symbols-outlined text-on-surface-variant text-[20px]">
+                    location_on
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <span className="block font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">
+                      Địa điểm
+                    </span>
+                    <span className="block font-body-md text-body-md text-on-surface truncate">
+                      {activeLocationLabel}
+                    </span>
+                  </div>
+                  <span className="material-symbols-outlined text-on-surface-variant text-[18px]">
+                    expand_more
+                  </span>
+                </div>
+
+                {locationMenuOpen && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-surface-container-lowest rounded-2xl shadow-lg border border-outline-variant/30 py-1.5 z-30">
+                    {LOCATION_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedLocation(opt.id);
+                          setLocationMenuOpen(false);
+                          setCurrentPage(1);
+                        }}
+                        className={`w-full text-left px-4 py-2 font-body-sm text-body-sm transition-colors cursor-pointer ${
+                          selectedLocation === opt.id
+                            ? 'bg-surface-container-low text-primary font-semibold'
+                            : 'text-on-surface hover:bg-surface-container-low'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Size Dropdown */}
+              <div className="md:col-span-2 relative">
+                <div
+                  onClick={() => {
+                    setSizeMenuOpen((prev) => !prev);
+                    setLocationMenuOpen(false);
+                  }}
+                  className="flex items-center gap-space-sm px-space-md py-space-sm bg-surface-container-low cursor-pointer hover:bg-surface-container transition-colors rounded-full select-none"
+                >
+                  <span className="material-symbols-outlined text-on-surface-variant text-[20px]">
+                    groups
+                  </span>
+                  <div className="flex-1 min-w-0">
+                    <span className="block font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">
+                      Quy mô
+                    </span>
+                    <span className="block font-body-md text-body-md text-on-surface truncate">
+                      {activeSizeLabel}
+                    </span>
+                  </div>
+                  <span className="material-symbols-outlined text-on-surface-variant text-[18px]">
+                    expand_more
+                  </span>
+                </div>
+
+                {sizeMenuOpen && (
+                  <div className="absolute left-0 right-0 top-full mt-2 bg-surface-container-lowest rounded-2xl shadow-lg border border-outline-variant/30 py-1.5 z-30 min-w-[180px]">
+                    {SIZE_OPTIONS.map((opt) => (
+                      <button
+                        key={opt.id}
+                        type="button"
+                        onClick={() => {
+                          setSelectedSize(opt.id);
+                          setSizeMenuOpen(false);
+                          setCurrentPage(1);
+                        }}
+                        className={`w-full text-left px-4 py-2 font-body-sm text-body-sm transition-colors cursor-pointer ${
+                          selectedSize === opt.id
+                            ? 'bg-surface-container-low text-primary font-semibold'
+                            : 'text-on-surface hover:bg-surface-container-low'
+                        }`}
+                      >
+                        {opt.label}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* CTA Button */}
+              <div className="md:col-span-2">
+                <button
+                  type="button"
+                  onClick={handleSearchButtonClick}
+                  className="w-full h-12 flex items-center justify-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg transition-colors shadow-[0_4px_14px_rgba(21,93,252,0.3)] rounded-full cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[20px]">
+                    search
+                  </span>
+                  <span>Tìm kiếm</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Quick Filter Pills matching Reference UI */}
+          <div className="flex items-center gap-space-sm flex-wrap">
+            <span className="font-label-md text-label-md text-on-surface-variant mr-space-xs">
+              Gợi ý nhanh:
+            </span>
+            <button
+              type="button"
+              onClick={() =>
+                setActiveQuickTag((prev) =>
+                  prev === 'featured' ? null : 'featured'
+                )
+              }
+              className={`flex items-center gap-space-xs px-space-md py-1.5 rounded-full transition-colors font-label-md text-label-md shadow-sm cursor-pointer ${
+                activeQuickTag === 'featured'
+                  ? 'bg-surface-container-high text-primary'
+                  : 'bg-surface-container-lowest hover:bg-surface-container-high text-on-surface'
+              }`}
+            >
+              <span className="w-2 h-2 rounded-full bg-secondary-container"></span>
+              <span>Công ty nổi bật</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setActiveQuickTag((prev) =>
+                  prev === 'top-tech' ? null : 'top-tech'
+                )
+              }
+              className={`flex items-center gap-space-xs px-space-md py-1.5 rounded-full transition-colors font-label-md text-label-md shadow-sm cursor-pointer ${
+                activeQuickTag === 'top-tech'
+                  ? 'bg-surface-container-high text-primary'
+                  : 'bg-surface-container-lowest hover:bg-surface-container-high text-on-surface'
+              }`}
+            >
+              <span>Top Tech Companies</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setActiveQuickTag((prev) =>
+                  prev === 'benefits' ? null : 'benefits'
+                )
+              }
+              className={`flex items-center gap-space-xs px-space-md py-1.5 rounded-full transition-colors font-label-md text-label-md shadow-sm cursor-pointer ${
+                activeQuickTag === 'benefits'
+                  ? 'bg-surface-container-high text-primary'
+                  : 'bg-surface-container-lowest hover:bg-surface-container-high text-on-surface'
+              }`}
+            >
+              <span>Đãi ngộ vượt trội</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setActiveQuickTag((prev) =>
+                  prev === 'urgent' ? null : 'urgent'
+                )
+              }
+              className={`flex items-center gap-space-xs px-space-md py-1.5 rounded-full transition-colors font-label-md text-label-md shadow-sm cursor-pointer ${
+                activeQuickTag === 'urgent'
+                  ? 'bg-surface-container-high text-primary'
+                  : 'bg-surface-container-lowest hover:bg-surface-container-high text-on-surface'
+              }`}
+            >
+              <span>Tuyển dụng gấp</span>
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                setActiveQuickTag((prev) =>
+                  prev === 'international' ? null : 'international'
+                )
+              }
+              className={`flex items-center gap-space-xs px-space-md py-1.5 rounded-full transition-colors font-label-md text-label-md shadow-sm cursor-pointer ${
+                activeQuickTag === 'international'
+                  ? 'bg-surface-container-high text-primary'
+                  : 'bg-surface-container-lowest hover:bg-surface-container-high text-on-surface'
+              }`}
+            >
+              <span>Môi trường quốc tế</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 2. MAIN 2-COLUMN VIEWPORT: FILTER SIDEBAR & COMPANY FEED */}
+      <section id="company-feed-section" className="w-full bg-surface py-space-xl">
+        <div className="max-w-7xl mx-auto px-margin">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-xl items-start">
+            {/* LEFT COLUMN: Filter Sidebar */}
+            <aside className="lg:col-span-3 flex flex-col gap-space-md lg:sticky lg:top-24">
+              {/* Filter Card 1 */}
+              <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col gap-space-lg">
+                <div className="flex items-center justify-between pb-space-sm bg-surface-container-lowest">
+                  <div className="flex items-center gap-space-xs font-headline-sm text-headline-sm text-on-surface">
+                    <span className="material-symbols-outlined text-[20px] text-primary">
+                      tune
+                    </span>
+                    <span>Bộ Lọc Tìm Kiếm</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleResetFilters}
+                    className="font-label-md text-label-md text-primary hover:underline cursor-pointer"
+                  >
+                    Đặt lại
+                  </button>
+                </div>
+
+                {/* Lĩnh vực hoạt động */}
+                <div className="flex flex-col gap-space-sm">
+                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">
+                    Lĩnh vực hoạt động
+                  </span>
+                  <div className="flex flex-col gap-space-xs">
+                    {INDUSTRY_OPTIONS.map((item) => {
+                      const isChecked = selectedIndustries.includes(item.id);
+                      return (
+                        <label
+                          key={item.id}
+                          className="flex items-center justify-between py-1 cursor-pointer group"
+                        >
+                          <div className="flex items-center gap-space-sm">
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onChange={() => handleToggleIndustry(item.id)}
+                              className="w-4 h-4 rounded text-primary focus:ring-0 accent-primary cursor-pointer"
+                            />
+                            <span className="font-body-sm text-body-sm text-on-surface group-hover:text-primary transition-colors">
+                              {item.label}
+                            </span>
+                          </div>
+                        </label>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Mô hình doanh nghiệp */}
+                <div className="flex flex-col gap-space-sm">
+                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">
+                    Mô hình doanh nghiệp
+                  </span>
+                  <div className="flex flex-col gap-space-xs">
+                    {MODEL_OPTIONS.map((model) => (
+                      <label
+                        key={model.id}
+                        className="flex items-center gap-space-sm py-1 cursor-pointer"
+                      >
+                        <input
+                          type="radio"
+                          name="comp-type"
+                          checked={selectedModel === model.id}
+                          onChange={() => {
+                            setSelectedModel(model.id);
+                            setCurrentPage(1);
+                          }}
+                          className="w-4 h-4 text-primary accent-primary cursor-pointer"
+                        />
+                        <span className="font-body-sm text-body-sm text-on-surface">
+                          {model.label}
+                        </span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {/* Filter Card 2: Đánh Giá & Xếp Hạng */}
+              <div className="bg-surface-container-lowest rounded-2xl p-space-lg shadow-sm flex flex-col gap-space-md">
+                <div className="flex items-center gap-space-xs pb-space-xs font-headline-sm text-headline-sm text-on-surface">
+                  <span className="material-symbols-outlined text-[20px] text-primary">
+                    star
+                  </span>
+                  <span>Đánh Giá &amp; Xếp Hạng</span>
+                </div>
+                <div className="flex flex-col gap-space-sm">
+                  <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant">
+                    Đánh giá từ nhân viên
+                  </span>
+                  <div className="flex flex-col gap-space-xs">
                     <button
                       type="button"
-                      onClick={() => {
-                        setSearchTerm('');
-                        if (onResetSearch) onResetSearch();
-                      }}
-                      className="absolute right-3 p-1 rounded-full text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
+                      onClick={() => setMinRating(4.5)}
+                      className={`flex items-center justify-between p-2 rounded-lg text-left transition-colors cursor-pointer ${
+                        minRating === 4.5
+                          ? 'bg-surface-container-high/50 hover:bg-surface-container-high'
+                          : 'hover:bg-surface-container'
+                      }`}
                     >
-                      <X className="w-4 h-4" />
+                      <div className="flex items-center gap-1 text-secondary">
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star_half
+                        </span>
+                        <span className="font-label-md text-label-md text-on-surface ml-1">
+                          4.5+
+                        </span>
+                      </div>
                     </button>
-                  ) : (
-                    <Search className="w-4 h-4 text-slate-500 absolute right-4 pointer-events-none" />
+
+                    <button
+                      type="button"
+                      onClick={() => setMinRating(4.0)}
+                      className={`flex items-center justify-between p-2 rounded-lg text-left transition-colors cursor-pointer ${
+                        minRating === 4.0
+                          ? 'bg-surface-container-high/50 hover:bg-surface-container-high'
+                          : 'hover:bg-surface-container'
+                      }`}
+                    >
+                      <div className="flex items-center gap-1 text-secondary">
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span
+                          className="material-symbols-outlined text-[18px]"
+                          style={{ fontVariationSettings: '"FILL" 1' }}
+                        >
+                          star
+                        </span>
+                        <span className="material-symbols-outlined text-[18px]">
+                          star
+                        </span>
+                        <span className="font-label-md text-label-md text-on-surface ml-1">
+                          4.0+
+                        </span>
+                      </div>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </aside>
+
+            {/* RIGHT COLUMN: Company Feed & Corporate Cards */}
+            <div className="lg:col-span-9 flex flex-col gap-space-lg">
+              {/* Section Controls Header */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-space-sm bg-surface-container-lowest p-space-md rounded-2xl shadow-sm">
+                <div>
+                  <span className="font-headline-md text-headline-md text-on-surface">
+                    Danh sách công ty tiêu biểu
+                  </span>
+                </div>
+                <div className="flex items-center gap-space-sm self-end sm:self-auto relative">
+                  <span className="font-body-sm text-body-sm text-on-surface-variant">
+                    Sắp xếp:
+                  </span>
+                  <div
+                    onClick={() => setSortMenuOpen((prev) => !prev)}
+                    className="flex items-center gap-space-xs bg-surface-container px-space-md py-1.5 rounded-lg cursor-pointer select-none"
+                  >
+                    <span className="font-label-md text-label-md text-on-surface">
+                      {activeSortLabel}
+                    </span>
+                    <span className="material-symbols-outlined text-[18px] text-on-surface-variant">
+                      arrow_drop_down
+                    </span>
+                  </div>
+
+                  {sortMenuOpen && (
+                    <div className="absolute right-0 top-full mt-1.5 bg-surface-container-lowest rounded-xl shadow-lg border border-outline-variant/30 py-1 z-20 min-w-[170px]">
+                      {SORT_OPTIONS.map((opt) => (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            setSortBy(opt.id);
+                            setSortMenuOpen(false);
+                          }}
+                          className={`w-full text-left px-3.5 py-2 font-body-sm text-body-sm transition-colors cursor-pointer ${
+                            sortBy === opt.id
+                              ? 'bg-surface-container-low text-primary font-semibold'
+                              : 'text-on-surface hover:bg-surface-container-low'
+                          }`}
+                        >
+                          {opt.label}
+                        </button>
+                      ))}
+                    </div>
                   )}
                 </div>
               </div>
 
-              {/* Action buttons row: Video | Ảnh | Viết bài viết */}
-              <div className="flex items-center justify-around pt-2.5 mt-2">
-                <button
-                  type="button"
-                  onClick={() =>
-                    onShowToast &&
-                    onShowToast('Tính năng đăng Video giới thiệu hồ sơ', 'info')
-                  }
-                  className="flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-slate-100 text-xs sm:text-sm font-semibold text-slate-700 transition-colors cursor-pointer"
-                >
-                  <SquarePlay className="w-5 h-5 text-emerald-600 fill-emerald-600/15" />
-                  <span>Video</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    onShowToast &&
-                    onShowToast('Tính năng chia sẻ Ảnh hoạt động công ty', 'info')
-                  }
-                  className="flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-slate-100 text-xs sm:text-sm font-semibold text-slate-700 transition-colors cursor-pointer"
-                >
-                  <Image className="w-5 h-5 text-[#0a66c2]" />
-                  <span>Ảnh</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() =>
-                    onShowToast &&
-                    onShowToast('Tính năng Viết bài chia sẻ kinh nghiệm phỏng vấn', 'info')
-                  }
-                  className="flex items-center space-x-2 px-4 py-2 rounded-full hover:bg-slate-100 text-xs sm:text-sm font-semibold text-slate-700 transition-colors cursor-pointer"
-                >
-                  <FileText className="w-5 h-5 text-orange-600" />
-                  <span>Viết bài viết</span>
-                </button>
-              </div>
-            </div>
-
-            {/* =============================================================== */}
-            {/* PHẦN Ở TRÊN: KẾT NỐI VỚI NHÀ TUYỂN DỤNG (Đề xuất cho bạn)        */}
-            {/* =============================================================== */}
-            <div
-              id="recruiter-connections-card"
-              className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden"
-            >
-              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">
-                    Đề xuất cho bạn
+              {/* Grid of Corporate Cards (2-col on Desktop) */}
+              {filteredCompanies.length === 0 ? (
+                <div className="bg-surface-container-lowest rounded-2xl p-space-xl text-center shadow-sm">
+                  <span className="material-symbols-outlined text-[40px] text-outline mb-space-xs">
+                    domain_disabled
+                  </span>
+                  <h3 className="font-headline-md text-headline-md text-on-surface mb-space-xs">
+                    Không tìm thấy doanh nghiệp phù hợp
                   </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Kết nối với nhà tuyển dụng & chuyên gia săn đầu người
+                  <p className="font-body-md text-body-md text-on-surface-variant mb-space-md">
+                    Vui lòng thử lại với từ khóa khác hoặc đặt lại bộ lọc tìm kiếm.
                   </p>
+                  <button
+                    type="button"
+                    onClick={handleResetFilters}
+                    className="px-space-lg py-space-sm bg-primary text-on-primary font-label-lg text-label-lg rounded-full hover:bg-primary-container transition-colors cursor-pointer"
+                  >
+                    Đặt lại bộ lọc
+                  </button>
                 </div>
-                <span className="text-[11px] font-semibold text-[#0a66c2] bg-blue-50 px-2.5 py-1 rounded-full">
-                  Nhà tuyển dụng
-                </span>
-              </div>
-
-              <div className="divide-y divide-slate-200/80">
-                {visibleRecruiters.map((rec) => {
-                  const isFollowing = followedRecruiterIds.includes(rec.id);
-                  const matchedComp = companies.find((c) =>
-                    c.name.toLowerCase().includes(rec.companyName.toLowerCase().split(' ')[0])
-                  );
-
-                  return (
-                    <div
-                      key={rec.id}
-                      className="p-4 hover:bg-slate-50/90 transition-colors flex items-start justify-between gap-3"
-                    >
-                      <div className="flex items-start space-x-3 min-w-0 flex-1">
-                        {/* Avatar */}
-                        <div
-                          onClick={() =>
-                            matchedComp &&
-                            onSelectCompany &&
-                            onSelectCompany(matchedComp)
-                          }
-                          className="relative w-12 h-12 rounded-full bg-slate-200 shrink-0 overflow-hidden border border-slate-200 cursor-pointer flex items-center justify-center"
-                        >
-                          {rec.avatar ? (
-                            <img
-                              src={rec.avatar}
-                              alt={rec.name}
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <Users className="w-6 h-6 text-slate-500" />
-                          )}
-                          <span className="absolute bottom-0 right-0 bg-[#0a66c2] text-white text-[7px] font-black px-1 rounded-tl-md">
-                            {rec.badgeText}
-                          </span>
-                        </div>
-
-                        {/* Info */}
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center space-x-1.5">
-                            <h4
-                              onClick={() =>
-                                matchedComp &&
-                                onSelectCompany &&
-                                onSelectCompany(matchedComp)
-                              }
-                              className="text-sm font-bold text-slate-900 hover:text-[#0a66c2] hover:underline cursor-pointer truncate"
-                            >
-                              {rec.name}
-                            </h4>
-                            {rec.verified && (
-                              <ShieldCheck className="w-4 h-4 text-slate-600 shrink-0" />
-                            )}
-                          </div>
-
-                          <p className="text-xs text-slate-700 line-clamp-2 mt-0.5 leading-snug">
-                            {rec.headline}
-                          </p>
-
-                          <div className="flex items-center space-x-1.5 text-[11px] text-slate-500 mt-1.5">
-                            <TrendingUp className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            <span>{rec.reason}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* + Theo dõi Pill Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleToggleFollowRecruiter(rec)}
-                        className={`shrink-0 inline-flex items-center space-x-1 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer ${
-                          isFollowing
-                            ? 'border-slate-300 bg-slate-100 text-slate-800 hover:bg-slate-200'
-                            : 'border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50/80 hover:border-[#004182]'
-                        }`}
-                      >
-                        {isFollowing ? (
-                          <>
-                            <Check className="w-4 h-4 text-amber-600 stroke-[2.5]" />
-                            <span>Đang theo dõi</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus className="w-4 h-4 stroke-[2.5]" />
-                            <span>Theo dõi</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Footer: Hiển thị thêm -> */}
-              <button
-                type="button"
-                onClick={() => setShowAllRecruiters((prev) => !prev)}
-                className="w-full py-3 border-t border-slate-200/80 hover:bg-slate-100 text-sm font-bold text-slate-700 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer rounded-b-xl"
-              >
-                <span>
-                  {showAllRecruiters ? 'Thu gọn danh sách' : 'Hiển thị thêm'}
-                </span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* =============================================================== */}
-            {/* PHẦN Ở DƯỚI: KẾT NỐI VỚI CÁC ỨNG VIÊN KHÁC (Những người bạn có thể biết) */}
-            {/* =============================================================== */}
-            <div
-              id="candidate-connections-card"
-              className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden"
-            >
-              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">
-                    Những người bạn có thể biết
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Kết nối với các ứng viên khác cùng ngành nghề & khu vực
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowAllCandidates((prev) => !prev)}
-                  className="p-1.5 rounded-full text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
-                  title="Xem tất cả ứng viên"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="divide-y divide-slate-200/80">
-                {visibleCandidates.map((cand) => {
-                  const isConnected = connectedCandidateIds.includes(cand.id);
-                  return (
-                    <div
-                      key={cand.id}
-                      className="p-4 hover:bg-slate-50/90 transition-colors flex items-start justify-between gap-3"
-                    >
-                      <div className="flex items-start space-x-3 min-w-0 flex-1">
-                        <img
-                          src={cand.avatar}
-                          alt={cand.name}
-                          referrerPolicy="no-referrer"
-                          className="w-12 h-12 rounded-full object-cover border border-slate-200 shrink-0"
-                        />
-
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center space-x-1.5">
-                            <h4 className="text-sm font-bold text-slate-900 hover:text-[#0a66c2] hover:underline cursor-pointer truncate">
-                              {cand.name}
-                            </h4>
-                            {cand.verified && (
-                              <ShieldCheck className="w-4 h-4 text-slate-600 shrink-0" />
-                            )}
-                          </div>
-
-                          <p className="text-xs text-slate-700 line-clamp-2 mt-0.5 leading-snug">
-                            {cand.headline}
-                          </p>
-
-                          <div className="flex items-center space-x-1.5 text-[11px] text-slate-500 mt-1.5">
-                            {cand.activityType === 'clock' ? (
-                              <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            ) : (
-                              <TrendingUp className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            )}
-                            <span>{cand.activity}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* + Kết nối Pill Button */}
-                      <button
-                        type="button"
-                        onClick={() => handleToggleConnectCandidate(cand)}
-                        className={`shrink-0 inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer ${
-                          isConnected
-                            ? 'border-slate-400 bg-slate-100 text-slate-800 hover:bg-slate-200'
-                            : 'border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50/80 hover:border-[#004182]'
-                        }`}
-                      >
-                        {isConnected ? (
-                          <>
-                            <Check className="w-4 h-4 stroke-[2.5]" />
-                            <span>Đã kết nối</span>
-                          </>
-                        ) : (
-                          <>
-                            <UserPlus className="w-4 h-4 stroke-[2.2]" />
-                            <span>Kết nối</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* Footer: Hiển thị thêm -> */}
-              <button
-                type="button"
-                onClick={() => setShowAllCandidates((prev) => !prev)}
-                className="w-full py-3 border-t border-slate-200/80 hover:bg-slate-100 text-sm font-bold text-slate-700 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer rounded-b-xl"
-              >
-                <span>
-                  {showAllCandidates ? 'Thu gọn danh sách' : 'Hiển thị thêm'}
-                </span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
-            </div>
-
-            {/* =============================================================== */}
-            {/* DANH SÁCH DOANH NGHIỆP & CÔNG TY HÀNG ĐẦU                        */}
-            {/* =============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden">
-              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">
-                    Doanh nghiệp & Công ty nổi bật
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Khám phá môi trường làm việc và cơ hội nghề nghiệp tại các tập đoàn hàng đầu
-                  </p>
-                </div>
-                <span className="text-xs font-bold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full">
-                  {filteredCompanies.length} công ty
-                </span>
-              </div>
-
-              <div className="divide-y divide-slate-200/80">
-                {visibleCompanies.map((company) => {
-                  const isFollowed = followedCompanyIds.includes(company.id);
-                  return (
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
+                  {filteredCompanies.map((company) => (
                     <div
                       key={company.id}
                       id={`company-card-${company.id}`}
-                      onClick={() => onSelectCompany && onSelectCompany(company)}
-                      className="p-4 hover:bg-slate-50/90 transition-colors flex items-start justify-between gap-3 cursor-pointer"
+                      className="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
                     >
-                      <div className="flex items-start space-x-3 min-w-0 flex-1">
-                        <div className="w-12 h-12 rounded-xl border border-slate-200 bg-slate-50 p-1.5 flex items-center justify-center shrink-0">
+                      <div>
+                        {/* Banner Preview */}
+                        <div
+                          onClick={() =>
+                            onSelectCompany && onSelectCompany(company)
+                          }
+                          className="relative h-36 w-full bg-surface-container overflow-hidden cursor-pointer"
+                        >
                           <img
-                            src={company.logo}
-                            alt={company.name}
+                            src={company.coverImage}
+                            alt={company.altText || company.name}
                             referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover rounded-lg"
+                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+                          {company.badgeText && (
+                            <span
+                              className={`absolute top-3 right-3 px-2 py-0.5 rounded-md font-label-sm text-label-sm uppercase ${company.badgeClass}`}
+                            >
+                              {company.badgeText}
+                            </span>
+                          )}
                         </div>
 
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center space-x-1.5">
-                            <h4 className="text-sm font-bold text-slate-900 hover:text-[#0a66c2] hover:underline truncate">
-                              {company.name}
-                            </h4>
-                            <ShieldCheck className="w-4 h-4 text-[#0a66c2] shrink-0" />
+                        <div className="p-space-lg pt-0 relative">
+                          {/* Logo Overlap */}
+                          <div className="-mt-8 mb-space-sm flex items-end justify-between">
+                            <div
+                              onClick={() =>
+                                onSelectCompany && onSelectCompany(company)
+                              }
+                              className="w-16 h-16 bg-surface-container-lowest shadow-md p-1.5 flex items-center justify-center rounded-full cursor-pointer"
+                            >
+                              <div
+                                className={`w-full h-full flex items-center justify-center rounded-full ${company.avatarBgClass}`}
+                              >
+                                {company.avatarCode}
+                              </div>
+                            </div>
+
+                            <div className="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-sm text-secondary">
+                              <span
+                                className="material-symbols-outlined text-[16px]"
+                                style={{ fontVariationSettings: '"FILL" 1' }}
+                              >
+                                star
+                              </span>
+                              <span className="font-headline-sm text-headline-sm text-on-surface">
+                                {company.rating}
+                              </span>
+                              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                                ({company.reviewsCount})
+                              </span>
+                            </div>
                           </div>
 
-                          <p className="text-xs text-slate-700 mt-0.5">
-                            {company.industry} • {company.location}
-                          </p>
+                          {/* Details */}
+                          <div className="flex flex-col gap-1 mb-space-md">
+                            <h2
+                              onClick={() =>
+                                onSelectCompany && onSelectCompany(company)
+                              }
+                              className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors cursor-pointer"
+                            >
+                              {company.name}
+                            </h2>
+                            <span className="font-body-sm text-body-sm text-on-surface-variant">
+                              {company.industry}
+                            </span>
+                          </div>
 
-                          <div className="flex flex-wrap items-center gap-2 text-[11px] text-slate-500 mt-1.5">
-                            <span className="inline-flex items-center space-x-1 text-amber-600 font-semibold">
-                              <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
-                              <span>{company.rating}</span>
-                            </span>
-                            <span>•</span>
-                            <span className="text-emerald-700 font-semibold">
-                              {company.openJobsCount} vị trí đang tuyển
-                            </span>
+                          <div className="grid grid-cols-2 gap-y-2 text-on-surface-variant font-body-sm text-body-sm mb-space-md">
+                            <div className="flex items-center gap-1.5">
+                              <span className="material-symbols-outlined text-[18px] text-primary">
+                                groups
+                              </span>
+                              <span>{company.employees}</span>
+                            </div>
+                            <div className="flex items-center gap-1.5">
+                              <span className="material-symbols-outlined text-[18px] text-primary">
+                                location_on
+                              </span>
+                              <span>{company.location}</span>
+                            </div>
                           </div>
                         </div>
                       </div>
 
-                      <button
-                        type="button"
-                        id={`company-follow-heart-${company.id}`}
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          if (onToggleFollowCompany) {
-                            onToggleFollowCompany(company.id);
-                          }
-                        }}
-                        className={`shrink-0 inline-flex items-center space-x-1 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer ${
-                          isFollowed
-                            ? 'border-slate-400 bg-slate-100 text-slate-800 hover:bg-slate-200'
-                            : 'border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50/80 hover:border-[#004182]'
-                        }`}
-                      >
-                        {isFollowed ? (
-                          <>
-                            <Check className="w-4 h-4 stroke-[2.5]" />
-                            <span>Đang theo dõi</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus className="w-4 h-4 stroke-[2.5]" />
-                            <span>Theo dõi</span>
-                          </>
-                        )}
-                      </button>
+                      {/* Footer CTA */}
+                      <div className="px-space-lg pb-space-lg pt-0 flex items-center justify-between bg-surface-container-lowest">
+                        <span className="font-label-md text-label-md flex items-center gap-1 text-on-surface-variant">
+                          {company.jobsLabel}
+                        </span>
+                        <div className="flex items-center gap-space-xs">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              onSelectCompany && onSelectCompany(company)
+                            }
+                            className="px-space-md py-1.5 bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-colors rounded-full cursor-pointer"
+                          >
+                            Xem công ty
+                          </button>
+                        </div>
+                      </div>
                     </div>
-                  );
-                })}
-              </div>
-
-              {filteredCompanies.length > 4 && (
-                <button
-                  type="button"
-                  onClick={() => setShowAllCompanies((prev) => !prev)}
-                  className="w-full py-3 border-t border-slate-200/80 hover:bg-slate-100 text-sm font-bold text-slate-700 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer rounded-b-xl"
-                >
-                  <span>
-                    {showAllCompanies
-                      ? 'Thu gọn danh sách công ty'
-                      : `Hiển thị thêm (${filteredCompanies.length - 4} công ty)`}
-                  </span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
+                  ))}
+                </div>
               )}
+
+              {/* Pagination Container */}
+              <div className="flex items-center justify-between pt-space-md">
+                <span className="font-body-sm text-body-sm text-on-surface-variant">
+                  Hiển thị 1 - {filteredCompanies.length} trên tổng số 48 công ty
+                </span>
+                <div className="flex items-center gap-space-xs">
+                  {[1, 2, 3].map((page) => (
+                    <button
+                      key={page}
+                      type="button"
+                      onClick={() => {
+                        setCurrentPage(page);
+                        const feedEl = document.getElementById('company-feed-section');
+                        if (feedEl) {
+                          feedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }}
+                      className={
+                        currentPage === page
+                          ? 'w-9 h-9 rounded-full bg-primary text-on-primary font-bold text-label-md flex items-center justify-center transition-colors border-0 outline-none cursor-pointer'
+                          : 'w-9 h-9 rounded-full text-on-surface hover:text-primary hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors cursor-pointer'
+                      }
+                    >
+                      {page}
+                    </button>
+                  ))}
+                  <span className="px-1.5 text-outline font-label-md select-none">
+                    ...
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCurrentPage(8);
+                      const feedEl = document.getElementById('company-feed-section');
+                      if (feedEl) {
+                        feedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                      }
+                    }}
+                    className={
+                      currentPage === 8
+                        ? 'w-9 h-9 rounded-full bg-primary text-on-primary font-bold text-label-md flex items-center justify-center transition-colors border-0 outline-none cursor-pointer'
+                        : 'w-9 h-9 rounded-full text-on-surface hover:text-primary hover:bg-surface-container font-label-md text-label-md flex items-center justify-center transition-colors cursor-pointer'
+                    }
+                  >
+                    8
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. CULTURE SHOWCASE & WORKSPACE BENTO SECTION */}
+      <section className="w-full bg-surface-container-lowest py-space-xl">
+        <div className="max-w-7xl mx-auto px-margin">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-space-xl gap-space-md">
+            <div>
+              <div className="inline-flex items-center gap-space-xs text-primary font-label-md text-label-md uppercase tracking-wider mb-space-xs">
+                <span className="material-symbols-outlined text-[18px]">
+                  verified
+                </span>
+                <span>Góc Văn Hóa &amp; Không Gian Làm Việc Thực Tế</span>
+              </div>
+              <h2 className="font-headline-lg text-headline-lg text-on-surface tracking-tight">
+                Trải nghiệm môi trường trước khi ứng tuyển
+              </h2>
+            </div>
+            <p className="font-body-md text-body-md text-on-surface-variant max-w-md">
+              Khám phá không gian làm việc đạt tiêu chuẩn Great Place To Work® cùng các hoạt động văn hóa đặc sắc từ các doanh nghiệp hàng đầu.
+            </p>
+          </div>
+
+          {/* Bento Grid Visual Showcase */}
+          <div className="grid grid-cols-1 md:grid-cols-12 gap-space-md h-auto md:h-[420px]">
+            {/* Large Tile */}
+            <div className="md:col-span-6 relative rounded-2xl overflow-hidden group shadow-sm h-72 md:h-auto">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuB-5niMZANi-oQUA7_9sEox2WtxY5qpHaaR6kuqADxRuUBkxUZ0wbxLt73S0uEliC2psUvdDd6rlH8tOTBbU6ZJIWd1Fo8KurRV84uEO0q63gOK5taAv2RK0eYvXGmEB8kdE3yQ_HUgWbEYinGywxdWfysLhEGY39racVWbc_s5ywY_Rgl29VbcZ8D3VIbrVGyvZKonGMye4-q13kKZsmuCB-MnnzTc9eOov0t4UX3FqAb07m-QKvij"
+                alt="Modern collaborative open workspace with sunlight streaming through large floor-to-ceiling windows, developers coding in a spacious modern tech office lounge."
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6 text-on-primary">
+                <span className="px-2.5 py-1 rounded-md bg-primary-container text-on-primary font-label-sm text-label-sm uppercase mb-2 inline-block">
+                  Best Workplace 2024
+                </span>
+                <h3 className="font-headline-md text-headline-md text-on-primary mb-1">
+                  Không gian mở linh hoạt không bàn cố định
+                </h3>
+                <p className="font-body-sm text-body-sm text-on-primary/80">
+                  Khuyến khích tương tác đa phòng ban và nuôi dưỡng tính sáng tạo tối đa.
+                </p>
+              </div>
+            </div>
+
+            {/* Upper Right Tile */}
+            <div className="md:col-span-3 relative overflow-hidden group shadow-sm h-64 md:h-auto rounded-2xl">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyPris8CZfKcbhIOx90Gai-Ht3lxCD-67vjigPzjUbvL8zHn85b9oOJOjhg8Wvux7SUInNBHq1e19tUi8xxPOZWz1qNkn2pL03GwHGbdox07OgrLRAn-1CYcmZSRZfQKM5W3TZI6vQ6tILffDzJg9R2wJ9QRCW_WNZnL3X7VblKNNUe9be1HUpjoG2y-wm7A15kRCkpBZMsRFWjVBtJSFecmPmv1xQtd_wBOQg3YyYI-D5zW5TrPKA"
+                alt="Vietnamese corporate tech team building event on a tropical beach in Da Nang, happy young diverse colleagues celebrating together under warm sunset."
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 right-4 text-on-primary">
+                <span className="font-label-sm text-label-sm text-secondary-fixed block mb-1">
+                  Team Bonding Thường Niên
+                </span>
+                <h4 className="font-headline-sm text-headline-sm text-on-primary">
+                  Gắn kết năng lượng đồng đội
+                </h4>
+              </div>
+            </div>
+
+            {/* Lower Right Tile */}
+            <div className="md:col-span-3 relative overflow-hidden group shadow-sm h-64 md:h-auto rounded-2xl">
+              <img
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzYr9Y-3KAUxC3F-W90yda5oKYik7gurEGgmIuPfiD9m4iLRRJvEYZByBC1lA_7EBaq0MPvpXFRM9HmO2C-UnOadyLY805R4kXx4hO1sx4cqoHB3KWoZr1qzA_aWSFJh3wWUekUWxg8hKZ17so141X8Q5bUn-DLTHj15l7mWzaKoGnKOZjDny5Ykxq6cKY8UCwZ3uJGamw28IYM16qE2dICyaqx8Esk3VxMUXWhHEgZgOq1C0eIOMS"
+                alt="Modern barista coffee bar and healthy snack lounge located inside a luxury corporate high-rise office building in central Saigon."
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+              <div className="absolute bottom-4 left-4 right-4 text-on-primary">
+                <span className="font-label-sm text-label-sm text-tertiary-fixed block mb-1">
+                  Tiện Ích Nội Khu
+                </span>
+                <h4 className="font-headline-sm text-headline-sm text-on-primary">
+                  Quầy Barista &amp; Phòng Gym riêng
+                </h4>
+              </div>
             </div>
           </div>
 
-          {/* =================================================================== */}
-          {/* CỘT PHẢI (3 cols): TIN TỨC NỔI BẬT & DOANH NGHIỆP TUYỂN DỤNG HÔM NAY */}
-          {/* =================================================================== */}
-          <aside className="lg:col-span-3 space-y-2.5">
-            {/* Top Right Card: JobCentral News / Câu chuyện nổi bật (như trong hình) */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-4 shadow-2xs">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-slate-900">
-                  JobCentral News
-                </h3>
-                <span className="w-4 h-4 rounded-xs bg-slate-800 text-white text-[10px] font-bold flex items-center justify-center">
-                  i
+          {/* Trust Metrics Bar */}
+          <div className="mt-space-xl grid grid-cols-2 md:grid-cols-4 gap-space-md py-space-lg px-space-xl bg-surface-container-low rounded-2xl">
+            <div className="flex flex-col items-center text-center">
+              <span className="font-display-lg text-display-lg text-primary tracking-tight">
+                1.200+
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                Doanh nghiệp kiểm duyệt
+              </span>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <span className="font-display-lg text-display-lg text-primary tracking-tight">
+                96%
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                Đánh giá xác thực từ nhân sự
+              </span>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <span className="font-display-lg text-display-lg text-primary tracking-tight">
+                8.500+
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                Vị trí việc làm chất lượng cao
+              </span>
+            </div>
+            <div className="flex flex-col items-center text-center">
+              <span className="font-display-lg text-display-lg text-primary tracking-tight">
+                24h
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                Tốc độ phản hồi hồ sơ trung bình
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 4. FOOTER */}
+      <footer className="w-full bg-surface-container-low pt-space-xl pb-space-lg">
+        <div className="max-w-7xl mx-auto px-margin">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl pb-space-xl">
+            {/* Column 1: Brand & Contact */}
+            <div className="flex flex-col gap-space-md">
+              <div className="flex items-center">
+                <span className="font-headline-md text-headline-md text-primary tracking-tight">
+                  JobCentral
                 </span>
               </div>
-              <p className="text-xs font-bold text-slate-500 mt-1.5">
-                Câu chuyện nổi bật
+              <p className="font-body-sm text-body-sm text-on-surface-variant">
+                Nền tảng kết nối nhân tài và cơ hội việc làm hàng đầu tại Việt Nam. Xây dựng sự nghiệp vượt trội cùng công nghệ tối ưu hóa tuyển dụng.
               </p>
-
-              <div className="mt-2.5 space-y-2.5">
-                {(showAllNews ? TRENDING_NEWS : TRENDING_NEWS.slice(0, 5)).map(
-                  (news) => (
-                    <div
-                      key={news.id}
-                      onClick={() => onTabChange && onTabChange('news')}
-                      className="px-2 py-1.5 -mx-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
-                    >
-                      <h4 className="text-xs font-bold text-slate-900 line-clamp-1">
-                        {news.title}
-                      </h4>
-                      <p className="text-[11px] text-slate-500 mt-0.5">
-                        {news.meta}
-                      </p>
-                    </div>
-                  )
-                )}
+              <div className="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    mail
+                  </span>
+                  <span>contact@jobcentral.vn</span>
+                </div>
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    call
+                  </span>
+                  <span>(+84) 28 7300 8888</span>
+                </div>
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    location_on
+                  </span>
+                  <span>
+                    Tòa nhà Pearl Plaza, Quận Bình Thạnh, TP. Hồ Chí Minh
+                  </span>
+                </div>
               </div>
+            </div>
 
+            {/* Column 2: Về JobCentral */}
+            <div className="flex flex-col gap-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">
+                Về JobCentral
+              </span>
+              <div className="flex flex-col gap-space-sm">
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('jobs')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Giới thiệu chung
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('news')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tin tức tuyển dụng
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Liên hệ hợp tác: contact@jobcentral.vn', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Liên hệ hợp tác
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Chính sách bảo mật thông tin người dùng JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Chính sách bảo mật
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Điều khoản sử dụng dịch vụ JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Điều khoản sử dụng
+                </button>
+              </div>
+            </div>
+
+            {/* Column 3: Dành cho ứng viên */}
+            <div className="flex flex-col gap-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">
+                Dành cho ứng viên
+              </span>
+              <div className="flex flex-col gap-space-sm">
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('search')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tìm kiếm việc làm
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('cv-builder')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tạo CV trực tuyến
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('tools')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tính lương Gross - Net
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Khám phá doanh nghiệp
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('news')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Cẩm nang nghề nghiệp
+                </button>
+              </div>
+            </div>
+
+            {/* Column 4: Dành cho nhà tuyển dụng */}
+            <div className="flex flex-col gap-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">
+                Dành cho nhà tuyển dụng
+              </span>
+              <div className="flex flex-col gap-space-sm">
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Đang chuyển đến Cổng Đăng Tin Tuyển Dụng', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Đăng tin tuyển dụng
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Đang mở kho Hồ sơ nhân tài JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tìm kiếm hồ sơ nhân tài
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Giải pháp Employer Branding dành cho doanh nghiệp', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Giải pháp thương hiệu nhà tuyển dụng
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Bảng giá dịch vụ tuyển dụng doanh nghiệp 2024', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Bảng giá dịch vụ
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Đang mở Cổng Nhà Tuyển Dụng JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Cổng nhà tuyển dụng
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Copyright Bar */}
+          <div className="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md">
+            <span className="font-body-sm text-body-sm text-on-surface-variant">
+              © 2024 JobCentral JSC. Toàn bộ bản quyền được bảo lưu.
+            </span>
+            <div className="flex items-center gap-space-lg">
               <button
                 type="button"
-                onClick={() => setShowAllNews((prev) => !prev)}
-                className="mt-3 px-2.5 py-1 -ml-2.5 rounded-full hover:bg-slate-100 inline-flex items-center space-x-1 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                onClick={() =>
+                  onShowToast &&
+                  onShowToast('Quy chế hoạt động sàn giao dịch việc làm JobCentral', 'info')
+                }
+                className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
               >
-                <span>
-                  {showAllNews ? 'Thu gọn tin tức' : 'Hiển thị thêm tin tức khác'}
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform ${
-                    showAllNews ? 'rotate-180' : ''
-                  }`}
-                />
+                Quy chế hoạt động
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onShowToast &&
+                  onShowToast('Quy trình tiếp nhận và giải quyết khiếu nại', 'info')
+                }
+                className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                Giải quyết khiếu nại
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onShowToast &&
+                  onShowToast('Trung tâm trợ giúp ứng viên & nhà tuyển dụng 24/7', 'info')
+                }
+                className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                Trung tâm trợ giúp
               </button>
             </div>
-
-            {/* Bottom Right Card: Tâm điểm doanh nghiệp hôm nay (style y hệt Câu đố hôm nay trong hình) */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-4 shadow-2xs">
-              <h3 className="text-sm font-bold text-slate-600 mb-3">
-                Tâm điểm tuyển dụng hôm nay
-              </h3>
-
-              <div className="space-y-2">
-                {companies.slice(0, 4).map((comp, idx) => {
-                  const badgeColors = [
-                    'bg-orange-500 text-white',
-                    'bg-emerald-600 text-white',
-                    'bg-sky-600 text-white',
-                    'bg-indigo-600 text-white',
-                  ];
-                  return (
-                    <div
-                      key={comp.id}
-                      onClick={() => onSelectCompany && onSelectCompany(comp)}
-                      className="flex items-center justify-between p-2 -mx-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer group"
-                    >
-                      <div className="flex items-center space-x-3 min-w-0">
-                        <div
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center font-black text-xs shrink-0 shadow-2xs overflow-hidden border border-slate-200 ${
-                            badgeColors[idx % badgeColors.length]
-                          }`}
-                        >
-                          {comp.logo ? (
-                            <img
-                              src={comp.logo}
-                              alt={comp.name}
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            comp.name.slice(0, 2).toUpperCase()
-                          )}
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-bold text-slate-900 truncate">
-                            {comp.name}{' '}
-                            <span className="font-normal text-slate-500">
-                              #{idx + 1}0{idx + 2}
-                            </span>
-                          </p>
-                          <p className="text-[11px] text-slate-500 truncate">
-                            {comp.openJobsCount} vị trí đang mở tuyển
-                          </p>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-slate-600 group-hover:translate-x-0.5 transition-transform shrink-0" />
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          </aside>
+          </div>
         </div>
-
-        {/* Công ty đang theo dõi ở dưới cùng */}
-        <FavoriteCompaniesSection
-          allCompanies={companies}
-          followedCompanyIds={followedCompanyIds}
-          onToggleFollowCompany={onToggleFollowCompany}
-          onSelectCompany={onSelectCompany}
-          onExploreCompanies={() => {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-          }}
-        />
-      </div>
+      </footer>
     </div>
   );
 };

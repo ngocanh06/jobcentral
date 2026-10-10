@@ -26,6 +26,9 @@ import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg'
 
 export const MessagesView = ({
   currentUser,
+  initialConversationId,
+  onCloseMessages,
+  onSystemNotification,
   onViewJobDetail,
   onNavigateToJobs,
   onNavigateToCompany,
@@ -467,8 +470,18 @@ export const MessagesView = ({
     },
   ]);
 
-  const [activeConvId, setActiveConvId] = useState('conv-1');
+  const [activeConvId, setActiveConvId] = useState(initialConversationId || 'conv-1');
   const [mobileView, setMobileView] = useState('chat'); // 'list' | 'chat'
+
+  useEffect(() => {
+    if (initialConversationId) {
+      setActiveConvId(initialConversationId);
+      setMobileView('chat');
+      setConversations((prev) =>
+        prev.map((c) => (c.id === initialConversationId ? { ...c, unreadCount: 0 } : c))
+      );
+    }
+  }, [initialConversationId]);
   const [searchQuery, setSearchQuery] = useState('');
   const [inputText, setInputText] = useState('');
   const [showInfoModal, setShowInfoModal] = useState(false);
@@ -555,6 +568,20 @@ export const MessagesView = ({
       const replyText =
         'Cảm ơn bạn đã phản hồi nhanh chóng! Đội ngũ tuyển dụng sẽ gửi link họp Google Meet và tài liệu chuẩn bị qua email của bạn nhé.';
 
+      if (onSystemNotification && activeConv) {
+        onSystemNotification({
+          type: 'message',
+          category: 'application',
+          title: `Phản hồi mới từ ${activeConv.recruiterName} (${activeConv.companyName})`,
+          description: replyText,
+          badgeText: 'Tin nhắn HR',
+          badgeColor: 'blue',
+          targetType: 'messages',
+          targetId: activeConv.id,
+          actionLabel: 'Xem tin nhắn',
+        });
+      }
+
       setConversations((prev) =>
         prev.map((c) => {
           if (c.id === activeConvId) {
@@ -599,12 +626,25 @@ export const MessagesView = ({
           {/* Header Title & Search Box */}
           <div className="p-4 sm:p-5 border-b border-slate-100 shrink-0">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="text-base sm:text-[17px] font-bold text-slate-900 tracking-tight">
-                Tin nhắn & Kết nối
-              </h2>
-              <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
-                {conversations.length} hội thoại
-              </span>
+              <div className="flex items-center gap-2">
+                <h2 className="text-base sm:text-[17px] font-bold text-slate-900 tracking-tight">
+                  Tin nhắn & Kết nối
+                </h2>
+                <span className="text-[11px] font-semibold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  {conversations.length} hội thoại
+                </span>
+              </div>
+              {onCloseMessages && (
+                <button
+                  type="button"
+                  onClick={onCloseMessages}
+                  title="Đóng trang tin nhắn"
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold text-slate-500 hover:text-slate-800 hover:bg-slate-100 transition-colors cursor-pointer"
+                >
+                  <X className="w-3.5 h-3.5" />
+                  <span>Đóng</span>
+                </button>
+              )}
             </div>
             <div className="relative">
               <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-2.5" />

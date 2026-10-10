@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   INITIAL_JOBS,
   INITIAL_COMPANIES,
   INITIAL_ARTICLES,
   INITIAL_REVIEWS,
+  INITIAL_NOTIFICATIONS,
+  SIMULATED_SYSTEM_NOTIFICATIONS,
 } from './data/mockData';
 import { Header } from './components/Header';
 import { AllJobsView } from './components/AllJobsView';
@@ -31,7 +33,10 @@ export function App() {
   const device = useDevice();
   const [jobs, setJobs] = useState(INITIAL_JOBS);
   const [followedCompanyIds, setFollowedCompanyIds] = useState(['c1', 'c2']);
+  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
   const [activeTab, setActiveTab] = useState('jobs');
+  const [previousTab, setPreviousTab] = useState('jobs');
+  const [targetConversationId, setTargetConversationId] = useState('conv-1');
   const [selectedJobForDetail, setSelectedJobForDetail] = useState(null);
   const [selectedJobForApply, setSelectedJobForApply] = useState(null);
   const [selectedJobForStandardApply, setSelectedJobForStandardApply] = useState(null);
@@ -40,6 +45,7 @@ export function App() {
   const [mobileProfileDrawerOpen, setMobileProfileDrawerOpen] = useState(false);
   const [targetCompanyFilter, setTargetCompanyFilter] = useState(null);
   const [selectedCompany, setSelectedCompany] = useState(null);
+  const simNotifIndexRef = useRef(0);
   const [currentUser, setCurrentUser] = useState(() => {
     try {
       const savedUser = localStorage.getItem('jobcentral_user');
@@ -61,6 +67,133 @@ export function App() {
     }, 3500);
   };
 
+  // Push a new real-time notification into the system notification stream
+  const pushSystemNotification = (notifPayload) => {
+    const newNotif = {
+      id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
+      type: notifPayload.type || 'system',
+      category: notifPayload.category || 'system',
+      title: notifPayload.title,
+      description: notifPayload.description || '',
+      time: 'Vừa xong',
+      isRead: false,
+      badgeText: notifPayload.badgeText || 'Hệ thống',
+      badgeColor: notifPayload.badgeColor || 'blue',
+      targetType: notifPayload.targetType || 'job',
+      targetId: notifPayload.targetId || 'job-1',
+      actionLabel: notifPayload.actionLabel || 'Xem chi tiết',
+    };
+    setNotifications((prev) => [newNotif, ...prev]);
+    return newNotif;
+  };
+
+  const handleSimulateNotification = () => {
+    const template =
+      SIMULATED_SYSTEM_NOTIFICATIONS[
+        simNotifIndexRef.current % SIMULATED_SYSTEM_NOTIFICATIONS.length
+      ];
+    simNotifIndexRef.current += 1;
+    pushSystemNotification(template);
+    showToast(`Thông báo hệ thống mới: ${template.title}`, 'info');
+  };
+
+  const handleMarkNotificationRead = (notifId, e) => {
+    if (e) e.stopPropagation();
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notifId ? { ...n, isRead: true } : n))
+    );
+  };
+
+  const handleMarkAllNotificationsRead = () => {
+    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    showToast('Đã đánh dấu đọc tất cả thông báo.', 'info');
+  };
+
+  const handleDeleteNotification = (notifId, e) => {
+    if (e) e.stopPropagation();
+    setNotifications((prev) => prev.filter((n) => n.id !== notifId));
+  };
+
+  const handleNotificationClick = (notif) => {
+    // Mark clicked notification as read
+    setNotifications((prev) =>
+      prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n))
+    );
+
+    setSelectedJobForStandardApply(null);
+
+    if (notif.targetType === 'job') {
+      const targetJob =
+        jobs.find((j) => String(j.id) === String(notif.targetId)) || jobs[0];
+      if (targetJob) {
+        setSelectedJobForDetail(targetJob);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return;
+      }
+    }
+
+    setSelectedJobForDetail(null);
+
+    if (notif.targetType === 'company') {
+      const targetComp =
+        INITIAL_COMPANIES.find((c) => String(c.id) === String(notif.targetId)) ||
+        INITIAL_COMPANIES[0];
+      if (targetComp) {
+        setSelectedCompany(targetComp);
+      }
+      setPreviousTab('companies');
+      setActiveTab('companies');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (notif.targetType === 'messages') {
+      if (activeTab !== 'messages') {
+        setPreviousTab(activeTab);
+      }
+      if (notif.targetId) {
+        setTargetConversationId(notif.targetId);
+      }
+      setActiveTab('messages');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
+    if (
+      notif.targetType === 'cv-builder' ||
+      notif.targetType === 'tools' ||
+      notif.targetType === 'saved'
+    ) {
+      setPreviousTab(notif.targetType);
+      setActiveTab(notif.targetType);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+  };
+
+  // Toggle Messages page: click once to open, click again to close back to previous tab
+  const handleToggleMessages = () => {
+    const isCurrentlyOnMessages =
+      activeTab === 'messages' &&
+      !selectedJobForDetail &&
+      !selectedJobForStandardApply;
+
+    if (isCurrentlyOnMessages) {
+      const fallbackTab =
+        previousTab && previousTab !== 'messages' ? previousTab : 'jobs';
+      setActiveTab(fallbackTab);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      if (activeTab !== 'messages') {
+        setPreviousTab(activeTab);
+      }
+      setSelectedJobForStandardApply(null);
+      setSelectedJobForDetail(null);
+      setActiveTab('messages');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   const handleToggleFollowCompany = (companyId, e) => {
     if (e) e.stopPropagation();
     const company = INITIAL_COMPANIES.find((c) => c.id === companyId);
@@ -80,6 +213,17 @@ export function App() {
         `Đã theo dõi công ty "${companyName}"! Bạn sẽ nhận được thông báo khi có việc làm mới.`,
         'success'
       );
+      pushSystemNotification({
+        type: 'company_update',
+        category: 'job_match',
+        title: `Đang theo dõi ${companyName}`,
+        description: `Hệ thống đã bật thông báo ưu tiên khi ${companyName} đăng vị trí tuyển dụng hoặc cập nhật phúc lợi mới.`,
+        badgeText: 'Theo dõi mới',
+        badgeColor: 'indigo',
+        targetType: 'company',
+        targetId: companyId,
+        actionLabel: 'Xem công ty',
+      });
     }
   };
 
@@ -147,6 +291,19 @@ export function App() {
           ? `Đã lưu công việc "${targetJob.title}" thành công!`
           : `Đã bỏ lưu công việc "${targetJob.title}"`
       );
+      if (nextSaved) {
+        pushSystemNotification({
+          type: 'job_match',
+          category: 'job_match',
+          title: `Đã lưu việc làm: ${targetJob.title}`,
+          description: `Vị trí tại ${targetJob.company} (${targetJob.salary}) đã được lưu vào danh sách theo dõi của bạn.`,
+          badgeText: 'Đã lưu việc',
+          badgeColor: 'blue',
+          targetType: 'job',
+          targetId: targetJob.id,
+          actionLabel: 'Xem việc làm',
+        });
+      }
     }
 
     setJobs((prevJobs) =>
@@ -185,8 +342,22 @@ export function App() {
   };
 
   const handleApplySubmit = (data) => {
+    const appliedJob = selectedJobForApply;
     setSelectedJobForApply(null);
     showToast('Hồ sơ ứng tuyển của bạn đã được gửi thành công!', 'success');
+    if (appliedJob) {
+      pushSystemNotification({
+        type: 'application',
+        category: 'application',
+        title: `Đã nộp CV ứng tuyển: ${appliedJob.title}`,
+        description: `Hồ sơ của bạn đã được chuyển tới bộ phận Tuyển dụng tại ${appliedJob.company}.`,
+        badgeText: 'Ứng tuyển',
+        badgeColor: 'emerald',
+        targetType: 'job',
+        targetId: appliedJob.id,
+        actionLabel: 'Xem lại công việc',
+      });
+    }
   };
 
   const handleOpenAuth = (mode) => {
@@ -208,6 +379,17 @@ export function App() {
     }
     setAuthModalOpen(false);
     showToast(`Chào mừng ${user.name}! Bạn đã đăng nhập thành công.`, 'success');
+    pushSystemNotification({
+      type: 'system',
+      category: 'system',
+      title: `Đăng nhập thành công: ${user.name}`,
+      description: `Chào mừng bạn quay lại JobCentral! Hồ sơ và các thông báo tuyển dụng của bạn đã được đồng bộ.`,
+      badgeText: 'Tài khoản',
+      badgeColor: 'purple',
+      targetType: 'messages',
+      targetId: 'conv-1',
+      actionLabel: 'Mở tin nhắn HR',
+    });
   };
 
   const handleLogout = () => {
@@ -234,12 +416,18 @@ export function App() {
       {/* Top Main Navigation Header */}
       <Header
         activeTab={selectedJobForStandardApply || selectedJobForDetail ? 'search' : activeTab}
+        onToggleMessages={handleToggleMessages}
         onTabChange={(tab) => {
+          if (tab === 'messages') {
+            handleToggleMessages();
+            return;
+          }
           setSelectedJobForStandardApply(null);
           setSelectedJobForDetail(null);
           if (tab === 'favorite-companies') {
             setSelectedCompany(null);
             setTargetCompanyFilter(null);
+            setPreviousTab('companies');
             setActiveTab('companies');
             setTimeout(() => {
               const el = document.getElementById('favorite-companies-section');
@@ -253,11 +441,18 @@ export function App() {
             setSelectedCompany(null);
             setTargetCompanyFilter(null);
           }
+          setPreviousTab(tab);
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}
         savedCount={savedCount}
         followedCompaniesCount={followedCompanyIds.length}
+        notifications={notifications}
+        onNotificationClick={handleNotificationClick}
+        onMarkNotificationRead={handleMarkNotificationRead}
+        onMarkAllNotificationsRead={handleMarkAllNotificationsRead}
+        onDeleteNotification={handleDeleteNotification}
+        onSimulateNotification={handleSimulateNotification}
         onOpenAuth={handleOpenAuth}
         currentUser={currentUser}
         onLogout={handleLogout}
@@ -298,8 +493,22 @@ export function App() {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
             onSubmitSuccess={(data) => {
+              const appliedJob = selectedJobForStandardApply;
               setSelectedJobForStandardApply(null);
               showToast(`Đã gửi hồ sơ ứng tuyển vị trí "${data.jobTitle || 'việc làm'}" thành công!`, 'success');
+              if (appliedJob) {
+                pushSystemNotification({
+                  type: 'application',
+                  category: 'application',
+                  title: `Đã nộp hồ sơ ứng tuyển: ${appliedJob.title}`,
+                  description: `CV của bạn đã được gửi tới ${appliedJob.company}. Hệ thống sẽ thông báo ngay khi Nhà tuyển dụng phản hồi.`,
+                  badgeText: 'Ứng tuyển',
+                  badgeColor: 'emerald',
+                  targetType: 'job',
+                  targetId: appliedJob.id,
+                  actionLabel: 'Xem lại công việc',
+                });
+              }
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
           />
@@ -360,6 +569,11 @@ export function App() {
                   setActiveTab('news');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
+                onTabChange={(tab) => {
+                  setActiveTab(tab);
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onShowToast={showToast}
               />
             )}
 
@@ -460,8 +674,14 @@ export function App() {
             {activeTab === 'messages' && (
               <MessagesView
                 currentUser={currentUser}
+                initialConversationId={targetConversationId}
+                onCloseMessages={handleToggleMessages}
+                onSystemNotification={pushSystemNotification}
                 onViewJobDetail={handleViewJobDetails}
-                onNavigateToJobs={() => setActiveTab('jobs')}
+                onNavigateToJobs={() => {
+                  setPreviousTab('jobs');
+                  setActiveTab('jobs');
+                }}
                 onNavigateToCompany={(companyName) => {
                   const matched = INITIAL_COMPANIES.find(
                     (c) =>
@@ -474,6 +694,7 @@ export function App() {
                     setTargetCompanyFilter(companyName);
                     setSelectedCompany(null);
                   }
+                  setPreviousTab('companies');
                   setActiveTab('companies');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
@@ -487,8 +708,13 @@ export function App() {
       <MobileBottomNav
         activeTab={selectedJobForStandardApply || selectedJobForDetail ? 'search' : activeTab}
         onTabChange={(tab) => {
+          if (tab === 'messages') {
+            handleToggleMessages();
+            return;
+          }
           setSelectedJobForStandardApply(null);
           setSelectedJobForDetail(null);
+          setPreviousTab(tab);
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}

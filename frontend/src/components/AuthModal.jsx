@@ -17,6 +17,7 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 import { useDevice } from '../context/DeviceContext';
+import { MOCK_TEST_ACCOUNTS } from '../data/mockData';
 import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
 
 export const AuthModal = ({
@@ -47,29 +48,17 @@ export const AuthModal = ({
   const [forgotEmail, setForgotEmail] = useState('');
 
   // Quick Demo Accounts for fast testing
-  const handleQuickLogin = (demoRole) => {
-    if (demoRole === 'employer') {
-      onSuccess({
-        name: 'Trần Minh Quân',
-        email: 'recruiter@fpt.vn',
-        phone: '0905123456',
-        role: 'employer',
-        headline: 'Trưởng bộ phận Tuyển dụng tại FPT Software',
-        companyName: 'FPT Software',
-        avatar: catAvatar,
-        provider: 'demo',
-      });
-    } else {
-      onSuccess({
-        name: 'Nhiên Nguyễn Viết',
-        email: 'vietnhiennguyen91@gmail.com',
-        phone: '0912345678',
-        role: 'candidate',
-        headline: 'Frontend Engineer & UI/UX Designer',
-        avatar: catAvatar,
-        provider: 'demo',
-      });
-    }
+  const handleQuickTestAccount = (acc) => {
+    setMode('login');
+    setRole(acc.role || 'candidate');
+    setEmail(acc.username);
+    setPassword(acc.password);
+    setErrorMessage('');
+    onSuccess({
+      ...acc,
+      avatar: catAvatar,
+      provider: 'credentials',
+    });
   };
 
   const handleGoogleLogin = () => {
@@ -87,16 +76,47 @@ export const AuthModal = ({
     setErrorMessage('');
 
     if (mode === 'forgot') {
-      if (!forgotEmail || !forgotEmail.includes('@')) {
-        setErrorMessage('Vui lòng nhập địa chỉ email hợp lệ.');
+      if (!forgotEmail || !forgotEmail.trim()) {
+        setErrorMessage('Vui lòng nhập tài khoản hoặc địa chỉ email hợp lệ.');
         return;
       }
       setForgotSent(true);
       return;
     }
 
-    if (!email || !email.includes('@')) {
-      setErrorMessage('Vui lòng nhập địa chỉ email hợp lệ.');
+    const trimmedIdentifier = email.trim();
+
+    if (!trimmedIdentifier) {
+      setErrorMessage('Vui lòng nhập tên tài khoản hoặc email.');
+      return;
+    }
+
+    // Check against predefined test accounts on login
+    if (mode === 'login') {
+      const matchedTestAcc = MOCK_TEST_ACCOUNTS.find(
+        (acc) =>
+          acc.username.toLowerCase() === trimmedIdentifier.toLowerCase() ||
+          acc.email.toLowerCase() === trimmedIdentifier.toLowerCase()
+      );
+
+      if (matchedTestAcc) {
+        if (password !== matchedTestAcc.password) {
+          setErrorMessage(
+            `Mật khẩu không chính xác cho tài khoản "${matchedTestAcc.username}".`
+          );
+          return;
+        }
+        onSuccess({
+          ...matchedTestAcc,
+          avatar: catAvatar,
+          provider: 'credentials',
+        });
+        return;
+      }
+    }
+
+    if (mode === 'register' && !trimmedIdentifier.includes('@')) {
+      setErrorMessage('Vui lòng nhập địa chỉ email hợp lệ khi đăng ký.');
       return;
     }
 
@@ -115,14 +135,19 @@ export const AuthModal = ({
       return;
     }
 
-    // Success login/register
+    // Success login/register for custom inputs
     const displayName =
       name.trim() ||
-      (email ? email.split('@')[0] : role === 'employer' ? 'Nhà Tuyển Dụng' : 'Nhiên Nguyễn Viết');
+      (trimmedIdentifier.includes('@')
+        ? trimmedIdentifier.split('@')[0]
+        : trimmedIdentifier);
 
     onSuccess({
       name: displayName,
-      email: email.trim(),
+      username: trimmedIdentifier,
+      email: trimmedIdentifier.includes('@')
+        ? trimmedIdentifier
+        : `${trimmedIdentifier.toLowerCase()}@jobcentral.vn`,
       phone: phone.trim() || '0901234567',
       role,
       headline:
@@ -375,16 +400,20 @@ export const AuthModal = ({
 
             <div>
               <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-                Email
+                {mode === 'register' ? 'Email' : 'Tài khoản hoặc Email'}
               </label>
               <div className="relative">
-                <Mail className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
+                <User className="w-4 h-4 text-slate-400 absolute left-3.5 top-3.5" />
                 <input
-                  type="email"
+                  type={mode === 'register' ? 'email' : 'text'}
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="name@example.com"
+                  placeholder={
+                    mode === 'register'
+                      ? 'name@example.com'
+                      : 'VD: NhienNguyen, abc, xyz...'
+                  }
                   className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100"
                 />
               </div>
@@ -539,26 +568,25 @@ export const AuthModal = ({
             {/* Quick 1-Click Demo Accounts Section */}
             <div className="mt-4 pt-3.5 border-t border-slate-100">
               <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-2">
-                <span>Trải nghiệm nhanh (Tài khoản mẫu):</span>
-                <span className="text-[#0A58CA] font-semibold text-[10px]">1-chạm đăng nhập</span>
+                <span>Tài khoản test có sẵn:</span>
+                <span className="text-[#0A58CA] font-semibold text-[10px]">Nhấn để đăng nhập nhanh</span>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('candidate')}
-                  className="px-2.5 py-1.5 rounded-xl border border-blue-200 bg-blue-50/60 hover:bg-blue-100/80 text-left transition-colors cursor-pointer group"
-                >
-                  <p className="text-[11px] font-bold text-[#0A58CA] truncate">👤 Ứng viên mẫu</p>
-                  <p className="text-[10px] text-slate-500 truncate">Nhiên Nguyễn Viết</p>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => handleQuickLogin('employer')}
-                  className="px-2.5 py-1.5 rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-left transition-colors cursor-pointer group"
-                >
-                  <p className="text-[11px] font-bold text-slate-800 truncate">🏢 Nhà tuyển dụng</p>
-                  <p className="text-[10px] text-slate-500 truncate">FPT Software HR</p>
-                </button>
+              <div className="grid grid-cols-3 gap-2">
+                {MOCK_TEST_ACCOUNTS.map((acc) => (
+                  <button
+                    key={acc.id}
+                    type="button"
+                    onClick={() => handleQuickTestAccount(acc)}
+                    className="px-2.5 py-1.5 rounded-xl border border-blue-200/80 bg-blue-50/50 hover:bg-blue-100/80 text-left transition-colors cursor-pointer"
+                  >
+                    <p className="text-[11px] font-bold text-[#0A58CA] truncate">
+                      {acc.username}
+                    </p>
+                    <p className="text-[10px] text-slate-500 truncate">
+                      MK: {acc.password}
+                    </p>
+                  </button>
+                ))}
               </div>
             </div>
           </form>

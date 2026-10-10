@@ -129,6 +129,8 @@ export const AllJobsView = ({
   onViewDetails,
   onShare,
   onNavigateNews,
+  onTabChange,
+  onShowToast,
 }) => {
   // Search state & Advanced Filters
   const [keyword, setKeyword] = useState('');
@@ -620,7 +622,7 @@ export const AllJobsView = ({
   };
 
   return (
-    <div className="bg-[#FAF9FF] pb-20">
+    <div className="bg-[#FAF9FF] flex flex-col w-full">
       {/* 1. HERO SEARCH SECTION WITH BACKGROUND IMAGE */}
       <section
         id="main-search-hero-section"
@@ -1848,6 +1850,250 @@ export const AllJobsView = ({
           );
         })()}
       </section>
+
+      {/* FOOTER */}
+      <footer className="w-full bg-surface-container-low pt-space-xl pb-space-lg">
+        <div className="max-w-7xl mx-auto px-margin">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-space-xl pb-space-xl">
+            {/* Column 1: Brand & Contact */}
+            <div className="flex flex-col gap-space-md">
+              <div className="flex items-center">
+                <span className="font-headline-md text-headline-md text-primary tracking-tight">
+                  JobCentral
+                </span>
+              </div>
+              <p className="font-body-sm text-body-sm text-on-surface-variant">
+                Nền tảng kết nối nhân tài và cơ hội việc làm hàng đầu tại Việt Nam. Xây dựng sự nghiệp vượt trội cùng công nghệ tối ưu hóa tuyển dụng.
+              </p>
+              <div className="flex flex-col gap-space-xs font-body-sm text-body-sm text-on-surface-variant">
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    mail
+                  </span>
+                  <span>contact@jobcentral.vn</span>
+                </div>
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    call
+                  </span>
+                  <span>(+84) 28 7300 8888</span>
+                </div>
+                <div className="flex items-center gap-space-xs">
+                  <span className="material-symbols-outlined text-[18px] text-primary">
+                    location_on
+                  </span>
+                  <span>
+                    Tòa nhà Pearl Plaza, Quận Bình Thạnh, TP. Hồ Chí Minh
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            {/* Column 2: Về JobCentral */}
+            <div className="flex flex-col gap-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">
+                Về JobCentral
+              </span>
+              <div className="flex flex-col gap-space-sm">
+                <button
+                  type="button"
+                  onClick={() =>
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Giới thiệu chung
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onTabChange) onTabChange('news');
+                    else if (onNavigateNews) onNavigateNews();
+                  }}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tin tức tuyển dụng
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Liên hệ hợp tác: contact@jobcentral.vn', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Liên hệ hợp tác
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Chính sách bảo mật thông tin người dùng JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Chính sách bảo mật
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Điều khoản sử dụng dịch vụ JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Điều khoản sử dụng
+                </button>
+              </div>
+            </div>
+
+            {/* Column 3: Dành cho ứng viên */}
+            <div className="flex flex-col gap-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">
+                Dành cho ứng viên
+              </span>
+              <div className="flex flex-col gap-space-sm">
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('search')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tìm kiếm việc làm
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('cv-builder')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tạo CV trực tuyến
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('tools')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tính lương Gross - Net
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onTabChange && onTabChange('companies')}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Khám phá doanh nghiệp
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (onTabChange) onTabChange('news');
+                    else if (onNavigateNews) onNavigateNews();
+                  }}
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Cẩm nang nghề nghiệp
+                </button>
+              </div>
+            </div>
+
+            {/* Column 4: Dành cho nhà tuyển dụng */}
+            <div className="flex flex-col gap-space-md">
+              <span className="font-headline-sm text-headline-sm text-on-surface">
+                Dành cho nhà tuyển dụng
+              </span>
+              <div className="flex flex-col gap-space-sm">
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Đang chuyển đến Cổng Đăng Tin Tuyển Dụng', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Đăng tin tuyển dụng
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Đang mở kho Hồ sơ nhân tài JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Tìm kiếm hồ sơ nhân tài
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Giải pháp Employer Branding dành cho doanh nghiệp', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Giải pháp thương hiệu nhà tuyển dụng
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Bảng giá dịch vụ tuyển dụng doanh nghiệp 2024', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Bảng giá dịch vụ
+                </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    onShowToast &&
+                    onShowToast('Đang mở Cổng Nhà Tuyển Dụng JobCentral', 'info')
+                  }
+                  className="text-left font-body-sm text-body-sm text-on-surface-variant hover:text-primary transition-colors cursor-pointer"
+                >
+                  Cổng nhà tuyển dụng
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Bottom Copyright Bar */}
+          <div className="pt-space-lg flex flex-col md:flex-row items-center justify-between gap-space-md">
+            <span className="font-body-sm text-body-sm text-on-surface-variant">
+              © 2024 JobCentral JSC. Toàn bộ bản quyền được bảo lưu.
+            </span>
+            <div className="flex items-center gap-space-lg">
+              <button
+                type="button"
+                onClick={() =>
+                  onShowToast &&
+                  onShowToast('Quy chế hoạt động sàn giao dịch việc làm JobCentral', 'info')
+                }
+                className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                Quy chế hoạt động
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onShowToast &&
+                  onShowToast('Quy trình tiếp nhận và giải quyết khiếu nại', 'info')
+                }
+                className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                Giải quyết khiếu nại
+              </button>
+              <button
+                type="button"
+                onClick={() =>
+                  onShowToast &&
+                  onShowToast('Trung tâm trợ giúp ứng viên & nhà tuyển dụng 24/7', 'info')
+                }
+                className="font-body-sm text-body-sm text-on-surface-variant hover:text-on-surface transition-colors cursor-pointer"
+              >
+                Trung tâm trợ giúp
+              </button>
+            </div>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 };
