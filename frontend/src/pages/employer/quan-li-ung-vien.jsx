@@ -585,7 +585,7 @@ export default function CandidateManagement(props) {
     "w-[26px] h-[26px] rounded-md border border-slate-200 bg-white text-xs cursor-pointer flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed";
 
   return (
-    <div className="flex h-screen bg-slate-50 font-sans">
+    <div className="flex h-screen bg-[#e8edf2] font-sans">
       {/* Danh sách ứng viên (bên trái) */}
       <main className="flex-1 overflow-auto no-scrollbar px-7 py-6">
         <div className="flex justify-between items-start flex-wrap gap-3">
@@ -601,9 +601,9 @@ export default function CandidateManagement(props) {
             <button className={toolBtnClass} onClick={() => HandleExportExcel(candidates)}>
               <Download size={14} /> Xuất file
             </button>
-            <button className={toolBtnClass}>
+            {/* <button className={toolBtnClass}>
               <Layers size={14} /> Thao tác hàng loạt
-            </button>
+            </button> */}
 
             <button
               type="button"
@@ -804,7 +804,7 @@ export default function CandidateManagement(props) {
         </div>
 
         {/* Filters */}
-        <div className="bg-blue-50 border border-blue-100 rounded-xl p-4 mt-5 flex gap-3 flex-wrap items-center">
+        <div className="bg-blue-200 border border-blue-100 rounded-xl p-4 mt-5 flex gap-3 flex-wrap items-center">
           <div className="relative flex-[1_1_220px]">
             <Search
               size={15}

@@ -14,22 +14,25 @@ import {
   UserCheck,
 } from "lucide-react";
 
+
 function SidebarItem({ icon: Icon, label, path, collapsed }) {
   return (
     <NavLink
       to={path}
+      end
       title={collapsed ? label : undefined}
       className={({ isActive }) =>
         `flex items-center ${
           collapsed ? "justify-center px-2" : "gap-3 px-4"
-        } py-2.5 rounded-lg text-sm cursor-pointer transition-all duration-200 ${
+        } py-2.5 rounded-lg text-sm cursor-pointer
+        transition-all duration-200 ${
           isActive
-            ? "bg-indigo-100 text-[#2170e4] font-bold"
-            : "text-slate-600 hover:bg-slate-50"
+            ? "bg-[#2170E4]/10 text-[#2170E4] font-semibold border-l-4 border-[#2170E4]"
+            : "text-slate-600 hover:bg-slate-100 hover:text-[#2170E4]"
         }`
       }
     >
-      <Icon size={17} strokeWidth={2} />
+      <Icon size={18} strokeWidth={2} />
       {!collapsed && <span>{label}</span>}
     </NavLink>
   );
@@ -42,13 +45,11 @@ const navItems = [
     path: "Dashboard",
     active: true,
   },
-
   {
     icon: ClipboardList,
     label: "Quản lý tin tuyển dụng",
     path: "Dashboard/Quan-li-tin-tuyen-dung",
   },
-  // { icon: MessageSquare, label: "Tin nhắn", path: "Dashboard/tin-nhan" },
   {
     icon: Users,
     label: "Quản lý ứng viên",

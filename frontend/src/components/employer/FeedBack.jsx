@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { LoaderCircle } from "lucide-react";
 
 const LABELS = ["Rất tệ", "Chưa tốt", "Bình thường", "Tốt", "Tuyệt vời"];
 
@@ -20,12 +21,65 @@ function Star({ filled, className = "" }) {
 
 export default function FeedbackWidget({ onSubmit }) {
   const [open, setOpen] = useState(false);
-  const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+
+  const panelRef = useRef(null);
+
+  // apis formSubmit
+  const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
+
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
-  const panelRef = useRef(null);
+
+  // function Submit by Mail
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+    setSent(false);
+
+    const formData = new FormData();
+
+    formData.append("Rating", rating);
+    formData.append("Description of customer complaints and reviews", comment);
+
+    formData.append(
+      "_subject",
+      "Support JobCenter - Bảng đánh giá từ khách hàng",
+    );
+    formData.append("_template", "table");
+    formData.append("_captcha", "false");
+
+    try {
+      const res = await fetch(
+        "https://formsubmit.co/kietthaivo2006@gmail.com",
+        {
+          method: "POST",
+          body: formData,
+        },
+      );
+
+      await (onSubmit ? onSubmit({ rating, comment }) : Promise.resolve());
+      setSent(true);
+      if (!rating) return;
+      setLoading(true);
+
+      if (res.ok) {
+        setRating(0);
+        setComment("");
+      } else {
+        console.error("FormSubmit error:", res.status);
+        setSent(false);
+        alert("Gửi thất bại!");
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Có lỗi xảy ra khi gửi!");
+    } finally {   
+      setLoading(false);
+    }
+  };
 
   // Đóng khi nhấn Esc
   useEffect(() => {
@@ -46,18 +100,6 @@ export default function FeedbackWidget({ onSubmit }) {
     if (sent) setTimeout(reset, 300);
   };
 
-  const handleSubmit = async () => {
-    if (!rating) return;
-    setLoading(true);
-    try {
-      // Gọi API của bạn ở đây (hoặc truyền qua prop onSubmit)
-      await (onSubmit ? onSubmit({ rating, comment }) : Promise.resolve());
-      setSent(true);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const active = hover || rating;
 
   return (
@@ -67,7 +109,7 @@ export default function FeedbackWidget({ onSubmit }) {
         ref={panelRef}
         role="dialog"
         aria-label="Gửi phản hồi"
-        className={`absolute right-full mr-3 w-[400px] origin-right rounded-xl border border-slate-200 bg-white p-4 shadow-xl transition-all duration-200 sm:w-[400px] ${
+        className={`absolute right-full mr-3 w-[400px] origin-right rounded-xl border border-slate-200 bg-white p-4 shadow-2xl transition-all duration-200 sm:w-[400px] ${
           open
             ? "pointer-events-auto translate-x-0 scale-100 opacity-100"
             : "pointer-events-none translate-x-4 scale-95 opacity-0"
@@ -77,12 +119,24 @@ export default function FeedbackWidget({ onSubmit }) {
         {sent ? (
           <div className="py-6 text-center">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-              <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg
+                viewBox="0 0 24 24"
+                className="h-6 w-6"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
                 <path d="M5 12.5l4.5 4.5L19 7.5" />
               </svg>
             </div>
-            <p className="font-semibold text-slate-900">Cảm ơn bạn đã đánh giá!</p>
-            <p className="mt-1 text-sm text-slate-500">Phản hồi của bạn giúp chúng tôi cải thiện trang web.</p>
+            <p className="font-semibold text-slate-900">
+              Cảm ơn bạn đã đánh giá!
+            </p>
+            <p className="mt-1 text-sm text-slate-500">
+              Phản hồi của bạn giúp chúng tôi cải thiện trang web.
+            </p>
             <button
               onClick={handleClose}
               className="mt-4 rounded-lg bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-700"
@@ -94,21 +148,33 @@ export default function FeedbackWidget({ onSubmit }) {
           <>
             <div className="mb-3 flex items-start justify-between">
               <div>
-                <p className="font-black text-blue-600">Trải nghiệm của bạn đối với JobCentral</p>
+                <p className="font-black text-blue-600">
+                  Trải nghiệm của bạn đối với JobCentral
+                </p>
               </div>
               <button
                 onClick={handleClose}
                 aria-label="Đóng"
                 className="-mr-1 -mt-1 rounded-md p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-700"
               >
-                <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                >
                   <path d="M6 6l12 12M18 6L6 18" />
                 </svg>
               </button>
             </div>
 
             {/* 5 ngôi sao */}
-            <div className="flex items-center gap-1" onMouseLeave={() => setHover(0)}>
+            <div
+              className="flex items-center gap-1"
+              onMouseLeave={() => setHover(0)}
+            >
               {[1, 2, 3, 4, 5].map((n) => (
                 <button
                   key={n}
@@ -131,13 +197,19 @@ export default function FeedbackWidget({ onSubmit }) {
             {/* Mô tả thêm: chỉ hiện sau khi đã chọn sao */}
             <div
               className={`grid transition-all duration-300 ${
-                rating ? "mt-4 grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"
+                rating
+                  ? "mt-4 grid-rows-[1fr] opacity-100"
+                  : "grid-rows-[0fr] opacity-0"
               }`}
             >
               <div className="overflow-hidden">
-                <label htmlFor="fb-comment" className="mb-1 block text-sm font-medium text-slate-700">
+                <label
+                  htmlFor="fb-comment"
+                  className="mb-1 block text-sm font-medium text-slate-700"
+                >
                   Mô tả cho chúng tôi về trải nghiệm của bạn
                 </label>
+
                 <textarea
                   id="fb-comment"
                   rows={4}
@@ -149,9 +221,16 @@ export default function FeedbackWidget({ onSubmit }) {
                 <button
                   onClick={handleSubmit}
                   disabled={loading}
-                  className="mt-3 w-full rounded-lg bg-rose-900 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 disabled:opacity-60"
+                  className="mt-3 flex w-full items-center justify-center gap-2 rounded-lg bg-rose-900 py-2 text-sm font-semibold text-white transition-colors hover:bg-slate-700 disabled:cursor-not-allowed disabled:opacity-60"
                 >
-                  {loading ? "Đang gửi..." : "Gửi đánh giá"}
+                  {loading ? (
+                    <>
+                      <LoaderCircle size={18} className="animate-spin" />
+                      <span>Đang gửi...</span>
+                    </>
+                  ) : (
+                    "Gửi đánh giá"
+                  )}
                 </button>
               </div>
             </div>
