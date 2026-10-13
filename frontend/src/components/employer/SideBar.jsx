@@ -3,7 +3,6 @@ import { NavLink } from "react-router-dom";
 import {
   LayoutDashboard,
   Users,
-  CheckCircle2,
   Calendar,
   Package,
   UserCog,
@@ -12,6 +11,7 @@ import {
   PanelLeftClose,
   PanelLeftOpen,
   UserCheck,
+  Trophy,
 } from "lucide-react";
 
 
@@ -61,7 +61,7 @@ const navItems = [
     path: "Dashboard/Hint-Ung-Vien",
   },
   { icon: Calendar, label: "Lịch phỏng vấn", path: "Dashboard/lich-phong-van" },
-  { icon: CheckCircle2, label: "Truth Score", path: "Dashboard/Truth-Score" },
+  { icon: Trophy, label: "JobCentral Rewards", path: "Dashboard/JobCentral-Rewards" },
   { icon: Bot, label: "ChatBox", path: "Dashboard/ChatBox" },
   { icon: Package, label: "Gói dịch vụ", path: "Dashboard/goi-dich-vu" },
   {

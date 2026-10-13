@@ -23,7 +23,7 @@ import TaoTinTuyenDung, {
 } from "./pages/employer/Tao-tin-tuyen-dung";
 import QuanLiTinTuyenDung from "./pages/employer/quan-li-tin-tuyen-dung";
 import QuanLiUngVien from "./pages/employer/quan-li-ung-vien";
-import TruthScore from "./pages/employer/Truth-Score";
+import JobCentralRewards from "./pages/employer/JobCentral-Rewards";
 import LichPhongVan from "./pages/employer/lich-phong-van";
 import EmailMau from "./pages/employer/Email-mau";
 import TinNhan from "./pages/employer/tin-nhan";
@@ -117,8 +117,8 @@ const recruiterRoutes = [
         element: <HintUngVien />,
       },
       {
-        path: "Truth-Score",
-        element: <TruthScore />,
+        path: "JobCentral-Rewards",
+        element: <JobCentralRewards />,
       },
       {
         path: "Lich-phong-van",
