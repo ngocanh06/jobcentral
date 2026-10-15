@@ -43,12 +43,12 @@ export const CVBuilderView = ({ onSavedJobsClick }) => {
       btnPrimary: 'bg-indigo-600 hover:bg-indigo-700 text-white',
     },
     blue: {
-      accentBorder: 'border-[#0A58CA]',
-      accentText: 'text-[#0A58CA]',
-      accentHeading: 'text-[#0A58CA]',
-      subtleBg: 'bg-blue-50 text-[#0A58CA] border-blue-100',
-      activeBorder: 'border-[#0A58CA] text-[#0A58CA]',
-      btnPrimary: 'bg-[#0A58CA] hover:bg-[#084298] text-white',
+      accentBorder: 'border-[#2170E4]',
+      accentText: 'text-[#2170E4]',
+      accentHeading: 'text-[#2170E4]',
+      subtleBg: 'bg-blue-50 text-[#2170E4] border-blue-100',
+      activeBorder: 'border-[#2170E4] text-[#2170E4]',
+      btnPrimary: 'bg-[#2170E4] hover:bg-[#1a5bbd] text-white',
     },
     dark: {
       accentBorder: 'border-slate-900',
@@ -247,7 +247,7 @@ ${cvData.skills.join(', ')}
           <button
             id="cv-export-print-btn"
             onClick={() => setShowExportModal(true)}
-            className="inline-flex items-center space-x-1.5 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full text-xs sm:text-sm font-semibold shadow-sm shadow-indigo-200 transition-all cursor-pointer"
+            className="inline-flex items-center space-x-1.5 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white rounded-full text-xs sm:text-sm font-semibold shadow-sm shadow-blue-500/20 transition-all cursor-pointer"
           >
             <Printer className="w-4 h-4" />
             <span>Xuất PDF / In CV</span>
@@ -469,7 +469,7 @@ ${cvData.skills.join(', ')}
 
           <button
             onClick={handleSaveCV}
-            className="w-full py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-full text-sm transition-all shadow-sm shadow-indigo-200 cursor-pointer"
+            className="w-full py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold rounded-full text-sm transition-all shadow-sm shadow-blue-500/20 cursor-pointer"
           >
             Lưu hồ sơ CV
           </button>
@@ -632,11 +632,11 @@ ${cvData.skills.join(', ')}
                   onClick={() => setThemeColor('blue')}
                   className={`px-3.5 py-1.5 rounded-full text-xs font-semibold flex items-center space-x-1.5 border transition-all cursor-pointer ${
                     themeColor === 'blue'
-                      ? 'bg-[#0A58CA] text-white border-[#0A58CA] shadow-xs'
+                      ? 'bg-[#2170E4] text-white border-[#2170E4] shadow-xs'
                       : 'bg-white text-slate-700 border-slate-200 hover:bg-slate-100'
                   }`}
                 >
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#0A58CA] ring-1 ring-white" />
+                  <span className="w-2.5 h-2.5 rounded-full bg-[#2170E4] ring-1 ring-white" />
                   <span>Xanh Thương Hiệu</span>
                 </button>
                 <button
@@ -674,7 +674,7 @@ ${cvData.skills.join(', ')}
                 <button
                   onClick={handleExportPDF}
                   disabled={isExporting}
-                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-full transition-all shadow-sm shadow-indigo-200 shrink-0 cursor-pointer disabled:opacity-75"
+                  className="w-full sm:w-auto inline-flex items-center justify-center space-x-2 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold text-xs sm:text-sm rounded-full transition-all shadow-sm shadow-blue-500/20 shrink-0 cursor-pointer disabled:opacity-75"
                 >
                   {isExporting ? (
                     <>

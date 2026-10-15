@@ -21,20 +21,26 @@ import {
   Trash2,
 } from 'lucide-react';
 
+const MAX_FILE_SIZE_BYTES = 5 * 1024 * 1024; // 5MB
+const ALLOWED_EXTENSIONS = ['.doc', '.docx', '.pdf'];
+
 export const ApplyJobView = ({
   job,
   currentUser = null,
   onBack,
   onNavigateJobs,
   onNavigateHome,
+  onNavigateCVBuilder,
   onViewJobDetail,
   onSubmitSuccess,
+  onShowToast,
 }) => {
   const [profileMode, setProfileMode] = useState('upload'); // 'select' | 'upload'
   const [fullName, setFullName] = useState(currentUser?.name || 'Nhiên Nguyễn Viết');
   const [email, setEmail] = useState(currentUser?.email || 'vietnhiennguyen91@gmail.com');
   const [phone, setPhone] = useState('0905 123 456');
   const [searchVisibility, setSearchVisibility] = useState('lock'); // 'lock' | 'public' | 'urgent'
+  const [fileError, setFileError] = useState('');
   const [uploadedFile, setUploadedFile] = useState({
     name: 'CV_NguyenVietNhien_2024.pdf',
     size: '1.4 MB',
@@ -47,20 +53,56 @@ export const ApplyJobView = ({
   if (!job) return null;
 
   const handleFileChange = (e) => {
-    if (e.target.files && e.target.files[0]) {
-      const file = e.target.files[0];
+    setFileError('');
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Check file format
+    const fileNameLower = file.name.toLowerCase();
+    const isAllowedFormat = ALLOWED_EXTENSIONS.some((ext) => fileNameLower.endsWith(ext));
+    if (!isAllowedFormat) {
+      const errorMsg = 'Định dạng tệp không được hỗ trợ. Vui lòng chọn tệp *.doc, *.docx hoặc *.pdf!';
+      setFileError(errorMsg);
+      if (onShowToast) onShowToast(errorMsg, 'error');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    // Check file size (<= 5MB)
+    if (file.size > MAX_FILE_SIZE_BYTES) {
       const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
-      setUploadedFile({
-        name: file.name,
-        size: `${sizeMB} MB`,
-        date: new Date().toLocaleDateString('vi-VN'),
-      });
-      setProfileMode('upload');
+      const errorMsg = `Dung lượng tệp (${sizeMB} MB) vượt quá giới hạn 5MB cho phép. Vui lòng chọn tệp nhỏ hơn!`;
+      setFileError(errorMsg);
+      if (onShowToast) onShowToast(errorMsg, 'error');
+      if (fileInputRef.current) fileInputRef.current.value = '';
+      return;
+    }
+
+    const sizeMB = (file.size / (1024 * 1024)).toFixed(1);
+    setUploadedFile({
+      name: file.name,
+      size: `${sizeMB} MB`,
+      date: new Date().toLocaleDateString('vi-VN'),
+    });
+    setFileError('');
+    setProfileMode('upload');
+    if (onShowToast) {
+      onShowToast(`Đã tải lên tệp "${file.name}" (${sizeMB} MB) thành công!`, 'success');
     }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (profileMode === 'upload' && fileError) {
+      if (onShowToast) onShowToast(fileError, 'error');
+      return;
+    }
+    if (profileMode === 'upload' && !uploadedFile) {
+      const errorMsg = 'Vui lòng tải lên tệp CV trước khi nộp hồ sơ!';
+      setFileError(errorMsg);
+      if (onShowToast) onShowToast(errorMsg, 'error');
+      return;
+    }
     setIsSubmitting(true);
 
     setTimeout(() => {
@@ -102,7 +144,7 @@ export const ApplyJobView = ({
             <button
               type="button"
               onClick={onNavigateHome}
-              className="hover:text-[#0A58CA] transition-colors cursor-pointer"
+              className="hover:text-[#2170E4] transition-colors cursor-pointer"
             >
               Trang chủ
             </button>
@@ -110,7 +152,7 @@ export const ApplyJobView = ({
             <button
               type="button"
               onClick={onNavigateJobs}
-              className="hover:text-[#0A58CA] transition-colors cursor-pointer"
+              className="hover:text-[#2170E4] transition-colors cursor-pointer"
             >
               Việc làm
             </button>
@@ -118,7 +160,7 @@ export const ApplyJobView = ({
             <button
               type="button"
               onClick={() => onViewJobDetail && onViewJobDetail(job)}
-              className="hover:text-[#0A58CA] transition-colors cursor-pointer truncate max-w-[160px] sm:max-w-xs"
+              className="hover:text-[#2170E4] transition-colors cursor-pointer truncate max-w-[160px] sm:max-w-xs"
             >
               {job.title}
             </button>
@@ -131,7 +173,7 @@ export const ApplyJobView = ({
           <button
             type="button"
             onClick={onBack}
-            className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#0A58CA] transition-colors cursor-pointer py-1 px-2.5 rounded-lg"
+            className="inline-flex items-center space-x-1.5 text-xs sm:text-sm font-semibold text-slate-600 hover:text-[#2170E4] transition-colors cursor-pointer py-1 px-2.5 rounded-lg"
           >
             <ArrowLeft className="w-4 h-4" />
             <span>Quay lại chi tiết công việc</span>
@@ -149,7 +191,7 @@ export const ApplyJobView = ({
           <div className="lg:col-span-8 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-8 space-y-7">
             
             {/* Header: NỘP HỒ SƠ ỨNG TUYỂN */}
-            <div className="border-b-2 border-[#0A58CA] pb-3">
+            <div className="border-b-2 border-[#2170E4] pb-3">
               <h1 className="text-base sm:text-lg font-extrabold text-slate-900 uppercase tracking-wide">
                 Nộp hồ sơ ứng tuyển
               </h1>
@@ -162,13 +204,13 @@ export const ApplyJobView = ({
                 onClick={() => setProfileMode('select')}
                 className={`rounded-2xl p-5 border-2 transition-all cursor-pointer flex flex-col justify-between ${
                   profileMode === 'select'
-                    ? 'border-[#0A58CA] bg-blue-50/40 shadow-xs ring-2 ring-[#0A58CA]/15'
+                    ? 'border-[#2170E4] bg-blue-50/40 shadow-xs ring-2 ring-[#2170E4]/15'
                     : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50/50'
                 }`}
               >
                 <div>
                   <div className="flex items-center space-x-2.5 mb-2">
-                    <div className="w-7 h-7 rounded-full bg-blue-100 text-[#0A58CA] flex items-center justify-center font-bold text-xs shrink-0">
+                    <div className="w-7 h-7 rounded-full bg-blue-100 text-[#2170E4] flex items-center justify-center font-bold text-xs shrink-0">
                       C
                     </div>
                     <h2 className="text-sm font-bold text-slate-900">
@@ -190,11 +232,14 @@ export const ApplyJobView = ({
                   <span className="text-slate-500">Bạn chưa có hồ sơ ?</span>
                   <button
                     type="button"
+                    id="create-new-profile-btn"
                     onClick={(e) => {
                       e.stopPropagation();
-                      window.open('/cv-builder', '_blank');
+                      if (onNavigateCVBuilder) {
+                        onNavigateCVBuilder();
+                      }
                     }}
-                    className="font-bold text-[#0A58CA] hover:underline cursor-pointer"
+                    className="font-bold text-[#2170E4] hover:underline cursor-pointer"
                   >
                     Tạo hồ sơ mới!
                   </button>
@@ -234,19 +279,31 @@ export const ApplyJobView = ({
                   Hỗ trợ định dạng *.doc, *.docx, *.pdf và không quá 5MB
                 </p>
 
-                {uploadedFile && (
+                {fileError ? (
+                  <div className="mt-3 inline-flex items-center space-x-1.5 bg-rose-500/20 px-3 py-1 rounded-full text-[11px] text-rose-300 font-semibold border border-rose-400/40 max-w-[260px]">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0 text-rose-400" />
+                    <span className="truncate">{fileError}</span>
+                  </div>
+                ) : uploadedFile ? (
                   <div className="mt-3 inline-flex items-center space-x-1.5 bg-white/15 px-3 py-1 rounded-full text-[11px] text-amber-300 font-semibold border border-amber-300/30">
                     <CheckCircle2 className="w-3.5 h-3.5" />
-                    <span className="truncate max-w-[150px]">{uploadedFile.name}</span>
+                    <span className="truncate max-w-[150px]">{uploadedFile.name} ({uploadedFile.size})</span>
                   </div>
-                )}
+                ) : null}
               </div>
             </div>
+
+            {fileError && (
+              <div className="flex items-center space-x-2 p-3 bg-rose-50 border border-rose-200 text-rose-700 text-xs rounded-xl">
+                <AlertCircle className="w-4 h-4 text-rose-500 shrink-0" />
+                <span>{fileError}</span>
+              </div>
+            )}
 
             {/* Block 2: Thông tin liên hệ của bạn (Khớp khung bo ảnh mẫu) */}
             <div className="rounded-2xl border-2 border-slate-200/90 p-5 sm:p-6 bg-white space-y-5">
               <div className="flex items-center space-x-2.5 pb-2 border-b border-slate-100">
-                <div className="w-7 h-7 rounded-full bg-blue-100 text-[#0A58CA] flex items-center justify-center font-bold text-xs shrink-0">
+                <div className="w-7 h-7 rounded-full bg-blue-100 text-[#2170E4] flex items-center justify-center font-bold text-xs shrink-0">
                   C
                 </div>
                 <h2 className="text-sm font-bold text-slate-900">
@@ -266,7 +323,7 @@ export const ApplyJobView = ({
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     placeholder="Nhập họ và tên..."
-                    className="w-full pb-2 pt-1 border-b-2 border-slate-300 focus:border-[#0A58CA] text-sm sm:text-base font-bold text-slate-900 bg-transparent focus:outline-hidden transition-colors"
+                    className="w-full pb-2 pt-1 border-b-2 border-slate-300 focus:border-[#2170E4] text-sm sm:text-base font-bold text-slate-900 bg-transparent focus:outline-hidden transition-colors"
                   />
                 </div>
               </div>
@@ -283,7 +340,7 @@ export const ApplyJobView = ({
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="email@example.com"
-                    className="w-full pb-2 pt-1 border-b-2 border-slate-300 focus:border-[#0A58CA] text-sm sm:text-base font-bold text-slate-900 bg-transparent focus:outline-hidden transition-colors"
+                    className="w-full pb-2 pt-1 border-b-2 border-slate-300 focus:border-[#2170E4] text-sm sm:text-base font-bold text-slate-900 bg-transparent focus:outline-hidden transition-colors"
                   />
                 </div>
               </div>
@@ -300,7 +357,7 @@ export const ApplyJobView = ({
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="Nhập số điện thoại..."
-                    className="w-full pb-2 pt-1 border-b-2 border-slate-300 focus:border-[#0A58CA] text-sm sm:text-base font-bold text-slate-900 bg-transparent focus:outline-hidden transition-colors"
+                    className="w-full pb-2 pt-1 border-b-2 border-slate-300 focus:border-[#2170E4] text-sm sm:text-base font-bold text-slate-900 bg-transparent focus:outline-hidden transition-colors"
                   />
                 </div>
               </div>
@@ -333,7 +390,7 @@ export const ApplyJobView = ({
                   onClick={() => setSearchVisibility('public')}
                   className={`py-2.5 px-3 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center space-x-1.5 transition-all cursor-pointer ${
                     searchVisibility === 'public'
-                      ? 'bg-[#0A58CA] text-white shadow-xs'
+                      ? 'bg-[#2170E4] text-white shadow-xs'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-white/60'
                   }`}
                 >
@@ -392,7 +449,7 @@ export const ApplyJobView = ({
           <div className="lg:col-span-4 bg-white rounded-2xl border border-slate-200/90 shadow-xs p-6 sm:p-7 space-y-6">
             
             {/* Header: THÔNG TIN VIỆC LÀM */}
-            <div className="border-b-2 border-[#0A58CA] pb-3">
+            <div className="border-b-2 border-[#2170E4] pb-3">
               <h2 className="text-base sm:text-lg font-extrabold text-slate-900 uppercase tracking-wide">
                 Thông tin việc làm
               </h2>
@@ -410,7 +467,7 @@ export const ApplyJobView = ({
                   <button
                     type="button"
                     onClick={() => onViewJobDetail && onViewJobDetail(job)}
-                    className="text-[#0A58CA] hover:text-[#084298] transition-colors p-0.5 shrink-0"
+                    className="text-[#2170E4] hover:text-[#1a5bbd] transition-colors p-0.5 shrink-0"
                     title="Xem chi tiết công việc"
                   >
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -463,7 +520,7 @@ export const ApplyJobView = ({
                 <span className="font-semibold text-slate-600 shrink-0 w-36">
                   Hình thức ứng tuyển:
                 </span>
-                <span className="font-semibold text-[#0A58CA] text-right">
+                <span className="font-semibold text-[#2170E4] text-right">
                   Hồ sơ trực tuyến
                 </span>
               </div>
@@ -472,7 +529,7 @@ export const ApplyJobView = ({
             {/* Note box at bottom */}
             <div className="bg-slate-50 border border-slate-200/80 rounded-xl p-4 text-xs text-slate-600 leading-relaxed space-y-2">
               <div className="flex items-start space-x-2">
-                <AlertCircle className="w-4 h-4 text-[#0A58CA] shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 text-[#2170E4] shrink-0 mt-0.5" />
                 <p>
                   Nhà tuyển dụng sẽ nhận trực tiếp hồ sơ thông qua hệ thống ngay khi hoàn tất ứng tuyển. Ứng viên vui lòng không liên hệ qua email và số điện thoại.
                 </p>

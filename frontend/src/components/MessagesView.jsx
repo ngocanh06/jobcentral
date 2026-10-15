@@ -32,6 +32,7 @@ export const MessagesView = ({
   onViewJobDetail,
   onNavigateToJobs,
   onNavigateToCompany,
+  onOpenAuth,
 }) => {
   // Mock conversations matching the screenshot exactly
   const [conversations, setConversations] = useState([
@@ -87,7 +88,7 @@ export const MessagesView = ({
         'https://images.unsplash.com/photo-1551434678-e076c223a692?w=120&auto=format&fit=crop&q=80',
       avatar: catAvatar,
       avatarText: 'TV',
-      avatarBg: 'bg-[#1877F2]',
+      avatarBg: 'bg-[#2170E4]',
       avatarType: 'image',
       online: false,
       jobTitle: 'Senior React / Next.js Frontend Developer',
@@ -132,7 +133,7 @@ export const MessagesView = ({
         'https://images.unsplash.com/photo-1559526324-4b87b5e36e44?w=120&auto=format&fit=crop&q=80',
       avatar: catAvatar,
       avatarText: 'L',
-      avatarBg: 'bg-[#1877F2]',
+      avatarBg: 'bg-[#2170E4]',
       avatarType: 'image',
       online: true,
       jobTitle: 'Product Growth Manager (Fintech)',
@@ -614,6 +615,42 @@ export const MessagesView = ({
     }
   };
 
+  if (!currentUser) {
+    return (
+      <div className="w-full h-full min-h-[500px] flex items-center justify-center p-6 bg-slate-50/50">
+        <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200/80 shadow-xl text-center">
+          <div className="w-16 h-16 bg-blue-50 text-[#2170E4] rounded-2xl flex items-center justify-center mx-auto mb-4 ring-8 ring-blue-50/50">
+            <MessageSquare className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-900 mb-2">
+            Bạn chưa đăng nhập
+          </h2>
+          <p className="text-sm text-slate-500 mb-6 leading-relaxed">
+            Hộp thư tin nhắn và kết nối tuyển dụng chỉ dành cho tài khoản đã đăng nhập. Vui lòng đăng nhập để trao đổi trực tiếp với nhà tuyển dụng và nhận lịch phỏng vấn.
+          </p>
+          <div className="space-y-3">
+            <button
+              type="button"
+              onClick={() => (onOpenAuth ? onOpenAuth('login') : null)}
+              className="w-full py-3 px-5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-sm rounded-full shadow-md shadow-blue-500/20 transition-all cursor-pointer"
+            >
+              Đăng nhập ngay
+            </button>
+            <button
+              type="button"
+              onClick={() =>
+                onNavigateToJobs ? onNavigateToJobs() : onCloseMessages ? onCloseMessages() : null
+              }
+              className="w-full py-2.5 px-5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-sm rounded-full transition-colors cursor-pointer"
+            >
+              Quay về Trang chủ
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="w-full h-full bg-white text-left animate-in fade-in duration-200 border-t border-slate-200 flex flex-col overflow-hidden min-h-0">
       <div className="flex flex-1 w-full max-w-[1600px] mx-auto overflow-hidden min-h-0">
@@ -674,7 +711,7 @@ export const MessagesView = ({
                 >
                   {/* Active Blue Left Bar */}
                   {isSelected && (
-                    <div className="absolute left-0 top-0 bottom-0 w-[3.5px] bg-[#1877F2]" />
+                    <div className="absolute left-0 top-0 bottom-0 w-[3.5px] bg-[#2170E4]" />
                   )}
 
                   {/* Avatar */}
@@ -710,7 +747,7 @@ export const MessagesView = ({
                       <span
                         className={`text-[11px] shrink-0 ml-1 ${
                           conv.isTimeHighlighted || conv.unreadCount > 0
-                            ? 'text-[#1877F2] font-semibold'
+                            ? 'text-[#2170E4] font-semibold'
                             : 'text-slate-400 font-normal'
                         }`}
                       >
@@ -728,7 +765,7 @@ export const MessagesView = ({
                         {conv.lastMessage}
                       </p>
                       {conv.unreadCount > 0 && (
-                        <span className="shrink-0 ml-2 px-1.5 py-0.2 text-[10px] font-bold bg-[#1877F2] text-white rounded-full min-w-[18px] text-center">
+                        <span className="shrink-0 ml-2 px-1.5 py-0.2 text-[10px] font-bold bg-[#2170E4] text-white rounded-full min-w-[18px] text-center">
                           {conv.unreadCount}
                         </span>
                       )}
@@ -787,7 +824,7 @@ export const MessagesView = ({
                   type="button"
                   onClick={() => onNavigateToCompany && onNavigateToCompany(activeConv.companyName)}
                   title={`Xem trang công ty ${activeConv.companyName}`}
-                  className="text-xs text-slate-500 hover:text-[#1877F2] hover:underline truncate font-normal block text-left cursor-pointer transition-colors"
+                  className="text-xs text-slate-500 hover:text-[#2170E4] hover:underline truncate font-normal block text-left cursor-pointer transition-colors"
                 >
                   {activeConv.companyName}
                 </button>
@@ -810,7 +847,7 @@ export const MessagesView = ({
                 }}
                 className="px-4 py-1.5 border border-slate-300 hover:border-slate-400 bg-white hover:bg-slate-50 rounded-full text-xs font-semibold text-slate-700 flex items-center space-x-1.5 transition-colors cursor-pointer shadow-2xs group"
               >
-                <Briefcase className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#1877F2] transition-colors" />
+                <Briefcase className="w-3.5 h-3.5 text-slate-600 group-hover:text-[#2170E4] transition-colors" />
                 <span className="group-hover:text-slate-900">Thông tin</span>
               </button>
 
@@ -834,7 +871,7 @@ export const MessagesView = ({
                           onNavigateToCompany(activeConv.companyName);
                         }
                       }}
-                      className="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 hover:text-[#1877F2]"
+                      className="w-full text-left px-3.5 py-2 hover:bg-slate-50 flex items-center space-x-2 text-slate-700 hover:text-[#2170E4]"
                     >
                       <Building2 className="w-3.5 h-3.5 text-slate-400" />
                       <span>Xem trang {activeConv.companyName}</span>
@@ -884,7 +921,7 @@ export const MessagesView = ({
                   {isUser ? (
                     /* User Message (Right - Blue Bubble) */
                     <div className="flex flex-col items-end">
-                      <div className="bg-[#1877F2] text-white rounded-2xl rounded-tr-xs px-4 py-3 max-w-[85%] sm:max-w-[70%] lg:max-w-[62%] text-xs sm:text-[13px] leading-relaxed shadow-2xs font-normal">
+                      <div className="bg-[#2170E4] text-white rounded-2xl rounded-tr-xs px-4 py-3 max-w-[85%] sm:max-w-[70%] lg:max-w-[62%] text-xs sm:text-[13px] leading-relaxed shadow-2xs font-normal">
                         {msg.text}
                       </div>
                       <span className="text-[11px] text-slate-400 mt-1 pr-1 font-normal">
@@ -995,7 +1032,7 @@ export const MessagesView = ({
                 <button
                   type="submit"
                   disabled={!inputText.trim()}
-                  className="w-8 h-8 rounded-full bg-[#1877F2] hover:bg-[#1565d8] disabled:bg-slate-300 disabled:cursor-not-allowed text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs"
+                  className="w-8 h-8 rounded-full bg-[#2170E4] hover:bg-[#1a5bbd] disabled:bg-slate-300 disabled:cursor-not-allowed text-white flex items-center justify-center transition-all cursor-pointer shrink-0 shadow-2xs"
                 >
                   <Send className="w-3.5 h-3.5 -ml-0.5" />
                 </button>
@@ -1023,7 +1060,7 @@ export const MessagesView = ({
             </button>
 
             <div className="flex items-center space-x-3 mb-4">
-              <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#1877F2] flex items-center justify-center font-bold text-lg border border-blue-100">
+              <div className="w-12 h-12 rounded-xl bg-blue-50 text-[#2170E4] flex items-center justify-center font-bold text-lg border border-blue-100">
                 <Building2 className="w-6 h-6" />
               </div>
               <div>
@@ -1060,14 +1097,14 @@ export const MessagesView = ({
               </h4>
               <div className="p-3 bg-blue-50/70 rounded-xl border border-blue-100 text-xs text-slate-700 flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <Calendar className="w-4 h-4 text-[#1877F2]" />
+                  <Calendar className="w-4 h-4 text-[#2170E4]" />
                   <span>Chiều thứ Năm (14:00) qua Google Meet</span>
                 </div>
                 <a
                   href="https://meet.google.com"
                   target="_blank"
                   rel="noreferrer"
-                  className="text-xs font-bold text-[#1877F2] hover:underline"
+                  className="text-xs font-bold text-[#2170E4] hover:underline"
                 >
                   Mở Meet →
                 </a>
@@ -1109,7 +1146,7 @@ export const MessagesView = ({
                     });
                   }
                 }}
-                className="px-4 py-2 bg-[#1877F2] hover:bg-[#1565d8] text-white text-xs font-bold rounded-full transition-colors cursor-pointer"
+                className="px-4 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] text-white text-xs font-bold rounded-full transition-colors cursor-pointer"
               >
                 Xem chi tiết JD
               </button>

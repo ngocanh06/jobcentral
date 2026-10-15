@@ -268,7 +268,7 @@ export const FilterSidebar = ({
           <button
             id="apply-filter-btn"
             onClick={onApply}
-            className="w-full py-2.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all flex items-center justify-center space-x-2 focus:outline-hidden cursor-pointer"
+            className="w-full py-2.5 px-4 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-98 text-white font-medium text-sm rounded-full shadow-sm shadow-blue-500/20 transition-all flex items-center justify-center space-x-2 focus:outline-hidden cursor-pointer"
           >
             <span>Áp dụng bộ lọc</span>
           </button>

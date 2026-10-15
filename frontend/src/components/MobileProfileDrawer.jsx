@@ -91,7 +91,7 @@ export const MobileProfileDrawer = ({
                   src={catAvatar}
                   alt={currentUser.name}
                   referrerPolicy="no-referrer"
-                  className="w-13 h-13 rounded-full object-cover ring-2 ring-[#0A58CA] shadow-xs"
+                  className="w-13 h-13 rounded-full object-cover ring-2 ring-[#2170E4] shadow-xs"
                 />
                 <span className="absolute bottom-0 right-0 w-3.5 h-3.5 bg-emerald-500 rounded-full ring-2 ring-white" />
               </div>
@@ -102,7 +102,7 @@ export const MobileProfileDrawer = ({
                 <p className="text-xs text-slate-500 truncate mt-0.5">
                   {currentUser.email}
                 </p>
-                <div className="flex items-center space-x-1 text-[11px] text-[#0A58CA] font-medium mt-1">
+                <div className="flex items-center space-x-1 text-[11px] text-[#2170E4] font-medium mt-1">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span>Ứng viên đã xác thực</span>
                 </div>
@@ -137,13 +137,13 @@ export const MobileProfileDrawer = ({
                 className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0A58CA] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2170E4] flex items-center justify-center">
                     <MessageSquare className="w-4 h-4" />
                   </div>
                   <span>Tin nhắn tuyển dụng</span>
                 </div>
                 <div className="flex items-center space-x-2">
-                  <span className="w-2 h-2 bg-[#0A58CA] rounded-full" />
+                  <span className="w-2 h-2 bg-[#2170E4] rounded-full" />
                   <ChevronRight className="w-4 h-4 text-slate-400" />
                 </div>
               </button>
@@ -222,7 +222,7 @@ export const MobileProfileDrawer = ({
                 className="w-full flex items-center justify-between p-3.5 rounded-xl hover:bg-slate-50 active:bg-slate-100 transition-colors"
               >
                 <div className="flex items-center space-x-3">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0A58CA] flex items-center justify-center">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2170E4] flex items-center justify-center">
                     <BookOpen className="w-4 h-4" />
                   </div>
                   <span>Tin tức & Cẩm nang nghề nghiệp</span>
@@ -248,7 +248,7 @@ export const MobileProfileDrawer = ({
           </div>
         ) : (
           <div className="p-6 text-center">
-            <div className="w-14 h-14 rounded-full bg-blue-50 text-[#0A58CA] flex items-center justify-center mx-auto mb-3">
+            <div className="w-14 h-14 rounded-full bg-blue-50 text-[#2170E4] flex items-center justify-center mx-auto mb-3">
               <User className="w-7 h-7" />
             </div>
             <h3 className="text-base font-bold text-slate-900">
@@ -264,7 +264,7 @@ export const MobileProfileDrawer = ({
                   onClose();
                   onOpenAuth('login');
                 }}
-                className="w-full py-3 bg-[#0A58CA] text-white font-bold text-sm rounded-full shadow-sm hover:bg-[#084298] transition-colors cursor-pointer"
+                className="w-full py-3 bg-[#2170E4] text-white font-bold text-sm rounded-full shadow-sm hover:bg-[#1a5bbd] transition-colors cursor-pointer"
               >
                 Đăng nhập ngay
               </button>

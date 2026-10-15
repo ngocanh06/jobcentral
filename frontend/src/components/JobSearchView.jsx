@@ -1076,7 +1076,7 @@ export const JobSearchView = ({
                           <div className="flex items-center justify-between gap-1">
                             <h4
                               className={`text-xs sm:text-sm font-bold truncate transition-colors ${
-                                isSelected ? 'text-[#0A58CA] font-black' : 'text-[#0A58CA] hover:text-[#084298]'
+                                isSelected ? 'text-[#2170E4] font-black' : 'text-[#2170E4] hover:text-[#1a5bbd]'
                               }`}
                             >
                               {job.title}
@@ -1116,7 +1116,7 @@ export const JobSearchView = ({
                             e.stopPropagation();
                             if (onViewDetails) onViewDetails(job);
                           }}
-                          className="text-slate-600 hover:text-[#0A58CA] font-semibold flex items-center transition-colors cursor-pointer"
+                          className="text-slate-600 hover:text-[#2170E4] font-semibold flex items-center transition-colors cursor-pointer"
                         >
                           <span>Xem chi tiết</span>
                           <ChevronRight className="w-3 h-3 ml-0.5" />
@@ -1179,7 +1179,7 @@ export const JobSearchView = ({
                         <button
                           type="button"
                           onClick={() => onApply && onApply(activeJob, { isQuickApply: isEasyApply })}
-                          className="py-1.5 px-4 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs rounded-full transition-all flex items-center space-x-1.5 cursor-pointer active:scale-95 shadow-2xs"
+                          className="py-1.5 px-4 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-xs rounded-full transition-all flex items-center space-x-1.5 cursor-pointer active:scale-95 shadow-2xs"
                         >
                           {isEasyApply ? (
                             <>
@@ -1226,7 +1226,7 @@ export const JobSearchView = ({
                             />
                           </div>
                           <div className="min-w-0">
-                            <h2 className="text-base sm:text-xl font-black text-[#0A58CA] leading-tight">
+                            <h2 className="text-base sm:text-xl font-black text-[#2170E4] leading-tight">
                               {activeJob.title}
                             </h2>
                             <p className="text-xs sm:text-sm font-semibold text-slate-600 mt-1">
@@ -1298,7 +1298,7 @@ export const JobSearchView = ({
                           type="button"
                           id="search-apply-btn"
                           onClick={() => onApply && onApply(activeJob, { isQuickApply: isEasyApply })}
-                          className="flex-1 py-2.5 px-5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs sm:text-sm rounded-full transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 shadow-sm shadow-blue-500/20"
+                          className="flex-1 py-2.5 px-5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-xs sm:text-sm rounded-full transition-all flex items-center justify-center space-x-2 cursor-pointer active:scale-95 shadow-sm shadow-blue-500/20"
                         >
                           {isEasyApply ? (
                             <>
@@ -1316,10 +1316,10 @@ export const JobSearchView = ({
                         <button
                           type="button"
                           onClick={() => onViewDetails && onViewDetails(activeJob)}
-                          className="py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 hover:border-[#0A58CA] hover:text-[#0A58CA] hover:bg-blue-50/40 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center space-x-1.5 shrink-0 group"
+                          className="py-2.5 px-4 rounded-full border border-slate-200 text-slate-700 hover:border-[#2170E4] hover:text-[#2170E4] hover:bg-blue-50/40 font-semibold text-xs transition-all duration-200 cursor-pointer flex items-center space-x-1.5 shrink-0 group"
                           title="Xem chi tiết việc làm"
                         >
-                          <ExternalLink className="w-3.5 h-3.5 transition-colors group-hover:text-[#0A58CA]" />
+                          <ExternalLink className="w-3.5 h-3.5 transition-colors group-hover:text-[#2170E4]" />
                           <span>Xem chi tiết</span>
                         </button>
                       </div>
@@ -1413,7 +1413,7 @@ export const JobSearchView = ({
                   referrerPolicy="no-referrer"
                   className="w-8 h-8 rounded-md object-cover border border-slate-200 shrink-0"
                 />
-                <span className="text-xs font-bold text-[#0A58CA] truncate">
+                <span className="text-xs font-bold text-[#2170E4] truncate">
                   {activeJob.title}
                 </span>
               </div>
@@ -1459,7 +1459,7 @@ export const JobSearchView = ({
                   setMobileDetailOpen(false);
                   onApply && onApply(activeJob, { isQuickApply: isEasyApply });
                 }}
-                className="flex-1 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs rounded-full flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm shadow-blue-500/20"
+                className="flex-1 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-xs rounded-full flex items-center justify-center space-x-1.5 cursor-pointer shadow-sm shadow-blue-500/20"
               >
                 {isEasyApply ? (
                   <>

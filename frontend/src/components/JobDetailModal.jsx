@@ -220,7 +220,7 @@ export const JobDetailModal = ({
                   onClose();
                   onApply(job, e);
                 }}
-                className="w-full sm:w-auto px-5 sm:px-6 py-2 sm:py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-xs sm:text-sm rounded-full shadow-md shadow-indigo-200 transition-all cursor-pointer text-center whitespace-nowrap"
+                className="w-full sm:w-auto px-5 sm:px-6 py-2 sm:py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold text-xs sm:text-sm rounded-full shadow-md shadow-blue-500/20 transition-all cursor-pointer text-center whitespace-nowrap"
               >
                 Ứng tuyển ngay
               </button>

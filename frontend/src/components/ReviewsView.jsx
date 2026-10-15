@@ -60,7 +60,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
         <button
           id="write-review-btn"
           onClick={() => setShowAddModal(true)}
-          className="inline-flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all shrink-0 cursor-pointer"
+          className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-medium text-sm rounded-full shadow-sm shadow-blue-500/20 transition-all shrink-0 cursor-pointer"
         >
           <Plus className="w-4 h-4" />
           <span>Viết đánh giá</span>
@@ -257,7 +257,7 @@ export const ReviewsView = ({ reviews: initialReviews }) => {
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 bg-indigo-600 text-white rounded-full font-medium text-sm hover:bg-indigo-700 shadow-sm shadow-indigo-200 transition-colors cursor-pointer"
+                  className="px-5 py-2 bg-[#2170E4] text-white rounded-full font-medium text-sm hover:bg-[#1a5bbd] shadow-sm shadow-blue-500/20 transition-colors cursor-pointer"
                 >
                   Đăng đánh giá
                 </button>

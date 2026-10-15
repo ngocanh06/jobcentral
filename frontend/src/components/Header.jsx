@@ -180,7 +180,7 @@ export const Header = ({
           : 'shadow-[0_1px_8px_rgba(0,0,0,0.04)]'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+      <div className="w-full px-6 lg:px-10 xl:px-14">
         <div className="h-[72px] flex items-center justify-between gap-6">
           {/* Zone 1 (Left): Brand Logo */}
           <div className="flex items-center shrink-0">
@@ -198,7 +198,7 @@ export const Header = ({
           {/* Zone 2 (Center): Balanced Navigation Tabs */}
           <nav
             id="main-nav-tabs"
-            className="hidden lg:flex items-center justify-center gap-7 xl:gap-9"
+            className="hidden lg:flex flex-1 min-w-0 items-center justify-center gap-6 xl:gap-9"
           >
             {navItems.map((item) => {
               const isActive = activeTab === item.id;
@@ -228,7 +228,9 @@ export const Header = ({
 
           {/* Zone 3 (Right): Actions & User Profile */}
           <div className="flex items-center justify-end gap-2.5 sm:gap-3 shrink-0">
-            {/* Notification Bell with Unread Count Badge */}
+            {currentUser ? (
+              <div className="flex items-center gap-2.5 sm:gap-3">
+                {/* Notification Bell with Unread Count Badge */}
             <div className="relative flex items-center" ref={notifMenuRef}>
               <button
                 id="header-notification-btn"
@@ -291,7 +293,7 @@ export const Header = ({
                             onSimulateNotification();
                           }}
                           title="Mô phỏng nhận thông báo mới từ hệ thống"
-                          className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 bg-indigo-50 hover:bg-indigo-100 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
+                          className="inline-flex items-center gap-1 text-[11px] font-bold text-[#2170E4] bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-full transition-colors cursor-pointer"
                         >
                           <Plus className="w-3 h-3 stroke-[2.5]" />
                           <span>Tạo sự kiện</span>
@@ -512,8 +514,8 @@ export const Header = ({
 
             <div className="hidden sm:block h-6 w-px bg-slate-200/90" />
 
-            {currentUser ? (
-              <div className="relative flex items-center" ref={profileMenuRef}>
+            {/* Logged-in User Profile Dropdown */}
+            <div className="relative flex items-center" ref={profileMenuRef}>
                 <button
                   id="header-user-profile-btn"
                   onClick={() => {
@@ -524,7 +526,7 @@ export const Header = ({
                       setNotifDropdownOpen(false);
                     }
                   }}
-                  className="h-10 pl-1.5 pr-3.5 bg-surface-container-low hover:bg-surface-container border border-slate-200/60 rounded-full inline-flex items-center gap-2.5 transition-all cursor-pointer select-none active:scale-95 group focus:outline-hidden"
+                  className="h-10 px-2 hover:bg-slate-100/70 rounded-lg inline-flex items-center gap-2 transition-colors cursor-pointer select-none focus:outline-hidden"
                 >
                   <img
                     src={currentUser.avatar || catAvatar}
@@ -545,9 +547,9 @@ export const Header = ({
                 {profileDropdownOpen && !device.isPhone && (
                   <div
                     id="header-profile-menu"
-                    className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 py-2 z-50 animate-in fade-in slide-from-top-2 duration-150"
+                    className="absolute right-0 top-full mt-2 w-56 bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden z-50 animate-in fade-in slide-from-top-2 duration-150"
                   >
-                    <div className="px-4 py-2.5 border-b border-slate-100">
+                    <div className="px-4 py-2.5 border-b border-slate-100 bg-slate-50/50">
                       <p className="text-sm font-bold text-slate-900 truncate">
                         {currentUser.name}
                       </p>
@@ -555,14 +557,14 @@ export const Header = ({
                         {currentUser.email}
                       </p>
                     </div>
-                    <div className="py-1 px-1.5 space-y-0.5">
+                    <div className="py-1">
                       <button
                         onClick={() => {
                           handleMessagesBtnClick();
                         }}
-                        className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer transition-colors"
+                        className="w-full px-4 py-2.5 text-left text-xs font-semibold text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 flex items-center justify-between cursor-pointer transition-colors border-0 rounded-none"
                       >
-                        <div className="flex items-center space-x-2">
+                        <div className="flex items-center space-x-2.5">
                           <MessageSquare className="w-4 h-4 text-slate-500" />
                           <span>
                             {activeTab === 'messages'
@@ -577,7 +579,7 @@ export const Header = ({
                           onTabChange('cv-builder');
                           setProfileDropdownOpen(false);
                         }}
-                        className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center space-x-2 cursor-pointer transition-colors"
+                        className="w-full px-4 py-2.5 text-left text-xs font-semibold text-slate-700 hover:bg-slate-100/80 hover:text-slate-900 flex items-center space-x-2.5 cursor-pointer transition-colors border-0 rounded-none"
                       >
                         <FileCheck className="w-4 h-4 text-slate-500" />
                         <span>Hồ sơ & CV của tôi</span>
@@ -588,10 +590,14 @@ export const Header = ({
                           onTabChange('saved');
                           setProfileDropdownOpen(false);
                         }}
-                        className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer transition-colors"
+                        className={`w-full px-4 py-2.5 text-left text-xs font-semibold hover:bg-slate-100/80 flex items-center justify-between cursor-pointer transition-colors border-0 rounded-none ${
+                          activeTab === 'saved'
+                            ? 'text-primary bg-blue-50/70 font-bold'
+                            : 'text-slate-700 hover:text-slate-900'
+                        }`}
                       >
-                        <div className="flex items-center space-x-2">
-                          <Bookmark className="w-4 h-4 text-slate-500" />
+                        <div className="flex items-center space-x-2.5">
+                          <Bookmark className={`w-4 h-4 ${activeTab === 'saved' ? 'text-primary' : 'text-slate-500'}`} />
                           <span>Việc làm đã lưu</span>
                         </div>
                         {savedCount > 0 ? (
@@ -604,10 +610,14 @@ export const Header = ({
                           onTabChange('favorite-companies');
                           setProfileDropdownOpen(false);
                         }}
-                        className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-slate-700 hover:bg-slate-100 flex items-center justify-between cursor-pointer transition-colors"
+                        className={`w-full px-4 py-2.5 text-left text-xs font-semibold hover:bg-slate-100/80 flex items-center justify-between cursor-pointer transition-colors border-0 rounded-none ${
+                          activeTab === 'favorite-companies'
+                            ? 'text-primary bg-blue-50/70 font-bold'
+                            : 'text-slate-700 hover:text-slate-900'
+                        }`}
                       >
-                        <div className="flex items-center space-x-2">
-                          <Building2 className="w-4 h-4 text-slate-500" />
+                        <div className="flex items-center space-x-2.5">
+                          <Building2 className={`w-4 h-4 ${activeTab === 'favorite-companies' ? 'text-primary' : 'text-slate-500'}`} />
                           <span>Công ty đã theo dõi</span>
                         </div>
                         {followedCompaniesCount > 0 ? (
@@ -615,13 +625,13 @@ export const Header = ({
                         ) : null}
                       </button>
                     </div>
-                    <div className="border-t border-slate-100 pt-1 px-1.5">
+                    <div className="border-t border-slate-100 py-1">
                       <button
                         onClick={() => {
                           setProfileDropdownOpen(false);
                           onLogout();
                         }}
-                        className="w-full px-3 py-2 rounded-full text-left text-xs font-semibold text-rose-600 hover:bg-slate-100 flex items-center space-x-2 cursor-pointer transition-colors"
+                        className="w-full px-4 py-2.5 text-left text-xs font-semibold text-rose-600 hover:bg-rose-50/80 flex items-center space-x-2.5 cursor-pointer transition-colors border-0 rounded-none"
                       >
                         <LogOut className="w-4 h-4" />
                         <span>Đăng xuất</span>
@@ -630,12 +640,13 @@ export const Header = ({
                   </div>
                 )}
               </div>
-            ) : (
-              <div className="flex items-center gap-2 sm:gap-2.5">
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 sm:gap-2.5">
                 <button
                   id="header-login-pill-btn"
                   onClick={() => onOpenAuth('login')}
-                  className="h-10 px-4 inline-flex items-center justify-center font-label-lg text-label-lg text-on-surface hover:text-primary hover:bg-surface-container-low transition-colors rounded-full cursor-pointer whitespace-nowrap"
+                  className="h-10 px-4 inline-flex items-center justify-center font-label-lg text-label-lg text-on-surface hover:bg-slate-100 transition-colors rounded-full cursor-pointer whitespace-nowrap"
                 >
                   <span>Đăng nhập</span>
                 </button>
@@ -643,7 +654,7 @@ export const Header = ({
                 <button
                   id="header-register-pill-btn"
                   onClick={() => onOpenAuth('register')}
-                  className="h-10 px-4 inline-flex items-center justify-center font-label-lg text-label-lg text-on-surface hover:text-primary hover:bg-surface-container-low transition-colors rounded-full cursor-pointer whitespace-nowrap"
+                  className="h-10 px-4 inline-flex items-center justify-center font-label-lg text-label-lg text-on-surface hover:bg-slate-100 transition-colors rounded-full cursor-pointer whitespace-nowrap"
                 >
                   <span>Đăng ký</span>
                 </button>
@@ -651,11 +662,11 @@ export const Header = ({
                 <button
                   id="header-employer-pill-btn"
                   onClick={() => onOpenAuth('employer')}
-                  className="hidden sm:inline-flex h-10 items-center gap-2 px-4.5 bg-primary-container text-on-primary font-label-lg text-label-lg hover:bg-primary transition-colors shadow-[0_2px_6px_rgba(21,93,252,0.22)] rounded-full cursor-pointer whitespace-nowrap ml-1"
+                  className="hidden sm:inline-flex h-10 items-center gap-2 px-4.5 bg-[#2170E4] text-white font-label-lg text-label-lg hover:bg-[#1a5bbd] transition-colors shadow-[0_2px_6px_rgba(33,112,228,0.25)] rounded-full cursor-pointer whitespace-nowrap ml-1"
                   title="Kênh dành riêng cho nhà tuyển dụng"
                 >
                   <span className="material-symbols-outlined text-[18px]">sync_alt</span>
-                  <span>Dành cho nhà tuyển dụng</span>
+                  <span className="hidden xl:inline">Dành cho nhà tuyển dụng</span>
                 </button>
               </div>
             )}

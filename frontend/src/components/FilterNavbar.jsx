@@ -329,7 +329,7 @@ export const FilterNavbar = ({
               setOpenDropdown(null);
               onApply();
             }}
-            className="inline-flex items-center space-x-1.5 px-4 sm:px-5 py-2 bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white rounded-full text-xs sm:text-sm font-semibold shadow-sm shadow-indigo-200 transition-all cursor-pointer"
+            className="inline-flex items-center space-x-1.5 px-4 sm:px-5 py-2 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-98 text-white rounded-full text-xs sm:text-sm font-semibold shadow-sm shadow-blue-500/20 transition-all cursor-pointer"
           >
             <span>Áp dụng</span>
             {activeFiltersCount > 0 && (

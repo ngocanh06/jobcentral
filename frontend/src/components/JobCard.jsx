@@ -29,7 +29,7 @@ export const JobCard = ({
 
           {/* Job title & company */}
           <div>
-            <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-indigo-600 transition-colors leading-tight">
+            <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#2170E4] transition-colors leading-tight">
               {job.title}
             </h3>
             <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium">
@@ -48,7 +48,7 @@ export const JobCard = ({
               if (onShare) onShare(job, e);
             }}
             title="Chia sẻ việc làm"
-            className="p-2 rounded-full text-slate-400 hover:text-indigo-600 hover:bg-indigo-50/60 transition-colors focus:outline-hidden cursor-pointer"
+            className="p-2 rounded-full text-slate-400 hover:text-[#2170E4] hover:bg-blue-50/60 transition-colors focus:outline-hidden cursor-pointer"
             aria-label="Chia sẻ việc làm"
           >
             <Share2 className="w-5 h-5" />
@@ -112,14 +112,14 @@ export const JobCard = ({
               if (e) e.stopPropagation();
               if (onViewDetails) onViewDetails(job);
             }}
-            className="px-4 py-2 text-xs sm:text-sm font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 rounded-full transition-colors cursor-pointer"
+            className="px-4 py-2 text-xs sm:text-sm font-semibold text-[#2170E4] bg-blue-50 hover:bg-blue-100 rounded-full transition-colors cursor-pointer"
           >
             Chi tiết
           </button>
           <button
             id={`apply-btn-${job.id}`}
             onClick={(e) => onApply(job, e)}
-            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 rounded-full shadow-xs hover:shadow-sm active:scale-95 transition-all focus:outline-hidden cursor-pointer"
+            className="px-5 py-2 text-xs sm:text-sm font-semibold text-white bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-95 rounded-full shadow-xs hover:shadow-sm shadow-blue-500/20 transition-all focus:outline-hidden cursor-pointer"
           >
             Ứng tuyển ngay
           </button>

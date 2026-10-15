@@ -50,15 +50,23 @@ export const MobileBottomNav = ({
           const Icon = tab.icon;
           const isActive = activeTab === tab.id;
 
+          const handleTabClick = () => {
+            if (tab.id === 'messages' && !currentUser) {
+              onOpenAuth('login');
+              return;
+            }
+            onTabChange(tab.id);
+          };
+
           return (
             <button
               key={tab.id}
               id={`mobile-bottom-nav-${tab.id}`}
               type="button"
-              onClick={() => onTabChange(tab.id)}
+              onClick={handleTabClick}
               className={`flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all cursor-pointer relative ${
                 isActive
-                  ? 'text-[#0A58CA]'
+                  ? 'text-[#2170E4]'
                   : 'text-slate-500 hover:text-slate-800'
               }`}
             >
@@ -68,18 +76,18 @@ export const MobileBottomNav = ({
                     isActive ? 'scale-110 stroke-[2.4]' : 'stroke-[1.8]'
                   }`}
                 />
-                {tab.badge && (
-                  <span className="absolute -top-0.5 -right-1 w-2 h-2 bg-[#0A58CA] rounded-full ring-2 ring-white" />
+                {tab.badge && currentUser && (
+                  <span className="absolute -top-0.5 -right-1 w-2 h-2 bg-[#2170E4] rounded-full ring-2 ring-white" />
                 )}
-                {tab.count !== undefined && tab.count > 0 && (
-                  <span className="absolute -top-1 -right-2 px-1 min-w-3.5 h-3.5 bg-[#0A58CA] text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-1 ring-white">
+                {tab.count !== undefined && tab.count > 0 && currentUser && (
+                  <span className="absolute -top-1 -right-2 px-1 min-w-3.5 h-3.5 bg-[#2170E4] text-white text-[9px] font-bold rounded-full flex items-center justify-center ring-1 ring-white">
                     {tab.count > 9 ? '9+' : tab.count}
                   </span>
                 )}
               </div>
               <span
                 className={`text-[10px] mt-1 font-medium tracking-tight truncate max-w-[56px] leading-none ${
-                  isActive ? 'font-bold text-[#0A58CA]' : 'text-slate-500'
+                  isActive ? 'font-bold text-[#2170E4]' : 'text-slate-500'
                 }`}
               >
                 {tab.label}
@@ -100,7 +108,7 @@ export const MobileBottomNav = ({
             }
           }}
           className={`flex flex-col items-center justify-center py-1 px-0.5 rounded-xl transition-all cursor-pointer relative ${
-            currentUser ? 'text-[#0A58CA]' : 'text-slate-500 hover:text-slate-800'
+            currentUser ? 'text-[#2170E4]' : 'text-slate-500 hover:text-slate-800'
           }`}
         >
           <div className="relative">
@@ -109,10 +117,10 @@ export const MobileBottomNav = ({
                 src={currentUser.avatar}
                 alt={currentUser.name}
                 referrerPolicy="no-referrer"
-                className="w-5 h-5 rounded-full object-cover ring-2 ring-[#0A58CA]"
+                className="w-5 h-5 rounded-full object-cover ring-2 ring-[#2170E4]"
               />
             ) : currentUser ? (
-              <div className="w-5 h-5 rounded-full bg-blue-100 text-[#0A58CA] text-[10px] font-bold flex items-center justify-center ring-1 ring-[#0A58CA]">
+              <div className="w-5 h-5 rounded-full bg-blue-100 text-[#2170E4] text-[10px] font-bold flex items-center justify-center ring-1 ring-[#2170E4]">
                 {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
               </div>
             ) : (
@@ -124,7 +132,7 @@ export const MobileBottomNav = ({
           </div>
           <span
             className={`text-[10px] mt-1 font-medium tracking-tight truncate max-w-[56px] leading-none ${
-              currentUser ? 'font-bold text-[#0A58CA]' : 'text-slate-500'
+              currentUser ? 'font-bold text-[#2170E4]' : 'text-slate-500'
             }`}
           >
             {currentUser ? 'Tôi' : 'Tài khoản'}

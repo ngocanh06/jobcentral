@@ -100,7 +100,7 @@ export const ApplyModal = ({
               value={fullName}
               onChange={(e) => setFullName(e.target.value)}
               placeholder="Nhập họ và tên của bạn..."
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-[#0A58CA] focus:ring-1 focus:ring-[#0A58CA] shadow-2xs transition-all"
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-[#2170E4] focus:ring-1 focus:ring-[#2170E4] shadow-2xs transition-all"
             />
           </div>
 
@@ -115,7 +115,7 @@ export const ApplyModal = ({
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="Nhập số điện thoại của bạn..."
-              className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-[#0A58CA] focus:ring-1 focus:ring-[#0A58CA] shadow-2xs transition-all"
+              className="w-full px-3.5 py-2.5 bg-white border border-slate-300 rounded-lg text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-hidden focus:border-[#2170E4] focus:ring-1 focus:ring-[#2170E4] shadow-2xs transition-all"
             />
           </div>
 
@@ -132,7 +132,7 @@ export const ApplyModal = ({
               id="submit-apply-form-btn"
               type="submit"
               disabled={isSubmitting}
-              className="px-6 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs sm:text-sm rounded-full shadow-sm shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-70 cursor-pointer flex items-center space-x-2"
+              className="px-6 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-xs sm:text-sm rounded-full shadow-sm shadow-blue-500/20 active:scale-95 transition-all disabled:opacity-70 cursor-pointer flex items-center space-x-2"
             >
               {isSubmitting ? (
                 <span>Đang gửi hồ sơ...</span>

@@ -202,7 +202,7 @@ export const AuthModal = ({
 
         {/* Modal Header */}
         <div className="text-center mb-5">
-          <div className="w-11 h-11 rounded-2xl bg-blue-50 text-[#0A58CA] flex items-center justify-center mx-auto mb-2.5 border border-blue-100 shadow-2xs">
+          <div className="w-11 h-11 rounded-2xl bg-blue-50 text-[#2170E4] flex items-center justify-center mx-auto mb-2.5 border border-blue-100 shadow-2xs">
             {mode === 'forgot' ? (
               <KeyRound className="w-5 h-5 stroke-[2]" />
             ) : role === 'employer' ? (
@@ -248,7 +248,7 @@ export const AuthModal = ({
                 onClick={() => setRole('candidate')}
                 className={`flex items-center justify-center space-x-1.5 py-2 rounded-xl transition-all cursor-pointer ${
                   role === 'candidate'
-                    ? 'bg-white text-[#0A58CA] shadow-xs'
+                    ? 'bg-white text-[#2170E4] shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -260,7 +260,7 @@ export const AuthModal = ({
                 onClick={() => setRole('employer')}
                 className={`flex items-center justify-center space-x-1.5 py-2 rounded-xl transition-all cursor-pointer ${
                   role === 'employer'
-                    ? 'bg-white text-[#0A58CA] shadow-xs'
+                    ? 'bg-white text-[#2170E4] shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -280,7 +280,7 @@ export const AuthModal = ({
                 }}
                 className={`flex-1 py-1.5 rounded-full transition-all cursor-pointer ${
                   mode === 'login'
-                    ? 'bg-white text-[#0A58CA] shadow-xs'
+                    ? 'bg-white text-[#2170E4] shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -295,7 +295,7 @@ export const AuthModal = ({
                 }}
                 className={`flex-1 py-1.5 rounded-full transition-all cursor-pointer ${
                   mode === 'register'
-                    ? 'bg-white text-[#0A58CA] shadow-xs'
+                    ? 'bg-white text-[#2170E4] shadow-xs'
                     : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
@@ -331,7 +331,7 @@ export const AuthModal = ({
                     setForgotSent(false);
                     setMode('login');
                   }}
-                  className="w-full py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs rounded-full shadow-xs transition-all cursor-pointer mt-3"
+                  className="w-full py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-xs rounded-full shadow-xs transition-all cursor-pointer mt-3"
                 >
                   Quay lại đăng nhập
                 </button>
@@ -350,14 +350,14 @@ export const AuthModal = ({
                       value={forgotEmail}
                       onChange={(e) => setForgotEmail(e.target.value)}
                       placeholder="name@example.com"
-                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100"
+                      className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#2170E4] focus:ring-2 focus:ring-blue-100"
                     />
                   </div>
                 </div>
 
                 <button
                   type="submit"
-                  className="w-full py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs transition-all cursor-pointer"
+                  className="w-full py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs transition-all cursor-pointer"
                 >
                   Gửi liên kết khôi phục
                 </button>
@@ -392,7 +392,7 @@ export const AuthModal = ({
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={role === 'employer' ? 'Nguyễn Mai Anh (HR Manager)' : 'Nguyễn Văn A'}
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#2170E4] focus:ring-2 focus:ring-blue-100"
                   />
                 </div>
               </div>
@@ -414,7 +414,7 @@ export const AuthModal = ({
                       ? 'name@example.com'
                       : 'VD: NhienNguyen, abc, xyz...'
                   }
-                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100"
+                  className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#2170E4] focus:ring-2 focus:ring-blue-100"
                 />
               </div>
             </div>
@@ -431,7 +431,7 @@ export const AuthModal = ({
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="0912 345 678"
-                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100"
+                    className="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#2170E4] focus:ring-2 focus:ring-blue-100"
                   />
                 </div>
               </div>
@@ -449,7 +449,7 @@ export const AuthModal = ({
                       setMode('forgot');
                       setErrorMessage('');
                     }}
-                    className="text-[11px] font-semibold text-[#0A58CA] hover:underline cursor-pointer"
+                    className="text-[11px] font-semibold text-[#2170E4] hover:underline cursor-pointer"
                   >
                     Quên mật khẩu?
                   </button>
@@ -463,7 +463,7 @@ export const AuthModal = ({
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100"
+                  className="w-full pl-10 pr-10 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-900 focus:bg-white focus:outline-hidden focus:border-[#2170E4] focus:ring-2 focus:ring-blue-100"
                 />
                 <button
                   type="button"
@@ -485,7 +485,7 @@ export const AuthModal = ({
                     type="checkbox"
                     checked={rememberMe}
                     onChange={(e) => setRememberMe(e.target.checked)}
-                    className="w-4 h-4 text-[#0A58CA] rounded-sm border-slate-300 focus:ring-blue-200 cursor-pointer"
+                    className="w-4 h-4 text-[#2170E4] rounded-sm border-slate-300 focus:ring-blue-200 cursor-pointer"
                   />
                   <span>Ghi nhớ đăng nhập</span>
                 </label>
@@ -498,13 +498,13 @@ export const AuthModal = ({
                     type="checkbox"
                     checked={agreeTerms}
                     onChange={(e) => setAgreeTerms(e.target.checked)}
-                    className="w-4 h-4 text-[#0A58CA] rounded-sm border-slate-300 focus:ring-blue-200 cursor-pointer mt-0.5 shrink-0"
+                    className="w-4 h-4 text-[#2170E4] rounded-sm border-slate-300 focus:ring-blue-200 cursor-pointer mt-0.5 shrink-0"
                   />
                   <span>
                     Tôi đồng ý với{' '}
-                    <span className="text-[#0A58CA] font-semibold hover:underline">Điều khoản dịch vụ</span>{' '}
+                    <span className="text-[#2170E4] font-semibold hover:underline">Điều khoản dịch vụ</span>{' '}
                     và{' '}
-                    <span className="text-[#0A58CA] font-semibold hover:underline">Chính sách bảo mật</span> của JobCentral.
+                    <span className="text-[#2170E4] font-semibold hover:underline">Chính sách bảo mật</span> của JobCentral.
                   </span>
                 </label>
               </div>
@@ -514,7 +514,7 @@ export const AuthModal = ({
             <button
               type="submit"
               id="auth-submit-btn"
-              className="w-full py-3 sm:py-2.5 bg-[#0A58CA] hover:bg-[#084298] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center space-x-2 mt-4 cursor-pointer"
+              className="w-full py-3 sm:py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-[0.99] text-white font-bold text-xs sm:text-sm rounded-full shadow-xs hover:shadow-md transition-all flex items-center justify-center space-x-2 mt-4 cursor-pointer"
             >
               <span>
                 {mode === 'login'
@@ -569,7 +569,7 @@ export const AuthModal = ({
             <div className="mt-4 pt-3.5 border-t border-slate-100">
               <div className="flex items-center justify-between text-[11px] font-bold text-slate-500 mb-2">
                 <span>Tài khoản test có sẵn:</span>
-                <span className="text-[#0A58CA] font-semibold text-[10px]">Nhấn để đăng nhập nhanh</span>
+                <span className="text-[#2170E4] font-semibold text-[10px]">Nhấn để đăng nhập nhanh</span>
               </div>
               <div className="grid grid-cols-3 gap-2">
                 {MOCK_TEST_ACCOUNTS.map((acc) => (
@@ -579,7 +579,7 @@ export const AuthModal = ({
                     onClick={() => handleQuickTestAccount(acc)}
                     className="px-2.5 py-1.5 rounded-xl border border-blue-200/80 bg-blue-50/50 hover:bg-blue-100/80 text-left transition-colors cursor-pointer"
                   >
-                    <p className="text-[11px] font-bold text-[#0A58CA] truncate">
+                    <p className="text-[11px] font-bold text-[#2170E4] truncate">
                       {acc.username}
                     </p>
                     <p className="text-[10px] text-slate-500 truncate">

@@ -337,7 +337,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
   return (
     <div className="bg-[#FAF9FF] min-h-screen text-slate-800 antialiased">
       {/* 1. HERO BANNER: Cẩm nang Nghề nghiệp & Xu hướng */}
-      <section className="bg-[#0A58CA] text-white pt-14 pb-16 sm:pt-18 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+      <section className="bg-[#2170E4] text-white pt-14 pb-16 sm:pt-18 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
         {/* Subtle decorative glow */}
         <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none" />
         <div className="absolute -bottom-32 -right-32 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl pointer-events-none" />
@@ -379,7 +379,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
               </div>
               <button
                 type="submit"
-                className="bg-[#0A58CA] hover:bg-[#084298] active:scale-95 text-white font-semibold text-xs sm:text-sm px-5 sm:px-7 py-2.5 sm:py-3 rounded-full transition-all cursor-pointer whitespace-nowrap shadow-xs shrink-0 select-none"
+                className="bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-95 text-white font-semibold text-xs sm:text-sm px-5 sm:px-7 py-2.5 sm:py-3 rounded-full transition-all cursor-pointer whitespace-nowrap shadow-xs shrink-0 select-none"
               >
                 Tìm kiếm
               </button>
@@ -402,7 +402,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                 }}
                 className={`px-5 py-2 sm:py-2.5 rounded-full text-xs sm:text-sm font-semibold transition-all cursor-pointer whitespace-nowrap select-none ${
                   isActive
-                    ? 'bg-[#0A58CA] text-white shadow-xs shadow-blue-500/25'
+                    ? 'bg-[#2170E4] text-white shadow-xs shadow-blue-500/25'
                     : 'bg-[#EAEFF7] hover:bg-[#DFE7F2] text-slate-700'
                 }`}
               >
@@ -434,7 +434,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
 
                 {/* Content Overlay */}
                 <div className="relative z-10 p-6 sm:p-8 md:p-10 text-white space-y-3">
-                  <span className="inline-block px-3 py-1 bg-[#0A58CA] text-white text-[11px] font-black uppercase rounded-md tracking-wider shadow-xs">
+                  <span className="inline-block px-3 py-1 bg-[#2170E4] text-white text-[11px] font-black uppercase rounded-md tracking-wider shadow-xs">
                     {featuredArticle.badge || 'NỔI BẬT'}
                   </span>
                   <h2 className="text-xl sm:text-2xl md:text-3xl font-black text-white leading-snug drop-shadow-xs group-hover:text-blue-100 transition-colors">
@@ -455,10 +455,10 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                   className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between flex-1 cursor-pointer group"
                 >
                   <div>
-                    <span className="text-xs font-bold text-[#0A58CA] uppercase tracking-wider block mb-2">
+                    <span className="text-xs font-bold text-[#2170E4] uppercase tracking-wider block mb-2">
                       {topRightArticle1.category}
                     </span>
-                    <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0A58CA] transition-colors leading-snug">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#2170E4] transition-colors leading-snug">
                       {topRightArticle1.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
@@ -470,7 +470,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
                       <span>{topRightArticle1.readTime}</span>
                     </span>
-                    <span className="text-[#0A58CA] font-semibold flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+                    <span className="text-[#2170E4] font-semibold flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
                       <span>Đọc tiếp</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
@@ -484,10 +484,10 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                   className="bg-white rounded-2xl border border-slate-200/90 p-6 sm:p-7 shadow-2xs hover:shadow-md hover:border-blue-300 transition-all flex flex-col justify-between flex-1 cursor-pointer group"
                 >
                   <div>
-                    <span className="text-xs font-bold text-[#0A58CA] uppercase tracking-wider block mb-2">
+                    <span className="text-xs font-bold text-[#2170E4] uppercase tracking-wider block mb-2">
                       {topRightArticle2.category}
                     </span>
-                    <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0A58CA] transition-colors leading-snug">
+                    <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#2170E4] transition-colors leading-snug">
                       {topRightArticle2.title}
                     </h3>
                     <p className="text-xs sm:text-sm text-slate-500 mt-2.5 line-clamp-3 leading-relaxed">
@@ -499,7 +499,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                       <Clock className="w-3.5 h-3.5 text-slate-400" />
                       <span>{topRightArticle2.readTime}</span>
                     </span>
-                    <span className="text-[#0A58CA] font-semibold flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
+                    <span className="text-[#2170E4] font-semibold flex items-center space-x-1 group-hover:translate-x-1 transition-transform">
                       <span>Đọc tiếp</span>
                       <ArrowRight className="w-3.5 h-3.5" />
                     </span>
@@ -530,7 +530,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                     setActiveCategory('all');
                     setSearchQuery('');
                   }}
-                  className="text-xs sm:text-sm font-bold text-[#0A58CA] hover:underline cursor-pointer"
+                  className="text-xs sm:text-sm font-bold text-[#2170E4] hover:underline cursor-pointer"
                 >
                   Xem tất cả
                 </button>
@@ -539,7 +539,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                   onClick={() => {
                     window.scrollTo({ top: 380, behavior: 'smooth' });
                   }}
-                  className="text-xs sm:text-sm font-bold text-[#0A58CA] hover:underline cursor-pointer"
+                  className="text-xs sm:text-sm font-bold text-[#2170E4] hover:underline cursor-pointer"
                 >
                   Xem tất cả
                 </button>
@@ -556,7 +556,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                     setActiveCategory('all');
                     setSearchQuery('');
                   }}
-                  className="mt-4 px-4 py-2 bg-[#0A58CA] text-white rounded-full text-xs font-semibold"
+                  className="mt-4 px-4 py-2 bg-[#2170E4] text-white rounded-full text-xs font-semibold"
                 >
                   Xem tất cả bài viết
                 </button>
@@ -583,14 +583,14 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                     <div className="p-5 sm:p-6 flex-1 flex flex-col justify-between">
                       <div>
                         {/* Tag & Date */}
-                        <div className="text-[11px] sm:text-xs font-bold text-[#0A58CA] uppercase tracking-wider">
+                        <div className="text-[11px] sm:text-xs font-bold text-[#2170E4] uppercase tracking-wider">
                           <span>{art.categoryDisplay || art.category}</span>
                           <span className="mx-1.5">•</span>
                           <span className="text-slate-400 font-medium">{art.date}</span>
                         </div>
 
                         {/* Title */}
-                        <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#0A58CA] transition-colors leading-snug mt-2">
+                        <h3 className="text-base sm:text-lg font-bold text-slate-900 group-hover:text-[#2170E4] transition-colors leading-snug mt-2">
                           {art.title}
                         </h3>
 
@@ -603,7 +603,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                       {/* Author row */}
                       <div className="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between">
                         <div className="flex items-center space-x-2.5">
-                          <div className="w-7 h-7 rounded-full bg-[#E0EDFF] text-[#0A58CA] flex items-center justify-center font-bold text-xs ring-1 ring-blue-100 shrink-0">
+                          <div className="w-7 h-7 rounded-full bg-[#E0EDFF] text-[#2170E4] flex items-center justify-center font-bold text-xs ring-1 ring-blue-100 shrink-0">
                             {art.author.charAt(0)}
                           </div>
                           <span className="text-xs font-semibold text-slate-700">
@@ -635,7 +635,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                     onClick={() => {
                       setSearchQuery(tag.replace('#', ''));
                     }}
-                    className="bg-[#F1F5F9] hover:bg-[#E2E8F0] hover:text-[#0A58CA] text-slate-700 text-xs font-medium px-3.5 py-1.5 rounded-full transition-colors cursor-pointer select-none"
+                    className="bg-[#F1F5F9] hover:bg-[#E2E8F0] hover:text-[#2170E4] text-slate-700 text-xs font-medium px-3.5 py-1.5 rounded-full transition-colors cursor-pointer select-none"
                   >
                     {tag}
                   </button>
@@ -655,11 +655,11 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                     onClick={() => setSelectedArticle(item)}
                     className="py-4 first:pt-4 last:pb-0 flex items-start gap-4 cursor-pointer group"
                   >
-                    <span className="text-xl sm:text-2xl font-black text-slate-300 font-mono tracking-tight shrink-0 w-8 group-hover:text-[#0A58CA] transition-colors">
+                    <span className="text-xl sm:text-2xl font-black text-slate-300 font-mono tracking-tight shrink-0 w-8 group-hover:text-[#2170E4] transition-colors">
                       {item.rank}
                     </span>
                     <div className="flex-1 min-w-0">
-                      <h4 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#0A58CA] transition-colors leading-snug line-clamp-2">
+                      <h4 className="text-xs sm:text-sm font-bold text-slate-800 group-hover:text-[#2170E4] transition-colors leading-snug line-clamp-2">
                         {item.title}
                       </h4>
                       <p className="text-[11px] text-slate-400 mt-1 font-medium">
@@ -672,7 +672,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
             </div>
 
             {/* Widget 3: Blue Newsletter CTA Card */}
-            <div className="bg-[#0A58CA] text-white rounded-2xl p-6 sm:p-7 shadow-md relative overflow-hidden">
+            <div className="bg-[#2170E4] text-white rounded-2xl p-6 sm:p-7 shadow-md relative overflow-hidden">
               <div className="relative z-10">
                 <h3 className="text-lg sm:text-xl font-black text-white leading-snug">
                   Luôn cập nhật thông tin mới nhất?
@@ -692,7 +692,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                   />
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-white text-[#0A58CA] hover:bg-blue-50 active:scale-98 font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all cursor-pointer text-center select-none"
+                    className="w-full py-2.5 bg-white text-[#2170E4] hover:bg-blue-50 active:scale-98 font-bold text-xs sm:text-sm rounded-xl shadow-xs transition-all cursor-pointer text-center select-none"
                   >
                     Đăng ký ngay
                   </button>
@@ -732,22 +732,22 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                 value={bottomEmail}
                 onChange={(e) => setBottomEmail(e.target.value)}
                 placeholder="Nhập địa chỉ email của bạn"
-                className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-[#0A58CA] focus:ring-2 focus:ring-blue-100 shadow-2xs"
+                className="flex-1 px-4 py-3 bg-white border border-slate-200 rounded-xl text-xs sm:text-sm text-slate-800 placeholder-slate-400 outline-none focus:border-[#2170E4] focus:ring-2 focus:ring-blue-100 shadow-2xs"
               />
               <button
                 type="submit"
-                className="px-6 py-3 bg-[#0A58CA] hover:bg-[#084298] active:scale-95 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-xs cursor-pointer whitespace-nowrap select-none"
+                className="px-6 py-3 bg-[#2170E4] hover:bg-[#1a5bbd] active:scale-95 text-white font-bold text-xs sm:text-sm rounded-xl transition-all shadow-xs cursor-pointer whitespace-nowrap select-none"
               >
                 Đăng ký bản tin
               </button>
             </form>
             <p className="text-[11px] text-slate-400 mt-2.5 leading-normal">
               Bằng cách đăng ký, bạn đồng ý với{' '}
-              <a href="#terms" className="text-slate-500 underline hover:text-[#0A58CA]">
+              <a href="#terms" className="text-slate-500 underline hover:text-[#2170E4]">
                 Điều khoản dịch vụ
               </a>{' '}
               và{' '}
-              <a href="#privacy" className="text-slate-500 underline hover:text-[#0A58CA]">
+              <a href="#privacy" className="text-slate-500 underline hover:text-[#2170E4]">
                 Chính sách bảo mật
               </a>{' '}
               của chúng tôi.
@@ -764,7 +764,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
             <div className="md:col-span-2 space-y-3">
               <div className="text-2xl font-black tracking-tight select-none">
                 <span className="text-black">Job</span>
-                <span className="text-[#0A58CA]">Central</span>
+                <span className="text-[#2170E4]">Central</span>
               </div>
               <p className="text-slate-400 text-xs mt-2">
                 © 2024 JobCentral. Empowering your professional journey.
@@ -773,21 +773,21 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                 <button
                   type="button"
                   title="Website"
-                  className="p-1.5 rounded-full hover:bg-slate-100 hover:text-[#0A58CA] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full hover:bg-slate-100 hover:text-[#2170E4] transition-colors cursor-pointer"
                 >
                   <Globe className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
                   title="Chia sẻ"
-                  className="p-1.5 rounded-full hover:bg-slate-100 hover:text-[#0A58CA] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full hover:bg-slate-100 hover:text-[#2170E4] transition-colors cursor-pointer"
                 >
                   <Share2 className="w-4 h-4" />
                 </button>
                 <button
                   type="button"
                   title="Liên hệ"
-                  className="p-1.5 rounded-full hover:bg-slate-100 hover:text-[#0A58CA] transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full hover:bg-slate-100 hover:text-[#2170E4] transition-colors cursor-pointer"
                 >
                   <AtSign className="w-4 h-4" />
                 </button>
@@ -799,17 +799,17 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
               <h4 className="font-bold text-slate-900 text-xs">Công ty</h4>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <a href="#about" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#about" className="hover:text-[#2170E4] transition-colors">
                     About Us
                   </a>
                 </li>
                 <li>
-                  <a href="#careers" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#careers" className="hover:text-[#2170E4] transition-colors">
                     Careers
                   </a>
                 </li>
                 <li>
-                  <a href="#app" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#app" className="hover:text-[#2170E4] transition-colors">
                     Mobile App
                   </a>
                 </li>
@@ -821,17 +821,17 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
               <h4 className="font-bold text-slate-900 text-xs">Hỗ trợ</h4>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <a href="#help" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#help" className="hover:text-[#2170E4] transition-colors">
                     Help Center
                   </a>
                 </li>
                 <li>
-                  <a href="#privacy" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#privacy" className="hover:text-[#2170E4] transition-colors">
                     Privacy Policy
                   </a>
                 </li>
                 <li>
-                  <a href="#terms" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#terms" className="hover:text-[#2170E4] transition-colors">
                     Terms of Service
                   </a>
                 </li>
@@ -843,17 +843,17 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
               <h4 className="font-bold text-slate-900 text-xs">Tài liệu</h4>
               <ul className="space-y-2 text-xs">
                 <li>
-                  <a href="#handbook" className="text-[#0A58CA] font-semibold hover:underline">
+                  <a href="#handbook" className="text-[#2170E4] font-semibold hover:underline">
                     Handbook
                   </a>
                 </li>
                 <li>
-                  <a href="#trends" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#trends" className="hover:text-[#2170E4] transition-colors">
                     Market Trends
                   </a>
                 </li>
                 <li>
-                  <a href="#interview" className="hover:text-[#0A58CA] transition-colors">
+                  <a href="#interview" className="hover:text-[#2170E4] transition-colors">
                     Interview Tips
                   </a>
                 </li>
@@ -869,7 +869,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
           <div className="bg-white rounded-3xl max-w-3xl w-full max-h-[90vh] overflow-y-auto shadow-2xl border border-slate-200 flex flex-col">
             {/* Header / Close bar */}
             <div className="sticky top-0 bg-white/95 backdrop-blur-sm px-6 py-4 border-b border-slate-100 flex items-center justify-between z-10">
-              <span className="text-xs font-bold text-[#0A58CA] uppercase tracking-wider">
+              <span className="text-xs font-bold text-[#2170E4] uppercase tracking-wider">
                 {selectedArticle.category}
               </span>
               <div className="flex items-center space-x-2">
@@ -879,7 +879,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                   title="Lưu bài viết"
                   className={`p-2 rounded-full border transition-colors cursor-pointer ${
                     savedArticleIds.has(selectedArticle.id)
-                      ? 'bg-blue-50 border-blue-200 text-[#0A58CA]'
+                      ? 'bg-blue-50 border-blue-200 text-[#2170E4]'
                       : 'border-slate-200 text-slate-500 hover:bg-slate-50'
                   }`}
                 >
@@ -919,7 +919,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
 
                 {/* Author & Date metadata */}
                 <div className="flex items-center space-x-3 text-xs text-slate-500 mt-4 pb-4 border-b border-slate-100">
-                  <div className="w-8 h-8 rounded-full bg-[#E0EDFF] text-[#0A58CA] flex items-center justify-center font-bold text-xs ring-1 ring-blue-100 shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#E0EDFF] text-[#2170E4] flex items-center justify-center font-bold text-xs ring-1 ring-blue-100 shrink-0">
                     {selectedArticle.author.charAt(0)}
                   </div>
                   <div>
@@ -946,7 +946,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
               )}
 
               {/* Summary lead */}
-              <div className="bg-blue-50/60 border-l-4 border-[#0A58CA] p-4 rounded-r-xl">
+              <div className="bg-blue-50/60 border-l-4 border-[#2170E4] p-4 rounded-r-xl">
                 <p className="text-sm font-semibold text-slate-800 leading-relaxed">
                   {selectedArticle.summary}
                 </p>
@@ -975,7 +975,7 @@ Học tập suốt đời chính là tấm vé bảo đảm cho tương lai sự
                 <button
                   type="button"
                   onClick={() => setSelectedArticle(null)}
-                  className="px-5 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white rounded-full text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
+                  className="px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white rounded-full text-xs sm:text-sm font-semibold transition-colors cursor-pointer"
                 >
                   Đóng bài viết
                 </button>

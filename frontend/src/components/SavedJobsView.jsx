@@ -44,7 +44,7 @@ export const SavedJobsView = ({
         <button
           id="explore-more-jobs-btn"
           onClick={onExploreMore}
-          className="hidden sm:inline-flex items-center space-x-2 px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white font-medium text-sm rounded-full shadow-sm shadow-indigo-200 transition-all cursor-pointer"
+          className="hidden sm:inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-medium text-sm rounded-full shadow-sm shadow-blue-500/20 transition-all cursor-pointer"
         >
           <Search className="w-4 h-4" />
           <span>Tìm thêm việc làm</span>
@@ -83,7 +83,7 @@ export const SavedJobsView = ({
             </p>
             <button
               onClick={onExploreMore}
-              className="inline-flex items-center space-x-2 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold text-sm rounded-full shadow-sm shadow-indigo-200 transition-all cursor-pointer"
+              className="inline-flex items-center space-x-2 px-6 py-3 bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-semibold text-sm rounded-full shadow-sm shadow-blue-500/20 transition-all cursor-pointer"
             >
               <Sparkles className="w-4 h-4" />
               <span>Khám phá việc làm ngay</span>

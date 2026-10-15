@@ -1,1134 +1,2418 @@
-import React, { useState, useMemo } from 'react';
-import {
-  Calculator,
-  Sparkles,
-  Search,
-  X,
-  Bookmark,
-  Users,
-  Newspaper,
-  Calendar,
-  ArrowRight,
-  ChevronRight,
-  ChevronDown,
-  ShieldCheck,
-  TrendingUp,
-  Clock,
-  Check,
-  Plus,
-  FileCheck,
-  Percent,
-  PiggyBank,
-  Award,
-  Briefcase,
-  RefreshCw,
-} from 'lucide-react';
-import catAvatar from '../assets/images/cat_opentowork_avatar_1791346160613.jpg';
+import React, { useState, useMemo, useRef } from 'react';
 
-const CAREER_TOOLS = [
+// Hình ảnh minh họa chuẩn
+import salaryNegotiationImg from '../assets/images/salary_negotiation_success_1791542193113.jpg';
+import featuredCareerImg from '../assets/images/featured_career_report_1791542153769.jpg';
+import remoteHybridImg from '../assets/images/remote_hybrid_work_1791542166753.jpg';
+
+// Danh sách công cụ phong phú (8 công cụ chuyên sâu)
+const TOOLS_DATA = [
   {
-    id: 'tool-gross-net',
-    name: 'Công cụ tính lương Gross ↔ Net',
-    badgeText: 'LƯƠNG',
-    verified: true,
-    category: 'Tài chính & Thu nhập',
-    headline:
-      'Quy đổi lương Gross sang Net và ngược lại chuẩn biểu thuế TNCN lũy tiến & mức đóng BHXH, BHYT, BHTN mới nhất.',
-    usageMeta: '142.850 lượt sử dụng trong tuần này',
-    actionLabel: 'Đang sử dụng',
-    type: 'calculator',
+    id: 'salary-benchmark',
+    title: 'So sánh mức lương thị trường (Salary Benchmark)',
+    category: 'market',
+    categoryLabel: 'Thị trường',
+    icon: 'query_stats',
+    description:
+      'Tra cứu mức lương trung vị theo ngành nghề, vị trí công việc, quy mô công ty và số năm kinh nghiệm từ hơn 250.000 dữ liệu tin tuyển dụng thực tế.',
+    tags: ['Dữ liệu 2025', 'Biểu đồ trung vị'],
+    stats: '520k+ lượt tra cứu',
+    actionText: 'Sử dụng ngay',
+    type: 'benchmark',
   },
   {
-    id: 'tool-bhtn',
-    name: 'Tính mức hưởng Bảo hiểm thất nghiệp',
-    badgeText: 'BHTN',
-    verified: true,
-    category: 'Bảo hiểm & Chế độ',
-    headline:
-      'Dự tính chính xác trợ cấp thất nghiệp hàng tháng (60% lương bình quân 6 tháng liền kề) và số tháng được hưởng.',
-    usageMeta: '64.320 lượt tra cứu gần đây',
-    actionLabel: 'Tính BHTN',
+    id: 'bhtn-calc',
+    title: 'Tính Bảo hiểm thất nghiệp & Trợ cấp thôi việc',
+    category: 'salary',
+    categoryLabel: 'Lương & Thuế',
+    icon: 'health_and_safety',
+    description:
+      'Xác định chính xác số tháng được hưởng trợ cấp thất nghiệp, số tiền nhận từng tháng và trợ cấp thôi việc do doanh nghiệp chi trả theo quy định của Luật Việc làm.',
+    tags: ['Chuẩn Luật BHXH', 'Thời hạn nộp hồ sơ'],
+    stats: '310k+ lượt sử dụng',
+    actionText: 'Sử dụng ngay',
     type: 'bhtn',
   },
   {
-    id: 'tool-bhxh-1lan',
-    name: 'Tính Bảo hiểm xã hội 1 lần',
-    badgeText: 'BHXH',
-    verified: true,
-    category: 'Bảo hiểm & Chế độ',
-    headline:
-      'Ước tính tổng số tiền nhận BHXH 1 lần dựa trên thời gian tham gia đóng bảo hiểm và hệ số trượt giá.',
-    usageMeta: '51.900 lượt tra cứu gần đây',
-    actionLabel: 'Tính BHXH',
-    type: 'bhxh',
+    id: 'mbti-test',
+    title: 'Trắc nghiệm MBTI & Holland Code chuẩn hóa',
+    category: 'assessment',
+    categoryLabel: 'Đánh giá & Test',
+    icon: 'psychology',
+    description:
+      'Khám phá 16 nhóm tính cách nghề nghiệp và 6 nhóm xu hướng sở thích Holland (RIASEC) được Việt hóa chuẩn mực kèm danh sách gợi ý công việc tương thích 95%.',
+    tags: ['60 câu hỏi nhanh', 'Báo cáo PDF miễn phí'],
+    stats: '670k+ người đã làm',
+    actionText: 'Làm bài test',
+    type: 'mbti',
   },
   {
-    id: 'tool-compound',
-    name: 'Tính lãi kép & Kế hoạch tiết kiệm lương',
-    badgeText: 'LÃI',
-    verified: true,
-    category: 'Hoạch định tài chính',
-    headline:
-      'Lập kế hoạch trích phần trăm thu nhập hàng tháng để đầu tư và tính giá trị tài sản tích lũy theo lãi suất kép.',
-    usageMeta: '38.410 lượt sử dụng',
-    actionLabel: 'Tính lãi kép',
-    type: 'compound',
+    id: 'ats-resume',
+    title: 'Tạo CV chuẩn ATS miễn phí (50+ Template)',
+    category: 'cv',
+    categoryLabel: 'Hồ sơ & CV',
+    icon: 'badge',
+    description:
+      'Trình khởi tạo hồ sơ xin việc thông minh với thư viện thiết kế tương thích tuyệt đối hệ thống lọc hồ sơ tự động ATS của các tập đoàn đa quốc gia.',
+    tags: ['Xuất PDF 1 chạm', 'Song ngữ Anh - Việt'],
+    stats: '890k+ CV được tạo',
+    actionText: 'Tạo CV ngay',
+    type: 'cv',
   },
   {
-    id: 'tool-ats-cv',
-    name: 'Kiểm tra & Chấm điểm CV chuẩn ATS',
-    badgeText: 'ATS',
-    verified: true,
-    category: 'Hồ sơ & Ứng tuyển',
-    headline:
-      'Phân tích bố cục, từ khóa kỹ năng trong CV và tối ưu hóa tỷ lệ vượt qua hệ thống lọc hồ sơ tự động của nhà tuyển dụng.',
-    usageMeta: '89.120 ứng viên đã tối ưu CV',
-    actionLabel: 'Mở tạo CV',
-    type: 'cv-builder',
+    id: 'mock-interview',
+    title: 'Phỏng vấn thử nghiệm & Mock Interview AI',
+    category: 'assessment',
+    categoryLabel: 'Đánh giá & Test',
+    secondaryBadge: 'Trợ lý AI',
+    icon: 'record_voice_over',
+    description:
+      'Ngân hàng câu hỏi tình huống thực tế theo từng ngành nghề (IT, Marketing, Sales, Tài chính). Nhận phân tích phản hồi bằng giọng nói và mẹo trả lời theo chuẩn STAR.',
+    tags: ['Mô hình STAR', 'Chấm phát âm tiếng Anh'],
+    stats: '240k+ lượt luyện tập',
+    actionText: 'Luyện phỏng vấn',
+    type: 'interview',
+  },
+  {
+    id: 'pit-tax',
+    title: 'Tính thuế TNCN lũy tiến & Quyết toán cuối năm',
+    category: 'salary',
+    categoryLabel: 'Lương & Thuế',
+    icon: 'receipt_long',
+    description:
+      'Hỗ trợ người lao động có từ 2 nguồn thu nhập trở lên tính toán số tiền thuế thừa được hoàn lại hoặc số tiền nộp bổ sung khi tự làm tờ khai quyết toán thuế điện tử (eTax).',
+    tags: ['Tích hợp eTax Mobile', 'Biểu 7 bậc thuế'],
+    stats: '410k+ lượt sử dụng',
+    actionText: 'Sử dụng ngay',
+    type: 'tax-final',
+  },
+  {
+    id: 'bhxh-one-time',
+    title: 'Dự tính tiền rút Bảo hiểm xã hội (BHXH) một lần',
+    category: 'salary',
+    categoryLabel: 'Lương & Thuế',
+    icon: 'savings',
+    description:
+      'Ước tính số tiền trợ cấp BHXH 1 lần nhận được dựa trên số năm đóng trước và sau năm 2014 cùng hệ số điều chỉnh trượt giá mới nhất của Nhà nước.',
+    tags: ['Luật BHXH 2025', 'Hệ số trượt giá'],
+    stats: '490k+ lượt tra cứu',
+    actionText: 'Tính BHXH 1 lần',
+    type: 'bhxh-one-time',
+  },
+  {
+    id: 'probation-eval',
+    title: 'Tra cứu Luật Thử việc & Hợp đồng lao động',
+    category: 'market',
+    categoryLabel: 'Thị trường',
+    icon: 'gavel',
+    description:
+      'Kiểm tra quy định pháp lý về mức lương thử việc (tối thiểu 85%), thời hạn thử việc tối đa theo trình độ và quyền đơn phương chấm dứt hợp đồng.',
+    tags: ['Bộ Luật LĐ 2019', 'Lương thử việc 85%'],
+    stats: '280k+ lượt xem',
+    actionText: 'Tra cứu luật',
+    type: 'probation-eval',
   },
 ];
 
-const PERSONAL_DEV_TOOLS = [
-  {
-    id: 'dev-mbti',
-    name: 'Trắc nghiệm tính cách nghề nghiệp MBTI',
-    verified: true,
-    headline:
-      'Khám phá 16 nhóm tính cách Myers-Briggs để định hướng vị trí công việc và môi trường doanh nghiệp phù hợp nhất.',
-    activity: 'Dựa trên hồ sơ ứng viên của bạn',
-    activityType: 'trend',
-  },
-  {
-    id: 'dev-holland',
-    name: 'Trắc nghiệm mật mã nghề nghiệp Holland (RIASEC)',
-    verified: true,
-    headline:
-      'Xác định nhóm sở thích nghề nghiệp Kỹ thuật, Nghiên cứu, Nghệ thuật, Xã hội, Quản lý hay Nghiệp vụ.',
-    activity: 'Hoạt động phổ biến của sinh viên & Fresher',
-    activityType: 'clock',
-  },
-  {
-    id: 'dev-interview',
-    name: 'Bộ 150+ câu hỏi phỏng vấn IT, Marketing & Tài chính',
-    verified: true,
-    headline:
-      'Tổng hợp câu hỏi phỏng vấn thực tế kèm gợi ý trả lời theo mô hình STAR từ các tập đoàn lớn.',
-    activity: 'Cập nhật mới cho mùa tuyển dụng năm nay',
-    activityType: 'trend',
-  },
-  {
-    id: 'dev-salary-negotiation',
-    name: 'Cẩm nang & Kịch bản đàm phán lương (Deal Offer)',
-    verified: true,
-    headline:
-      'Mẫu email phản hồi Offer và công thức định giá bản thân giúp tăng 15% - 30% mức thu nhập đề xuất.',
-    activity: 'Được đề xuất bởi các chuyên gia HR',
-    activityType: 'clock',
-  },
-];
+// Lương tối thiểu các vùng
+const REGION_WAGES = {
+  1: { name: 'Vùng I (4.960.000 đ - Hà Nội, TP.HCM)', minWage: 4960000 },
+  2: { name: 'Vùng II (4.410.000 đ - Đà Nẵng, Cần Thơ)', minWage: 4410000 },
+  3: { name: 'Vùng III (3.860.000 đ - Bắc Ninh, Hải Dương)', minWage: 3860000 },
+  4: { name: 'Vùng IV (3.450.000 đ - Khu vực còn lại)', minWage: 3450000 },
+};
 
-const SALARY_INSIGHTS = [
-  {
-    id: 's1',
-    title: 'Mức lương tối thiểu vùng I tăng lên 4.960.000đ...',
-    meta: '1 giờ trước • 4.210 người đọc',
-  },
-  {
-    id: 's2',
-    title: 'Báo cáo lương IT & AI Engineer tại Việt Nam...',
-    meta: '3 giờ trước • 9.840 người đọc',
-  },
-  {
-    id: 's3',
-    title: 'Cách tính giảm trừ gia cảnh thuế TNCN chuẩn...',
-    meta: '4 giờ trước • 6.530 người đọc',
-  },
-  {
-    id: 's4',
-    title: 'Quy định mới về mức đóng BHXH bắt buộc...',
-    meta: '6 giờ trước • 5.120 người đọc',
-  },
-  {
-    id: 's5',
-    title: 'Lương Gross và Net khác nhau thế nào khi nhận Offer...',
-    meta: '8 giờ trước • 11.490 người đọc',
-  },
-  {
-    id: 's6',
-    title: 'Kinh nghiệm nhận biết chế độ đóng bảo hiểm full lương...',
-    meta: '12 giờ trước • 3.870 người đọc',
-  },
-];
+export const ToolsView = ({ currentUser, onTabChange, onShowToast }) => {
+  // Bộ lọc & Tìm kiếm
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortOption, setSortOption] = useState('popular');
 
-export const ToolsView = ({
-  currentUser,
-  savedCount = 0,
-  onTabChange,
-  onShowToast,
-}) => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [activeToolMode, setActiveToolMode] = useState('gross-to-net'); // 'gross-to-net' | 'net-to-gross' | 'bhtn' | 'compound'
-  const [salaryInput, setSalaryInput] = useState(25000000);
-  const [dependents, setDependents] = useState(0);
+  // Preview mini calculator ở Card 1
+  const [previewGross, setPreviewGross] = useState(30000000);
+
+  // Widget tính lương chính
+  const [calcMode, setCalcMode] = useState('gross-to-net'); // 'gross-to-net' | 'net-to-gross'
+  const [salaryValue, setSalaryValue] = useState(25000000);
+  const [salaryInputFormatted, setSalaryInputFormatted] = useState('25,000,000');
   const [region, setRegion] = useState('1');
-  const [bhtnMonths, setBhtnMonths] = useState(24);
-  const [savedToolIds, setSavedToolIds] = useState(['tool-gross-net']);
-  const [completedDevIds, setCompletedDevIds] = useState([]);
-  const [showAllTools, setShowAllTools] = useState(false);
-  const [showAllDevTools, setShowAllDevTools] = useState(false);
-  const [showAllInsights, setShowAllInsights] = useState(false);
+  const [dependents, setDependents] = useState(0);
+  const [insuranceType, setInsuranceType] = useState('official'); // 'official' | 'custom'
+  const [customInsuranceWage, setCustomInsuranceWage] = useState(5000000);
 
-  const displayName = currentUser?.name || 'Nhiên Nguyễn Viết';
-  const displayAvatar = catAvatar;
+  // Modal chi tiết & Modal các tính năng ('breakdown' | 'cv-scanner' | 'benchmark' | 'bhtn' | 'mbti' | 'interview' | 'tax-final' | 'bhxh-one-time' | 'probation-eval')
+  const [activeModal, setActiveModal] = useState(null);
+  const [newsletterEmail, setNewsletterEmail] = useState('');
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
-  // Calculate Gross <-> Net Salary Breakdown
-  const salaryBreakdown = useMemo(() => {
-    const rawAmount = Math.max(0, Number(salaryInput) || 0);
-    const numDeps = Math.max(0, Number(dependents) || 0);
+  // CV Scanner State & Input Ref
+  const cvFileInputRef = useRef(null);
+  const [cvFile, setCvFile] = useState(null);
+  const [cvFileName, setCvFileName] = useState('');
+  const [cvFileSize, setCvFileSize] = useState('');
+  const [isScanningCv, setIsScanningCv] = useState(false);
+  const [scanProgress, setScanProgress] = useState(0);
+  const [scanResult, setScanResult] = useState(null);
+  const [cvError, setCvError] = useState('');
+  const [isDraggingCv, setIsDraggingCv] = useState(false);
 
-    // Ceiling for BHXH/BHYT (20 x base salary 2,340,000 = 46,800,000)
-    const bhxhCap = 46800000;
-    const regionMinWages = {
-      1: 4960000,
-      2: 4410000,
-      3: 3860000,
-      4: 3450000,
-    };
-    const bhtnCap = (regionMinWages[region] || 4960000) * 20;
+  // Tax Finalization (tax-final) State
+  const [taxFinalAnnualGross, setTaxFinalAnnualGross] = useState(360000000);
+  const [taxFinalMonths, setTaxFinalMonths] = useState(12);
+  const [taxFinalDependents, setTaxFinalDependents] = useState(0);
+  const [taxFinalInsurancePaid, setTaxFinalInsurancePaid] = useState(37800000);
+  const [taxFinalPrepaidTax, setTaxFinalPrepaidTax] = useState(18500000);
 
-    const computeFromGross = (gross) => {
-      const bhxh = Math.min(gross, bhxhCap) * 0.08;
-      const bhyt = Math.min(gross, bhxhCap) * 0.015;
-      const bhtn = Math.min(gross, bhtnCap) * 0.01;
-      const totalInsurance = bhxh + bhyt + bhtn;
-      const incomeBeforeTax = Math.max(0, gross - totalInsurance);
-      const personalDeduction = 11000000;
-      const dependentDeduction = numDeps * 4400000;
-      const taxableIncome = Math.max(
-        0,
-        incomeBeforeTax - personalDeduction - dependentDeduction
-      );
+  // BHXH 1 lần State
+  const [bhxhAvgSalary, setBhxhAvgSalary] = useState(12000000);
+  const [bhxhYearsBefore2014, setBhxhYearsBefore2014] = useState(2);
+  const [bhxhYearsAfter2014, setBhxhYearsAfter2014] = useState(4);
 
-      // Progressive PIT brackets (VND)
-      let pit = 0;
-      if (taxableIncome > 0) {
-        const brackets = [
-          { limit: 5000000, rate: 0.05 },
-          { limit: 10000000, rate: 0.1 },
-          { limit: 18000000, rate: 0.15 },
-          { limit: 32000000, rate: 0.2 },
-          { limit: 52000000, rate: 0.25 },
-          { limit: 80000000, rate: 0.3 },
-          { limit: Infinity, rate: 0.35 },
-        ];
-        let prevLimit = 0;
-        for (const b of brackets) {
-          if (taxableIncome > prevLimit) {
-            const taxableInBracket = Math.min(taxableIncome, b.limit) - prevLimit;
-            pit += taxableInBracket * b.rate;
-            prevLimit = b.limit;
-          } else {
-            break;
-          }
-        }
-      }
+  // Probation State
+  const [probationJobType, setProbationJobType] = useState('university');
+  const [probationOfficialSalary, setProbationOfficialSalary] = useState(20000000);
 
-      const net = Math.max(0, gross - totalInsurance - pit);
-      return {
-        gross: Math.round(gross),
-        net: Math.round(net),
-        bhxh: Math.round(bhxh),
-        bhyt: Math.round(bhyt),
-        bhtn: Math.round(bhtn),
-        totalInsurance: Math.round(totalInsurance),
-        taxableIncome: Math.round(taxableIncome),
-        pit: Math.round(pit),
-        dependentDeduction,
-      };
-    };
-
-    if (activeToolMode === 'net-to-gross') {
-      // Binary search for Gross that yields target Net
-      let low = rawAmount;
-      let high = rawAmount * 2 + 20000000;
-      for (let i = 0; i < 35; i++) {
-        const mid = (low + high) / 2;
-        const res = computeFromGross(mid);
-        if (res.net < rawAmount) {
-          low = mid;
-        } else {
-          high = mid;
-        }
-      }
-      return computeFromGross((low + high) / 2);
-    }
-
-    return computeFromGross(rawAmount);
-  }, [salaryInput, dependents, region, activeToolMode]);
-
-  const bhtnBenefit = useMemo(() => {
-    const avgSalary = Math.max(0, Number(salaryInput) || 0);
-    const monthlyBenefit = Math.min(avgSalary * 0.6, 4960000 * 5);
-    const years = Math.max(1, Math.floor((Number(bhtnMonths) || 12) / 12));
-    const eligibleMonths = Math.min(12, Math.max(3, years <= 3 ? 3 : 3 + (years - 3)));
-    return {
-      monthlyBenefit: Math.round(monthlyBenefit),
-      eligibleMonths,
-      totalBenefit: Math.round(monthlyBenefit * eligibleMonths),
-    };
-  }, [salaryInput, bhtnMonths]);
-
+  // Hàm định dạng số tiền VND
   const formatVND = (num) => {
-    return Number(num || 0).toLocaleString('vi-VN') + ' đ';
+    return new Intl.NumberFormat('vi-VN').format(Math.round(num)) + ' đ';
   };
 
-  const handleToggleSaveTool = (tool) => {
-    const exists = savedToolIds.includes(tool.id);
-    setSavedToolIds((prev) =>
-      prev.includes(tool.id)
-        ? prev.filter((id) => id !== tool.id)
-        : [...prev, tool.id]
-    );
-    if (onShowToast) {
-      onShowToast(
-        exists
-          ? `Đã bỏ ghim công cụ "${tool.name}"`
-          : `Đã ghim công cụ "${tool.name}" vào danh sách yêu thích!`,
-        exists ? 'info' : 'success'
-      );
+  const formatNumberOnly = (num) => {
+    return new Intl.NumberFormat('vi-VN').format(Math.round(num));
+  };
+
+  // Tính lương Gross sang Net & Thuế 7 bậc
+  const calculateGrossToNet = (gross, numDeps = 0, regionId = '1', insType = 'official', customIns = 5000000) => {
+    if (gross <= 0) {
+      return {
+        gross: 0,
+        net: 0,
+        bhxh: 0,
+        bhyt: 0,
+        bhtn: 0,
+        totalIns: 0,
+        taxableIncome: 0,
+        incomeBeforeTax: 0,
+        tax: 0,
+        bracketDetails: [],
+        employerBhxh: 0,
+        employerBhyt: 0,
+        employerBhtn: 0,
+        totalEmployerIns: 0,
+        totalEmployerCost: 0,
+      };
+    }
+
+    const maxSocialSalary = 46800000; // 20 lần mức lương cơ sở (2.340.000 đ)
+    const minWage = REGION_WAGES[regionId]?.minWage || 4960000;
+    const maxBhtnSalary = minWage * 20;
+
+    const baseIns = insType === 'custom' ? Math.max(0, Number(customIns) || 0) : gross;
+    const insBaseBhxh = Math.min(baseIns, maxSocialSalary);
+    const insBaseBhtn = Math.min(baseIns, maxBhtnSalary);
+
+    // Người lao động đóng
+    const bhxh = insBaseBhxh * 0.08;
+    const bhyt = insBaseBhxh * 0.015;
+    const bhtn = insBaseBhtn * 0.01;
+    const totalIns = bhxh + bhyt + bhtn;
+
+    // Doanh nghiệp đóng
+    const employerBhxh = insBaseBhxh * 0.175;
+    const employerBhyt = insBaseBhxh * 0.03;
+    const employerBhtn = insBaseBhtn * 0.01;
+    const employerBhtnld = insBaseBhxh * 0.005;
+    const totalEmployerIns = employerBhxh + employerBhyt + employerBhtn + employerBhtnld;
+    const totalEmployerCost = gross + totalEmployerIns;
+
+    // Giảm trừ gia cảnh
+    const incomeBeforeTax = Math.max(0, gross - totalIns);
+    const selfDeduction = 11000000;
+    const depDeduction = numDeps * 4400000;
+    const taxableIncome = Math.max(0, incomeBeforeTax - selfDeduction - depDeduction);
+
+    // 7 Bậc thuế TNCN
+    const brackets = [
+      { level: 1, limit: 5000000, rate: 0.05, label: 'Đến 5 triệu (5%)' },
+      { level: 2, limit: 10000000, rate: 0.1, label: 'Trên 5 đến 10 triệu (10%)' },
+      { level: 3, limit: 18000000, rate: 0.15, label: 'Trên 10 đến 18 triệu (15%)' },
+      { level: 4, limit: 32000000, rate: 0.2, label: 'Trên 18 đến 32 triệu (20%)' },
+      { level: 5, limit: 52000000, rate: 0.25, label: 'Trên 32 đến 52 triệu (25%)' },
+      { level: 6, limit: 80000000, rate: 0.3, label: 'Trên 52 đến 80 triệu (30%)' },
+      { level: 7, limit: Infinity, rate: 0.35, label: 'Trên 80 triệu (35%)' },
+    ];
+
+    let tax = 0;
+    let prevLimit = 0;
+    const bracketDetails = [];
+
+    for (const b of brackets) {
+      if (taxableIncome > prevLimit) {
+        const taxableInBracket = Math.min(taxableIncome, b.limit) - prevLimit;
+        const taxAmount = taxableInBracket * b.rate;
+        tax += taxAmount;
+        bracketDetails.push({
+          ...b,
+          taxableAmount: taxableInBracket,
+          taxAmount,
+        });
+        prevLimit = b.limit;
+      } else {
+        bracketDetails.push({
+          ...b,
+          taxableAmount: 0,
+          taxAmount: 0,
+        });
+      }
+    }
+
+    const net = Math.max(0, gross - totalIns - tax);
+
+    return {
+      gross,
+      net,
+      bhxh,
+      bhyt,
+      bhtn,
+      totalIns,
+      taxableIncome,
+      incomeBeforeTax,
+      tax,
+      selfDeduction,
+      depDeduction,
+      bracketDetails,
+      employerBhxh,
+      employerBhyt,
+      employerBhtn,
+      totalEmployerIns,
+      totalEmployerCost,
+    };
+  };
+
+  // Tính ngược từ Net sang Gross
+  const calculateNetToGross = (targetNet, numDeps = 0, regionId = '1', insType = 'official', customIns = 5000000) => {
+    let low = targetNet;
+    let high = targetNet * 2 + 50000000;
+    let bestGross = targetNet;
+
+    for (let i = 0; i < 40; i++) {
+      const mid = (low + high) / 2;
+      const res = calculateGrossToNet(mid, numDeps, regionId, insType, customIns);
+      if (Math.abs(res.net - targetNet) < 1) {
+        bestGross = mid;
+        break;
+      }
+      if (res.net < targetNet) {
+        low = mid;
+      } else {
+        high = mid;
+      }
+      bestGross = mid;
+    }
+    return calculateGrossToNet(bestGross, numDeps, regionId, insType, customIns);
+  };
+
+  // Kết quả tính của Widget chính
+  const widgetResult = useMemo(() => {
+    if (calcMode === 'gross-to-net') {
+      return calculateGrossToNet(salaryValue, dependents, region, insuranceType, customInsuranceWage);
+    } else {
+      return calculateNetToGross(salaryValue, dependents, region, insuranceType, customInsuranceWage);
+    }
+  }, [calcMode, salaryValue, dependents, region, insuranceType, customInsuranceWage]);
+
+  // Kết quả tính của Card 1 Preview
+  const previewResult = useMemo(() => {
+    return calculateGrossToNet(previewGross, 0, '1', 'official');
+  }, [previewGross]);
+
+  // Lọc và sắp xếp công cụ dựa theo sortOption
+  const filteredTools = useMemo(() => {
+    const list = TOOLS_DATA.filter((tool) => {
+      const matchCategory =
+        selectedCategory === 'all' ||
+        (selectedCategory === 'salary' && tool.category === 'salary') ||
+        (selectedCategory === 'cv' && tool.category === 'cv') ||
+        (selectedCategory === 'assessment' && tool.category === 'assessment') ||
+        (selectedCategory === 'market' && tool.category === 'market');
+
+      const q = searchQuery.toLowerCase().trim();
+      const matchSearch =
+        !q ||
+        tool.title.toLowerCase().includes(q) ||
+        tool.description.toLowerCase().includes(q) ||
+        tool.categoryLabel.toLowerCase().includes(q);
+
+      return matchCategory && matchSearch;
+    });
+
+    return [...list].sort((a, b) => {
+      if (sortOption === 'popular') {
+        const getStatsNum = (str) => {
+          const match = str.match(/(\d+)k/);
+          return match ? parseInt(match[1], 10) : 0;
+        };
+        return getStatsNum(b.stats) - getStatsNum(a.stats);
+      }
+      if (sortOption === 'new') {
+        const isNewA = a.tags.some((t) => t.includes('2025') || t.includes('AI') || t.includes('eTax')) || a.secondaryBadge ? 1 : 0;
+        const isNewB = b.tags.some((t) => t.includes('2025') || t.includes('AI') || t.includes('eTax')) || b.secondaryBadge ? 1 : 0;
+        return isNewB - isNewA;
+      }
+      if (sortOption === 'high-rate') {
+        return a.title.localeCompare(b.title, 'vi');
+      }
+      return 0;
+    });
+  }, [selectedCategory, searchQuery, sortOption]);
+
+  // Tính Quyết toán thuế TNCN cả năm
+  const taxFinalResult = useMemo(() => {
+    const gross = Math.max(0, Number(taxFinalAnnualGross) || 0);
+    const months = Math.max(1, Math.min(12, Number(taxFinalMonths) || 12));
+    const deps = Math.max(0, Number(taxFinalDependents) || 0);
+    const ins = Math.max(0, Number(taxFinalInsurancePaid) || 0);
+    const prepaid = Math.max(0, Number(taxFinalPrepaidTax) || 0);
+
+    const selfDeduction = 11000000 * months;
+    const depDeduction = 4400000 * months * deps;
+    const totalDeduction = selfDeduction + depDeduction + ins;
+    const taxableIncome = Math.max(0, gross - totalDeduction);
+
+    // Biểu thuế lũy tiến từng phần theo năm (7 bậc quy đổi năm)
+    const yearlyBrackets = [
+      { level: 1, limit: 60000000, rate: 0.05, label: 'Đến 60 triệu (5%)' },
+      { level: 2, limit: 120000000, rate: 0.1, label: 'Trên 60 đến 120 triệu (10%)' },
+      { level: 3, limit: 216000000, rate: 0.15, label: 'Trên 120 đến 216 triệu (15%)' },
+      { level: 4, limit: 384000000, rate: 0.2, label: 'Trên 216 đến 384 triệu (20%)' },
+      { level: 5, limit: 624000000, rate: 0.25, label: 'Trên 384 đến 624 triệu (25%)' },
+      { level: 6, limit: 960000000, rate: 0.3, label: 'Trên 624 đến 960 triệu (30%)' },
+      { level: 7, limit: Infinity, rate: 0.35, label: 'Trên 960 triệu (35%)' },
+    ];
+
+    let totalTax = 0;
+    let prev = 0;
+    const bracketDetails = [];
+
+    for (const b of yearlyBrackets) {
+      if (taxableIncome > prev) {
+        const taxable = Math.min(taxableIncome, b.limit) - prev;
+        const taxAmt = taxable * b.rate;
+        totalTax += taxAmt;
+        bracketDetails.push({ ...b, taxableAmount: taxable, taxAmount: taxAmt });
+        prev = b.limit;
+      } else {
+        bracketDetails.push({ ...b, taxableAmount: 0, taxAmount: 0 });
+      }
+    }
+
+    const difference = prepaid - totalTax; // > 0: hoàn thuế; < 0: nộp thêm; === 0: đủ
+
+    return {
+      gross,
+      selfDeduction,
+      depDeduction,
+      totalDeduction,
+      taxableIncome,
+      totalTax,
+      prepaid,
+      difference,
+      bracketDetails,
+    };
+  }, [taxFinalAnnualGross, taxFinalMonths, taxFinalDependents, taxFinalInsurancePaid, taxFinalPrepaidTax]);
+
+  // Tính BHXH 1 lần
+  const bhxhOneTimeResult = useMemo(() => {
+    const avg = Math.max(0, Number(bhxhAvgSalary) || 0);
+    const yBefore = Math.max(0, Number(bhxhYearsBefore2014) || 0);
+    const yAfter = Math.max(0, Number(bhxhYearsAfter2014) || 0);
+
+    const amountBefore = yBefore * 1.5 * avg;
+    const amountAfter = yAfter * 2.0 * avg;
+    const totalAmount = amountBefore + amountAfter;
+
+    return {
+      avgSalary: avg,
+      yearsBefore2014: yBefore,
+      yearsAfter2014: yAfter,
+      amountBefore,
+      amountAfter,
+      totalAmount,
+    };
+  }, [bhxhAvgSalary, bhxhYearsBefore2014, bhxhYearsAfter2014]);
+
+  // Tính Luật thử việc
+  const probationResult = useMemo(() => {
+    const salary = Math.max(0, Number(probationOfficialSalary) || 0);
+    const probationSalaryMin = salary * 0.85;
+
+    let maxDays = 60;
+    let description = 'Công việc có chức danh nghề nghiệp cần trình độ chuyên môn, kỹ thuật từ cao đẳng trở lên';
+    if (probationJobType === 'manager') {
+      maxDays = 180;
+      description = 'Người quản lý doanh nghiệp theo quy định của Luật Doanh nghiệp, Luật Quản lý, sử dụng vốn nhà nước';
+    } else if (probationJobType === 'intermediate') {
+      maxDays = 30;
+      description = 'Công việc có chức danh nghề nghiệp cần trình độ chuyên môn, kỹ thuật trung cấp, công nhân kỹ thuật, nhân viên nghiệp vụ';
+    } else if (probationJobType === 'simple') {
+      maxDays = 6;
+      description = 'Công việc đơn giản, lao động phổ thông';
+    }
+
+    return {
+      officialSalary: salary,
+      probationSalaryMin,
+      maxDays,
+      description,
+    };
+  }, [probationOfficialSalary, probationJobType]);
+
+  // Xử lý tệp tải lên cho AI CV Scanner
+  const handleCvFileSelect = (file) => {
+    if (!file) return;
+    setCvError('');
+    const validExtensions = ['.pdf', '.doc', '.docx'];
+    const nameLower = file.name.toLowerCase();
+    const isValidExt = validExtensions.some((ext) => nameLower.endsWith(ext));
+    if (!isValidExt) {
+      const err = 'Chỉ hỗ trợ tệp định dạng .pdf, .doc hoặc .docx!';
+      setCvError(err);
+      if (onShowToast) onShowToast(err, 'error');
+      return;
+    }
+    const maxSizeBytes = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSizeBytes) {
+      const err = 'Dung lượng tệp vượt quá 10MB cho phép!';
+      setCvError(err);
+      if (onShowToast) onShowToast(err, 'error');
+      return;
+    }
+
+    setCvFile(file);
+    setCvFileName(file.name);
+    setCvFileSize((file.size / (1024 * 1024)).toFixed(1) + ' MB');
+    setIsScanningCv(true);
+    setScanProgress(15);
+    setScanResult(null);
+
+    let progress = 15;
+    const interval = setInterval(() => {
+      progress += Math.floor(Math.random() * 20) + 15;
+      if (progress >= 100) {
+        clearInterval(interval);
+        setScanProgress(100);
+        setTimeout(() => {
+          setIsScanningCv(false);
+          setScanResult({
+            overallScore: 88,
+            formatScore: 92,
+            keywordScore: 85,
+            experienceScore: 89,
+            matchedKeywords: ['ReactJS', 'TypeScript', 'Tailwind CSS', 'Figma', 'UI/UX Design', 'Next.js', 'REST API', 'Git'],
+            missingKeywords: ['Docker', 'CI/CD', 'Unit Testing / Jest', 'Microservices'],
+            recommendations: [
+              'Bổ sung số liệu định lượng (metrics, % tăng trưởng, thời gian tối ưu) trong các dự án gần nhất.',
+              'Thêm các từ khóa CI/CD hoặc Docker để tăng điểm tương thích ATS lên 95+.',
+              'Định dạng cấu trúc phân cấp tiêu đề đã chuẩn xác, dễ đọc cho hệ thống quét tự động.'
+            ],
+          });
+          if (onShowToast) onShowToast(`Quét CV "${file.name}" hoàn tất! Đạt 88/100 điểm.`, 'success');
+        }, 300);
+      } else {
+        setScanProgress(progress);
+      }
+    }, 180);
+  };
+
+  const handleLoadSampleCv = () => {
+    const fakeFile = {
+      name: 'NguyenVanA_Senior_Frontend_Engineer.pdf',
+      size: 1.4 * 1024 * 1024,
+    };
+    handleCvFileSelect(fakeFile);
+  };
+
+  const handleResetCvScanner = () => {
+    setCvFile(null);
+    setCvFileName('');
+    setCvFileSize('');
+    setIsScanningCv(false);
+    setScanProgress(0);
+    setScanResult(null);
+    setCvError('');
+    if (cvFileInputRef.current) cvFileInputRef.current.value = '';
+  };
+
+  // Xử lý thay đổi input tiền lương
+  const handleSalaryInputChange = (e) => {
+    const raw = e.target.value.replace(/,/g, '').replace(/[^0-9]/g, '');
+    const num = Number(raw) || 0;
+    setSalaryValue(num);
+    setSalaryInputFormatted(num > 0 ? formatNumberOnly(num) : '');
+  };
+
+  // Xử lý đăng ký nhận tin
+  const handleNewsletterSubmit = (e) => {
+    e.preventDefault();
+    if (!newsletterEmail.trim() || !newsletterEmail.includes('@')) {
+      if (onShowToast) onShowToast('Vui lòng nhập địa chỉ email hợp lệ!', 'error');
+      return;
+    }
+    setIsSubscribed(true);
+    if (onShowToast) onShowToast('Đã đăng ký nhận bản tin thành công!', 'success');
+  };
+
+  // Scroll xuống Widget
+  const scrollToWidget = () => {
+    const el = document.getElementById('quick-calculator-widget');
+    if (el) {
+      el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  const handleToggleDevTool = (item) => {
-    const exists = completedDevIds.includes(item.id);
-    setCompletedDevIds((prev) =>
-      prev.includes(item.id)
-        ? prev.filter((id) => id !== item.id)
-        : [...prev, item.id]
-    );
-    if (onShowToast) {
-      onShowToast(
-        exists
-          ? `Đã bỏ lưu "${item.name}"`
-          : `Đã mở bài đánh giá "${item.name}" và lưu vào lộ trình của bạn!`,
-        exists ? 'info' : 'success'
-      );
+  // Mở công cụ tương ứng
+  const handleToolAction = (tool) => {
+    if (tool.type === 'cv') {
+      if (onTabChange) onTabChange('cv-builder');
+      return;
     }
+    setActiveModal(tool.type);
+    if (onShowToast) onShowToast(`Đang mở: ${tool.title}`, 'info');
   };
-
-  const filteredTools = CAREER_TOOLS.filter(
-    (t) =>
-      !searchTerm.trim() ||
-      t.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.headline.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      t.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const filteredDevTools = PERSONAL_DEV_TOOLS.filter(
-    (d) =>
-      !searchTerm.trim() ||
-      d.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      d.headline.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const visibleTools = showAllTools ? filteredTools : filteredTools.slice(0, 3);
-  const visibleDevTools = showAllDevTools
-    ? filteredDevTools
-    : filteredDevTools.slice(0, 3);
 
   return (
-    <div className="bg-[#FAF9FF] min-h-screen py-5 sm:py-6">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* 3-Column LinkedIn-style Layout: Đồng bộ phong cách với trang Công ty */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
-          {/* =================================================================== */}
-          {/* CỘT TRÁI (3 cols): TÀI KHOẢN ĐẾN THÔNG TIN ĐỒNG BỘ TRANG CÔNG TY      */}
-          {/* =================================================================== */}
-          <aside className="lg:col-span-3 space-y-2.5">
-            {/* Card 1: Thông tin Tài khoản (Profile Card) */}
-            <div className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden">
-              <div className="h-14 bg-[#a0b4b7] relative overflow-hidden">
-                <div className="absolute -left-6 -top-6 w-28 h-28 rounded-full bg-[#cbd6d8]/70" />
-                <div className="absolute left-12 -bottom-8 w-28 h-28 rounded-full bg-[#b6c7c9]/80" />
-                <div className="absolute right-0 top-0 w-24 h-full bg-[#8fa5a8]/60" />
+    <div className="flex flex-col w-full bg-surface text-on-surface antialiased min-h-screen">
+      {/* ===================================================================== */}
+      {/* 1. INTERACTIVE TOP SEARCH & HERO HUB                                  */}
+      {/* ===================================================================== */}
+      <section className="relative w-full overflow-hidden bg-gradient-to-b from-surface-container-high/60 via-surface-container-low/40 to-surface py-space-xl">
+        {/* Ambient Glow Orbs */}
+        <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-[720px] h-[340px] bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute top-1/3 -right-24 w-80 h-80 bg-secondary-container/20 rounded-full blur-3xl pointer-events-none" />
+
+        <div className="relative max-w-7xl mx-auto px-margin flex flex-col items-center text-center">
+          {/* Main Headline */}
+          <h1 className="font-display-lg text-display-lg text-on-surface max-w-4xl tracking-tight leading-tight">
+            Bộ công cụ phát triển sự nghiệp toàn diện cho ứng viên
+          </h1>
+
+          {/* Subtitle */}
+          <p className="mt-space-md font-body-lg text-body-lg text-on-surface-variant max-w-3xl leading-relaxed">
+            Tính toán lương thực nhận Gross - Net, kiểm tra chuẩn CV bằng AI, định giá thị trường lao động và trắc nghiệm tính cách nghề nghiệp chuẩn quốc tế.
+          </p>
+
+          {/* Search Input Bar & Quick Filter Pills */}
+          <div className="w-full max-w-2xl mt-space-lg">
+            <div className="relative flex items-center bg-surface-container-lowest rounded-full p-2 shadow-md">
+              <span
+                className="material-symbols-outlined text-primary text-[24px] ml-3 shrink-0"
+                style={{ fontVariationSettings: '"FILL" 1' }}
+              >
+                search
+              </span>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Tìm nhanh công cụ: Gross sang Net, Chấm điểm CV, Tính BHXH, MBTI..."
+                className="w-full bg-transparent px-space-sm py-2 font-body-md text-body-md text-on-surface placeholder:text-outline focus:outline-none"
+              />
+              <button
+                type="button"
+                onClick={scrollToWidget}
+                className="shrink-0 px-space-lg py-2.5 bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg rounded-full transition-all duration-200 shadow-sm flex items-center gap-space-xs cursor-pointer"
+              >
+                <span>Tìm kiếm</span>
+                <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+              </button>
+            </div>
+
+            {/* Category Pills */}
+            <div className="flex flex-wrap items-center justify-center gap-space-xs mt-space-md">
+              {[
+                { id: 'all', label: `Tất cả công cụ (${TOOLS_DATA.length})` },
+                { id: 'salary', label: 'Lương & Thuế' },
+                { id: 'cv', label: 'Hồ sơ & CV' },
+                { id: 'assessment', label: 'Đánh giá & Test' },
+                { id: 'market', label: 'Thị trường' },
+              ].map((pill) => (
+                <button
+                  key={pill.id}
+                  type="button"
+                  onClick={() => setSelectedCategory(pill.id)}
+                  className={`px-4 py-2 rounded-full font-label-md text-label-md transition-colors duration-200 shadow-sm cursor-pointer ${
+                    selectedCategory === pill.id
+                      ? 'bg-primary-container text-on-primary'
+                      : 'bg-surface-container-lowest text-on-surface-variant hover:bg-surface-container-high hover:text-on-surface'
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================== */}
+      {/* 2. FEATURED HUB: 2 CORE ANCHOR TOOLS (ASYMMETRIC BENTO)               */}
+      {/* ===================================================================== */}
+      <section className="w-full max-w-7xl mx-auto px-margin py-space-xl">
+        <div className="flex items-center justify-between mb-space-lg">
+          <div className="flex items-center gap-space-sm">
+            <span className="inline-flex p-2 bg-primary-fixed rounded-xl text-primary">
+              <span className="material-symbols-outlined text-[24px]">verified</span>
+            </span>
+            <div>
+              <span className="font-label-sm text-label-sm uppercase tracking-wider text-on-surface font-bold">
+                Lựa chọn hàng đầu
+              </span>
+              <h2 className="font-headline-lg text-headline-lg text-on-surface">
+                Công cụ cốt lõi được tin dùng nhất
+              </h2>
+            </div>
+          </div>
+          <div className="hidden sm:flex items-center gap-1 text-on-surface-variant font-label-md text-label-md">
+            <span className="material-symbols-outlined text-[16px] text-primary">update</span>
+            <span>Cập nhật ngày 15/01/2025</span>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg">
+          {/* Tool 1: Gross to Net Advanced Calculator Card (7 cols) */}
+          <div className="lg:col-span-7 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between group">
+            {/* Top Banner Gradient Accent */}
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-primary to-primary-container" />
+
+            <div>
+              <div className="flex items-start justify-between gap-space-md mb-space-md">
+                <div className="flex items-center gap-space-md">
+                  <div className="w-14 h-14 rounded-xl bg-surface-container-high flex items-center justify-center text-primary-container shrink-0 shadow-inner">
+                    <span className="material-symbols-outlined text-[32px]">payments</span>
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-space-xs mb-1">
+                      <span className="px-2.5 py-0.5 rounded-full bg-secondary-fixed text-on-secondary-fixed font-label-sm text-label-sm uppercase tracking-wide">
+                        Phổ biến nhất
+                      </span>
+                      <span className="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+                        Quy định 2024 - 2025
+                      </span>
+                    </div>
+                    <h3 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors">
+                      Tính lương Gross sang Net & Ngược lại
+                    </h3>
+                  </div>
+                </div>
               </div>
 
-              <div className="px-4 pb-4 relative">
-                <div className="relative -mt-9 mb-2.5 w-18 h-18">
-                  <img
-                    src={displayAvatar}
-                    alt={displayName}
-                    referrerPolicy="no-referrer"
-                    className="w-18 h-18 rounded-full object-cover border-2 border-white shadow-xs"
-                  />
+              <p className="font-body-md text-body-md text-on-surface-variant mb-space-lg leading-relaxed">
+                Hỗ trợ chuyển đổi 2 chiều chính xác tuyệt đối. Tự động khấu trừ Bảo hiểm Xã hội (8%), BHYT (1.5%), BHTN (1%) và biểu thuế thu nhập cá nhân lũy tiến từng phần mới nhất.
+              </p>
+
+              {/* Interactive Fast Simulator inside the Card */}
+              <div className="bg-surface-container-low rounded-xl p-space-md mb-space-lg">
+                <div className="flex items-center justify-between mb-space-sm">
+                  <span className="font-label-md text-label-md text-on-surface font-semibold">
+                    Mô phỏng lương tháng nhanh
+                  </span>
+                  <div className="flex items-center gap-1 text-on-surface-variant font-body-sm text-body-sm">
+                    <span className="material-symbols-outlined text-[16px] text-primary">info</span>
+                    <span>Vùng I (Hà Nội, TP.HCM)</span>
+                  </div>
                 </div>
 
-                <h2
-                  onClick={() => onTabChange && onTabChange('cv-builder')}
-                  className="text-[17px] font-bold text-slate-900 leading-snug hover:underline cursor-pointer"
-                >
-                  {displayName}
-                </h2>
-                <p className="text-xs text-slate-700 mt-0.5 leading-snug">
-                  Sinh viên tại Duy Tan University
-                </p>
-                <p className="text-xs text-slate-500 mt-1">
-                  Đà Nẵng, Da Nang City
-                </p>
-
-                <div className="mt-3 flex items-center space-x-2">
-                  <div className="w-5 h-4 rounded-[3px] bg-rose-800 text-white flex items-center justify-center text-[7px] font-black shrink-0 tracking-tighter">
-                    DTU
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-space-sm items-center">
+                  <div className="sm:col-span-2 relative">
+                    <input
+                      type="number"
+                      step="1000000"
+                      value={previewGross}
+                      onChange={(e) => setPreviewGross(Math.max(0, Number(e.target.value) || 0))}
+                      placeholder="Nhập mức lương Gross..."
+                      className="w-full bg-surface-container-lowest rounded-full px-space-md py-2.5 font-headline-sm text-headline-sm text-primary font-bold focus:outline-none shadow-sm"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 font-label-sm text-label-sm text-outline font-semibold">
+                      VND
+                    </span>
                   </div>
-                  <span className="text-xs font-semibold text-slate-900 truncate">
-                    Duy Tan University
+                  <div className="bg-surface-container-lowest rounded-full px-space-md py-2 text-center shadow-sm">
+                    <span className="block font-label-sm text-label-sm text-outline-variant uppercase">
+                      Net dự kiến
+                    </span>
+                    <span className="font-headline-sm text-headline-sm text-on-surface font-bold">
+                      {formatVND(previewResult.net)}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between mt-space-sm pt-space-xs text-on-surface-variant font-body-sm text-body-sm">
+                  <span>
+                    Người phụ thuộc: <strong>0 người</strong>
+                  </span>
+                  <span className="text-tertiary">
+                    Tổng khấu trừ BH & Thuế:{' '}
+                    <strong>{formatVND(previewResult.totalIns + previewResult.tax)}</strong>
                   </span>
                 </div>
               </div>
             </div>
 
-            {/* Card 2: Truy cập công cụ & Dùng thử Premium */}
-            <div
-              onClick={() =>
-                onShowToast &&
-                onShowToast(
-                  'Tính năng dùng thử Premium 0đ đã sẵn sàng cho tài khoản của bạn!',
-                  'info'
-                )
-              }
-              className="bg-white hover:bg-slate-50 rounded-xl border border-slate-300/80 p-3.5 shadow-2xs transition-colors cursor-pointer group"
-            >
-              <p className="text-xs text-slate-500 leading-snug">
-                Truy cập các công cụ và thông tin chuyên sâu độc quyền
-              </p>
-              <div className="mt-1.5 flex items-center space-x-2">
-                <span className="w-3.5 h-3.5 rounded-[3px] bg-gradient-to-tr from-amber-600 via-amber-500 to-amber-300 inline-block shrink-0 shadow-2xs" />
-                <span className="text-xs font-bold text-slate-900 group-hover:text-[#0a66c2] transition-colors">
-                  Dùng thử Premium cho 0 đ
+            <div className="flex flex-wrap items-center justify-between gap-space-md pt-space-sm">
+              <div className="flex items-center gap-space-xs text-on-surface-variant font-body-sm text-body-sm">
+                <span className="material-symbols-outlined text-primary text-[18px]">group</span>
+                <span>
+                  Hơn <strong>1.450.000+</strong> lượt tính mỗi tháng
                 </span>
               </div>
+              <div className="flex items-center gap-space-sm">
+                <button
+                  type="button"
+                  onClick={scrollToWidget}
+                  className="px-space-lg py-2.5 bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg rounded-full transition-all duration-200 shadow-sm flex items-center gap-space-xs cursor-pointer"
+                >
+                  <span className="material-symbols-outlined text-[18px]">calculate</span>
+                  <span>Tính lương ngay</span>
+                </button>
+              </div>
             </div>
+          </div>
 
-            {/* Card 3: Công cụ đã ghim & Lộ trình cá nhân */}
-            <div className="bg-white hover:bg-slate-50 rounded-xl border border-slate-300/80 p-3.5 shadow-2xs transition-colors cursor-pointer">
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <p className="text-xs font-bold text-slate-900">Công cụ của bạn</p>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Công cụ tính toán & bài test đã lưu
+          {/* Tool 2: AI CV Scanner Card (5 cols) */}
+          <div className="lg:col-span-5 bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-shadow relative overflow-hidden flex flex-col justify-between group">
+            <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-secondary-container to-primary" />
+
+            <div>
+              <div className="flex items-start justify-between gap-space-md mb-space-md">
+                <div className="w-14 h-14 rounded-xl bg-surface-container-high flex items-center justify-center text-primary shrink-0 shadow-inner">
+                  <span className="material-symbols-outlined text-[32px]">neurology</span>
+                </div>
+                <div className="flex flex-col items-end">
+                  <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm uppercase tracking-wide">
+                    Công nghệ AI
+                  </span>
+                  <span className="mt-1 font-label-sm text-label-sm text-outline font-semibold">
+                    Chuẩn ATS 2025
+                  </span>
+                </div>
+              </div>
+
+              <h3 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors mb-space-xs">
+                AI CV Scanner & Đánh giá mức độ phù hợp JD
+              </h3>
+              <p className="font-body-md text-body-md text-on-surface-variant mb-space-md leading-relaxed">
+                Quét và chấm điểm CV bằng trí tuệ nhân tạo, đối chiếu từ khóa với mô tả công việc (JD), gia tăng tỷ lệ nhận lời mời phỏng vấn lên tới 85%.
+              </p>
+
+              {/* Interactive Graphic / Visual Metric Pill */}
+              <div className="bg-surface-container-low rounded-xl p-space-md mb-space-md">
+                <div className="flex items-center justify-between mb-2">
+                  <span className="font-label-md text-label-md text-on-surface font-semibold">
+                    Điểm phù hợp trung bình sau tối ưu
+                  </span>
+                  <span className="font-headline-sm text-headline-sm text-primary font-bold">
+                    88 / 100
+                  </span>
+                </div>
+                {/* Progress Bar */}
+                <div className="w-full bg-surface-container-high rounded-full h-2.5 overflow-hidden">
+                  <div className="bg-primary-container h-2.5 rounded-full transition-all duration-1000 w-[88%]" />
+                </div>
+                <div className="flex items-center justify-between mt-space-sm text-on-surface-variant font-label-sm text-label-sm">
+                  <span className="flex items-center gap-1">
+                    <span className="w-2 h-2 rounded-full bg-primary" /> Phát hiện 12 từ khóa thiếu
+                  </span>
+                  <span className="flex items-center gap-1 text-primary">
+                    <span className="material-symbols-outlined text-[14px]">bolt</span> Sửa lỗi format tự động
+                  </span>
+                </div>
+              </div>
+
+              <div className="p-3 bg-surface-container-lowest rounded-xl flex items-center gap-3 shadow-inner">
+                <img
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuAenvMF3_6Rh8HBq4mr8uhYQ1_Td86FXhJZ9B6gGm9PwhaKidXaRgrDF7EoeAnqu7Du1x-Ah47pHIyKKOQmV83BeiUD-7ivCH3JUf8MkqZQCJBfXTVVIiB1X4T8uxN5BUnW2N91L_bnSnC3wMthbG1bBepz-lE-qQmQxM4K_PvxTNyrBYoIcBDcdpXzVVXbqw_x6qPx5-3fBM1egaXAAv__LFFB2Pqcik-jl0wgJUjginfRw1VJpthC"
+                  alt="Recruiter reviewing CV"
+                  onError={(e) => {
+                    e.currentTarget.src = featuredCareerImg;
+                  }}
+                  className="w-12 h-12 rounded-xl object-cover shrink-0"
+                />
+                <div className="min-w-0">
+                  <p className="font-label-md text-label-md text-on-surface truncate font-semibold">
+                    Tương thích hơn 500+ doanh nghiệp
+                  </p>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant truncate">
+                    Được tối ưu cho Shopee, VNG, Techcombank, FPT...
                   </p>
                 </div>
-                <span className="text-xs font-bold text-[#0a66c2]">
-                  {savedToolIds.length + completedDevIds.length}
-                </span>
               </div>
             </div>
 
-            {/* Card 4: Các mục đã lưu, Nhóm, Bản tin, Sự kiện */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-2 shadow-2xs space-y-0.5">
+            <div className="flex items-center justify-between gap-space-md pt-space-lg">
+              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                Miễn phí 3 lần quét/ngày
+              </span>
               <button
                 type="button"
-                onClick={() => onTabChange && onTabChange('saved')}
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center justify-between text-left transition-colors cursor-pointer"
+                onClick={() => setActiveModal('cv-scanner')}
+                className="px-space-lg py-2.5 bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg rounded-full transition-all duration-200 shadow-sm flex items-center gap-space-xs cursor-pointer"
               >
-                <div className="flex items-center space-x-3">
-                  <Bookmark className="w-4 h-4 text-slate-700 fill-slate-700 shrink-0" />
-                  <span className="text-xs font-bold text-slate-800">
-                    Các mục đã lưu
-                  </span>
-                </div>
-                {savedCount > 0 && (
-                  <span className="text-[11px] font-bold text-[#0a66c2]">
-                    {savedCount}
-                  </span>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  onShowToast &&
-                  onShowToast('Đang mở danh sách Nhóm chuyên môn của bạn', 'info')
-                }
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center space-x-3 text-left transition-colors cursor-pointer"
-              >
-                <Users className="w-4 h-4 text-slate-700 shrink-0" />
-                <span className="text-xs font-bold text-slate-800">Nhóm</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => onTabChange && onTabChange('news')}
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center space-x-3 text-left transition-colors cursor-pointer"
-              >
-                <Newspaper className="w-4 h-4 text-slate-700 shrink-0" />
-                <span className="text-xs font-bold text-slate-800">Bản tin</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() =>
-                  onShowToast &&
-                  onShowToast('Đang mở lịch Sự kiện nghề nghiệp sắp tới', 'info')
-                }
-                className="w-full px-2.5 py-2 rounded-full hover:bg-slate-100 flex items-center space-x-3 text-left transition-colors cursor-pointer"
-              >
-                <Calendar className="w-4 h-4 text-slate-700 shrink-0" />
-                <span className="text-xs font-bold text-slate-800">Sự kiện</span>
+                <span className="material-symbols-outlined text-[18px]">upload_file</span>
+                <span>Tải CV chấm điểm</span>
               </button>
             </div>
-          </aside>
+          </div>
+        </div>
+      </section>
 
-          {/* =================================================================== */}
-          {/* CỘT GIỮA (6 cols): THANH TÌM KIẾM CÔNG CỤ, MÁY TÍNH LƯƠNG & CÔNG CỤ   */}
-          {/* =================================================================== */}
-          <div className="lg:col-span-6 space-y-3">
-            {/* Top Card: Thanh tìm kiếm & Chuyển nhanh công cụ */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-3.5 shadow-2xs">
-              <div className="flex items-center space-x-2.5">
-                <div className="relative w-12 h-12 shrink-0">
-                  <img
-                    src={displayAvatar}
-                    alt={displayName}
-                    referrerPolicy="no-referrer"
-                    className="w-12 h-12 rounded-full object-cover border border-slate-200"
-                  />
+      {/* ===================================================================== */}
+      {/* 3. INTERACTIVE LIVE SIMULATOR WIDGET                                  */}
+      {/* ===================================================================== */}
+      <section className="w-full max-w-7xl mx-auto px-margin py-space-lg" id="quick-calculator-widget">
+        <div className="bg-surface-container-lowest rounded-xl p-space-lg lg:p-space-xl shadow-md relative overflow-hidden">
+          {/* Decorative Backdrop Graphic */}
+          <div className="absolute -right-20 -bottom-20 w-80 h-80 bg-primary/5 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-space-lg pb-space-lg border-b border-surface-container-high/50">
+            <div>
+              <h2 className="font-headline-lg text-headline-lg text-on-surface">
+                Widget Tính Lương Gross - Net Tức Thì
+              </h2>
+              <p className="font-body-md text-body-md text-on-surface-variant mt-1">
+                Nhập nhanh mức lương đề xuất và số người phụ thuộc để kiểm tra số tiền thực lãnh về tài khoản ATM hàng tháng.
+              </p>
+            </div>
+
+            <div className="flex items-center gap-space-sm">
+              <button
+                type="button"
+                onClick={() => setCalcMode('gross-to-net')}
+                className={`px-5 py-2 rounded-full font-label-md text-label-md transition-all shadow-sm cursor-pointer ${
+                  calcMode === 'gross-to-net'
+                    ? 'bg-primary-container text-on-primary'
+                    : 'bg-surface-container-high text-on-surface-variant hover:text-primary'
+                }`}
+              >
+                Gross sang Net
+              </button>
+              <button
+                type="button"
+                onClick={() => setCalcMode('net-to-gross')}
+                className={`px-5 py-2 rounded-full font-label-md text-label-md transition-all shadow-sm cursor-pointer ${
+                  calcMode === 'net-to-gross'
+                    ? 'bg-primary-container text-on-primary'
+                    : 'bg-surface-container-high text-on-surface-variant hover:text-primary'
+                }`}
+              >
+                Net sang Gross
+              </button>
+            </div>
+          </div>
+
+          {/* Widget Interactive Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-space-lg items-center pt-space-lg">
+            {/* Input Parameters Form (7 cols) */}
+            <div className="lg:col-span-7 space-y-space-md">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+                <div>
+                  <label className="block font-label-md text-label-md text-on-surface mb-1.5 font-medium">
+                    {calcMode === 'gross-to-net' ? 'Mức lương thỏa thuận (VND)' : 'Mức lương Net mong muốn (VND)'}
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={salaryInputFormatted}
+                      onChange={handleSalaryInputChange}
+                      placeholder="25,000,000"
+                      className="w-full bg-surface-container-low rounded-xl px-4 py-3 font-headline-md text-headline-md text-primary font-bold focus:outline-none focus:bg-surface-container-lowest focus:ring-2 focus:ring-primary/30 transition-all pr-24"
+                    />
+                    <span className="absolute right-4 top-1/2 -translate-y-1/2 text-outline font-label-md text-label-md font-semibold">
+                      VND/tháng
+                    </span>
+                  </div>
+
+                  {/* Quick Preset Buttons */}
+                  <div className="flex flex-wrap gap-1.5 mt-2">
+                    {[15000000, 20000000, 25000000, 35000000].map((amt) => (
+                      <button
+                        key={amt}
+                        type="button"
+                        onClick={() => {
+                          setSalaryValue(amt);
+                          setSalaryInputFormatted(formatNumberOnly(amt));
+                        }}
+                        className={`text-[11px] px-2 py-0.5 rounded-full border transition-colors cursor-pointer ${
+                          salaryValue === amt
+                            ? 'bg-primary-fixed text-primary border-primary font-bold'
+                            : 'bg-surface-container-lowest text-on-surface-variant border-surface-container-high hover:border-primary/40'
+                        }`}
+                      >
+                        {(amt / 1000000).toLocaleString('vi-VN')} triệu
+                      </button>
+                    ))}
+                  </div>
                 </div>
 
-                <div className="flex-1 relative flex items-center">
-                  <input
-                    type="text"
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    placeholder="Tìm công cụ tính lương Gross - Net, BHXH, BHTN, chấm điểm CV..."
-                    className="w-full py-3 px-4 pr-9 rounded-full border border-slate-400/90 hover:bg-slate-100/80 focus:bg-white text-xs sm:text-sm font-semibold text-slate-800 placeholder:text-slate-600 focus:outline-hidden focus:border-slate-700 transition-colors"
-                  />
-                  {searchTerm ? (
+                <div>
+                  <label className="block font-label-md text-label-md text-on-surface mb-1.5 font-medium">
+                    Khu vực / Vùng lương tối thiểu
+                  </label>
+                  <select
+                    value={region}
+                    onChange={(e) => setRegion(e.target.value)}
+                    className="w-full bg-surface-container-low rounded-xl px-4 py-3 font-body-md text-body-md text-on-surface focus:outline-none focus:bg-surface-container-lowest transition-all"
+                  >
+                    <option value="1">Vùng I (4.960.000 đ - Hà Nội, TP.HCM)</option>
+                    <option value="2">Vùng II (4.410.000 đ - Đà Nẵng, Cần Thơ)</option>
+                    <option value="3">Vùng III (3.860.000 đ - Bắc Ninh, Hải Dương)</option>
+                    <option value="4">Vùng IV (3.450.000 đ - Khu vực còn lại)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-space-md">
+                <div>
+                  <label className="block font-label-md text-label-md text-on-surface mb-1.5 font-medium">
+                    Số người phụ thuộc giảm trừ
+                  </label>
+                  <div className="flex items-center bg-surface-container-low rounded-xl p-1">
                     <button
                       type="button"
-                      onClick={() => setSearchTerm('')}
-                      className="absolute right-3 p-1 rounded-full text-slate-500 hover:bg-slate-200 transition-colors cursor-pointer"
+                      onClick={() => setDependents((prev) => Math.max(0, prev - 1))}
+                      className="w-10 h-10 rounded-lg bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm hover:bg-surface-container-high transition-colors flex items-center justify-center cursor-pointer select-none"
                     >
-                      <X className="w-4 h-4" />
+                      -
                     </button>
-                  ) : (
-                    <Search className="w-4 h-4 text-slate-500 absolute right-4 pointer-events-none" />
+                    <span className="flex-1 text-center font-headline-sm text-headline-sm text-on-surface font-bold">
+                      {dependents}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setDependents((prev) => prev + 1)}
+                      className="w-10 h-10 rounded-lg bg-surface-container-lowest text-on-surface font-headline-sm text-headline-sm hover:bg-surface-container-high transition-colors flex items-center justify-center cursor-pointer select-none"
+                    >
+                      +
+                    </button>
+                  </div>
+                  <span className="text-[12px] text-outline mt-1 block">
+                    4.400.000 đ/tháng cho mỗi người phụ thuộc
+                  </span>
+                </div>
+
+                <div>
+                  <label className="block font-label-md text-label-md text-on-surface mb-1.5 font-medium">
+                    Mức đóng bảo hiểm
+                  </label>
+                  <div className="flex items-center gap-space-sm pt-2">
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="ins-type"
+                        checked={insuranceType === 'official'}
+                        onChange={() => setInsuranceType('official')}
+                        className="accent-primary w-4 h-4 cursor-pointer"
+                      />
+                      <span className="font-body-md text-body-md text-on-surface">Trên lương chính thức</span>
+                    </label>
+                    <label className="inline-flex items-center gap-2 cursor-pointer">
+                      <input
+                        type="radio"
+                        name="ins-type"
+                        checked={insuranceType === 'custom'}
+                        onChange={() => setInsuranceType('custom')}
+                        className="accent-primary w-4 h-4 cursor-pointer"
+                      />
+                      <span className="font-body-md text-body-md text-on-surface-variant">Mức quy định khác</span>
+                    </label>
+                  </div>
+
+                  {insuranceType === 'custom' && (
+                    <div className="mt-2 relative">
+                      <input
+                        type="number"
+                        step="500000"
+                        value={customInsuranceWage}
+                        onChange={(e) => setCustomInsuranceWage(Math.max(0, Number(e.target.value) || 0))}
+                        placeholder="Mức đóng BH..."
+                        className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-semibold pr-12 focus:outline-none"
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-outline font-semibold">
+                        VND
+                      </span>
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            {/* Realtime Result Summary Card (5 cols) */}
+            <div className="lg:col-span-5 bg-gradient-to-br from-primary via-primary-container to-surface-tint rounded-xl p-space-lg text-on-primary shadow-lg flex flex-col justify-between">
+              <div>
+                <div className="flex items-center justify-between mb-space-md">
+                  <span className="font-label-md text-label-md uppercase tracking-wider text-primary-fixed">
+                    KẾT QUẢ THỰC NHẬN
+                  </span>
+                  <span className="px-2.5 py-0.5 rounded-full bg-on-primary/10 backdrop-blur-sm text-[11px] font-semibold text-primary-fixed">
+                    Chính xác 100%
+                  </span>
+                </div>
+
+                <div className="mb-space-lg">
+                  <span className="font-label-md text-label-md text-on-primary/80">
+                    {calcMode === 'gross-to-net' ? 'LƯƠNG NET (Thực nhận về tài khoản):' : 'LƯƠNG GROSS (Cần thỏa thuận):'}
+                  </span>
+                  <div className="flex items-baseline gap-2 mt-1">
+                    <span className="font-display-lg text-display-lg text-on-primary font-extrabold tracking-tight">
+                      {formatNumberOnly(calcMode === 'gross-to-net' ? widgetResult.net : widgetResult.gross)}
+                    </span>
+                    <span className="font-headline-md text-headline-md text-primary-fixed">VND</span>
+                  </div>
+                </div>
+
+                {/* Deductions breakdown mini bars */}
+                <div className="space-y-2.5 bg-on-primary/10 rounded-xl p-space-md backdrop-blur-sm">
+                  <div className="flex justify-between items-center text-body-sm font-body-sm">
+                    <span className="text-on-primary/90 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-secondary-fixed" /> Bảo hiểm bắt buộc (10.5%):
+                    </span>
+                    <span className="font-bold text-on-primary">{formatVND(widgetResult.totalIns)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-body-sm font-body-sm">
+                    <span className="text-on-primary/90 flex items-center gap-1">
+                      <span className="w-2 h-2 rounded-full bg-tertiary-fixed" /> Thuế thu nhập cá nhân (TNCN):
+                    </span>
+                    <span className="font-bold text-on-primary">{formatVND(widgetResult.tax)}</span>
+                  </div>
+                  <div className="flex justify-between items-center text-body-sm font-body-sm pt-2 border-t border-on-primary/10">
+                    <span className="text-on-primary/80">Giảm trừ bản thân:</span>
+                    <span className="font-semibold text-on-primary">11.000.000 đ</span>
+                  </div>
+                  {dependents > 0 && (
+                    <div className="flex justify-between items-center text-body-sm font-body-sm">
+                      <span className="text-on-primary/80">Giảm trừ người phụ thuộc ({dependents} người):</span>
+                      <span className="font-semibold text-on-primary">{formatVND(dependents * 4400000)}</span>
+                    </div>
                   )}
                 </div>
               </div>
 
-              {/* Quick Tool Switcher Pills */}
-              <div className="flex items-center justify-around pt-2.5 mt-2">
+              <div className="pt-space-md flex items-center justify-between gap-space-sm">
+                <span className="text-[12px] text-primary-fixed">Đã bao gồm điều chỉnh theo luật thuế 2025</span>
                 <button
                   type="button"
-                  onClick={() => setActiveToolMode('gross-to-net')}
-                  className={`flex items-center space-x-2 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
-                    activeToolMode === 'gross-to-net' || activeToolMode === 'net-to-gross'
-                      ? 'bg-blue-50 text-[#0a66c2]'
-                      : 'hover:bg-slate-100 text-slate-700'
-                  }`}
+                  onClick={() => setActiveModal('breakdown')}
+                  className="px-space-md py-2 bg-surface-container-lowest hover:bg-surface-container-low text-primary font-label-md text-label-md rounded-full transition-colors shadow-sm flex items-center gap-1 cursor-pointer"
                 >
-                  <Calculator className="w-4 h-4 text-[#0a66c2]" />
-                  <span>Tính lương Gross - Net</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setActiveToolMode('bhtn')}
-                  className={`flex items-center space-x-2 px-3.5 py-2 rounded-full text-xs sm:text-sm font-semibold transition-colors cursor-pointer ${
-                    activeToolMode === 'bhtn'
-                      ? 'bg-emerald-50 text-emerald-700'
-                      : 'hover:bg-slate-100 text-slate-700'
-                  }`}
-                >
-                  <PiggyBank className="w-4 h-4 text-emerald-600" />
-                  <span>Bảo hiểm thất nghiệp</span>
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => onTabChange && onTabChange('cv-builder')}
-                  className="flex items-center space-x-2 px-3.5 py-2 rounded-full hover:bg-slate-100 text-xs sm:text-sm font-semibold text-slate-700 transition-colors cursor-pointer"
-                >
-                  <FileCheck className="w-4 h-4 text-orange-600" />
-                  <span>Chấm điểm CV</span>
+                  <span>Xem bảng chi tiết</span>
+                  <span className="material-symbols-outlined text-[16px]">chevron_right</span>
                 </button>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
 
-            {/* Interactive Calculator Card: Tính Lương Gross <-> Net hoặc BHTN */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-4 shadow-2xs">
-              <div className="flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-slate-200/80">
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">
-                    {activeToolMode === 'bhtn'
-                      ? 'Công cụ tính Bảo hiểm thất nghiệp (BHTN)'
-                      : 'Công cụ tính lương Gross ↔ Net chuẩn 2026'}
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    {activeToolMode === 'bhtn'
-                      ? 'Áp dụng mức lương cơ sở & trần BHTN theo vùng mới nhất'
-                      : 'Áp dụng mức giảm trừ gia cảnh 11 triệu/tháng & người phụ thuộc 4,4 triệu/người'}
-                  </p>
+      {/* ===================================================================== */}
+      {/* 4. COMPREHENSIVE TOOL GRID (6-8 SPECIALIZED TOOLS)                    */}
+      {/* ===================================================================== */}
+      <section className="w-full max-w-7xl mx-auto px-margin py-space-xl">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-space-lg gap-space-sm">
+          <div>
+            <div className="inline-flex items-center gap-1 text-on-surface font-label-sm text-label-sm uppercase font-bold tracking-wider mb-1">
+              <span className="material-symbols-outlined text-[16px]">grid_view</span>
+              Hệ sinh thái tiện ích
+            </div>
+            <h2 className="font-headline-lg text-headline-lg text-on-surface">
+              Danh mục công cụ hỗ trợ nghề nghiệp
+            </h2>
+            <p className="font-body-md text-body-md text-on-surface-variant">
+              Được thiết kế chuyên sâu cho thị trường lao động và ứng viên tại Việt Nam.
+            </p>
+          </div>
+
+          <div className="flex items-center gap-2">
+            <span className="font-label-sm text-label-sm text-on-surface-variant">Sắp xếp:</span>
+            <div className="relative">
+              <select
+                value={sortOption}
+                onChange={(e) => setSortOption(e.target.value)}
+                className="appearance-none px-3.5 py-1.5 pr-8 rounded-full bg-surface-container-lowest text-on-surface font-label-md text-label-md shadow-sm border border-surface-container-high focus:outline-none cursor-pointer"
+              >
+                <option value="popular">Phổ biến nhất</option>
+                <option value="new">Mới nhất</option>
+                <option value="high-rate">Đánh giá cao</option>
+              </select>
+              <span className="material-symbols-outlined text-[16px] absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-on-surface-variant">
+                expand_more
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Catalog Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+          {filteredTools.map((tool) => (
+            <div
+              key={tool.id}
+              className="group bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-md transition-all flex flex-col justify-between border border-transparent hover:border-primary/20"
+            >
+              <div>
+                <div className="flex items-start justify-between mb-space-md">
+                  <div className="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center text-primary group-hover:scale-110 transition-transform">
+                    <span className="material-symbols-outlined text-[26px]">{tool.icon}</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    {tool.secondaryBadge && (
+                      <span className="px-2.5 py-0.5 rounded-full bg-primary-fixed text-on-primary-fixed font-label-sm text-label-sm">
+                        {tool.secondaryBadge}
+                      </span>
+                    )}
+                    <span className="px-2.5 py-0.5 rounded-full bg-surface-container text-on-surface-variant font-label-sm text-label-sm">
+                      {tool.categoryLabel}
+                    </span>
+                  </div>
                 </div>
 
-                <div className="flex items-center space-x-1.5">
-                  <button
-                    type="button"
-                    onClick={() => setActiveToolMode('gross-to-net')}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-                      activeToolMode === 'gross-to-net'
-                        ? 'bg-[#0a66c2] text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    Gross → Net
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveToolMode('net-to-gross')}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-                      activeToolMode === 'net-to-gross'
-                        ? 'bg-[#0a66c2] text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    Net → Gross
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setActiveToolMode('bhtn')}
-                    className={`px-3 py-1 rounded-full text-xs font-bold transition-colors cursor-pointer ${
-                      activeToolMode === 'bhtn'
-                        ? 'bg-[#0a66c2] text-white'
-                        : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
-                    }`}
-                  >
-                    Tính BHTN
-                  </button>
+                <h3 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                  {tool.title}
+                </h3>
+
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 mb-space-md line-clamp-3 leading-relaxed">
+                  {tool.description}
+                </p>
+
+                <div className="flex flex-wrap gap-1.5 mb-space-md">
+                  {tool.tags.map((tag, idx) => (
+                    <span
+                      key={idx}
+                      className="px-2 py-0.5 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm"
+                    >
+                      {tag}
+                    </span>
+                  ))}
                 </div>
               </div>
 
-              {activeToolMode === 'bhtn' ? (
-                <div className="pt-3.5 space-y-3.5">
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Lương bình quân 6 tháng liền kề (VNĐ)
-                      </label>
-                      <input
-                        type="number"
-                        value={salaryInput}
-                        onChange={(e) => setSalaryInput(Number(e.target.value))}
-                        className="w-full px-3.5 py-2 rounded-full border border-slate-300 text-xs sm:text-sm font-bold text-slate-900 focus:outline-hidden focus:border-[#0a66c2]"
-                      />
+              <div className="pt-space-md flex items-center justify-between border-t border-surface-container-high/40">
+                <div className="flex items-center gap-1 font-label-sm text-label-sm text-on-surface-variant">
+                  <span className="material-symbols-outlined text-[16px] text-primary">analytics</span>
+                  <span>{tool.stats}</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => handleToolAction(tool)}
+                  className="px-space-md py-2 bg-surface-container-low hover:bg-primary hover:text-on-primary text-primary font-label-md text-label-md rounded-full transition-colors flex items-center gap-1 cursor-pointer"
+                >
+                  <span>{tool.actionText}</span>
+                  <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ===================================================================== */}
+      {/* 5. KEY METRICS & TRUST BANNER                                         */}
+      {/* ===================================================================== */}
+      <section className="w-full bg-surface-container-low py-space-xl">
+        <div className="max-w-7xl mx-auto px-margin">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg text-center divide-y md:divide-y-0 md:divide-x divide-outline-variant/30">
+            <div className="flex flex-col items-center p-space-md">
+              <div className="w-12 h-12 rounded-full bg-primary-fixed flex items-center justify-center text-primary mb-space-sm shadow-sm">
+                <span className="material-symbols-outlined text-[28px]">monitoring</span>
+              </div>
+              <span className="font-display-lg text-display-lg text-primary font-extrabold tracking-tight">
+                2.5M+
+              </span>
+              <span className="font-headline-sm text-headline-sm text-on-surface font-semibold mt-1">
+                Lượt tính lương thành công
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Dữ liệu được bảo mật 100% theo tiêu chuẩn ISO
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center p-space-md">
+              <div className="w-12 h-12 rounded-full bg-secondary-fixed flex items-center justify-center text-secondary mb-space-sm shadow-sm">
+                <span className="material-symbols-outlined text-[28px]">document_scanner</span>
+              </div>
+              <span className="font-display-lg text-display-lg text-secondary font-extrabold tracking-tight">
+                850k+
+              </span>
+              <span className="font-headline-sm text-headline-sm text-on-surface font-semibold mt-1">
+                Hồ sơ CV được tối ưu AI
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Tăng tỷ lệ phản hồi phỏng vấn trung bình 3.2 lần
+              </span>
+            </div>
+
+            <div className="flex flex-col items-center p-space-md">
+              <div className="w-12 h-12 rounded-full bg-surface-container-high flex items-center justify-center text-primary mb-space-sm shadow-sm">
+                <span className="material-symbols-outlined text-[28px]">sentiment_very_satisfied</span>
+              </div>
+              <span className="font-display-lg text-display-lg text-primary font-extrabold tracking-tight">
+                98.4%
+              </span>
+              <span className="font-headline-sm text-headline-sm text-on-surface font-semibold mt-1">
+                Đánh giá hài lòng
+              </span>
+              <span className="font-body-sm text-body-sm text-on-surface-variant mt-0.5">
+                Từ hơn 45.000 phản hồi của ứng viên trên cả nước
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================================================================== */}
+      {/* 6. CAREER INSIGHTS & BEST PRACTICE GUIDES                             */}
+      {/* ===================================================================== */}
+      <section className="w-full max-w-7xl mx-auto px-margin py-space-xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-space-lg gap-space-sm">
+          <div>
+            <div className="inline-flex items-center gap-1 text-on-surface font-label-sm text-label-sm uppercase font-bold tracking-wider mb-1">
+              <span className="material-symbols-outlined text-[16px]">menu_book</span>
+              Cẩm nang chuyên gia
+            </div>
+            <h2 className="font-headline-lg text-headline-lg text-on-surface">
+              Hướng dẫn sử dụng công cụ tối ưu sự nghiệp
+            </h2>
+            <p className="font-body-md text-body-md text-on-surface-variant">
+              Bí quyết đàm phán quyền lợi và chuẩn bị hồ sơ từ chuyên gia nhân sự JobCentral.
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => {
+              if (onTabChange) onTabChange('news');
+            }}
+            className="inline-flex items-center gap-1 text-primary hover:text-primary-container font-label-lg text-label-lg cursor-pointer"
+          >
+            <span>Xem tất cả bài viết</span>
+            <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-space-lg">
+          {/* Article 1 */}
+          <article className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between border border-surface-container-high/30">
+            <div>
+              <div className="relative w-full h-48 overflow-hidden bg-surface-container-high">
+                <img
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuD0zmyrQVJsbqP35obGnYYhUSpi00xm1oeaIIQoWba6kflFof2iB66PmGHPZJkmRks-HueYdBppGfhHNkVU4kEZZw9dlDdEJ3Ja00xNLG7_f7yRXpimNPXVBStBjoPuTZeDpsRB9kZj8IVqB94wWyrBIrJbBuWC4J--QfKO22tKubRpKNDz78VFY4lL3tLeCa2NyjbRcoKePEH_TNO60gMekY76bb8YD7uk8lpUEwLyEjZ3kBoSQ8F5"
+                  alt="Deal lương thành công"
+                  onError={(e) => {
+                    e.currentTarget.src = salaryNegotiationImg;
+                  }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold shadow-sm">
+                  Đàm phán lương
+                </span>
+              </div>
+              <div className="p-space-lg">
+                <div className="flex items-center gap-2 font-label-sm text-label-sm text-outline mb-2">
+                  <span className="material-symbols-outlined text-[14px]">schedule</span>
+                  <span>5 phút đọc</span>
+                  <span>•</span>
+                  <span>Cập nhật tuần này</span>
+                </div>
+                <h3 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                  Cách đàm phán lương hiệu quả dựa trên bảng quy đổi Gross - Net
+                </h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 line-clamp-3 leading-relaxed">
+                  Chiến thuật đề xuất mức lương mong muốn khi deal lương với HR, tránh rủi ro bị giảm trừ bảo hiểm quá nhiều và cách làm rõ các khoản phụ cấp không chịu thuế.
+                </p>
+              </div>
+            </div>
+            <div className="px-space-lg pb-space-lg pt-0">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onTabChange) onTabChange('news');
+                }}
+                className="inline-flex items-center gap-1 text-primary font-label-md text-label-md group-hover:translate-x-1 transition-transform cursor-pointer"
+              >
+                <span>Đọc chi tiết</span>
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+          </article>
+
+          {/* Article 2 */}
+          <article className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between border border-surface-container-high/30">
+            <div>
+              <div className="relative w-full h-48 overflow-hidden bg-surface-container-high">
+                <img
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuCeEoAz03312WLNLisdiZWgpzmwlSjfHwsywS5DEaSNSGjtReYlpobzoJamYi3jdF5TJZwm3GSKHSq9Ig-Qb4LJ2XfXOgAeFUW5mkSmpXIHrR9BNJw7KlzowNvMRQqfipztS3-MzWFE2nuNgUsavqpMcTSYb9yUYBYM3nxaV-k0hvIo3sKE0LUH3BmKYXwhZ4xtMMXC7jOc8EHp7Wj9goQxjztKbwaNUp8c36EOso7Lk9yJybxgnC7V"
+                  alt="Tối ưu từ khóa CV ATS"
+                  onError={(e) => {
+                    e.currentTarget.src = featuredCareerImg;
+                  }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold shadow-sm">
+                  Tối ưu CV & AI
+                </span>
+              </div>
+              <div className="p-space-lg">
+                <div className="flex items-center gap-2 font-label-sm text-label-sm text-outline mb-2">
+                  <span className="material-symbols-outlined text-[14px]">schedule</span>
+                  <span>7 phút đọc</span>
+                  <span>•</span>
+                  <span>Xu hướng 2025</span>
+                </div>
+                <h3 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                  Tối ưu từ khóa CV để vượt qua hệ thống quét tự động ATS
+                </h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 line-clamp-3 leading-relaxed">
+                  Hiểu cách thuật toán AI và ATS phân loại ứng viên, cách trích xuất động từ hành động và số liệu đo lường kết quả công việc để đạt điểm tương thích trên 85%.
+                </p>
+              </div>
+            </div>
+            <div className="px-space-lg pb-space-lg pt-0">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onTabChange) onTabChange('news');
+                }}
+                className="inline-flex items-center gap-1 text-primary font-label-md text-label-md group-hover:translate-x-1 transition-transform cursor-pointer"
+              >
+                <span>Đọc chi tiết</span>
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+          </article>
+
+          {/* Article 3 */}
+          <article className="bg-surface-container-lowest rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col justify-between border border-surface-container-high/30">
+            <div>
+              <div className="relative w-full h-48 overflow-hidden bg-surface-container-high">
+                <img
+                  src="https://lh3.googleusercontent.com/aida-public/AB6AXuDgGrkCtPFF0UmQ_Iy0vv8YM1AOpuvQCra7jyfkad9BZlbEDtZdIN_vAvoJhOvWLewJRwOZ7G99AcFpuypKSA8mZvVJuDzp3hodXdnhP2Xa9-961R2D6CrQCGmpVPEUCu32pImTEVM0SxQXGzSTzXgSIcxpL59AgpTFuL-2UWC48iKn3rGAM5XjJy1aJMF0Da7qdWD4_n2CYPwXVMGmQSZ3QI6XoYUjNgo60LUZW-jv10xCEXnuNUb1"
+                  alt="Luật lao động và bảo hiểm"
+                  onError={(e) => {
+                    e.currentTarget.src = remoteHybridImg;
+                  }}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <span className="absolute top-3 left-3 px-3 py-1 rounded-full bg-surface-container-lowest/90 backdrop-blur-md text-primary font-label-sm text-label-sm font-bold shadow-sm">
+                  Luật Lao Động
+                </span>
+              </div>
+              <div className="p-space-lg">
+                <div className="flex items-center gap-2 font-label-sm text-label-sm text-outline mb-2">
+                  <span className="material-symbols-outlined text-[14px]">schedule</span>
+                  <span>6 phút đọc</span>
+                  <span>•</span>
+                  <span>Cẩm nang pháp lý</span>
+                </div>
+                <h3 className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors leading-snug">
+                  Hiểu đúng về bảo hiểm xã hội khi nhảy việc để không thiệt thòi
+                </h3>
+                <p className="font-body-sm text-body-sm text-on-surface-variant mt-2 line-clamp-3 leading-relaxed">
+                  Hướng dẫn chốt sổ bảo hiểm xã hội, cộng dồn thời gian đóng bảo hiểm thất nghiệp và cách xử lý khi có quãng nghỉ ngắt quãng giữa hai công ty.
+                </p>
+              </div>
+            </div>
+            <div className="px-space-lg pb-space-lg pt-0">
+              <button
+                type="button"
+                onClick={() => {
+                  if (onTabChange) onTabChange('news');
+                }}
+                className="inline-flex items-center gap-1 text-primary font-label-md text-label-md group-hover:translate-x-1 transition-transform cursor-pointer"
+              >
+                <span>Đọc chi tiết</span>
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      {/* ===================================================================== */}
+      {/* 7. COMMUNITY FEEDBACK / CALL-TO-ACTION NEWSLETTER BANNER             */}
+      {/* ===================================================================== */}
+      <section className="w-full max-w-7xl mx-auto px-margin pb-space-xl">
+        <div className="bg-gradient-to-r from-primary-container to-primary rounded-xl p-space-lg lg:p-space-xl text-on-primary flex flex-col lg:flex-row items-center justify-between gap-space-lg shadow-md relative overflow-hidden">
+          {/* Glow Decor */}
+          <div className="absolute -left-10 -top-10 w-64 h-64 bg-on-primary/10 rounded-full blur-2xl pointer-events-none" />
+
+          <div className="max-w-xl">
+            <span className="px-3 py-1 rounded-full bg-on-primary/15 text-primary-fixed text-label-sm font-label-sm uppercase tracking-wider font-semibold">
+              Đồng hành sự nghiệp
+            </span>
+            <h3 className="font-display-lg text-display-lg text-on-primary mt-space-xs font-bold leading-tight">
+              Bạn cần một công cụ chuyên biệt khác?
+            </h3>
+            <p className="font-body-md text-body-md text-on-primary/90 mt-2 leading-relaxed">
+              Gửi yêu cầu tính năng cho đội ngũ JobCentral hoặc nhận thông báo ngay khi có biểu thuế & chính sách lao động mới nhất gửi vào hòm thư.
+            </p>
+          </div>
+
+          <form onSubmit={handleNewsletterSubmit} className="w-full lg:w-auto flex flex-col sm:flex-row items-center gap-space-sm shrink-0">
+            <div className="relative w-full sm:w-80">
+              <input
+                type="email"
+                value={newsletterEmail}
+                onChange={(e) => setNewsletterEmail(e.target.value)}
+                placeholder="Nhập email của bạn..."
+                className="w-full bg-surface-container-lowest text-on-surface placeholder:text-outline rounded-full px-space-md py-3 font-body-md text-body-md focus:outline-none shadow-sm"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full sm:w-auto px-space-lg py-3 bg-secondary-container hover:bg-secondary-fixed text-on-primary font-label-lg text-label-lg rounded-full transition-all shadow-sm font-bold flex items-center justify-center gap-space-xs whitespace-nowrap cursor-pointer"
+            >
+              <span>{isSubscribed ? 'Đã gửi' : 'Đăng ký nhận tin'}</span>
+              <span className="material-symbols-outlined text-[18px]">send</span>
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* ===================================================================== */}
+      {/* 8. MODAL: XEM BẢNG CHI TIẾT THUẾ TNCN & CHI PHÍ DOANH NGHIỆP          */}
+      {/* ===================================================================== */}
+      {activeModal === 'breakdown' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative">
+            <div className="flex items-center justify-between pb-4 border-b border-surface-container-high">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-[28px]">receipt_long</span>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                    Bảng phân tích chi tiết Thuế & Bảo hiểm
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    Lương Gross: <strong>{formatVND(widgetResult.gross)}</strong> | Lương Net: <strong>{formatVND(widgetResult.net)}</strong>
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            {/* Chi tiết 7 bậc thuế */}
+            <div className="mt-5">
+              <h4 className="font-label-lg text-label-lg text-on-surface font-bold mb-3 flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-primary" />
+                Biểu thuế lũy tiến từng phần (7 bậc)
+              </h4>
+              <div className="bg-surface-container-low rounded-xl overflow-hidden text-xs">
+                <div className="grid grid-cols-12 bg-surface-container-high/70 p-2.5 font-bold text-on-surface">
+                  <div className="col-span-2">Bậc</div>
+                  <div className="col-span-5">Thu nhập tính thuế/tháng</div>
+                  <div className="col-span-2 text-center">Thuế suất</div>
+                  <div className="col-span-3 text-right">Tiền thuế</div>
+                </div>
+                {widgetResult.bracketDetails.map((b) => (
+                  <div
+                    key={b.level}
+                    className={`grid grid-cols-12 p-2.5 border-t border-surface-container-high/40 items-center ${
+                      b.taxAmount > 0 ? 'bg-primary-fixed/20 font-semibold' : 'text-on-surface-variant'
+                    }`}
+                  >
+                    <div className="col-span-2">Bậc {b.level}</div>
+                    <div className="col-span-5">{b.label}</div>
+                    <div className="col-span-2 text-center">{b.rate * 100}%</div>
+                    <div className="col-span-3 text-right font-bold text-primary">
+                      {formatVND(b.taxAmount)}
+                    </div>
+                  </div>
+                ))}
+                <div className="grid grid-cols-12 p-3 bg-surface-container-high/50 font-bold text-on-surface border-t border-surface-container-high">
+                  <div className="col-span-9">Tổng tiền thuế TNCN phải nộp:</div>
+                  <div className="col-span-3 text-right text-rose-600 font-extrabold text-sm">
+                    {formatVND(widgetResult.tax)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Chi phí phía Doanh nghiệp */}
+            <div className="mt-6">
+              <h4 className="font-label-lg text-label-lg text-on-surface font-bold mb-3 flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-secondary-container" />
+                Khoản bảo hiểm do Người sử dụng lao động chi trả
+              </h4>
+              <div className="bg-surface-container-low rounded-xl p-4 text-xs space-y-2">
+                <div className="flex justify-between">
+                  <span>• BHXH Doanh nghiệp đóng (17.5%):</span>
+                  <span className="font-semibold">{formatVND(widgetResult.employerBhxh)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• BHYT Doanh nghiệp đóng (3%):</span>
+                  <span className="font-semibold">{formatVND(widgetResult.employerBhyt)}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span>• BHTN Doanh nghiệp đóng (1%):</span>
+                  <span className="font-semibold">{formatVND(widgetResult.employerBhtn)}</span>
+                </div>
+                <div className="flex justify-between pt-2 border-t border-surface-container-high font-bold text-sm text-on-surface">
+                  <span>Tổng chi phí doanh nghiệp chi trả cho bạn:</span>
+                  <span className="text-primary font-black">{formatVND(widgetResult.totalEmployerCost)}</span>
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+              >
+                Đã hiểu & Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 9. MODAL: AI CV SCANNER                                               */}
+      {/* ===================================================================== */}
+      {/* ===================================================================== */}
+      {/* 9. MODAL: AI CV SCANNER                                               */}
+      {/* ===================================================================== */}
+      {activeModal === 'cv-scanner' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-xl w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative text-center">
+            {/* Hidden real file input */}
+            <input
+              ref={cvFileInputRef}
+              type="file"
+              accept=".pdf,.doc,.docx"
+              onChange={(e) => handleCvFileSelect(e.target.files?.[0])}
+              className="hidden"
+            />
+
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
+              <div className="flex items-center gap-2 text-left">
+                <div className="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[24px]">document_scanner</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                    AI CV Scanner & Chấm điểm ATS
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    Đối chiếu từ khóa và cấu trúc theo chuẩn ATS 500+ doanh nghiệp
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  handleResetCvScanner();
+                  setActiveModal(null);
+                }}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            {!isScanningCv && !scanResult && (
+              <div className="mt-5">
+                <div
+                  onClick={() => cvFileInputRef.current?.click()}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setIsDraggingCv(true);
+                  }}
+                  onDragLeave={() => setIsDraggingCv(false)}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    setIsDraggingCv(false);
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) handleCvFileSelect(file);
+                  }}
+                  className={`border-2 border-dashed rounded-2xl p-8 transition-all cursor-pointer flex flex-col items-center justify-center ${
+                    isDraggingCv
+                      ? 'border-primary bg-primary-fixed/20 scale-[1.01]'
+                      : 'border-primary/40 bg-surface-container-low hover:bg-surface-container hover:border-primary'
+                  }`}
+                >
+                  <div className="w-16 h-16 rounded-2xl bg-primary-fixed text-primary flex items-center justify-center mb-3">
+                    <span className="material-symbols-outlined text-[36px]">cloud_upload</span>
+                  </div>
+                  <p className="font-label-lg text-label-lg text-on-surface font-bold">
+                    Kéo thả hoặc nhấn để chọn tệp CV từ thiết bị
+                  </p>
+                  <p className="text-[12px] text-on-surface-variant mt-1">
+                    Định dạng hỗ trợ: <strong>.PDF, .DOC, .DOCX</strong> (Tối đa 10MB)
+                  </p>
+
+                  <button
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      cvFileInputRef.current?.click();
+                    }}
+                    className="mt-4 px-5 py-2 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+                  >
+                    Duyệt tệp từ máy tính
+                  </button>
+                </div>
+
+                {cvError && (
+                  <div className="mt-3 p-3 bg-error-container text-on-error-container text-xs rounded-xl flex items-center gap-2">
+                    <span className="material-symbols-outlined text-[18px]">error</span>
+                    <span>{cvError}</span>
+                  </div>
+                )}
+
+                {/* Quick Sample CV Test */}
+                <div className="mt-4 pt-4 border-t border-surface-container-high/60 flex items-center justify-between text-xs text-on-surface-variant">
+                  <span>Chưa có tệp sẵn trên máy?</span>
+                  <button
+                    type="button"
+                    onClick={handleLoadSampleCv}
+                    className="font-bold text-primary hover:underline cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">play_circle</span>
+                    <span>Thử nhanh với CV mẫu IT / Designer</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {isScanningCv && (
+              <div className="mt-8 py-8 px-4 flex flex-col items-center text-center">
+                <div className="w-16 h-16 rounded-full border-4 border-primary/20 border-t-primary animate-spin mb-4" />
+                <h4 className="font-headline-sm text-headline-sm text-on-surface font-bold">
+                  Đang phân tích cấu trúc CV bằng AI...
+                </h4>
+                <p className="text-xs text-on-surface-variant mt-1 max-w-sm">
+                  Đang quét tệp "{cvFileName}" ({cvFileSize}) đối chiếu thuật toán ATS của các doanh nghiệp lớn.
+                </p>
+
+                {/* Progress bar */}
+                <div className="w-full max-w-xs bg-surface-container-high rounded-full h-2.5 mt-5 overflow-hidden">
+                  <div
+                    className="bg-primary-container h-full rounded-full transition-all duration-200"
+                    style={{ width: `${scanProgress}%` }}
+                  />
+                </div>
+                <span className="text-xs font-bold text-primary mt-2">{scanProgress}%</span>
+              </div>
+            )}
+
+            {!isScanningCv && scanResult && (
+              <div className="mt-4 text-left space-y-4">
+                {/* Result Top Card */}
+                <div className="bg-surface-container-low rounded-2xl p-4 flex items-center justify-between border border-primary/20">
+                  <div className="flex items-center gap-3">
+                    <div className="w-14 h-14 rounded-full bg-emerald-500/15 text-emerald-700 flex flex-col items-center justify-center font-bold">
+                      <span className="text-lg leading-none">{scanResult.overallScore}</span>
+                      <span className="text-[10px]">/ 100</span>
                     </div>
                     <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Tổng số tháng đã đóng BHTN
-                      </label>
-                      <input
-                        type="number"
-                        min="12"
-                        max="240"
-                        value={bhtnMonths}
-                        onChange={(e) => setBhtnMonths(Number(e.target.value))}
-                        className="w-full px-3.5 py-2 rounded-full border border-slate-300 text-xs sm:text-sm font-bold text-slate-900 focus:outline-hidden focus:border-[#0a66c2]"
-                      />
+                      <h4 className="font-headline-sm text-headline-sm text-on-surface font-bold flex items-center gap-1.5">
+                        <span>Đạt chuẩn ATS xuất sắc</span>
+                        <span className="material-symbols-outlined text-emerald-600 text-[18px]">verified</span>
+                      </h4>
+                      <p className="text-xs text-on-surface-variant">
+                        Tệp: <strong>{cvFileName || 'CV_UngVien.pdf'}</strong> ({cvFileSize || '1.4 MB'})
+                      </p>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2.5 bg-slate-50 rounded-xl p-3.5 border border-slate-200/80">
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Mức hưởng / tháng
-                      </p>
-                      <p className="text-sm font-extrabold text-[#0a66c2] mt-0.5">
-                        {formatVND(bhtnBenefit.monthlyBenefit)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Số tháng được hưởng
-                      </p>
-                      <p className="text-sm font-extrabold text-slate-900 mt-0.5">
-                        {bhtnBenefit.eligibleMonths} tháng
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Tổng trợ cấp dự kiến
-                      </p>
-                      <p className="text-sm font-extrabold text-emerald-700 mt-0.5">
-                        {formatVND(bhtnBenefit.totalBenefit)}
-                      </p>
-                    </div>
+                  <button
+                    type="button"
+                    onClick={handleResetCvScanner}
+                    className="text-xs text-primary font-bold hover:underline cursor-pointer"
+                  >
+                    Quét tệp khác
+                  </button>
+                </div>
+
+                {/* Sub-scores */}
+                <div className="grid grid-cols-3 gap-2 text-center text-xs">
+                  <div className="p-2.5 bg-surface-container-low rounded-xl border border-surface-container-high">
+                    <span className="text-on-surface-variant block text-[11px]">Bố cục ATS</span>
+                    <span className="font-bold text-emerald-600 text-sm">{scanResult.formatScore}%</span>
+                  </div>
+                  <div className="p-2.5 bg-surface-container-low rounded-xl border border-surface-container-high">
+                    <span className="text-on-surface-variant block text-[11px]">Từ khóa ngành</span>
+                    <span className="font-bold text-primary text-sm">{scanResult.keywordScore}%</span>
+                  </div>
+                  <div className="p-2.5 bg-surface-container-low rounded-xl border border-surface-container-high">
+                    <span className="text-on-surface-variant block text-[11px]">Kinh nghiệm</span>
+                    <span className="font-bold text-amber-600 text-sm">{scanResult.experienceScore}%</span>
+                  </div>
+                </div>
+
+                {/* Matched Keywords */}
+                <div>
+                  <span className="font-label-sm text-label-sm font-bold text-on-surface block mb-1.5">
+                    Từ khóa tương thích phát hiện ({scanResult.matchedKeywords.length}):
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {scanResult.matchedKeywords.map((kw, i) => (
+                      <span key={i} className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-medium flex items-center gap-0.5">
+                        <span className="material-symbols-outlined text-[13px]">check</span>
+                        <span>{kw}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Missing Keywords */}
+                <div>
+                  <span className="font-label-sm text-label-sm font-bold text-on-surface block mb-1.5">
+                    Từ khóa nên bổ sung để đạt 95+ điểm:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {scanResult.missingKeywords.map((kw, i) => (
+                      <span key={i} className="px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 text-[11px] font-medium flex items-center gap-0.5">
+                        <span className="material-symbols-outlined text-[13px]">add</span>
+                        <span>{kw}</span>
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                {/* AI Recommendations */}
+                <div className="p-3 bg-primary-fixed/20 rounded-xl space-y-1.5 text-xs text-on-surface">
+                  <span className="font-bold text-primary block">Khuyến nghị từ chuyên gia AI:</span>
+                  {scanResult.recommendations.map((rec, i) => (
+                    <p key={i} className="leading-relaxed flex items-start gap-1.5">
+                      <span className="material-symbols-outlined text-[14px] text-primary shrink-0 mt-0.5">tips_and_updates</span>
+                      <span>{rec}</span>
+                    </p>
+                  ))}
+                </div>
+
+                {/* Bottom Actions */}
+                <div className="pt-2 flex items-center justify-end gap-2.5">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      handleResetCvScanner();
+                      setActiveModal(null);
+                    }}
+                    className="px-4 py-2 bg-surface-container-high text-on-surface font-label-md text-label-md rounded-full hover:bg-surface-container transition-colors cursor-pointer"
+                  >
+                    Đóng
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setActiveModal(null);
+                      if (onTabChange) onTabChange('cv-builder');
+                    }}
+                    className="px-5 py-2 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer flex items-center gap-1 font-bold"
+                  >
+                    <span>Mở CV Builder để sửa</span>
+                    <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 10. MODAL: DỰ TÍNH BHTN & THỜI HẠN NỘP HỒ SƠ                           */}
+      {/* ===================================================================== */}
+      {activeModal === 'bhtn' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <div className="flex items-center justify-between pb-4 border-b border-surface-container-high">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-[28px]">health_and_safety</span>
+                <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                  Bảo hiểm thất nghiệp (BHTN)
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3 text-body-md text-on-surface-variant leading-relaxed">
+              <div className="p-3 bg-primary-fixed/20 rounded-xl text-primary font-semibold text-xs flex items-start gap-2">
+                <span className="material-symbols-outlined text-[18px] shrink-0">info</span>
+                <span>
+                  Mức hưởng trợ cấp thất nghiệp hàng tháng = <strong>60%</strong> mức bình quân tiền lương tháng đóng BHTN của 06 tháng liền kề trước khi nghỉ việc.
+                </span>
+              </div>
+
+              <div className="bg-surface-container-low rounded-xl p-4 text-xs space-y-2">
+                <p>• <strong>Thời gian hưởng:</strong> Đóng đủ từ 12 - 36 tháng thì được hưởng 03 tháng trợ cấp; sau đó cứ đóng đủ thêm 12 tháng thì được hưởng thêm 01 tháng (tối đa không quá 12 tháng).</p>
+                <p>• <strong>Thời hạn nộp hồ sơ:</strong> Trong vòng <strong>03 tháng (90 ngày)</strong> kể từ ngày chấm dứt hợp đồng lao động tại Trung tâm Dịch vụ Việc làm.</p>
+                <p>• <strong>Mức trần chi trả:</strong> Không quá 05 lần mức lương tối thiểu vùng tại thời điểm chấm dứt hợp đồng ({formatVND(4960000 * 5)}/tháng ở Vùng I).</p>
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+              >
+                Đã hiểu
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 11. MODAL: TRẮC NGHIỆM TÍNH CÁCH MBTI                                  */}
+      {/* ===================================================================== */}
+      {activeModal === 'mbti' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 shadow-2xl relative text-center">
+            <div className="w-16 h-16 rounded-2xl bg-secondary-fixed text-secondary flex items-center justify-center mx-auto mb-4">
+              <span className="material-symbols-outlined text-[36px]">psychology</span>
+            </div>
+            <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+              Trắc nghiệm MBTI & Holland Code
+            </h3>
+            <p className="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+              Bộ câu hỏi 60 tình huống thực tế giúp bạn xác định chuẩn xác nhóm tính cách nghề nghiệp (INTJ, ENFP, ISTJ...) và môi trường văn hóa công ty tương thích.
+            </p>
+
+            <div className="mt-5 grid grid-cols-2 gap-2 text-left">
+              {['INTJ - Nhà kiến tạo', 'ENFP - Người truyền cảm hứng', 'ISTJ - Người trách nhiệm', 'ENTP - Người phát minh'].map((type, i) => (
+                <div key={i} className="p-3 bg-surface-container-low rounded-xl text-xs font-semibold text-on-surface">
+                  {type}
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 flex items-center justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2.5 bg-surface-container-high text-on-surface font-label-md text-label-md rounded-full hover:bg-surface-container transition-colors cursor-pointer"
+              >
+                Đóng
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveModal(null);
+                  if (onShowToast) onShowToast('Đang khởi tạo bài kiểm tra MBTI 60 câu hỏi...', 'success');
+                }}
+                className="px-5 py-2.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer flex items-center gap-1.5"
+              >
+                <span>Bắt đầu làm bài (15 phút)</span>
+                <span className="material-symbols-outlined text-[16px]">arrow_forward</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 12. MODAL: SALARY BENCHMARK                                           */}
+      {activeModal === 'benchmark' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 shadow-2xl relative">
+            <div className="flex items-center justify-between pb-4 border-b border-surface-container-high">
+              <div className="flex items-center gap-2">
+                <span className="material-symbols-outlined text-primary text-[28px]">query_stats</span>
+                <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                  Báo cáo Lương Thị Trường 2025
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3">
+              <p className="font-body-sm text-body-sm text-on-surface-variant">
+                Mức lương trung vị được khảo sát từ hơn 250.000 tin tuyển dụng thực tế tại TP.HCM & Hà Nội:
+              </p>
+
+              <div className="space-y-2">
+                {[
+                  { title: 'Frontend Developer (2-4 năm)', salary: '22 - 38 triệu' },
+                  { title: 'Backend / DevOps (3-5 năm)', salary: '28 - 48 triệu' },
+                  { title: 'Product Manager / PO', salary: '30 - 55 triệu' },
+                  { title: 'Digital Marketing Lead', salary: '20 - 35 triệu' },
+                  { title: 'HR Generalist / Recruiter', salary: '14 - 24 triệu' },
+                ].map((item, idx) => (
+                  <div key={idx} className="flex justify-between items-center p-3 bg-surface-container-low rounded-xl text-xs">
+                    <span className="font-semibold text-on-surface">{item.title}</span>
+                    <span className="font-bold text-primary">{item.salary}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 13. MODAL: PHỎNG VẤN THỬ NGHIỆM AI                                    */}
+      {activeModal === 'interview' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-lg w-full p-6 shadow-2xl relative text-center">
+            <div className="w-16 h-16 rounded-2xl bg-primary-fixed text-primary flex items-center justify-center mx-auto mb-4">
+              <span className="material-symbols-outlined text-[36px]">record_voice_over</span>
+            </div>
+            <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+              Phỏng Vấn Giả Lập AI (Mock Interview)
+            </h3>
+            <p className="font-body-md text-body-md text-on-surface-variant mt-2 leading-relaxed">
+              Luyện trả lời câu hỏi phỏng vấn theo mô hình STAR (Situation, Task, Action, Result) với người phỏng vấn ảo AI.
+            </p>
+
+            <div className="mt-4 p-4 bg-surface-container-low rounded-xl text-xs text-left space-y-2 text-on-surface-variant">
+              <p>✔ Tự động chấm điểm độ tự tin và cấu trúc câu trả lời</p>
+              <p>✔ Gợi ý từ khóa đắt giá cho ngành IT, Marketing, Tài chính</p>
+              <p>✔ Hỗ trợ luyện cả tiếng Việt và tiếng Anh chuẩn quốc tế</p>
+            </div>
+
+            <div className="mt-6 flex justify-center gap-3">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2.5 bg-surface-container-high text-on-surface font-label-md text-label-md rounded-full hover:bg-surface-container transition-colors cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setActiveModal(null);
+                  if (onShowToast) onShowToast('Đang kết nối phòng phỏng vấn thử nghiệm...', 'success');
+                }}
+                className="px-5 py-2.5 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+              >
+                Bắt đầu phỏng vấn
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 14. MODAL: QUYẾT TOÁN THUẾ TNCN CUỐI NĂM (tax-final)                  */}
+      {/* ===================================================================== */}
+      {activeModal === 'tax-final' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full max-h-[92vh] overflow-y-auto p-6 shadow-2xl relative text-left">
+            <div className="flex items-center justify-between pb-4 border-b border-surface-container-high">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[24px]">receipt_long</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                    Quyết toán Thuế TNCN & Tính Thuế Lũy Tiến
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    Tính toán số tiền thuế thừa được hoàn hoặc số tiền cần nộp thêm cuối năm
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            {/* Inputs Grid */}
+            <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-3.5 text-xs">
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Tổng thu nhập chịu thuế cả năm (Gross năm):
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="5000000"
+                    value={taxFinalAnnualGross}
+                    onChange={(e) => setTaxFinalAnnualGross(Math.max(0, Number(e.target.value) || 0))}
+                    className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[11px]">VND</span>
+                </div>
+                <span className="text-[10px] text-on-surface-variant">Bình quân: {formatVND(taxFinalAnnualGross / taxFinalMonths)}/tháng</span>
+              </div>
+
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Thuế TNCN đã tạm khấu trừ trong năm:
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="1000000"
+                    value={taxFinalPrepaidTax}
+                    onChange={(e) => setTaxFinalPrepaidTax(Math.max(0, Number(e.target.value) || 0))}
+                    className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[11px]">VND</span>
+                </div>
+                <span className="text-[10px] text-on-surface-variant">Xem trên chứng từ khấu trừ thuế của công ty</span>
+              </div>
+
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Số tháng làm việc tính giảm trừ (1-12 tháng):
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  max="12"
+                  value={taxFinalMonths}
+                  onChange={(e) => setTaxFinalMonths(Math.max(1, Math.min(12, Number(e.target.value) || 1)))}
+                  className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <span className="text-[10px] text-on-surface-variant">Giảm trừ bản thân: {formatVND(11000000 * taxFinalMonths)}</span>
+              </div>
+
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Số người phụ thuộc đăng ký:
+                </label>
+                <input
+                  type="number"
+                  min="0"
+                  max="10"
+                  value={taxFinalDependents}
+                  onChange={(e) => setTaxFinalDependents(Math.max(0, Number(e.target.value) || 0))}
+                  className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                />
+                <span className="text-[10px] text-on-surface-variant">Giảm trừ: {formatVND(4400000 * taxFinalMonths * taxFinalDependents)}</span>
+              </div>
+            </div>
+
+            {/* Final Balance Notification Box */}
+            <div className="mt-4">
+              {taxFinalResult.difference > 0 ? (
+                <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center shrink-0">
+                    <span className="material-symbols-outlined text-[24px]">savings</span>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                      Kết quả quyết toán: BẠN ĐƯỢC HOÀN THUẾ THỪA
+                    </span>
+                    <h4 className="text-xl font-black text-emerald-700 mt-0.5">
+                      +{formatVND(taxFinalResult.difference)}
+                    </h4>
+                    <p className="text-xs text-emerald-800/90 mt-1 leading-relaxed">
+                      Bạn đã nộp thừa tiền thuế trong năm. Bạn có quyền nộp tờ khai <strong>02/QTT-TNCN</strong> trực tuyến trên ứng dụng <strong>eTax Mobile</strong> để nhận tiền hoàn trả về tài khoản ngân hàng.
+                    </p>
+                  </div>
+                </div>
+              ) : taxFinalResult.difference < 0 ? (
+                <div className="p-4 bg-amber-50 border border-amber-200 rounded-2xl flex items-start gap-3">
+                  <div className="w-10 h-10 rounded-full bg-amber-100 text-amber-700 flex items-center justify-center shrink-0">
+                    <span className="material-symbols-outlined text-[24px]">priority_high</span>
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold uppercase tracking-wider text-amber-800">
+                      Kết quả quyết toán: BẠN CẦN NỘP BỔ SUNG
+                    </span>
+                    <h4 className="text-xl font-black text-amber-700 mt-0.5">
+                      -{formatVND(Math.abs(taxFinalResult.difference))}
+                    </h4>
+                    <p className="text-xs text-amber-800/90 mt-1 leading-relaxed">
+                      Số tiền thuế tạm nộp trong năm chưa đủ so với tổng thu nhập thực tế. Bạn cần nộp bổ sung trước hạn quyết toán để tránh bị tính tiền chậm nộp 0.03%/ngày.
+                    </p>
                   </div>
                 </div>
               ) : (
-                <div className="pt-3.5 space-y-3.5">
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        {activeToolMode === 'net-to-gross'
-                          ? 'Thu nhập Net (VNĐ)'
-                          : 'Thu nhập Gross (VNĐ)'}
-                      </label>
-                      <input
-                        type="number"
-                        step="500000"
-                        value={salaryInput}
-                        onChange={(e) => setSalaryInput(Number(e.target.value))}
-                        className="w-full px-3.5 py-2 rounded-full border border-slate-300 text-xs sm:text-sm font-bold text-slate-900 focus:outline-hidden focus:border-[#0a66c2]"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Người phụ thuộc
-                      </label>
-                      <select
-                        value={dependents}
-                        onChange={(e) => setDependents(Number(e.target.value))}
-                        className="w-full px-3.5 py-2 rounded-full border border-slate-300 bg-white text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:border-[#0a66c2] cursor-pointer"
-                      >
-                        {[0, 1, 2, 3, 4, 5].map((n) => (
-                          <option key={n} value={n}>
-                            {n} người phụ thuộc
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-bold text-slate-700 mb-1">
-                        Vùng lương tối thiểu
-                      </label>
-                      <select
-                        value={region}
-                        onChange={(e) => setRegion(e.target.value)}
-                        className="w-full px-3.5 py-2 rounded-full border border-slate-300 bg-white text-xs sm:text-sm font-semibold text-slate-800 focus:outline-hidden focus:border-[#0a66c2] cursor-pointer"
-                      >
-                        <option value="1">Vùng I (TP.HCM, Hà Nội...)</option>
-                        <option value="2">Vùng II (Đà Nẵng, Cần Thơ...)</option>
-                        <option value="3">Vùng III</option>
-                        <option value="4">Vùng IV</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Quick preset salary pills */}
-                  <div className="flex flex-wrap items-center gap-1.5">
-                    <span className="text-[11px] text-slate-500 font-medium mr-1">
-                      Mức lương phổ biến:
-                    </span>
-                    {[15000000, 20000000, 25000000, 35000000, 50000000].map(
-                      (val) => (
-                        <button
-                          key={val}
-                          type="button"
-                          onClick={() => setSalaryInput(val)}
-                          className={`px-2.5 py-1 rounded-full text-[11px] font-semibold transition-colors cursor-pointer ${
-                            Number(salaryInput) === val
-                              ? 'bg-blue-50 text-[#0a66c2] border border-[#0a66c2]'
-                              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                          }`}
-                        >
-                          {val / 1000000} triệu
-                        </button>
-                      )
-                    )}
-                  </div>
-
-                  {/* Result Summary Box */}
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 bg-slate-50 rounded-xl p-3.5 border border-slate-200/80">
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Lương Gross
-                      </p>
-                      <p className="text-sm font-extrabold text-slate-900 mt-0.5">
-                        {formatVND(salaryBreakdown.gross)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Bảo hiểm (10.5%)
-                      </p>
-                      <p className="text-sm font-bold text-slate-700 mt-0.5">
-                        -{formatVND(salaryBreakdown.totalInsurance)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Thuế TNCN
-                      </p>
-                      <p className="text-sm font-bold text-rose-600 mt-0.5">
-                        -{formatVND(salaryBreakdown.pit)}
-                      </p>
-                    </div>
-                    <div>
-                      <p className="text-[11px] text-slate-500 font-medium">
-                        Lương Net thực nhận
-                      </p>
-                      <p className="text-sm font-extrabold text-[#0a66c2] mt-0.5">
-                        {formatVND(salaryBreakdown.net)}
-                      </p>
-                    </div>
+                <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl flex items-center gap-3">
+                  <span className="material-symbols-outlined text-primary text-[28px]">check_circle</span>
+                  <div>
+                    <h4 className="font-bold text-primary text-sm">Thuế TNCN đã quyết toán cân bằng!</h4>
+                    <p className="text-xs text-slate-600">Số thuế đã tạm nộp trùng khớp hoàn toàn với số thuế phát sinh cả năm.</p>
                   </div>
                 </div>
               )}
             </div>
 
-            {/* =============================================================== */}
-            {/* PHẦN Ở TRÊN: CÔNG CỤ TÍNH TOÁN & SỰ NGHIỆP ĐỀ XUẤT CHO BẠN        */}
-            {/* =============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden">
-              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">
-                    Công cụ sự nghiệp đề xuất cho bạn
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Các tiện ích tính lương, bảo hiểm và tối ưu hồ sơ ứng tuyển
-                  </p>
-                </div>
-                <span className="text-[11px] font-semibold text-[#0a66c2] bg-blue-50 px-2.5 py-1 rounded-full">
-                  Công cụ tiện ích
-                </span>
+            {/* Calculations Breakdown */}
+            <div className="mt-4 bg-surface-container-low rounded-xl p-3.5 text-xs space-y-1.5 text-on-surface-variant">
+              <div className="flex justify-between">
+                <span>Tổng thu nhập chịu thuế cả năm:</span>
+                <span className="font-bold text-on-surface">{formatVND(taxFinalResult.gross)}</span>
               </div>
-
-              <div className="divide-y divide-slate-200/80">
-                {visibleTools.map((tool) => {
-                  const isSaved = savedToolIds.includes(tool.id);
-                  return (
-                    <div
-                      key={tool.id}
-                      className="p-4 hover:bg-slate-50/90 transition-colors flex items-start justify-between gap-3"
-                    >
-                      <div className="flex items-start space-x-3 min-w-0 flex-1">
-                        <div className="relative w-12 h-12 rounded-full bg-slate-200 shrink-0 overflow-hidden border border-slate-200 flex items-center justify-center">
-                          <img
-                            src={displayAvatar}
-                            alt={tool.name}
-                            referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover"
-                          />
-                          <span className="absolute bottom-0 right-0 bg-[#0a66c2] text-white text-[7px] font-black px-1 rounded-tl-md">
-                            {tool.badgeText}
-                          </span>
-                        </div>
-
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center space-x-1.5">
-                            <h4
-                              onClick={() => {
-                                if (tool.type === 'cv-builder') {
-                                  onTabChange && onTabChange('cv-builder');
-                                } else if (tool.type === 'bhtn') {
-                                  setActiveToolMode('bhtn');
-                                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                                } else {
-                                  setActiveToolMode('gross-to-net');
-                                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                                }
-                              }}
-                              className="text-sm font-bold text-slate-900 hover:text-[#0a66c2] hover:underline cursor-pointer truncate"
-                            >
-                              {tool.name}
-                            </h4>
-                            {tool.verified && (
-                              <ShieldCheck className="w-4 h-4 text-slate-600 shrink-0" />
-                            )}
-                          </div>
-
-                          <p className="text-xs text-slate-700 line-clamp-2 mt-0.5 leading-snug">
-                            {tool.headline}
-                          </p>
-
-                          <div className="flex items-center space-x-1.5 text-[11px] text-slate-500 mt-1.5">
-                            <TrendingUp className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            <span>{tool.usageMeta}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleToggleSaveTool(tool)}
-                        className={`shrink-0 inline-flex items-center space-x-1 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer ${
-                          isSaved
-                            ? 'border-slate-400 bg-slate-100 text-slate-800 hover:bg-slate-200'
-                            : 'border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50/80 hover:border-[#004182]'
-                        }`}
-                      >
-                        {isSaved ? (
-                          <>
-                            <Check className="w-4 h-4 stroke-[2.5]" />
-                            <span>Đã ghim</span>
-                          </>
-                        ) : (
-                          <>
-                            <Plus className="w-4 h-4 stroke-[2.5]" />
-                            <span>Ghim công cụ</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  );
-                })}
+              <div className="flex justify-between">
+                <span>Tổng các khoản giảm trừ gia cảnh & BH:</span>
+                <span className="font-semibold text-emerald-700">-{formatVND(taxFinalResult.totalDeduction)}</span>
               </div>
-
-              <button
-                type="button"
-                onClick={() => setShowAllTools((prev) => !prev)}
-                className="w-full py-3 border-t border-slate-200/80 hover:bg-slate-100 text-sm font-bold text-slate-700 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer rounded-b-xl"
-              >
-                <span>
-                  {showAllTools ? 'Thu gọn danh sách' : 'Hiển thị thêm'}
-                </span>
-                <ArrowRight className="w-4 h-4" />
-              </button>
+              <div className="flex justify-between pt-1 border-t border-surface-container-high">
+                <span className="font-bold text-on-surface">Thu nhập tính thuế cả năm:</span>
+                <span className="font-bold text-primary">{formatVND(taxFinalResult.taxableIncome)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="font-bold text-on-surface">Thuế TNCN cả năm phải nộp:</span>
+                <span className="font-bold text-rose-600">{formatVND(taxFinalResult.totalTax)}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Thuế TNCN đã tạm khấu trừ tại nguồn:</span>
+                <span className="font-semibold text-on-surface">{formatVND(taxFinalResult.prepaid)}</span>
+              </div>
             </div>
 
-            {/* =============================================================== */}
-            {/* PHẦN Ở DƯỚI: TRẮC NGHIỆM ĐỊNH HƯỚNG & PHÁT TRIỂN BẢN THÂN         */}
-            {/* =============================================================== */}
-            <div className="bg-white rounded-xl border border-slate-300/80 shadow-2xs overflow-hidden">
-              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
-                <div>
-                  <h3 className="text-[15px] font-bold text-slate-900">
-                    Định hướng nghề nghiệp & Phát triển kỹ năng
-                  </h3>
-                  <p className="text-xs text-slate-500 mt-0.5">
-                    Trắc nghiệm tính cách, cẩm nang phỏng vấn & đàm phán thu nhập dành cho ứng viên
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => setShowAllDevTools((prev) => !prev)}
-                  className="p-1.5 rounded-full text-slate-600 hover:bg-slate-100 transition-colors cursor-pointer"
-                  title="Xem tất cả"
-                >
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-
-              <div className="divide-y divide-slate-200/80">
-                {visibleDevTools.map((item) => {
-                  const isCompleted = completedDevIds.includes(item.id);
-                  return (
-                    <div
-                      key={item.id}
-                      className="p-4 hover:bg-slate-50/90 transition-colors flex items-start justify-between gap-3"
-                    >
-                      <div className="flex items-start space-x-3 min-w-0 flex-1">
-                        <img
-                          src={displayAvatar}
-                          alt={item.name}
-                          referrerPolicy="no-referrer"
-                          className="w-12 h-12 rounded-full object-cover border border-slate-200 shrink-0"
-                        />
-
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center space-x-1.5">
-                            <h4
-                              onClick={() => handleToggleDevTool(item)}
-                              className="text-sm font-bold text-slate-900 hover:text-[#0a66c2] hover:underline cursor-pointer truncate"
-                            >
-                              {item.name}
-                            </h4>
-                            {item.verified && (
-                              <ShieldCheck className="w-4 h-4 text-slate-600 shrink-0" />
-                            )}
-                          </div>
-
-                          <p className="text-xs text-slate-700 line-clamp-2 mt-0.5 leading-snug">
-                            {item.headline}
-                          </p>
-
-                          <div className="flex items-center space-x-1.5 text-[11px] text-slate-500 mt-1.5">
-                            {item.activityType === 'clock' ? (
-                              <Clock className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            ) : (
-                              <TrendingUp className="w-3.5 h-3.5 text-slate-500 shrink-0" />
-                            )}
-                            <span>{item.activity}</span>
-                          </div>
-                        </div>
-                      </div>
-
-                      <button
-                        type="button"
-                        onClick={() => handleToggleDevTool(item)}
-                        className={`shrink-0 inline-flex items-center space-x-1.5 px-4 py-1.5 rounded-full text-xs sm:text-sm font-bold border transition-colors cursor-pointer ${
-                          isCompleted
-                            ? 'border-slate-400 bg-slate-100 text-slate-800 hover:bg-slate-200'
-                            : 'border-[#0a66c2] text-[#0a66c2] hover:bg-blue-50/80 hover:border-[#004182]'
-                        }`}
-                      >
-                        {isCompleted ? (
-                          <>
-                            <Check className="w-4 h-4 stroke-[2.5]" />
-                            <span>Đã lưu</span>
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="w-4 h-4 stroke-[2.2]" />
-                            <span>Khám phá</span>
-                          </>
-                        )}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-
+            <div className="mt-5 flex items-center justify-between">
+              <span className="text-[11px] text-outline">Quy định theo Luật Thuế Thu Nhập Cá Nhân & eTax Mobile</span>
               <button
                 type="button"
-                onClick={() => setShowAllDevTools((prev) => !prev)}
-                className="w-full py-3 border-t border-slate-200/80 hover:bg-slate-100 text-sm font-bold text-slate-700 flex items-center justify-center space-x-1.5 transition-colors cursor-pointer rounded-b-xl"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
               >
-                <span>
-                  {showAllDevTools ? 'Thu gọn danh sách' : 'Hiển thị thêm'}
-                </span>
-                <ArrowRight className="w-4 h-4" />
+                Đã hiểu & Đóng
               </button>
             </div>
           </div>
+        </div>
+      )}
 
-          {/* =================================================================== */}
-          {/* CỘT PHẢI (3 cols): BẢNG LƯƠNG & TIỆN ÍCH NỔI BẬT HÔM NAY             */}
-          {/* =================================================================== */}
-          <aside className="lg:col-span-3 space-y-2.5">
-            {/* Top Right Card: Cẩm nang Lương & Thuế (giống JobCentral News) */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-4 shadow-2xs">
-              <div className="flex items-center justify-between">
-                <h3 className="text-base font-bold text-slate-900">
-                  JobCentral Tools
-                </h3>
-                <span className="w-4 h-4 rounded-xs bg-slate-800 text-white text-[10px] font-bold flex items-center justify-center">
-                  i
-                </span>
+      {/* ===================================================================== */}
+      {/* 15. MODAL: TÍNH BHXH 1 LẦN (bhxh-one-time)                             */}
+      {/* ===================================================================== */}
+      {activeModal === 'bhxh-one-time' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative text-left">
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[24px]">savings</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                    Dự Tính Tiền Rút BHXH 1 Lần
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    Tính theo quy định Luật Bảo hiểm Xã hội hiện hành
+                  </p>
+                </div>
               </div>
-              <p className="text-xs font-bold text-slate-500 mt-1.5">
-                Tiêu điểm Lương & Bảo hiểm
-              </p>
-
-              <div className="mt-2.5 space-y-2.5">
-                {(showAllInsights
-                  ? SALARY_INSIGHTS
-                  : SALARY_INSIGHTS.slice(0, 5)
-                ).map((item) => (
-                  <div
-                    key={item.id}
-                    onClick={() => onTabChange && onTabChange('news')}
-                    className="px-2 py-1.5 -mx-2 rounded-lg hover:bg-slate-100 transition-colors cursor-pointer"
-                  >
-                    <h4 className="text-xs font-bold text-slate-900 line-clamp-1">
-                      {item.title}
-                    </h4>
-                    <p className="text-[11px] text-slate-500 mt-0.5">
-                      {item.meta}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
               <button
                 type="button"
-                onClick={() => setShowAllInsights((prev) => !prev)}
-                className="mt-3 px-2.5 py-1 -ml-2.5 rounded-full hover:bg-slate-100 inline-flex items-center space-x-1 text-xs font-bold text-slate-700 transition-colors cursor-pointer"
+                onClick={() => setActiveModal(null)}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
               >
-                <span>
-                  {showAllInsights ? 'Thu gọn' : 'Hiển thị thêm'}
-                </span>
-                <ChevronDown
-                  className={`w-4 h-4 transition-transform ${
-                    showAllInsights ? 'rotate-180' : ''
-                  }`}
-                />
+                <span className="material-symbols-outlined text-[20px]">close</span>
               </button>
             </div>
 
-            {/* Bottom Right Card: Tiện ích dùng nhiều hôm nay */}
-            <div className="bg-white rounded-xl border border-slate-300/80 p-4 shadow-2xs">
-              <h3 className="text-sm font-bold text-slate-600 mb-3">
-                Công cụ nổi bật hôm nay
-              </h3>
+            <div className="mt-4 space-y-3.5 text-xs">
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Mức bình quân tiền lương tháng đóng BHXH (VND):
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="1000000"
+                    value={bhxhAvgSalary}
+                    onChange={(e) => setBhxhAvgSalary(Math.max(0, Number(e.target.value) || 0))}
+                    className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[11px]">VND</span>
+                </div>
+              </div>
 
-              <div className="space-y-2">
-                {[
-                  {
-                    id: 'quick-1',
-                    name: 'Quy đổi Gross → Net',
-                    tag: '#101',
-                    desc: 'Tính nhanh thuế TNCN & BHXH',
-                    color: 'bg-orange-500 text-white',
-                    icon: Calculator,
-                    action: () => setActiveToolMode('gross-to-net'),
-                  },
-                  {
-                    id: 'quick-2',
-                    name: 'Trợ cấp thất nghiệp',
-                    tag: '#102',
-                    desc: 'Dự tính mức hưởng 60% lương',
-                    color: 'bg-emerald-600 text-white',
-                    icon: PiggyBank,
-                    action: () => setActiveToolMode('bhtn'),
-                  },
-                  {
-                    id: 'quick-3',
-                    name: 'Tạo & Chấm điểm CV',
-                    tag: '#103',
-                    desc: 'Mẫu CV chuẩn ATS nhà tuyển dụng',
-                    color: 'bg-sky-600 text-white',
-                    icon: FileCheck,
-                    action: () => onTabChange && onTabChange('cv-builder'),
-                  },
-                  {
-                    id: 'quick-4',
-                    name: 'Khám phá việc làm lương cao',
-                    tag: '#104',
-                    desc: 'So sánh mức đãi ngộ thị trường',
-                    color: 'bg-indigo-600 text-white',
-                    icon: Briefcase,
-                    action: () => onTabChange && onTabChange('search'),
-                  },
-                ].map((item) => {
-                  const IconComp = item.icon;
-                  return (
-                    <div
-                      key={item.id}
-                      onClick={item.action}
-                      className="flex items-center justify-between p-2 -mx-2 rounded-xl hover:bg-slate-100 transition-colors cursor-pointer group"
-                    >
-                      <div className="flex items-center space-x-3 min-w-0">
-                        <div
-                          className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 shadow-2xs ${item.color}`}
-                        >
-                          <IconComp className="w-5 h-5" />
-                        </div>
-                        <div className="min-w-0">
-                          <p className="text-xs font-bold text-slate-900 truncate">
-                            {item.name}{' '}
-                            <span className="font-normal text-slate-500">
-                              {item.tag}
-                            </span>
-                          </p>
-                          <p className="text-[11px] text-slate-500 truncate">
-                            {item.desc}
-                          </p>
-                        </div>
-                      </div>
-                      <ChevronRight className="w-4 h-4 text-slate-600 group-hover:translate-x-0.5 transition-transform shrink-0" />
-                    </div>
-                  );
-                })}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-bold text-on-surface block mb-1">
+                    Số năm đóng trước 2014:
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="40"
+                    value={bhxhYearsBefore2014}
+                    onChange={(e) => setBhxhYearsBefore2014(Math.max(0, Number(e.target.value) || 0))}
+                    className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <span className="text-[10px] text-on-surface-variant">Mỗi năm = 1.5 tháng lương</span>
+                </div>
+
+                <div>
+                  <label className="font-bold text-on-surface block mb-1">
+                    Số năm đóng từ 2014 trở đi:
+                  </label>
+                  <input
+                    type="number"
+                    min="0"
+                    max="40"
+                    value={bhxhYearsAfter2014}
+                    onChange={(e) => setBhxhYearsAfter2014(Math.max(0, Number(e.target.value) || 0))}
+                    className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <span className="text-[10px] text-on-surface-variant">Mỗi năm = 2.0 tháng lương</span>
+                </div>
+              </div>
+
+              {/* Total Card */}
+              <div className="p-4 bg-gradient-to-br from-primary to-primary-container text-on-primary rounded-2xl shadow-sm">
+                <span className="text-xs uppercase tracking-wider text-primary-fixed block font-bold">
+                  SỐ TIỀN BHXH 1 LẦN DỰ TÍNH NHẬN ĐƯỢC:
+                </span>
+                <div className="text-2xl font-black mt-1">
+                  {formatVND(bhxhOneTimeResult.totalAmount)}
+                </div>
+                <div className="mt-2 pt-2 border-t border-on-primary/15 text-[11px] text-on-primary/80 flex justify-between">
+                  <span>Trước 2014 ({bhxhOneTimeResult.yearsBefore2014} năm): {formatVND(bhxhOneTimeResult.amountBefore)}</span>
+                  <span>Từ 2014 ({bhxhOneTimeResult.yearsAfter2014} năm): {formatVND(bhxhOneTimeResult.amountAfter)}</span>
+                </div>
+              </div>
+
+              <div className="bg-surface-container-low rounded-xl p-3 text-[11px] text-on-surface-variant space-y-1">
+                <p>• <strong>Điều kiện rút:</strong> Sau 12 tháng nghỉ việc không tiếp tục tham gia BHXH hoặc ra nước ngoài định cư, mắc bệnh hiểm nghèo.</p>
+                <p>• <strong>Lưu ý:</strong> Rút BHXH 1 lần sẽ làm mất thời gian tích lũy để hưởng chế độ hưu trí và thẻ BHYT miễn phí khi về già.</p>
               </div>
             </div>
-          </aside>
+
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* ===================================================================== */}
+      {/* 16. MODAL: TRA CỨU LUẬT THỬ VIỆC (probation-eval)                     */}
+      {/* ===================================================================== */}
+      {activeModal === 'probation-eval' && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn">
+          <div className="bg-surface-container-lowest rounded-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto p-6 shadow-2xl relative text-left">
+            <div className="flex items-center justify-between pb-3 border-b border-surface-container-high">
+              <div className="flex items-center gap-2">
+                <div className="w-10 h-10 rounded-xl bg-primary-fixed text-primary flex items-center justify-center shrink-0">
+                  <span className="material-symbols-outlined text-[24px]">gavel</span>
+                </div>
+                <div>
+                  <h3 className="font-headline-md text-headline-md text-on-surface font-bold">
+                    Tra Cứu Luật Thử Việc & Quyền Lợi
+                  </h3>
+                  <p className="font-body-sm text-body-sm text-on-surface-variant">
+                    Căn cứ theo Điều 25 & 26 Bộ Luật Lao Động 2019
+                  </p>
+                </div>
+              </div>
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="w-8 h-8 rounded-full bg-surface-container-low hover:bg-surface-container flex items-center justify-center text-on-surface-variant cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[20px]">close</span>
+              </button>
+            </div>
+
+            <div className="mt-4 space-y-3.5 text-xs">
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Trình độ / Vị trí công việc:
+                </label>
+                <select
+                  value={probationJobType}
+                  onChange={(e) => setProbationJobType(e.target.value)}
+                  className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-xs font-bold text-on-surface focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
+                >
+                  <option value="university">Cao đẳng / Đại học trở lên (Tối đa 60 ngày)</option>
+                  <option value="intermediate">Trung cấp / Kỹ thuật viên / Nghiệp vụ (Tối đa 30 ngày)</option>
+                  <option value="simple">Lao động đơn giản / Phổ thông (Tối đa 6 ngày)</option>
+                  <option value="manager">Người quản lý doanh nghiệp (Tối đa 180 ngày)</option>
+                </select>
+                <p className="text-[11px] text-on-surface-variant mt-1 leading-relaxed">
+                  {probationResult.description}
+                </p>
+              </div>
+
+              <div>
+                <label className="font-bold text-on-surface block mb-1">
+                  Mức lương chính thức thỏa thuận (VND):
+                </label>
+                <div className="relative">
+                  <input
+                    type="number"
+                    step="1000000"
+                    value={probationOfficialSalary}
+                    onChange={(e) => setProbationOfficialSalary(Math.max(0, Number(e.target.value) || 0))}
+                    className="w-full bg-surface-container-low rounded-xl px-3 py-2 text-sm font-bold text-primary focus:outline-none focus:ring-1 focus:ring-primary"
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-outline text-[11px]">VND</span>
+                </div>
+              </div>
+
+              {/* Legal Summary Box */}
+              <div className="p-4 bg-surface-container-low rounded-2xl border border-primary/20 space-y-2">
+                <div className="flex justify-between items-center">
+                  <span className="text-on-surface-variant">Thời gian thử việc tối đa:</span>
+                  <span className="font-bold text-primary text-sm">{probationResult.maxDays} ngày</span>
+                </div>
+                <div className="flex justify-between items-center">
+                  <span className="text-on-surface-variant">Lương thử việc tối thiểu (85%):</span>
+                  <span className="font-black text-emerald-700 text-sm">{formatVND(probationResult.probationSalaryMin)}</span>
+                </div>
+                <div className="flex justify-between items-center text-[11px] text-outline">
+                  <span>Không được áp dụng thử việc đối với:</span>
+                  <span className="font-semibold text-on-surface">HĐLĐ dưới 1 tháng</span>
+                </div>
+              </div>
+
+              <div className="bg-primary-fixed/20 rounded-xl p-3 text-[11px] text-on-surface space-y-1">
+                <p className="font-bold text-primary">Quyền chấm dứt trong thời gian thử việc:</p>
+                <p>• Trong thời gian thử việc, mỗi bên có quyền hủy bỏ hợp đồng thử việc mà <strong>không cần báo trước</strong> và <strong>không phải bồi thường</strong>.</p>
+                <p>• Người sử dụng lao động <strong>chỉ được thử việc 01 lần</strong> cho một công việc.</p>
+              </div>
+            </div>
+
+            <div className="mt-5 flex justify-end">
+              <button
+                type="button"
+                onClick={() => setActiveModal(null)}
+                className="px-5 py-2 bg-primary-container text-on-primary font-label-md text-label-md rounded-full shadow-sm hover:bg-primary transition-colors cursor-pointer"
+              >
+                Đóng
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
+import { FavoriteCompaniesSection } from './FavoriteCompaniesSection';
 
 const DEFAULT_CORPORATE_COMPANIES = [
   {
@@ -196,11 +197,16 @@ const SORT_OPTIONS = [
 
 export const CompaniesView = ({
   companies = [],
+  currentUser,
+  savedCount,
   onSelectCompany,
   onTabChange,
   onShowToast,
   initialSearchQuery = '',
   onResetSearch,
+  followedCompanyIds = [],
+  onToggleFollowCompany,
+  onExploreJobs,
 }) => {
   const [searchTerm, setSearchTerm] = useState(initialSearchQuery || '');
   const [selectedLocation, setSelectedLocation] = useState('all');
@@ -276,10 +282,16 @@ export const CompaniesView = ({
   };
 
   const mergedCompanies = useMemo(() => {
-    return DEFAULT_CORPORATE_COMPANIES.map((defComp) => {
+    const list = DEFAULT_CORPORATE_COMPANIES.map((defComp) => {
       const matched = companies.find((c) => c.id === defComp.id || c.name === defComp.name);
       return matched ? { ...matched, ...defComp } : defComp;
     });
+    companies.forEach((c) => {
+      if (!list.some((item) => item.id === c.id || item.name === c.name)) {
+        list.push(c);
+      }
+    });
+    return list;
   }, [companies]);
 
   const filteredCompanies = useMemo(() => {
@@ -510,7 +522,7 @@ export const CompaniesView = ({
                 <button
                   type="button"
                   onClick={handleSearchButtonClick}
-                  className="w-full h-12 flex items-center justify-center gap-space-xs bg-primary-container hover:bg-primary text-on-primary font-label-lg text-label-lg transition-colors shadow-[0_4px_14px_rgba(21,93,252,0.3)] rounded-full cursor-pointer"
+                  className="w-full h-12 flex items-center justify-center gap-space-xs bg-[#2170E4] hover:bg-[#1a5bbd] text-white font-label-lg text-label-lg transition-colors shadow-[0_4px_14px_rgba(33,112,228,0.3)] rounded-full cursor-pointer"
                 >
                   <span className="material-symbols-outlined text-[20px]">
                     search
@@ -526,6 +538,27 @@ export const CompaniesView = ({
             <span className="font-label-md text-label-md text-on-surface-variant mr-space-xs">
               Gợi ý nhanh:
             </span>
+            {followedCompanyIds.length > 0 && (
+              <button
+                type="button"
+                id="quick-filter-followed-btn"
+                onClick={() => {
+                  const el = document.getElementById('favorite-companies-section');
+                  if (el) {
+                    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }
+                }}
+                className="flex items-center gap-space-xs px-space-md py-1.5 rounded-full transition-colors font-label-md text-label-md shadow-sm cursor-pointer bg-amber-50 text-amber-800 hover:bg-amber-100 border border-amber-200"
+              >
+                <span
+                  className="material-symbols-outlined text-[16px] text-amber-600"
+                  style={{ fontVariationSettings: '"FILL" 1' }}
+                >
+                  bookmark
+                </span>
+                <span>Đang theo dõi ({followedCompanyIds.length})</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={() =>
@@ -867,119 +900,177 @@ export const CompaniesView = ({
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-space-lg">
-                  {filteredCompanies.map((company) => (
-                    <div
-                      key={company.id}
-                      id={`company-card-${company.id}`}
-                      className="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
-                    >
-                      <div>
-                        {/* Banner Preview */}
-                        <div
-                          onClick={() =>
-                            onSelectCompany && onSelectCompany(company)
-                          }
-                          className="relative h-36 w-full bg-surface-container overflow-hidden cursor-pointer"
-                        >
-                          <img
-                            src={company.coverImage}
-                            alt={company.altText || company.name}
-                            referrerPolicy="no-referrer"
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                          />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
-                          {company.badgeText && (
-                            <span
-                              className={`absolute top-3 right-3 px-2 py-0.5 rounded-md font-label-sm text-label-sm uppercase ${company.badgeClass}`}
-                            >
-                              {company.badgeText}
-                            </span>
-                          )}
-                        </div>
-
-                        <div className="p-space-lg pt-0 relative">
-                          {/* Logo Overlap */}
-                          <div className="-mt-8 mb-space-sm flex items-end justify-between">
-                            <div
-                              onClick={() =>
-                                onSelectCompany && onSelectCompany(company)
-                              }
-                              className="w-16 h-16 bg-surface-container-lowest shadow-md p-1.5 flex items-center justify-center rounded-full cursor-pointer"
-                            >
-                              <div
-                                className={`w-full h-full flex items-center justify-center rounded-full ${company.avatarBgClass}`}
-                              >
-                                {company.avatarCode}
-                              </div>
-                            </div>
-
-                            <div className="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-sm text-secondary">
-                              <span
-                                className="material-symbols-outlined text-[16px]"
-                                style={{ fontVariationSettings: '"FILL" 1' }}
-                              >
-                                star
-                              </span>
-                              <span className="font-headline-sm text-headline-sm text-on-surface">
-                                {company.rating}
-                              </span>
-                              <span className="font-body-sm text-body-sm text-on-surface-variant">
-                                ({company.reviewsCount})
-                              </span>
-                            </div>
-                          </div>
-
-                          {/* Details */}
-                          <div className="flex flex-col gap-1 mb-space-md">
-                            <h2
-                              onClick={() =>
-                                onSelectCompany && onSelectCompany(company)
-                              }
-                              className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors cursor-pointer"
-                            >
-                              {company.name}
-                            </h2>
-                            <span className="font-body-sm text-body-sm text-on-surface-variant">
-                              {company.industry}
-                            </span>
-                          </div>
-
-                          <div className="grid grid-cols-2 gap-y-2 text-on-surface-variant font-body-sm text-body-sm mb-space-md">
-                            <div className="flex items-center gap-1.5">
-                              <span className="material-symbols-outlined text-[18px] text-primary">
-                                groups
-                              </span>
-                              <span>{company.employees}</span>
-                            </div>
-                            <div className="flex items-center gap-1.5">
-                              <span className="material-symbols-outlined text-[18px] text-primary">
-                                location_on
-                              </span>
-                              <span>{company.location}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Footer CTA */}
-                      <div className="px-space-lg pb-space-lg pt-0 flex items-center justify-between bg-surface-container-lowest">
-                        <span className="font-label-md text-label-md flex items-center gap-1 text-on-surface-variant">
-                          {company.jobsLabel}
-                        </span>
-                        <div className="flex items-center gap-space-xs">
-                          <button
-                            type="button"
+                  {filteredCompanies.map((company) => {
+                    const isFollowed = followedCompanyIds.includes(company.id);
+                    return (
+                      <div
+                        key={company.id}
+                        id={`company-card-${company.id}`}
+                        className="group bg-surface-container-lowest rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
+                      >
+                        <div>
+                          {/* Banner Preview */}
+                          <div
                             onClick={() =>
                               onSelectCompany && onSelectCompany(company)
                             }
-                            className="px-space-md py-1.5 bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-colors rounded-full cursor-pointer"
+                            className="relative h-36 w-full bg-surface-container overflow-hidden cursor-pointer"
                           >
-                            Xem công ty
-                          </button>
+                            <img
+                              src={company.coverImage}
+                              alt={company.altText || company.name}
+                              referrerPolicy="no-referrer"
+                              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+
+                            {/* Quick Bookmark Follow button on banner */}
+                            <button
+                              type="button"
+                              id={`quick-follow-btn-${company.id}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (onToggleFollowCompany) {
+                                  onToggleFollowCompany(company.id, e);
+                                }
+                              }}
+                              title={isFollowed ? 'Bỏ theo dõi công ty' : 'Theo dõi công ty'}
+                              aria-label={isFollowed ? 'Bỏ theo dõi công ty' : 'Theo dõi công ty'}
+                              className={`absolute top-3 left-3 w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md transition-all cursor-pointer shadow-sm z-10 ${
+                                isFollowed
+                                  ? 'bg-amber-400 text-white hover:bg-amber-500 ring-2 ring-white/70'
+                                  : 'bg-black/40 hover:bg-black/60 text-white border border-white/30'
+                              }`}
+                            >
+                              <span
+                                className="material-symbols-outlined text-[18px]"
+                                style={isFollowed ? { fontVariationSettings: '"FILL" 1' } : {}}
+                              >
+                                {isFollowed ? 'bookmark' : 'bookmark_border'}
+                              </span>
+                            </button>
+
+                            {company.badgeText && (
+                              <span
+                                className={`absolute top-3 right-3 px-2 py-0.5 rounded-md font-label-sm text-label-sm uppercase ${company.badgeClass}`}
+                              >
+                                {company.badgeText}
+                              </span>
+                            )}
+                          </div>
+
+                          <div className="p-space-lg pt-0 relative">
+                            {/* Logo Overlap */}
+                            <div className="-mt-8 mb-space-sm flex items-end justify-between">
+                              <div
+                                onClick={() =>
+                                  onSelectCompany && onSelectCompany(company)
+                                }
+                                className="w-16 h-16 bg-surface-container-lowest shadow-md p-1.5 flex items-center justify-center rounded-full cursor-pointer"
+                              >
+                                <div
+                                  className={`w-full h-full flex items-center justify-center rounded-full ${company.avatarBgClass}`}
+                                >
+                                  {company.avatarCode}
+                                </div>
+                              </div>
+
+                              <div className="flex items-center gap-1 bg-surface-container-lowest px-2.5 py-1 rounded-full shadow-sm text-secondary">
+                                <span
+                                  className="material-symbols-outlined text-[16px]"
+                                  style={{ fontVariationSettings: '"FILL" 1' }}
+                                >
+                                  star
+                                </span>
+                                <span className="font-headline-sm text-headline-sm text-on-surface">
+                                  {company.rating}
+                                </span>
+                                <span className="font-body-sm text-body-sm text-on-surface-variant">
+                                  ({company.reviewsCount})
+                                </span>
+                              </div>
+                            </div>
+
+                            {/* Details */}
+                            <div className="flex flex-col gap-1 mb-space-md">
+                              <h2
+                                onClick={() =>
+                                  onSelectCompany && onSelectCompany(company)
+                                }
+                                className="font-headline-md text-headline-md text-on-surface group-hover:text-primary transition-colors cursor-pointer"
+                              >
+                                {company.name}
+                              </h2>
+                              <span className="font-body-sm text-body-sm text-on-surface-variant">
+                                {company.industry}
+                              </span>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-y-2 text-on-surface-variant font-body-sm text-body-sm mb-space-md">
+                              <div className="flex items-center gap-1.5">
+                                <span className="material-symbols-outlined text-[18px] text-primary">
+                                  groups
+                                </span>
+                                <span>{company.employees}</span>
+                              </div>
+                              <div className="flex items-center gap-1.5">
+                                <span className="material-symbols-outlined text-[18px] text-primary">
+                                  location_on
+                                </span>
+                                <span>{company.location}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Footer CTA with Follow Button */}
+                        <div className="px-space-lg pb-space-lg pt-0 flex items-center justify-between bg-surface-container-lowest gap-2">
+                          <span className="font-label-md text-label-md flex items-center gap-1 text-on-surface-variant truncate">
+                            {company.jobsLabel}
+                          </span>
+                          <div className="flex items-center gap-2 shrink-0">
+                            <button
+                              type="button"
+                              id={`follow-company-btn-${company.id}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                if (onToggleFollowCompany) {
+                                  onToggleFollowCompany(company.id, e);
+                                }
+                              }}
+                              title={isFollowed ? 'Bỏ theo dõi công ty' : 'Theo dõi công ty'}
+                              aria-label={isFollowed ? 'Bỏ theo dõi công ty' : 'Theo dõi công ty'}
+                              className={`px-3 py-1.5 rounded-full font-label-md text-label-md transition-all flex items-center gap-1.5 cursor-pointer border ${
+                                isFollowed
+                                  ? 'bg-amber-50 border-amber-300 text-amber-700 hover:bg-amber-100 shadow-2xs font-semibold'
+                                  : 'bg-surface-container border-outline-variant/60 text-on-surface hover:text-primary hover:border-primary/50 hover:bg-surface-container-high'
+                              }`}
+                            >
+                              <span
+                                className={`material-symbols-outlined text-[17px] ${
+                                  isFollowed ? 'text-amber-600' : 'text-on-surface-variant'
+                                }`}
+                                style={isFollowed ? { fontVariationSettings: '"FILL" 1' } : {}}
+                              >
+                                {isFollowed ? 'bookmark_added' : 'bookmark_add'}
+                              </span>
+                              <span>{isFollowed ? 'Đang theo dõi' : 'Theo dõi'}</span>
+                            </button>
+                            <button
+                              type="button"
+                              id={`view-company-btn-${company.id}`}
+                              onClick={() =>
+                                onSelectCompany && onSelectCompany(company)
+                              }
+                              className="px-space-md py-1.5 bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md transition-colors rounded-full cursor-pointer whitespace-nowrap"
+                            >
+                              Xem công ty
+                            </button>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               )}
 
@@ -1033,6 +1124,20 @@ export const CompaniesView = ({
               </div>
             </div>
           </div>
+
+          {/* Favorite Companies Section */}
+          <FavoriteCompaniesSection
+            allCompanies={mergedCompanies}
+            followedCompanyIds={followedCompanyIds}
+            onToggleFollowCompany={onToggleFollowCompany}
+            onSelectCompany={onSelectCompany}
+            onExploreCompanies={() => {
+              const feedEl = document.getElementById('company-feed-section');
+              if (feedEl) {
+                feedEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }}
+          />
         </div>
       </section>
 

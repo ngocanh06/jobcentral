@@ -12,6 +12,7 @@ import { AllJobsView } from './components/AllJobsView';
 import { JobSearchView } from './components/JobSearchView';
 import { SavedJobsView } from './components/SavedJobsView';
 import { CompaniesView } from './components/CompaniesView';
+import { FollowedCompaniesView } from './components/FollowedCompaniesView';
 import { CompanyDetailView } from './components/CompanyDetailView';
 import { NewsView } from './components/NewsView';
 import { ReviewsView } from './components/ReviewsView';
@@ -90,7 +91,7 @@ export function App() {
   const handleSimulateNotification = () => {
     const template =
       SIMULATED_SYSTEM_NOTIFICATIONS[
-        simNotifIndexRef.current % SIMULATED_SYSTEM_NOTIFICATIONS.length
+      simNotifIndexRef.current % SIMULATED_SYSTEM_NOTIFICATIONS.length
       ];
     simNotifIndexRef.current += 1;
     pushSystemNotification(template);
@@ -135,9 +136,37 @@ export function App() {
     setSelectedJobForDetail(null);
 
     if (notif.targetType === 'company') {
-      const targetComp =
-        INITIAL_COMPANIES.find((c) => String(c.id) === String(notif.targetId)) ||
-        INITIAL_COMPANIES[0];
+      let targetComp = null;
+
+      // 1. Direct resolution with ID corrections/aliases
+      let lookupId = notif.targetId;
+      if (notif.id === 'notif-3' || (lookupId === 'c3' && (notif.title?.includes('FPT') || notif.description?.includes('FPT')))) {
+        lookupId = 'c5'; // FPT Software
+      } else if (notif.id === 'notif-7' || (lookupId === 'c5' && (notif.title?.includes('FinX') || notif.description?.includes('FinX')))) {
+        lookupId = 'c3'; // FinX Digital Bank
+      } else if (lookupId === 'c6' || notif.id === 'notif-8') {
+        lookupId = 'c9'; // Shopee Vietnam
+      }
+
+      if (lookupId) {
+        targetComp = INITIAL_COMPANIES.find(
+          (c) => String(c.id) === String(lookupId) || c.aliasIds?.includes(String(lookupId))
+        );
+      }
+
+      // 2. Fallback to name matching in title or description
+      if (!targetComp) {
+        const textToSearch = `${notif.title || ''} ${notif.description || ''}`.toLowerCase();
+        targetComp = INITIAL_COMPANIES.find((c) =>
+          textToSearch.includes(c.name.toLowerCase())
+        );
+      }
+
+      // 3. Fallback to first company if still not found
+      if (!targetComp) {
+        targetComp = INITIAL_COMPANIES[0];
+      }
+
       if (targetComp) {
         setSelectedCompany(targetComp);
       }
@@ -173,6 +202,12 @@ export function App() {
 
   // Toggle Messages page: click once to open, click again to close back to previous tab
   const handleToggleMessages = () => {
+    if (!currentUser) {
+      showToast('Vui lòng đăng nhập để xem tin nhắn từ nhà tuyển dụng!', 'info');
+      handleOpenAuth('login');
+      return;
+    }
+
     const isCurrentlyOnMessages =
       activeTab === 'messages' &&
       !selectedJobForDetail &&
@@ -228,24 +263,26 @@ export function App() {
   };
 
   // Open job details if URL contains jobId
+  const initialJobHandledRef = useRef(false);
+
   useEffect(() => {
-    try {
-      const params = new URLSearchParams(window.location.search);
-      const urlJobId = params.get('jobId');
-      if (urlJobId) {
-        const found = jobs.find((j) => String(j.id) === String(urlJobId));
-        if (found) {
-          setSelectedJobForDetail(found);
-        }
-      }
-    } catch {
-      // Ignore if URL query params fail to parse
-    }
+    if (initialJobHandledRef.current) return;
+    initialJobHandledRef.current = true;
+
+    const url = new URL(window.location.href);
+    const urlJobId = url.searchParams.get('jobId');
+    if (!urlJobId) return;
+
+    const found = jobs.find((j) => String(j.id) === String(urlJobId));
+    if (found) setSelectedJobForDetail(found);
+
+    url.searchParams.delete('jobId');
+    window.history.replaceState({}, '', url.toString());
   }, [jobs]);
 
   const handleShareJob = (job, e) => {
     if (e) e.stopPropagation();
-    
+
     // Construct shareable URL
     const url = new URL(window.location.href);
     url.searchParams.set('jobId', job.id);
@@ -400,18 +437,20 @@ export function App() {
     } catch (e) {
       console.error('Failed to remove user session:', e);
     }
-    showToast('Đã đăng xuất khỏi hệ thống.', 'info');
+    if (activeTab === 'messages') {
+      setActiveTab('jobs');
+    }
+    showToast('Đã đăng xuất. Bạn đang ở trạng thái chưa đăng nhập.', 'info');
   };
 
   const savedCount = jobs.filter((j) => j.isSaved).length;
 
   return (
     <div
-      className={`flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 bg-[#FAF9FF] ${
-        (activeTab === 'messages' || activeTab === 'search') && !selectedJobForDetail && !selectedJobForStandardApply
+      className={`flex flex-col font-sans text-slate-800 antialiased selection:bg-indigo-100 selection:text-indigo-900 bg-[#FAF9FF] ${(activeTab === 'messages' || activeTab === 'search') && !selectedJobForDetail && !selectedJobForStandardApply
           ? 'h-dvh overflow-hidden'
           : 'min-h-screen'
-      }`}
+        }`}
     >
       {/* Top Main Navigation Header */}
       <Header
@@ -425,16 +464,13 @@ export function App() {
           setSelectedJobForStandardApply(null);
           setSelectedJobForDetail(null);
           if (tab === 'favorite-companies') {
+            setSelectedJobForStandardApply(null);
+            setSelectedJobForDetail(null);
             setSelectedCompany(null);
             setTargetCompanyFilter(null);
-            setPreviousTab('companies');
-            setActiveTab('companies');
-            setTimeout(() => {
-              const el = document.getElementById('favorite-companies-section');
-              if (el) {
-                el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-              }
-            }, 120);
+            setPreviousTab(activeTab);
+            setActiveTab('favorite-companies');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
           }
           if (tab === 'companies') {
@@ -487,6 +523,13 @@ export function App() {
               setActiveTab('search');
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            onNavigateCVBuilder={() => {
+              setSelectedJobForStandardApply(null);
+              setSelectedJobForDetail(null);
+              setPreviousTab('jobs');
+              setActiveTab('cv-builder');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
             onViewJobDetail={(targetJob) => {
               setSelectedJobForStandardApply(null);
               setSelectedJobForDetail(targetJob);
@@ -511,6 +554,7 @@ export function App() {
               }
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }}
+            onShowToast={showToast}
           />
         ) : selectedJobForDetail ? (
           <JobDetailView
@@ -606,6 +650,27 @@ export function App() {
               />
             )}
 
+            {activeTab === 'favorite-companies' && (
+              <FollowedCompaniesView
+                companies={INITIAL_COMPANIES}
+                allJobs={jobs}
+                followedCompanyIds={followedCompanyIds}
+                onToggleFollowCompany={handleToggleFollowCompany}
+                onSelectCompany={(c) => {
+                  setSelectedCompany(c);
+                  setPreviousTab('favorite-companies');
+                  setActiveTab('companies');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                onExploreCompanies={() => {
+                  setSelectedCompany(null);
+                  setTargetCompanyFilter(null);
+                  setActiveTab('companies');
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+              />
+            )}
+
             {activeTab === 'companies' && (
               selectedCompany ? (
                 <CompanyDetailView
@@ -615,6 +680,9 @@ export function App() {
                   onToggleFollowCompany={handleToggleFollowCompany}
                   onBack={() => {
                     setSelectedCompany(null);
+                    if (previousTab === 'favorite-companies') {
+                      setActiveTab('favorite-companies');
+                    }
                     window.scrollTo({ top: 0, behavior: 'smooth' });
                   }}
                   onApplyJob={handleApplyClick}
@@ -678,6 +746,7 @@ export function App() {
                 onCloseMessages={handleToggleMessages}
                 onSystemNotification={pushSystemNotification}
                 onViewJobDetail={handleViewJobDetails}
+                onOpenAuth={handleOpenAuth}
                 onNavigateToJobs={() => {
                   setPreviousTab('jobs');
                   setActiveTab('jobs');
@@ -732,16 +801,25 @@ export function App() {
         savedCount={savedCount}
         followedCompaniesCount={followedCompanyIds.length}
         onTabChange={(tab) => {
+          setSelectedJobForStandardApply(null);
+          setSelectedJobForDetail(null);
+          if (tab === 'messages') {
+            handleToggleMessages();
+            return;
+          }
           if (tab === 'favorite-companies') {
             setSelectedCompany(null);
             setTargetCompanyFilter(null);
-            setActiveTab('companies');
-            setTimeout(() => {
-              const el = document.getElementById('favorite-companies-section');
-              if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            }, 120);
+            setPreviousTab(activeTab);
+            setActiveTab('favorite-companies');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
             return;
           }
+          if (tab === 'companies') {
+            setSelectedCompany(null);
+            setTargetCompanyFilter(null);
+          }
+          setPreviousTab(tab);
           setActiveTab(tab);
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }}

@@ -138,7 +138,7 @@ export const CompanyDetailView = ({
         salary: 'Thỏa thuận',
         location: 'TP. Hồ Chí Minh',
         postedTime: '5 ngày trước',
-        iconBg: 'bg-blue-50 text-[#0A58CA]',
+        iconBg: 'bg-blue-50 text-[#2170E4]',
         iconType: 'briefcase',
         featured: true,
         tags: ['Agile', 'Scrum', 'Fintech'],
@@ -765,7 +765,7 @@ export const CompanyDetailView = ({
                         value={jobSearchTerm}
                         onChange={(e) => setJobSearchTerm(e.target.value)}
                         placeholder="Tìm theo chức danh, kỹ năng (React, Golang, Figma, AWS...)"
-                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0A58CA]"
+                        className="w-full pl-10 pr-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-800 placeholder:text-slate-400 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#2170E4]"
                       />
                     </div>
 
@@ -773,7 +773,7 @@ export const CompanyDetailView = ({
                     <select
                       value={selectedJobType}
                       onChange={(e) => setSelectedJobType(e.target.value)}
-                      className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-700 font-medium focus:outline-hidden focus:border-[#0A58CA]"
+                      className="px-4 py-2 bg-slate-50 border border-slate-200 rounded-full text-xs sm:text-sm text-slate-700 font-medium focus:outline-hidden focus:border-[#2170E4]"
                     >
                       <option value="all">Tất cả hình thức</option>
                       <option value="fulltime">Full-time</option>
@@ -817,7 +817,7 @@ export const CompanyDetailView = ({
                         onClick={() => setSelectedDepartment(dept.id)}
                         className={`px-3.5 py-1.5 rounded-full transition-all cursor-pointer ${
                           selectedDepartment === dept.id
-                            ? 'bg-[#0A58CA] text-white font-bold shadow-2xs'
+                            ? 'bg-[#2170E4] text-white font-bold shadow-2xs'
                             : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                       >
@@ -840,7 +840,7 @@ export const CompanyDetailView = ({
                         setSelectedDepartment('all');
                         setSelectedJobType('all');
                       }}
-                      className="text-xs text-[#0A58CA] hover:underline font-semibold cursor-pointer"
+                      className="text-xs text-[#2170E4] hover:underline font-semibold cursor-pointer"
                     >
                       Đặt lại bộ lọc
                     </button>
@@ -877,7 +877,7 @@ export const CompanyDetailView = ({
                           setSelectedDepartment('all');
                           setSelectedJobType('all');
                         }}
-                        className="mt-4 px-5 py-2 bg-[#0A58CA] text-white text-xs font-bold rounded-full cursor-pointer"
+                        className="mt-4 px-5 py-2 bg-[#2170E4] text-white text-xs font-bold rounded-full cursor-pointer"
                       >
                         Xem toàn bộ 12 công việc
                       </button>
@@ -930,11 +930,11 @@ export const CompanyDetailView = ({
                         <div key={idx} className="space-y-1">
                           <div className="flex justify-between text-xs font-semibold text-slate-700">
                             <span>{item.label}</span>
-                            <span className="text-[#0A58CA]">{item.score}</span>
+                            <span className="text-[#2170E4]">{item.score}</span>
                           </div>
                           <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
                             <div
-                              className="h-full bg-[#0A58CA] rounded-full"
+                              className="h-full bg-[#2170E4] rounded-full"
                               style={{ width: item.percent }}
                             />
                           </div>
@@ -1012,7 +1012,7 @@ export const CompanyDetailView = ({
                       <div className="flex items-center space-x-4 pt-2 border-t border-slate-100 text-xs text-slate-500">
                         <button
                           type="button"
-                          className="flex items-center space-x-1.5 hover:text-[#0A58CA] transition-colors cursor-pointer"
+                          className="flex items-center space-x-1.5 hover:text-[#2170E4] transition-colors cursor-pointer"
                         >
                           <ThumbsUp className="w-3.5 h-3.5" />
                           <span>Hữu ích ({rev.likes})</span>

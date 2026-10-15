@@ -994,6 +994,7 @@ export const INITIAL_COMPANIES = [
   },
   {
     id: 'c9',
+    aliasIds: ['c6'],
     name: 'Shopee Vietnam',
     logo: 'https://lh3.googleusercontent.com/aida-public/AB6AXuC6qtHeY8XsbWQV-AhwKW8YZcQ0FfPPgg1leGjP7b8y-8kn3n7gGZ-eniixrKOKpQVyuPWu6kxm8Aue5XnQz3rFBbRee0FHIm1uwukWQzC-VQNYKhd9_QKpIvH9DE1jSVRykk5TACyRaHsEmuxAWDLXE1xrDqJAbyeDLSSs5ouq5bqsyJEQR9MskTJw4NYUEP3EKw4M3zK3bdXVYgI68hN-6bZuXuxsQe66LFEJv8FDTzrX1gE9iIkn',
     coverImage:
@@ -1397,7 +1398,7 @@ export const INITIAL_NOTIFICATIONS = [
     badgeText: 'Trạng thái CV',
     badgeColor: 'indigo',
     targetType: 'company',
-    targetId: 'c3',
+    targetId: 'c5',
     actionLabel: 'Xem công ty',
   },
   {
@@ -1457,7 +1458,7 @@ export const INITIAL_NOTIFICATIONS = [
     badgeText: 'Công ty theo dõi',
     badgeColor: 'blue',
     targetType: 'company',
-    targetId: 'c5',
+    targetId: 'c3',
     actionLabel: 'Khám phá công ty',
   },
   {
@@ -1472,7 +1473,7 @@ export const INITIAL_NOTIFICATIONS = [
     badgeText: 'Lượt xem hồ sơ',
     badgeColor: 'emerald',
     targetType: 'company',
-    targetId: 'c6',
+    targetId: 'c9',
     actionLabel: 'Xem nhà tuyển dụng',
   },
   {
@@ -1547,7 +1548,7 @@ export const SIMULATED_SYSTEM_NOTIFICATIONS = [
     badgeText: 'Phỏng vấn mới',
     badgeColor: 'emerald',
     targetType: 'company',
-    targetId: 'c6',
+    targetId: 'c9',
     actionLabel: 'Xem chi tiết',
   },
   {

@@ -39,7 +39,7 @@ export const DeviceStatusBadge = () => {
           <div className="bg-white rounded-2xl max-w-sm w-full shadow-2xl border border-slate-200 p-5 text-left text-slate-800 animate-slideUp">
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 mb-3">
               <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#0A58CA] flex items-center justify-center font-bold">
+                <div className="w-8 h-8 rounded-xl bg-blue-50 text-[#2170E4] flex items-center justify-center font-bold">
                   <Smartphone className="w-4 h-4" />
                 </div>
                 <div>
@@ -84,7 +84,7 @@ export const DeviceStatusBadge = () => {
               </div>
               <div className="flex justify-between items-center">
                 <span className="text-slate-500">Chế độ hiển thị:</span>
-                <span className="font-bold text-[#0A58CA]">
+                <span className="font-bold text-[#2170E4]">
                   {device.isPhone ? 'Giao diện Điện Thoại (Không vỡ layout)' : 'Giao diện Màn Hình Lớn'}
                 </span>
               </div>
@@ -101,7 +101,7 @@ export const DeviceStatusBadge = () => {
                   onClick={() => device.setSimulatedDevice('auto')}
                   className={`py-2 px-2 rounded-lg border font-medium flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
                     device.simulatedDevice === 'auto'
-                      ? 'border-[#0A58CA] bg-blue-50 text-[#0A58CA] font-bold shadow-2xs'
+                      ? 'border-[#2170E4] bg-blue-50 text-[#2170E4] font-bold shadow-2xs'
                       : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                   }`}
                 >
@@ -114,7 +114,7 @@ export const DeviceStatusBadge = () => {
                   onClick={() => device.setSimulatedDevice('phone')}
                   className={`py-2 px-2 rounded-lg border font-medium flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
                     device.simulatedDevice === 'phone'
-                      ? 'border-[#0A58CA] bg-blue-50 text-[#0A58CA] font-bold shadow-2xs'
+                      ? 'border-[#2170E4] bg-blue-50 text-[#2170E4] font-bold shadow-2xs'
                       : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                   }`}
                 >
@@ -127,7 +127,7 @@ export const DeviceStatusBadge = () => {
                   onClick={() => device.setSimulatedDevice('desktop')}
                   className={`py-2 px-2 rounded-lg border font-medium flex flex-col items-center justify-center space-y-1 transition-all cursor-pointer ${
                     device.simulatedDevice === 'desktop'
-                      ? 'border-[#0A58CA] bg-blue-50 text-[#0A58CA] font-bold shadow-2xs'
+                      ? 'border-[#2170E4] bg-blue-50 text-[#2170E4] font-bold shadow-2xs'
                       : 'border-slate-200 bg-white text-slate-700 hover:bg-slate-50'
                   }`}
                 >
@@ -140,7 +140,7 @@ export const DeviceStatusBadge = () => {
             <button
               type="button"
               onClick={() => setIsOpen(false)}
-              className="w-full py-2.5 bg-[#0A58CA] text-white text-xs font-bold rounded-xl shadow-sm hover:bg-[#084298] transition-colors"
+              className="w-full py-2.5 bg-[#2170E4] text-white text-xs font-bold rounded-xl shadow-sm hover:bg-[#1a5bbd] transition-colors"
             >
               Đã hiểu & Đóng
             </button>

@@ -31,13 +31,13 @@ export const FavoriteCompaniesSection = ({
     >
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
         <div>
-          <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#0A58CA] text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2.5">
-            <Building2 className="w-3.5 h-3.5 text-[#0A58CA]" />
+          <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-100 text-[#2170E4] text-xs font-bold uppercase tracking-wider px-3 py-1 rounded-full mb-2.5">
+            <Building2 className="w-3.5 h-3.5 text-[#2170E4]" />
             <span>Doanh nghiệp đang theo dõi</span>
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
             <span>Công Ty Đã Theo Dõi</span>
-            <span className="text-sm font-bold bg-blue-100 text-[#0A58CA] px-2.5 py-0.5 rounded-full">
+            <span className="text-sm font-bold bg-blue-100 text-[#2170E4] px-2.5 py-0.5 rounded-full">
               {favoriteCompanies.length}
             </span>
           </h2>
@@ -59,7 +59,7 @@ export const FavoriteCompaniesSection = ({
           id="favorite-companies-empty-state"
           className="bg-white rounded-3xl border border-dashed border-slate-300 p-8 sm:p-12 text-center max-w-2xl mx-auto shadow-xs"
         >
-          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-4 text-[#0A58CA] shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto mb-4 text-[#2170E4] shadow-xs">
             <Building2 className="w-8 h-8 stroke-[1.7]" />
           </div>
           <h3 className="text-lg font-bold text-slate-800">
@@ -73,7 +73,7 @@ export const FavoriteCompaniesSection = ({
               type="button"
               id="explore-companies-btn"
               onClick={onExploreCompanies}
-              className="mt-6 inline-flex items-center space-x-2 px-5 py-2.5 bg-[#0A58CA] hover:bg-[#084298] text-white text-xs sm:text-sm font-semibold rounded-full transition-all shadow-xs cursor-pointer"
+              className="mt-6 inline-flex items-center space-x-2 px-5 py-2.5 bg-[#2170E4] hover:bg-[#1a5bbd] text-white text-xs sm:text-sm font-semibold rounded-full transition-all shadow-xs cursor-pointer"
             >
               <Building2 className="w-4 h-4" />
               <span>Khám phá công ty hàng đầu ngay</span>
@@ -96,16 +96,30 @@ export const FavoriteCompaniesSection = ({
                       onClick={() => onSelectCompany && onSelectCompany(company)}
                       className="flex items-center space-x-3.5 cursor-pointer flex-1 min-w-0"
                     >
-                      <div className="w-14 h-14 rounded-2xl border border-slate-200 bg-slate-50 p-2 flex items-center justify-center shrink-0 shadow-2xs group-hover:border-rose-200 transition-colors">
-                        <img
-                          src={company.logo}
-                          alt={company.name}
-                          referrerPolicy="no-referrer"
-                          className="w-full h-full object-cover rounded-xl"
-                        />
+                      <div className="w-14 h-14 rounded-2xl border border-slate-200 bg-slate-50 p-2 flex items-center justify-center shrink-0 shadow-2xs group-hover:border-rose-200 transition-colors overflow-hidden">
+                        {company.logo && typeof company.logo === 'string' && company.logo.startsWith('http') ? (
+                          <img
+                            src={company.logo}
+                            alt={company.name}
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover rounded-xl"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling;
+                              if (fallback) fallback.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <div
+                          className={`w-full h-full items-center justify-center rounded-xl font-bold text-xs ${
+                            company.avatarBgClass || 'bg-blue-50 text-[#2170E4]'
+                          } ${company.logo && typeof company.logo === 'string' && company.logo.startsWith('http') ? 'hidden' : 'flex'}`}
+                        >
+                          {company.avatarCode || (company.name ? company.name.substring(0, 2).toUpperCase() : 'CP')}
+                        </div>
                       </div>
                       <div className="min-w-0">
-                        <h4 className="text-base font-bold text-slate-900 group-hover:text-[#0A58CA] transition-colors truncate">
+                        <h4 className="text-base font-bold text-slate-900 group-hover:text-[#2170E4] transition-colors truncate">
                           {company.name}
                         </h4>
                         <p className="text-xs text-indigo-600 font-medium truncate mt-0.5">
@@ -121,7 +135,7 @@ export const FavoriteCompaniesSection = ({
                       onClick={(e) => {
                         e.stopPropagation();
                         if (onToggleFollowCompany) {
-                          onToggleFollowCompany(company.id);
+                          onToggleFollowCompany(company.id, e);
                         }
                       }}
                       title="Bỏ theo dõi công ty này"
@@ -180,7 +194,7 @@ export const FavoriteCompaniesSection = ({
                     type="button"
                     id={`view-detail-fav-company-${company.id}`}
                     onClick={() => onSelectCompany && onSelectCompany(company)}
-                    className="inline-flex items-center space-x-1 text-xs font-semibold text-white bg-[#0A58CA] hover:bg-[#084298] px-3.5 py-1.5 rounded-full transition-all shadow-xs cursor-pointer"
+                    className="inline-flex items-center space-x-1 text-xs font-semibold text-white bg-[#2170E4] hover:bg-[#1a5bbd] px-3.5 py-1.5 rounded-full transition-all shadow-xs cursor-pointer"
                   >
                     <span>Xem công ty</span>
                     <ArrowUpRight className="w-3.5 h-3.5" />
