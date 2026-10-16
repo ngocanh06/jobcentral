@@ -16,5 +16,5 @@
     "checkJs": false,
     "esModuleInterop": true
   },
-  "include": ["src", "server.ts", "vite.config.ts"]
+  "include": ["src", "vite.config.ts"]
 }
