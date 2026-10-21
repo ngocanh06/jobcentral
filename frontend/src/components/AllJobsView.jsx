@@ -1,5 +1,7 @@
 import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { motion } from 'motion/react';
+import { MarketAnalytics } from './MarketAnalytics';
+import { FilterDropdown } from './FilterDropdown';
 import {
   Search,
   MapPin,
@@ -121,6 +123,34 @@ const companiesList = [
   },
 ];
 
+const SALARY_OPTIONS = [
+  { value: '', label: 'Tất cả mức lương' },
+  { value: 'under10', label: 'Dưới 10 triệu' },
+  { value: '10to20', label: '10 - 20 triệu' },
+  { value: '20to35', label: '20 - 35 triệu' },
+  { value: 'above35', label: 'Trên 35 triệu' },
+  { value: 'negotiable', label: 'Lương thỏa thuận' },
+];
+
+const EXPERIENCE_OPTIONS = [
+  { value: '', label: 'Tất cả kinh nghiệm' },
+  { value: 'intern', label: 'Thực tập sinh / Sinh viên' },
+  { value: 'fresher', label: 'Fresher / Chưa có kinh nghiệm' },
+  { value: 'junior', label: 'Junior (1 - 2 năm)' },
+  { value: 'middle', label: 'Middle (2 - 4 năm)' },
+  { value: 'senior', label: 'Senior (5+ năm)' },
+  { value: 'lead', label: 'Lead / Quản lý / Trưởng phòng' },
+];
+
+const JOBTYPE_OPTIONS = [
+  { value: '', label: 'Tất cả hình thức' },
+  { value: 'fulltime', label: 'Toàn thời gian (Full-time)' },
+  { value: 'parttime', label: 'Bán thời gian (Part-time)' },
+  { value: 'remote', label: 'Làm việc từ xa (Remote / Hybrid)' },
+  { value: 'freelance', label: 'Freelance / Dự án' },
+  { value: 'internship', label: 'Thực tập (Internship)' },
+];
+
 export const AllJobsView = ({
   jobs,
   isLoading = false,
@@ -164,11 +194,10 @@ export const AllJobsView = ({
 
   const [activeJobTab, setActiveJobTab] = useState('featured');
   const [currentPage, setCurrentPage] = useState(1);
-  const JOBS_PER_PAGE = 6;
+  const JOBS_PER_PAGE = 9;
   const [activeCompanyCategory, setActiveCompanyCategory] = useState('all');
   const [companyCarouselIndex, setCompanyCarouselIndex] = useState(0);
   const [isCarouselPaused, setIsCarouselPaused] = useState(false);
-  const [chartPeriod, setChartPeriod] = useState('6months');
   const [followedCompanyIds, setFollowedCompanyIds] = useState(['c2']);
   const [industrySlideIndex, setIndustrySlideIndex] = useState(0);
   const CATEGORIES_PER_PAGE = 8; // 2 rows x 4 columns = 8 cards per slide
@@ -578,7 +607,7 @@ export const AllJobsView = ({
     }
   }, [totalJobPages, currentPage]);
 
-  // Paginated jobs for Section 4 (6 jobs per page)
+  // Paginated jobs for Section 4 (9 jobs per page)
   const paginatedJobs = useMemo(() => {
     const startIndex = (currentPage - 1) * JOBS_PER_PAGE;
     return displayedJobs.slice(startIndex, startIndex + JOBS_PER_PAGE);
@@ -821,130 +850,55 @@ export const AllJobsView = ({
 
             {/* Advanced Filter Row (Salary, Experience, Job Format) */}
             {showAdvancedFilters && (
-              <div className="mt-2.5 p-3.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 shadow-lg grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in slide-in-from-top-1 duration-150">
+              <div className="relative z-20 mt-2.5 p-3.5 bg-white/95 backdrop-blur-md rounded-2xl border border-slate-200/90 shadow-lg grid grid-cols-1 sm:grid-cols-3 gap-3 animate-in fade-in slide-in-from-top-1 duration-150">
                 {/* Option 1: Salary Range */}
                 <div className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <Banknote className="w-3.5 h-3.5 text-emerald-600" />
                     <span>Mức lương</span>
                   </label>
-                  <select
+                  <FilterDropdown
+                    id="salary"
                     value={salaryRange}
-                    onChange={(e) => {
-                      setSalaryRange(e.target.value);
-                    }}
-                    className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
-                  >
-                    <option value="">Tất cả mức lương</option>
-                    <option value="under10">Dưới 10 triệu</option>
-                    <option value="10to20">10 - 20 triệu</option>
-                    <option value="20to35">20 - 35 triệu</option>
-                    <option value="above35">Trên 35 triệu</option>
-                    <option value="usd">$1,500 - $3,000+ (USD)</option>
-                    <option value="negotiable">Lương thỏa thuận</option>
-                  </select>
+                    onChange={setSalaryRange}
+                    options={SALARY_OPTIONS}
+                    openDropdown={openDropdown}
+                    setOpenDropdown={setOpenDropdown}
+                  />
                 </div>
 
                 {/* Option 2: Experience Level */}
                 <div className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <GraduationCap className="w-3.5 h-3.5 text-indigo-600" />
                     <span>Kinh nghiệm</span>
                   </label>
-                  <select
+                  <FilterDropdown
+                    id="experience"
                     value={experienceLevel}
-                    onChange={(e) => {
-                      setExperienceLevel(e.target.value);
-                    }}
-                    className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
-                  >
-                    <option value="">Tất cả kinh nghiệm</option>
-                    <option value="intern">Thực tập sinh / Sinh viên</option>
-                    <option value="fresher">Fresher / Chưa có kinh nghiệm</option>
-                    <option value="junior">Junior (1 - 2 năm)</option>
-                    <option value="middle">Middle (2 - 4 năm)</option>
-                    <option value="senior">Senior (5+ năm)</option>
-                    <option value="lead">Lead / Quản lý / Trưởng phòng</option>
-                  </select>
+                    onChange={setExperienceLevel}
+                    options={EXPERIENCE_OPTIONS}
+                    openDropdown={openDropdown}
+                    setOpenDropdown={setOpenDropdown}
+                  />
                 </div>
 
                 {/* Option 3: Work Format */}
                 <div className="relative p-2 rounded-xl hover:bg-slate-100 transition-colors">
                   <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-1.5">
-                    <Clock className="w-3.5 h-3.5 text-amber-600" />
                     <span>Hình thức</span>
                   </label>
-                  <select
+                  <FilterDropdown
+                    id="jobType"
                     value={jobType}
-                    onChange={(e) => {
-                      setJobType(e.target.value);
-                    }}
-                    className="w-full text-xs font-medium text-slate-700 bg-slate-50 hover:bg-slate-200/70 border border-slate-200 rounded-full px-3.5 py-2 focus:outline-hidden focus:border-[#2170E4] transition-colors cursor-pointer"
-                  >
-                    <option value="">Tất cả hình thức</option>
-                    <option value="fulltime">Toàn thời gian (Full-time)</option>
-                    <option value="parttime">Bán thời gian (Part-time)</option>
-                    <option value="remote">Làm việc từ xa (Remote / Hybrid)</option>
-                    <option value="freelance">Freelance / Dự án</option>
-                    <option value="internship">Thực tập (Internship)</option>
-                  </select>
+                    onChange={setJobType}
+                    options={JOBTYPE_OPTIONS}
+                    openDropdown={openDropdown}
+                    setOpenDropdown={setOpenDropdown}
+                  />
                 </div>
               </div>
             )}
 
             {/* Quick Popular Keywords & Suggested Tags */}
-            <div
-              className={`mt-3.5 flex flex-wrap items-center gap-1.5 text-xs transition-all duration-700 delay-300 ease-out ${isTypingComplete
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-3 pointer-events-none'
-                }`}
-            >
-              <span className="text-white font-bold text-xs sm:text-[13px] mr-1.5 drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]">
-                Gợi ý tìm kiếm:
-              </span>
-              {[
-                'UI/UX Designer',
-                'ReactJS',
-                'Golang',
-                'AI Engineer',
-                'Product Manager',
-                'Digital Marketing',
-                'Dược Sĩ',
-                'IELTS Teacher',
-                'Bất Động Sản',
-                'Logistics',
-                'Data Analyst',
-                'Sales B2B',
-                'Fresher IT',
-                'Remote',
-              ].map((tag) => (
-                <button
-                  key={tag}
-                  type="button"
-                  onClick={() => {
-                    setKeyword(keyword === tag ? '' : tag);
-                    smoothScrollToJobs();
-                  }}
-                  className={`px-3 py-1 rounded-full text-xs transition-all duration-200 cursor-pointer active:scale-95 ${keyword === tag
-                    ? 'bg-[#2170E4] text-white font-bold shadow-xs'
-                    : 'bg-slate-900/75 hover:bg-slate-800/90 text-white font-medium border border-white/30 backdrop-blur-xs shadow-2xs'
-                    }`}
-                >
-                  {tag}
-                </button>
-              ))}
-
-              {(keyword || industry || location || salaryRange || experienceLevel || jobType) && (
-                <button
-                  type="button"
-                  onClick={handleResetFilters}
-                  className="ml-auto inline-flex items-center space-x-1 text-rose-200 hover:text-white text-xs font-medium cursor-pointer bg-rose-950/60 hover:bg-slate-600/50 px-3 py-1 rounded-full border border-rose-500/30 transition-colors"
-                >
-                  <RotateCcw className="w-3 h-3" />
-                  <span>Đặt lại tất cả</span>
-                </button>
-              )}
-            </div>
           </div>
         </div>
       </section>
@@ -1141,7 +1095,7 @@ export const AllJobsView = ({
         >
           {isLoading || isFiltering ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 mt-7 text-left">
-              <JobCardSkeleton count={6} />
+              <JobCardSkeleton count={9} />
             </div>
           ) : displayedJobs.length === 0 ? (
             <div className="bg-white rounded-2xl border border-slate-200/90 p-12 text-center my-6">
@@ -1300,11 +1254,10 @@ export const AllJobsView = ({
                     setCurrentPage(pageNum);
                     smoothScrollToJobs();
                   }}
-                  className={`px-3 py-1 text-sm rounded-lg cursor-pointer select-none transition-colors ${
-                    currentPage === pageNum
-                      ? 'text-[#2170E4] font-extrabold text-base bg-blue-50'
-                      : 'text-slate-500 hover:text-[#2170E4] hover:bg-slate-100 font-medium'
-                  }`}
+                  className={`px-3 py-1 text-sm rounded-lg cursor-pointer select-none transition-colors ${currentPage === pageNum
+                    ? 'text-[#2170E4] font-extrabold text-base bg-blue-50'
+                    : 'text-slate-500 hover:text-[#2170E4] hover:bg-slate-100 font-medium'
+                    }`}
                 >
                   {pageNum}
                 </button>
@@ -1332,7 +1285,7 @@ export const AllJobsView = ({
         </ErrorBoundary>
       </section>
 
-      {/* 5. CẬP NHẬT THỊ TRƯỜNG LAO ĐỘNG MỖI NGÀY */}
+      {/* 5. PHÂN TÍCH THỊ TRƯỜNG & CHUYÊN SÂU */}
       <section
         data-scroll-reveal="market-trends"
         className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isSectionVisible('market-trends')
@@ -1340,293 +1293,10 @@ export const AllJobsView = ({
           : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
           }`}
       >
-        <div className="text-left mb-6">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-left">
-            Cập Nhật Thị Trường Lao Động <span className="text-[#2170E4]">Mỗi Ngày</span>
-          </h2>
-        </div>
-
-        {/* 2 Big Analytics Cards */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
-          {/* Left Chart: Xu hướng đăng tuyển */}
-          <div className="lg:col-span-6 bg-white hover:bg-slate-100/70 transition-colors rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                Xu hướng đăng tuyển
-              </h3>
-              <div className="relative">
-                <select
-                  value={chartPeriod}
-                  onChange={(e) => setChartPeriod(e.target.value)}
-                  className="text-xs bg-slate-50 hover:bg-slate-200/80 border border-slate-200 rounded-full px-3.5 py-1.5 text-slate-700 font-medium focus:outline-hidden transition-colors cursor-pointer"
-                >
-                  <option value="6months">6 tháng qua</option>
-                  <option value="1year">1 năm qua</option>
-                  <option value="1month">Tháng này</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Visual Bar Chart */}
-            <div className="pt-4 pb-2">
-              <div className="h-48 flex items-end justify-between gap-2 sm:gap-3 px-1">
-                {[
-                  { month: 'Th. 6', height: 'h-24', val: '4,200' },
-                  { month: 'Th. 9', height: 'h-28', val: '5,100' },
-                  { month: 'Th. 12', height: 'h-32', val: '6,400' },
-                  { month: 'Th. 3', height: 'h-36', val: '7,800' },
-                  { month: 'Th. 5', height: 'h-40', val: '9,500' },
-                ].map((bar) => (
-                  <div
-                    key={bar.month}
-                    className="flex-1 flex flex-col items-center gap-2 p-2 rounded-xl hover:bg-slate-200/70 transition-colors cursor-pointer group"
-                  >
-                    <div className="w-full max-w-[42px] bg-slate-100 group-hover:bg-slate-300/60 rounded-t-lg overflow-hidden flex items-end h-40 transition-colors">
-                      <div
-                        className={`w-full ${bar.height} bg-gradient-to-t from-[#2170E4] to-blue-400 group-hover:brightness-105 rounded-t-lg transition-all`}
-                      />
-                    </div>
-                    <span className="text-[11px] text-slate-500 group-hover:text-slate-900 font-medium transition-colors">{bar.month}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Right Progress List: Ngành nghề nhu cầu cao */}
-          <div className="lg:col-span-6 bg-white hover:bg-slate-100/70 transition-colors rounded-2xl border border-slate-200/90 hover:border-slate-300 p-5 sm:p-6 shadow-xs flex flex-col justify-between">
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-1.5">
-                <h3 className="text-sm sm:text-base font-bold text-slate-900">
-                  Ngành nghề nhu cầu cao
-                </h3>
-              </div>
-              <button
-                type="button"
-                className="p-2 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/80 transition-colors cursor-pointer"
-                title="Thông tin thống kê"
-                aria-label="Thông tin thống kê"
-              >
-                <Info className="w-4 h-4" />
-              </button>
-            </div>
-
-            <div className="space-y-1.5 py-1">
-              {[
-                { name: 'Công nghệ thông tin', percent: 32, width: 'w-[32%]' },
-                { name: 'Marketing & Sáng tạo', percent: 24, width: 'w-[24%]' },
-                { name: 'Tài chính & Ngân hàng', percent: 18, width: 'w-[18%]' },
-                { name: 'Y tế & Chăm sóc sức khỏe', percent: 15, width: 'w-[15%]' },
-                { name: 'Sản xuất & Vận tải', percent: 11, width: 'w-[11%]' },
-              ].map((item) => (
-                <div
-                  key={item.name}
-                  onClick={() => {
-                    setIndustry(item.name.split('&')[0].trim());
-                    smoothScrollToJobs();
-                  }}
-                  className="px-3 py-2 -mx-3 rounded-xl hover:bg-slate-200/70 transition-colors cursor-pointer space-y-1.5"
-                >
-                  <div className="flex items-center justify-between text-xs font-medium text-slate-700">
-                    <span>{item.name}</span>
-                    <span className="font-bold text-slate-900">{item.percent}%</span>
-                  </div>
-                  <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
-                    <div className={`h-full ${item.width} bg-[#2170E4] rounded-full`} />
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* 4 Metric Stats Cards */}
-        <div
-          data-scroll-reveal="market-stats"
-          className={`grid grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 mt-5 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isSectionVisible('market-stats')
-            ? 'opacity-100 translate-y-0'
-            : 'opacity-0 translate-y-8'
-            }`}
-        >
-          {/* Stat 1 */}
-          <div
-            onClick={() => {
-              setIndustry('Marketing');
-              smoothScrollToJobs();
-            }}
-            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-8 h-8 rounded-xl bg-blue-50 flex items-center justify-center text-[#2170E4]">
-                <Briefcase className="w-4 h-4" />
-              </div>
-              <span className="inline-flex items-center text-xs font-bold text-emerald-600">
-                <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> +12%
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-xs text-slate-500 font-medium">Marketing</p>
-              <p className="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">142,500</p>
-            </div>
-          </div>
-
-          {/* Stat 2 */}
-          <div
-            onClick={() => {
-              setIndustry('Tài chính');
-              smoothScrollToJobs();
-            }}
-            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-8 h-8 rounded-xl bg-emerald-50 flex items-center justify-center text-emerald-600">
-                <CreditCard className="w-4 h-4" />
-              </div>
-              <span className="inline-flex items-center text-xs font-bold text-emerald-600">
-                <TrendingUp className="w-3.5 h-3.5 mr-0.5" /> +5.4%
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-xs text-slate-500 font-medium">Tài chính ngân hàng</p>
-              <p className="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">1,500,000</p>
-            </div>
-          </div>
-
-          {/* Stat 3 */}
-          <div
-            onClick={() => {
-              setIndustry('Công nghệ');
-              smoothScrollToJobs();
-            }}
-            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-8 h-8 rounded-xl bg-rose-50 flex items-center justify-center text-rose-500">
-                <Rocket className="w-4 h-4" />
-              </div>
-              <span className="inline-flex items-center text-xs font-bold text-rose-600">
-                <TrendingDown className="w-3.5 h-3.5 mr-0.5" /> -7%
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-xs text-slate-500 font-medium">Công nghệ phần mềm</p>
-              <p className="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">500,000</p>
-            </div>
-          </div>
-
-          {/* Stat 4 */}
-          <div
-            onClick={() => {
-              setIndustry('CSKH');
-              smoothScrollToJobs();
-            }}
-            className="bg-white hover:bg-slate-200/70 rounded-2xl border border-slate-200/90 hover:border-slate-300 p-4 sm:p-5 shadow-xs transition-colors cursor-pointer"
-          >
-            <div className="flex items-center justify-between">
-              <div className="w-8 h-8 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
-                <Users className="w-4 h-4" />
-              </div>
-              <span className="inline-flex items-center text-xs font-bold text-rose-600">
-                <TrendingDown className="w-3.5 h-3.5 mr-0.5" /> -2%
-              </span>
-            </div>
-            <div className="mt-3">
-              <p className="text-xs text-slate-500 font-medium">Chăm sóc khách hàng</p>
-              <p className="text-lg sm:text-xl font-extrabold text-slate-900 mt-0.5">890,000</p>
-            </div>
-          </div>
-        </div>
+        <MarketAnalytics />
       </section>
 
-      {/* 6. PHÂN TÍCH CHUYÊN SÂU (AI INSIGHTS) */}
-      <section
-        data-scroll-reveal="ai-insights"
-        className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isSectionVisible('ai-insights')
-          ? 'opacity-100 translate-y-0 scale-100 blur-0'
-          : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
-          }`}
-      >
-        <div className="flex items-center space-x-2.5 mb-6">
-          <div className="w-7 h-7 rounded-lg bg-[#2170E4] flex items-center justify-center text-white">
-            <Sparkles className="w-4 h-4" />
-          </div>
-          <h2 className="text-lg sm:text-xl font-extrabold text-slate-900 tracking-tight">
-            Phân tích chuyên sâu (AI Insights)
-          </h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Card 1 */}
-          <div
-            onClick={() => onNavigateNews && onNavigateNews()}
-            className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer"
-          >
-            <div>
-              <h3 className="text-sm font-bold text-slate-900">Tương lai việc làm</h3>
-              <p className="text-xs text-slate-600 leading-relaxed mt-2">
-                Sự trỗi dậy của GenAI dự kiến sẽ thay đổi 40% các tác vụ trong ngành tài chính và IT vào năm 2025.
-              </p>
-            </div>
-            <a
-              href="#report"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (onNavigateNews) onNavigateNews();
-              }}
-              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
-            >
-              <span>Đọc báo cáo đầy đủ</span>
-              <span>&gt;</span>
-            </a>
-          </div>
-
-          {/* Card 2 */}
-          <div
-            onClick={() => onNavigateNews && onNavigateNews()}
-            className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer"
-          >
-            <div>
-              <h3 className="text-sm font-bold text-slate-900">Kỹ năng vàng</h3>
-              <p className="text-xs text-slate-600 leading-relaxed mt-2">
-                Kỹ năng tư duy phản biện và quản lý dự án linh hoạt (Agile) đang có mức tăng trưởng lương cao nhất (+22%).
-              </p>
-            </div>
-            <a
-              href="#skills"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (onNavigateNews) onNavigateNews();
-              }}
-              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
-            >
-              <span>Khám phá kỹ năng</span>
-              <span>&gt;</span>
-            </a>
-          </div>
-
-          {/* Card 3 */}
-          <div className="bg-white hover:bg-slate-200/70 rounded-2xl border-t-4 border-t-[#2170E4] border-x border-b border-slate-200/90 hover:border-x-slate-300 hover:border-b-slate-300 p-5 shadow-xs flex flex-col justify-between space-y-3 transition-colors cursor-pointer">
-            <div>
-              <h3 className="text-sm font-bold text-slate-900">Mức lương chuẩn</h3>
-              <p className="text-xs text-slate-600 leading-relaxed mt-2">
-                Các doanh nghiệp đang điều chỉnh ngân sách lương tăng 8-10% để thu hút nhân tài cấp cao trong năm nay.
-              </p>
-            </div>
-            <a
-              href="#salary"
-              onClick={(e) => e.preventDefault()}
-              className="text-xs font-bold text-[#2170E4] hover:text-[#1a5bbd] hover:bg-slate-300/60 px-3 py-1.5 -ml-3 rounded-full inline-flex items-center space-x-1 w-fit transition-colors"
-            >
-              <span>Xem biểu đồ lương</span>
-              <span>&gt;</span>
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* 7. KẾT NỐI VỚI NHỮNG CÔNG TY HÀNG ĐẦU (3D ROTATING AXIS CAROUSEL) */}
+      {/* 7. KẾT NỐI VỚI NHỮNG CÔNG TY HÀNG ĐẦU */}
       <section
         data-scroll-reveal="top-companies"
         className={`w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-14 transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${isSectionVisible('top-companies')
@@ -1634,13 +1304,13 @@ export const AllJobsView = ({
           : 'opacity-0 translate-y-12 scale-[0.98] blur-[2px] pointer-events-none select-none'
           }`}
       >
-        <div className="flex flex-col items-start gap-4 mb-6">
-          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-left">
+        <div className="flex flex-col items-center gap-4 mb-6">
+          <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight text-center">
             Kết Nối Với Những Công Ty <span className="text-[#2170E4]">Hàng Đầu</span>
           </h2>
 
           {/* Category Pills */}
-          <div className="inline-flex flex-wrap items-center gap-1.5 p-1 bg-slate-100/90 rounded-full border border-slate-200/80 max-w-full shadow-2xs">
+          <div className="inline-flex flex-wrap items-center justify-center gap-1.5 p-1 bg-slate-100/90 rounded-full border border-slate-200/80 max-w-full shadow-2xs">
             {[
               { id: 'all', label: 'Tất cả' },
               { id: 'tech', label: 'Công nghệ' },
