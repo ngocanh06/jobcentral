@@ -97,7 +97,7 @@ export default function SideBar() {
                 <p className="text-sm font-medium text-slate-600">
                   Hạng thành viên:{" "}
                   <span className="font-bold tracking-wide text-amber-600">
-                    VIP
+                    Copper
                   </span>
                 </p>
 

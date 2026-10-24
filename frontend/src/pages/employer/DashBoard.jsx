@@ -7,7 +7,18 @@ import {
   Download,
   Laptop,
 } from "lucide-react";
-import { BarChart, Bar, ResponsiveContainer, XAxis, Cell } from "recharts";
+import {
+  Area,
+  AreaChart,
+  BarChart,
+  Bar,
+  CartesianGrid,
+  Cell,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import TimeOfDay from "../../components/employer/GetTime";
 import { Book } from "lucide-react";
 
@@ -34,17 +45,27 @@ const tasks = [
   // },
 ];
 
-//lấy dữ liệu từ DB
+// Dữ liệu demo cho chiến dịch tuyển thực tập sinh Management Trainee.
 const funnelStages = [
-  { label: "Applied", value: 0, color: "bg-indigo-950 text-white" },
-  { label: "Screening", value: 0, color: "bg-indigo-800 text-white" },
-  { label: "Interview", value: 0, color: "bg-sky-500 text-white" },
-  { label: "Technical", value: 0, color: "bg-sky-300 text-slate-900" },
-  { label: "Offer", value: 0, color: "bg-slate-100 text-slate-500" },
-  { label: "Hired", value: 0, color: null },
+  { label: "Nộp hồ sơ", value: 592, color: "#1d4ed8" },
+  { label: "Sàng lọc hồ sơ", value: 418, color: "#2563eb" },
+  { label: "Phỏng vấn sơ loại", value: 246, color: "#3b82f6" },
+  { label: "Phỏng vấn chuyên sâu", value: 132, color: "#60a5fa" },
+  { label: "Gửi thư mời (Offer)", value: 78, color: "#93c5fd" },
+  { label: "Nhận việc (Onboarding)", value: 61, color: "#0f766e" },
 ];
 
-// lấy dữ liệu từ DB
+const cumulativeApplicantTrend = [
+  { week: "Tuần 1", applicants: 42, hired: 0 },
+  { week: "Tuần 2", applicants: 89, hired: 0 },
+  { week: "Tuần 3", applicants: 156, hired: 3 },
+  { week: "Tuần 4", applicants: 238, hired: 8 },
+  { week: "Tuần 5", applicants: 326, hired: 16 },
+  { week: "Tuần 6", applicants: 418, hired: 25 },
+  { week: "Tuần 7", applicants: 507, hired: 36 },
+  { week: "Tuần 8", applicants: 592, hired: 61 },
+];
+
 const weeklyApplicants = [
   { day: "T2", value: 0 },
   { day: "T3", value: 0 },
@@ -118,6 +139,18 @@ function StatCard({ label, value, change, up }) {
 
 export default function RecruiterDashboard() {
   const maxVal = Math.max(...weeklyApplicants.map((d) => d.value));
+  const maxFunnelValue = funnelStages[0].value;
+  const largestDrop = funnelStages.slice(1).reduce(
+    (largest, stage, index) => {
+      const previousStage = funnelStages[index];
+      const dropRate = (previousStage.value - stage.value) / previousStage.value;
+      return dropRate > largest.dropRate
+        ? { stage, dropRate }
+        : largest;
+    },
+    { stage: funnelStages[1], dropRate: 0 },
+  );
+
   return (
     <div className="min-h-screen overflow-auto no-scrollbar bg-[#e8edf2] font-sans text-slate-900 flex">
       <div className="flex-1 min-w-0">
@@ -147,44 +180,6 @@ export default function RecruiterDashboard() {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {/* Tasks */}
-            <div className="bg-white rounded-xl border border-slate-200 p-5">
-              <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-sm">Việc cần làm ngay</h3>
-                <span className="text-xs text-[#2170e4] font-medium cursor-pointer flex items-center">
-                  Xem tất cả <ChevronRight size={13} />
-                </span>
-              </div>
-              <div className="space-y-4">
-                {tasks.length === 0 ? (
-                  <p className="text-stale-500 text-sm flex items-center justify-center align-item">
-                    Chưa có thông báo nào !
-                  </p>
-                ) : (
-                  tasks.map((t) => (
-                    <div
-                      key={t.title}
-                      className={`border-l-4 pl-3 ${t.borderColor}`}
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <p className="text-sm font-medium leading-snug">
-                          {t.title}
-                        </p>
-                        <span
-                          className={`text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap ${t.priorityColor}`}
-                        >
-                          {t.priority}
-                        </span>
-                      </div>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {t.subtitle}
-                      </p>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-
             {/* Funnel */}
             <div
               className="relative overflow-hidden rounded-2xl bg-cover bg-center p-5 shadow-lg border border-white/10"
@@ -233,6 +228,45 @@ export default function RecruiterDashboard() {
                 </div>
               </div>
             </div>
+
+            {/* Tasks */}
+            <div className="bg-white rounded-xl border border-slate-200 p-5">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="font-semibold text-sm">Việc cần làm ngay</h3>
+                <span className="text-xs text-[#2170e4] font-medium cursor-pointer flex items-center">
+                  Xem tất cả <ChevronRight size={13} />
+                </span>
+              </div>
+              <div className="space-y-4">
+                {tasks.length === 0 ? (
+                  <p className="text-stale-500 text-sm flex items-center justify-center align-item">
+                    Chưa có thông báo nào !
+                  </p>
+                ) : (
+                  tasks.map((t) => (
+                    <div
+                      key={t.title}
+                      className={`border-l-4 pl-3 ${t.borderColor}`}
+                    >
+                      <div className="flex items-start justify-between gap-2">
+                        <p className="text-sm font-medium leading-snug">
+                          {t.title}
+                        </p>
+                        <span
+                          className={`text-[10px] px-2 py-0.5 rounded-full whitespace-nowrap ${t.priorityColor}`}
+                        >
+                          {t.priority}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-0.5">
+                        {t.subtitle}
+                      </p>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
+
             {/* Chart */}
             <div className="bg-white rounded-xl border border-slate-200 p-5">
               <div className="flex items-center justify-between mb-4">
@@ -395,6 +429,207 @@ export default function RecruiterDashboard() {
                 </button>
               </div>
             </div>
+          </div>
+
+          {/* Cumulative growth / Recruitment funnel */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-stretch">
+            <section className="min-w-0 min-h-[360px] bg-white rounded-xl border border-slate-200 p-5 flex flex-col">
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <h3 className="font-semibold text-sm">
+                    Tăng trưởng ứng viên tích lũy
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Chiến dịch Management Trainee · 8 tuần
+                  </p>
+                </div>
+                <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700">
+                  Dữ liệu demo
+                </span>
+              </div>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-2xl font-semibold text-slate-900">
+                  592
+                </span>
+                <span className="text-xs text-slate-500">
+                  hồ sơ tích lũy
+                </span>
+                <span className="ml-auto text-xs font-medium text-emerald-600">
+                  61 nhận việc
+                </span>
+              </div>
+              <div className="flex-1 min-h-[220px]">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart
+                    data={cumulativeApplicantTrend}
+                    margin={{ top: 8, right: 8, left: -20, bottom: 0 }}
+                  >
+                    <defs>
+                      <linearGradient
+                        id="applicantsGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#3b82f6"
+                          stopOpacity={0.28}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#3b82f6"
+                          stopOpacity={0.02}
+                        />
+                      </linearGradient>
+                      <linearGradient
+                        id="hiredGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#10b981"
+                          stopOpacity={0.24}
+                        />
+                        <stop
+                          offset="95%"
+                          stopColor="#10b981"
+                          stopOpacity={0.02}
+                        />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid
+                      vertical={false}
+                      stroke="#e2e8f0"
+                      strokeDasharray="3 3"
+                    />
+                    <XAxis
+                      dataKey="week"
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: "#94a3b8" }}
+                      tickMargin={8}
+                    />
+                    <YAxis
+                      axisLine={false}
+                      tickLine={false}
+                      tick={{ fontSize: 10, fill: "#94a3b8" }}
+                      tickMargin={8}
+                      domain={[0, "dataMax"]}
+                    />
+                    <Tooltip
+                      formatter={(value, name) => [
+                        `${value} người`,
+                        name === "applicants" ? "Ứng viên" : "Đã nhận việc",
+                      ]}
+                      contentStyle={{
+                        borderRadius: 12,
+                        borderColor: "#e2e8f0",
+                        fontSize: 12,
+                      }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="applicants"
+                      stroke="#3b82f6"
+                      strokeWidth={2.5}
+                      fill="url(#applicantsGradient)"
+                      activeDot={{ r: 4 }}
+                    />
+                    <Area
+                      type="monotone"
+                      dataKey="hired"
+                      stroke="#10b981"
+                      strokeWidth={2}
+                      fill="url(#hiredGradient)"
+                      activeDot={{ r: 3 }}
+                    />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="flex items-center justify-center gap-5 pt-2 text-[11px] text-slate-500">
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-blue-500" />
+                  Ứng viên tích lũy
+                </span>
+                <span className="flex items-center gap-1.5">
+                  <span className="h-2 w-2 rounded-full bg-emerald-500" />
+                  Đã nhận việc
+                </span>
+              </div>
+            </section>
+
+            <section className="min-w-0 min-h-[360px] bg-white rounded-xl border border-slate-200 p-5 flex flex-col">
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div>
+                  <h3 className="font-semibold text-sm">
+                    Phễu tuyển dụng
+                  </h3>
+                  <p className="text-xs text-slate-400 mt-1">
+                    Số ứng viên qua từng vòng tuyển chọn
+                  </p>
+                </div>
+                <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-medium text-blue-700">
+                  Dữ liệu demo
+                </span>
+              </div>
+              <p className="mb-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-800">
+                Điểm rơi lớn nhất: {largestDrop.stage.label} (
+                {Math.round(largestDrop.dropRate * 100)}% ứng viên không qua)
+              </p>
+              <div className="flex flex-1 flex-col justify-between gap-2">
+                {funnelStages.map((stage, index) => {
+                  const previousValue =
+                    index === 0 ? stage.value : funnelStages[index - 1].value;
+                  const passRate =
+                    index === 0 ? 100 : (stage.value / previousValue) * 100;
+
+                  return (
+                    <div key={stage.label}>
+                      <div className="mb-1 flex items-center justify-between gap-3 text-xs">
+                        <span className="font-medium text-slate-700">
+                          {stage.label}
+                        </span>
+                        <span className="shrink-0 text-slate-500">
+                          <strong className="text-slate-800">
+                            {stage.value}
+                          </strong>
+                          <span className="ml-2 text-[10px] text-slate-400">
+                            {index === 0
+                              ? "100%"
+                              : `${Math.round(passRate)}% qua vòng`}
+                          </span>
+                        </span>
+                      </div>
+                      <div className="h-2.5 overflow-hidden rounded-full bg-slate-100">
+                        <div
+                          className="h-full rounded-full transition-all"
+                          style={{
+                            width: `${(stage.value / maxFunnelValue) * 100}%`,
+                            backgroundColor: stage.color,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+              <p className="pt-3 text-center text-[11px] text-slate-400">
+                Tỷ lệ chuyển đổi từ hồ sơ đến nhận việc:{" "}
+                <span className="font-semibold text-slate-600">
+                  {Math.round(
+                    (funnelStages[funnelStages.length - 1].value /
+                      maxFunnelValue) *
+                      100,
+                  )}
+                  %
+                </span>
+              </p>
+            </section>
           </div>
 
           {/* Upgrade banner */}

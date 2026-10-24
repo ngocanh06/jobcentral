@@ -6,8 +6,8 @@ const resources = {
   vi: {
     translation: {
       nav: {
-        product: "Việc làm",
-        HiraRecruitment: "AI Recruitment",
+        product: "Giới thiệu",
+        HiraRecruitment: "AI Recruitment - HIRA",
         handbook: "Cẩm nang tuyển dụng",
         utilities: "Công cụ",
         contact: "Liên hệ",
@@ -26,7 +26,8 @@ const resources = {
       hero: {
         title: "Chuyển đổi Tuyển dụng với",
         highlight: "Công nghệ AI",
-        description: "Giải pháp tuyển dụng dựa trên dữ liệu, tối ưu hoá quy trình tìm kiếm nhân tài của bạn.",
+        description:
+          "Giải pháp tuyển dụng dựa trên dữ liệu, tối ưu hoá quy trình tìm kiếm nhân tài của bạn.",
         start: "Bắt đầu tuyển dụng",
         learnMore: "Tìm hiểu thêm",
         team: "Đội ngũ tuyển dụng đang trao đổi",
@@ -36,7 +37,8 @@ const resources = {
       scrollHint: "Lướt xuống phần giới thiệu",
       stats: {
         title: "Tại sao chọn JobCentral?",
-        description: "Những con số ấn tượng chứng minh hiệu quả tuyển dụng vượt trội",
+        description:
+          "Những con số ấn tượng chứng minh hiệu quả tuyển dụng vượt trội",
         candidates: "Ứng viên chất lượng",
         speed: "Tốc độ tuyển dụng nhanh hơn",
         accuracy: "Độ chính xác AI Matching",
@@ -50,13 +52,19 @@ const resources = {
         advertisingTitle: "Quảng cáo nhắm mục tiêu",
         globalTitle: "Tiếp cận toàn cầu",
         supportTitle: "Hỗ trợ 24/7",
-        description: "JobCentral đem đến bộ công cụ hỗ trợ nhà tuyển dụng ở mọi bước trong hành trình tìm kiếm nhân tài, từ đăng tin đến chốt ứng viên.",
-        matching: "Công nghệ AI học sâu giúp gợi ý ứng viên phù hợp nhất theo vị trí, kinh nghiệm và kỹ năng chỉ trong vài giây.",
-        branding: "Xây dựng trang thương hiệu tuyển dụng riêng, giúp doanh nghiệp thu hút và giữ chân nhân tài hiệu quả hơn.",
+        description:
+          "JobCentral đem đến bộ công cụ hỗ trợ nhà tuyển dụng ở mọi bước trong hành trình tìm kiếm nhân tài, từ đăng tin đến chốt ứng viên.",
+        matching:
+          "Công nghệ AI học sâu giúp gợi ý ứng viên phù hợp nhất theo vị trí, kinh nghiệm và kỹ năng chỉ trong vài giây.",
+        branding:
+          "Xây dựng trang thương hiệu tuyển dụng riêng, giúp doanh nghiệp thu hút và giữ chân nhân tài hiệu quả hơn.",
         ats: "Quản lý toàn bộ quy trình tuyển dụng từ đăng tin, sàng lọc đến phỏng vấn trên một nền tảng duy nhất.",
-        advertising: "Phân phối tin tuyển dụng đúng đối tượng ứng viên tiềm năng, tối ưu ngân sách theo thời gian thực.",
-        global: "Mạng lưới ứng viên trải rộng trong nước và quốc tế, mở rộng phạm vi tìm kiếm nhân tài của bạn.",
-        support: "Đội ngũ chuyên gia tuyển dụng đồng hành cùng doanh nghiệp xuyên suốt quá trình sử dụng dịch vụ.",
+        advertising:
+          "Phân phối tin tuyển dụng đúng đối tượng ứng viên tiềm năng, tối ưu ngân sách theo thời gian thực.",
+        global:
+          "Mạng lưới ứng viên trải rộng trong nước và quốc tế, mở rộng phạm vi tìm kiếm nhân tài của bạn.",
+        support:
+          "Đội ngũ chuyên gia tuyển dụng đồng hành cùng doanh nghiệp xuyên suốt quá trình sử dụng dịch vụ.",
       },
       process: {
         title: "Quy trình Đơn giản, Hiệu quả Tối đa",
@@ -71,18 +79,29 @@ const resources = {
       },
       testimonials: {
         title: "Khách hàng nói gì về chúng tôi",
-        quoteOne: "Nhờ giải pháp AI Matching của JobCenTral, thời gian tìm kiếm ứng viên phù hợp rút ngắn đáng kể. Đội ngũ hỗ trợ cũng rất nhiệt tình và sát sao.",
-        quoteTwo: "Trang Employer Branding giúp chúng tôi xây dựng hình ảnh chuyên nghiệp và thu hút được nhiều ứng viên chất lượng hơn hẳn so với trước đây.",
+        quoteOne:
+          "Nhờ giải pháp AI Matching của JobCentral, thời gian tìm kiếm ứng viên phù hợp rút ngắn đáng kể. Đội ngũ hỗ trợ cũng rất nhiệt tình và sát sao.",
+        quoteTwo:
+          "Trang Employer Branding giúp chúng tôi xây dựng hình ảnh chuyên nghiệp và thu hút được nhiều ứng viên chất lượng hơn hẳn so với trước đây.",
+        quoteThree:
+          "Quy trình sàng lọc hồ sơ tự động giúp đội ngũ tiết kiệm hơn 40% chi phí vận hành và không còn tình trạng bỏ sót nhân tài tiềm năng.",
+        quoteFour:
+          "Giao diện quản lý trực quan, ứng viên phản hồi rất nhanh. Đây thực sự là giải pháp tuyển dụng toàn diện nhất mà chúng tôi từng triển khai.",
+
         roleOne: "Giám đốc Nhân sự, Công ty XYZ",
         roleTwo: "Trưởng phòng Tuyển dụng, Tập đoàn ABC",
+        roleThree: "Head of Talent Acquisition, TechCorp Global",
+        roleFour: "Operations Director, InnovateHub Vietnam",
       },
       pricing: {
         title: "Gói Giải pháp Linh hoạt",
         basic: "CƠ BẢN",
         standard: "TIÊU CHUẨN",
         breakthrough: "BỨT PHÁ",
-        description: "Chọn gói dịch vụ phù hợp với quy mô và nhu cầu tuyển dụng của doanh nghiệp bạn",
-        basicTagline: "Phù hợp cho freelancer hoặc các startup giai đoạn sơ khai hoặc nhà tuyển dụng mới.",
+        description:
+          "Chọn gói dịch vụ phù hợp với quy mô và nhu cầu tuyển dụng của doanh nghiệp bạn",
+        basicTagline:
+          "Phù hợp cho freelancer hoặc các startup giai đoạn sơ khai hoặc nhà tuyển dụng mới.",
         basicFeatureOne: "Đăng 1 bài lên FanPage",
         basicFeatureTwo: "Tiếp cận < 5000 ứng viên",
         basicFeatureThree: "Hỗ trợ email cơ bản",
@@ -93,10 +112,12 @@ const resources = {
         standardFeatureThree: "Tiếp cận 15.000 - 20.000 ứng viên",
         standardFeatureFour: "Phỏng vấn video (Sắp tới)",
         popular: "Phổ biến nhất",
-        breakthroughTagline: "Khai phá sức mạnh AI và quản trị dữ liệu tập trung.",
+        breakthroughTagline:
+          "Khai phá sức mạnh AI và quản trị dữ liệu tập trung.",
         breakthroughFeatureOne: "Bao gồm toàn bộ quyền lợi của gói Tiêu Chuẩn",
         breakthroughFeatureTwo: "Chạy Quảng Cáo 05 ngày",
-        breakthroughFeatureThree: "Hỗ trợ tương tác, kéo tin nhắn trong 03 ngày đầu",
+        breakthroughFeatureThree:
+          "Hỗ trợ tương tác, kéo tin nhắn trong 03 ngày đầu",
         breakthroughFeatureFour: "Chuyên viên hỗ trợ riêng",
         learnMore: "Tìm hiểu thêm",
         start: "Bắt đầu ngay",
@@ -136,7 +157,7 @@ const resources = {
     translation: {
       nav: {
         product: "Products",
-        aiRecruitment: "AI Recruitment",
+        HiraRecruitment: "AI Recruitment - HIRA",
         handbook: "Recruitment Handbook",
         utilities: "Utilities",
         contact: "Contact",
@@ -147,11 +168,15 @@ const resources = {
       utilities: {
         truthScore: "Truth Score",
         servicePlans: "Service plans",
+        Calculator_salary: "Gross-to-Net Salary Calculator",
+        Personal_IncomeTax: "Personal Income Tax",
+        industry_specific_base_salary: "Industry-specific Basic Salary",
       },
       hero: {
         title: "Transform Recruitment with",
         highlight: "AI Technology",
-        description: "A data-driven recruitment solution that optimizes your talent search process.",
+        description:
+          "A data-driven recruitment solution that optimizes your talent search process.",
         start: "Start recruiting",
         learnMore: "Learn more",
         team: "Recruitment team discussing",
@@ -161,7 +186,8 @@ const resources = {
       scrollHint: "Scroll to the introduction",
       stats: {
         title: "Why choose JobCentral?",
-        description: "Impressive numbers that demonstrate outstanding recruitment results",
+        description:
+          "Impressive numbers that demonstrate outstanding recruitment results",
         candidates: "Quality candidates",
         speed: "Faster recruitment",
         accuracy: "AI Matching accuracy",
@@ -169,19 +195,25 @@ const resources = {
       },
       features: {
         title: "Complete Recruitment Solutions",
-        matchingTitle: "AI Matching",
+        matchingTitle: "Part-Time Jobs with HIRA",
         brandingTitle: "Employer Branding",
         atsTitle: "ATS Platform",
         advertisingTitle: "Targeted Advertising",
         globalTitle: "Global Reach",
         supportTitle: "24/7 Support",
-        description: "Tools that support recruiters at every step of the talent search journey, from posting jobs to hiring candidates.",
-        matching: "Deep-learning AI recommends the most suitable candidates based on position, experience, and skills in seconds.",
-        branding: "Build a dedicated employer branding page to attract and retain top talent more effectively.",
+        description:
+          "Tools that support recruiters at every step of the talent search journey, from posting jobs to hiring candidates.",
+        matching:
+          "Deep-learning AI recommends the most suitable candidates based on position, experience, and skills in seconds.",
+        branding:
+          "Build a dedicated employer branding page to attract and retain top talent more effectively.",
         ats: "Manage the entire recruitment process, from job posting and screening to interviews, on one platform.",
-        advertising: "Deliver job postings to the right potential candidates and optimize your budget in real time.",
-        global: "Reach candidates locally and internationally to expand your talent search.",
-        support: "Recruitment experts support your business throughout the entire service journey.",
+        advertising:
+          "Deliver job postings to the right potential candidates and optimize your budget in real time.",
+        global:
+          "Reach candidates locally and internationally to expand your talent search.",
+        support:
+          "Recruitment experts support your business throughout the entire service journey.",
       },
       process: {
         title: "Simple Process, Maximum Results",
@@ -191,28 +223,40 @@ const resources = {
         hireTitle: "Hire",
         register: "Create a free business account in minutes.",
         post: "Create standardized job posts with AI content suggestions.",
-        matching: "The system automatically screens and recommends the best candidates.",
+        matching:
+          "The system automatically screens and recommends the best candidates.",
         hire: "Interview, evaluate, and hire candidates on the platform.",
       },
       testimonials: {
         title: "What our customers say",
-        quoteOne: "Thanks to JobCenTral's AI Matching solution, the time needed to find suitable candidates has been significantly reduced. The support team is also attentive and enthusiastic.",
-        quoteTwo: "The Employer Branding page helps us build a professional image and attract far more quality candidates than before.",
+        quoteOne:
+          "Thanks to JobCenTral's AI Matching solution, the time needed to find suitable candidates has been significantly reduced. The support team is also attentive and enthusiastic.",
+        quoteTwo:
+          "The Employer Branding page helps us build a professional image and attract far more quality candidates than before.",
+        quoteThree:
+          "Automated resume screening saves our team more than 40% in operating costs and prevents us from overlooking promising talent.",
+        quoteFour:
+          "The intuitive management interface gets quick responses from candidates. This is truly the most comprehensive recruitment solution we have ever implemented.",
         roleOne: "HR Director, XYZ Company",
         roleTwo: "Head of Recruitment, ABC Group",
+        roleThree: "Head of Talent Acquisition, TechCorp Global",
+        roleFour: "Operations Director, InnovateHub Vietnam",
       },
       pricing: {
         title: "Flexible Solutions",
         basic: "BASIC",
         standard: "STANDARD",
         breakthrough: "BREAKTHROUGH",
-        description: "Choose a service plan that fits your business size and recruitment needs",
-        basicTagline: "Suitable for freelancers, early-stage startups, or new recruiters.",
+        description:
+          "Choose a service plan that fits your business size and recruitment needs",
+        basicTagline:
+          "Suitable for freelancers, early-stage startups, or new recruiters.",
         basicFeatureOne: "Post 1 listing on FanPage",
         basicFeatureTwo: "Reach fewer than 5,000 candidates",
         basicFeatureThree: "Basic email support",
         basicFeatureFour: "Automated interview AI Matching",
-        standardTagline: "The optimal solution for small and medium businesses.",
+        standardTagline:
+          "The optimal solution for small and medium businesses.",
         standardFeatureOne: "Post 2 listings on FanPage with a red logo",
         standardFeatureTwo: "Pin a listing on FanPage for 3 days",
         standardFeatureThree: "Reach 15,000 - 20,000 candidates",
@@ -221,7 +265,8 @@ const resources = {
         breakthroughTagline: "Unlock AI power and centralized data management.",
         breakthroughFeatureOne: "All benefits of the Standard plan",
         breakthroughFeatureTwo: "Run ads for 5 days",
-        breakthroughFeatureThree: "Engagement and message support during the first 3 days",
+        breakthroughFeatureThree:
+          "Engagement and message support during the first 3 days",
         breakthroughFeatureFour: "Dedicated support specialist",
         learnMore: "Learn more",
         start: "Get started",
@@ -261,14 +306,12 @@ const resources = {
 
 const savedLanguage = window.localStorage.getItem("jobcentral-language");
 
-void i18n
-  .use(initReactI18next)
-  .init({
-    resources,
-    lng: savedLanguage || "vi",
-    fallbackLng: "vi",
-    interpolation: { escapeValue: false },
-  });
+void i18n.use(initReactI18next).init({
+  resources,
+  lng: savedLanguage || "vi",
+  fallbackLng: "vi",
+  interpolation: { escapeValue: false },
+});
 
 i18n.on("languageChanged", (language) => {
   window.localStorage.setItem("jobcentral-language", language);

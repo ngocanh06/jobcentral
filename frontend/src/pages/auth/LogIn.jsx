@@ -226,82 +226,85 @@ function RightPanel() {
     setStep(1);
   };
 
-  return (
-    <div className="flex justify-center h-full flex-col bg-white px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
-      {/* Top bar */}
-      <div className="mx-auto w-full max-w-lg">
-        <h2 className="text-2xl font-bold text-slate-900">
-          Thông tin đăng nhập
-        </h2>
-        {step === 0 && (
-          <form
-            onSubmit={handleAccountSubmit}
-            noValidate
-            className="mt-8 space-y-4"
-          >
-            <Field label="Địa chỉ email" error={show("email")}>
-              <input
-                type="email"
-                className={inputCls(show("email"))}
-                value={form.email}
-                onChange={set("email")}
-                onBlur={blur("email")}
-              />
-            </Field>
+return (
+  <div className="flex h-full flex-col justify-center bg-[#ffffff] px-6 py-8 shadow-sm sm:px-10 lg:px-14 lg:py-10">
+    {/* Top bar */}
+    <div className="mx-auto box-border w-full max-w-lg rounded-lg border border-slate-300 bg-white p-8">
+      <h2 className="text-2xl font-bold text-slate-900">
+        Thông tin đăng nhập
+      </h2>
 
-            <Field
-              label="Mật khẩu"
+      {step === 0 && (
+        <form
+          onSubmit={handleAccountSubmit}
+          noValidate
+          className="mt-8 space-y-4"
+        >
+          <Field label="Địa chỉ email" error={show("email")}>
+            <input
+              type="email"
+              className={inputCls(show("email"))}
+              value={form.email}
+              onChange={set("email")}
+              onBlur={blur("email")}
+            />
+          </Field>
+
+          <Field
+            label="Mật khẩu"
+            error={show("password")}
+            tooltip="Mật khẩu tối thiểu 8 ký tự, nên gồm chữ hoa, chữ thường và số."
+          >
+            <PasswordInput
+              value={form.password}
+              onChange={set("password")}
+              onBlur={blur("password")}
               error={show("password")}
-              tooltip="Mật khẩu tối thiểu 8 ký tự, nên gồm chữ hoa, chữ thường và số."
+            />
+          </Field>
+
+          <div className="flex justify-between gap-3 pt-2">
+            <button
+              type="button"
+              onClick={() => navigate(`/recruiter/intro`)}
+              className="h-12 rounded-lg border border-slate-300 px-6 text-base font-medium text-slate-700 transition hover:bg-slate-50"
             >
-              <PasswordInput
-                value={form.password}
-                onChange={set("password")}
-                onBlur={blur("password")}
-                error={show("password")}
-              />
-            </Field>
+              Quay lại
+            </button>
 
-            <div className="flex justify-between gap-3 pt-2">
-              <button
-                type="button"
-                onClick={() => navigate(`/recruiter/intro`)}
-                className="h-12 rounded-lg border border-slate-300 px-6 text-base font-medium text-slate-700 transition hover:bg-slate-50"
-              >
-                Quay lại
-              </button>
+            <button
+              type="submit"
+              disabled={!valid}
+              onClick={handleLogin}
+              className="h-12 rounded-lg bg-orange-600 px-8 text-base font-medium text-white shadow-sm transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-orange-300 disabled:shadow-none"
+            >
+              Tiếp tục
+            </button>
+          </div>
+        </form>
+      )}
 
-              <button
-                type="submit"
-                disabled={!valid}
-                onClick={handleLogin}
-                className="h-12 rounded-lg bg-orange-600 px-8 text-base font-medium text-white transition hover:bg-orange-700 disabled:cursor-not-allowed disabled:bg-orange-300"
-              >
-                Tiếp tục
-              </button>
-            </div>
-          </form>
-        )}
+      {/* Divider */}
+      <div className="my-6 flex items-center gap-3">
+        <span className="h-px flex-1 bg-slate-200" />
+      </div>
 
-        {/* Divider */}
-        <div className="my-6 flex items-center gap-3">
-          <span className="h-px flex-1 bg-slate-200" />
-        </div>
+      {/* Chưa có tài khoản */}
+      <div className="mt-6 flex items-center justify-center gap-1.5 rounded-xl border border-blue-200/70 bg-blue-50/50 px-4 py-3.5 text-sm">
+        <p className="text-slate-600">
+          Bạn chưa có tài khoản JobCentral?
+        </p>
 
-        {/* Chưa có tài khoản */}
-        <div className="mt-6 flex items-center justify-center gap-1.5 rounded-xl border border-blue-100 bg-blue-50/60 px-4 py-3.5 text-sm">
-          <p className="text-slate-600">Bạn chưa có tài khoản JobCentral?</p>
-
-          <Link
-            to="/Register"
-            className="font-semibold text-blue-600 underline-offset-4 transition hover:text-blue-700 hover:underline"
-          >
-            Đăng ký ngay
-          </Link>
-        </div>
+        <Link
+          to="/Register"
+          className="font-semibold text-blue-600 underline-offset-4 transition hover:text-blue-700 hover:underline"
+        >
+          Đăng ký ngay
+        </Link>
       </div>
     </div>
-  );
+  </div>
+);
 }
 
 export default function BusinessSignupPage() {

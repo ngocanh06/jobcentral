@@ -388,9 +388,9 @@ function RightPanel() {
   };
 
   return (
-    <div className="flex h-full flex-col bg-white px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
+    <div className="flex items-center h-full flex-col bg-white px-6 py-8 sm:px-10 lg:px-14 lg:py-10">
       {/* Top bar */}
-      <div className="mx-auto w-full max-w-lg">
+      <div className="mx-auto box-border w-full max-w-lg rounded-lg border border-slate-300 bg-white p-8">
         <h2 className="text-2xl font-bold text-slate-900">
           Đăng ký Tài khoản Doanh nghiệp
         </h2>

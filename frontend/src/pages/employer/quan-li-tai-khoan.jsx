@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Check, User, Building2, ShieldCheck, Eye, EyeOff, AlertCircle } from "lucide-react";
+import {
+  Check,
+  User,
+  Building2,
+  ShieldCheck,
+  Eye,
+  EyeOff,
+  AlertCircle,
+} from "lucide-react";
 
 // ---------- Reusable field components ----------
 
@@ -99,7 +107,21 @@ function AccountTab({ onSaved }) {
   });
   const [errors, setErrors] = useState({});
 
-  const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const handleReset = () => {
+    setForm({
+      fullName: "",
+      email: "",
+      phone: "",
+      country: "",
+      city: "",
+      address: "",
+      fax: "",
+    });
+    setErrors({});
+  };
+
+  const update = (key) => (e) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const validate = () => {
     const next = {};
@@ -174,15 +196,26 @@ function AccountTab({ onSaved }) {
             />
           </Field>
           <Field label="Fax">
-            <TextInput value={form.fax} onChange={update("fax")} placeholder="Không bắt buộc" />
+            <TextInput
+              value={form.fax}
+              onChange={update("fax")}
+              placeholder="Không bắt buộc"
+            />
           </Field>
         </div>
       </SectionCard>
 
-      <div className="flex justify-center pt-1">
+      <div className="flex justify-center gap-5 pt-1">
+        <button
+          type="button"
+          onClick={handleReset}
+          className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+        >
+          Hủy
+        </button>
         <button
           type="submit"
-          className="rounded-lg border border-blue-500 px-8 py-2.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 active:scale-[0.98]"
+          className="rounded-lg border border-blue-500 px-6 py-2.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 active:scale-[0.98]"
         >
           Cập nhật
         </button>
@@ -210,12 +243,15 @@ function CompanyTab({ onSaved }) {
   });
   const [errors, setErrors] = useState({});
 
-  const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const update = (key) => (e) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const validate = () => {
     const next = {};
-    if (!form.companyName.trim()) next.companyName = "Vui lòng nhập tên doanh nghiệp";
-    if (!form.licenseNumber.trim()) next.licenseNumber = "Vui lòng nhập số giấy phép kinh doanh";
+    if (!form.companyName.trim())
+      next.companyName = "Vui lòng nhập tên doanh nghiệp";
+    if (!form.licenseNumber.trim())
+      next.licenseNumber = "Vui lòng nhập số giấy phép kinh doanh";
     if (!form.intro.trim()) next.intro = "Vui lòng giới thiệu công ty";
     const urlFields = ["website", "linkedin", "facebook"];
     urlFields.forEach((f) => {
@@ -227,6 +263,24 @@ function CompanyTab({ onSaved }) {
     return Object.keys(next).length === 0;
   };
 
+    const handleReset = () => {
+    setForm({
+    companyName: "",
+    licenseNumber: "",
+    foundedDate: "",
+    legalRep: "",
+    taxCode: "",
+    size: "Dưới 50",
+    industry: "",
+    headquarters: "",
+    intro: "",
+    website: "",
+    linkedin: "",
+    facebook: "",
+    });
+    setErrors({});
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) onSaved("Đã cập nhật thông tin công ty");
@@ -236,7 +290,11 @@ function CompanyTab({ onSaved }) {
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <SectionCard title="Thông tin pháp lý & doanh nghiệp">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Field label="Tên doanh nghiệp đầy đủ" required error={errors.companyName}>
+          <Field
+            label="Tên doanh nghiệp đầy đủ"
+            required
+            error={errors.companyName}
+          >
             <TextInput
               value={form.companyName}
               onChange={update("companyName")}
@@ -244,7 +302,11 @@ function CompanyTab({ onSaved }) {
               error={errors.companyName}
             />
           </Field>
-          <Field label="Số giấy phép kinh doanh" required error={errors.licenseNumber}>
+          <Field
+            label="Số giấy phép kinh doanh"
+            required
+            error={errors.licenseNumber}
+          >
             <TextInput
               value={form.licenseNumber}
               onChange={update("licenseNumber")}
@@ -253,7 +315,11 @@ function CompanyTab({ onSaved }) {
             />
           </Field>
           <Field label="Ngày thành lập">
-            <TextInput type="date" value={form.foundedDate} onChange={update("foundedDate")} />
+            <TextInput
+              type="date"
+              value={form.foundedDate}
+              onChange={update("foundedDate")}
+            />
           </Field>
           <Field label="Người đại diện pháp luật">
             <TextInput
@@ -263,7 +329,11 @@ function CompanyTab({ onSaved }) {
             />
           </Field>
           <Field label="Mã số thuế">
-            <TextInput value={form.taxCode} onChange={update("taxCode")} placeholder="Mã số thuế" />
+            <TextInput
+              value={form.taxCode}
+              onChange={update("taxCode")}
+              placeholder="Mã số thuế"
+            />
           </Field>
           <Field label="Quy mô nhân sự">
             <Select value={form.size} onChange={update("size")}>
@@ -332,10 +402,17 @@ function CompanyTab({ onSaved }) {
         </div>
       </SectionCard>
 
-      <div className="flex justify-center pt-1">
+      <div className="flex justify-center gap-5 pt-1">
+        <button
+          type="button"
+          onClick={handleReset}
+          className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+        >
+          Hủy
+        </button>
         <button
           type="submit"
-          className="rounded-lg bg-blue-600 px-8 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 active:scale-[0.98]"
+          className="rounded-lg border border-blue-500 px-6 py-2.5 text-sm font-medium text-blue-600 transition hover:bg-blue-50 active:scale-[0.98]"
         >
           Cập nhật
         </button>
@@ -356,16 +433,19 @@ function SecurityTab({ onSaved }) {
   const [show, setShow] = useState({ old: false, next: false, confirm: false });
   const [errors, setErrors] = useState({});
 
-  const update = (key) => (e) => setForm((f) => ({ ...f, [key]: e.target.value }));
+  const update = (key) => (e) =>
+    setForm((f) => ({ ...f, [key]: e.target.value }));
 
   const validate = () => {
     const next = {};
-    if (!form.username.trim()) next.username = "Vui lòng nhập email hoặc tên đăng nhập";
+    if (!form.username.trim())
+      next.username = "Vui lòng nhập email hoặc tên đăng nhập";
     if (!form.oldPassword) next.oldPassword = "Vui lòng nhập mật khẩu cũ";
     if (!form.newPassword) next.newPassword = "Vui lòng nhập mật khẩu mới";
     else if (form.newPassword.length < 8)
       next.newPassword = "Mật khẩu mới phải có ít nhất 8 ký tự";
-    if (!form.confirmPassword) next.confirmPassword = "Vui lòng xác thực mật khẩu mới";
+    if (!form.confirmPassword)
+      next.confirmPassword = "Vui lòng xác thực mật khẩu mới";
     else if (form.newPassword && form.confirmPassword !== form.newPassword)
       next.confirmPassword = "Mật khẩu xác thực không khớp";
     setErrors(next);
@@ -373,7 +453,12 @@ function SecurityTab({ onSaved }) {
   };
 
   const handleReset = () => {
-    setForm({ username: "", oldPassword: "", newPassword: "", confirmPassword: "" });
+    setForm({
+      username: "",
+      oldPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
     setErrors({});
   };
 
@@ -463,7 +548,9 @@ export default function AccountSettings() {
       <div className="px-4">
         {/* Header */}
         <div className="mb-4">
-          <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">Thiết lập tài khoản</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#2170e4]">
+            Thiết lập tài khoản
+          </h1>
           <p className="mt-1 text-sm text-slate-400">
             Quản lý thông tin cá nhân, hồ sơ doanh nghiệp và tùy chỉnh hệ thống.
           </p>

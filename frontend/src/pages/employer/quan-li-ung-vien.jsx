@@ -576,10 +576,10 @@ export default function CandidateManagement(props) {
   const selectedCandidate = candidates.find((c) => c.id === selectedId) || null;
 
   const toolBtnClass =
-    "flex items-center gap-1.5 bg-white border border-slate-200 rounded-lg px-3.5 py-[9px] text-[12.5px] font-bold text-slate-700 cursor-pointer";
+    "flex items-center gap-1.5 bg-white border border-slate-400 rounded-lg px-3.5 py-[9px] text-[12.5px] font-bold text-slate-700 cursor-pointer";
 
   const selectClass =
-    "px-2.5 py-[9px] rounded-lg border border-slate-200 text-[13px] text-slate-700 bg-white";
+    "px-2.5 py-[9px] rounded-lg border border-slate-400 text-[13px] text-slate-700 bg-white";
 
   const pageBtnClass =
     "w-[26px] h-[26px] rounded-md border border-slate-200 bg-white text-xs cursor-pointer flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed";
@@ -804,7 +804,7 @@ export default function CandidateManagement(props) {
         </div>
 
         {/* Filters */}
-        <div className="bg-blue-200 border border-blue-100 rounded-xl p-4 mt-5 flex gap-3 flex-wrap items-center">
+        <div className="bg-white rounded-xl p-4 mt-5 flex gap-3 flex-wrap items-center">
           <div className="relative flex-[1_1_220px]">
             <Search
               size={15}
@@ -812,7 +812,7 @@ export default function CandidateManagement(props) {
             />
             <input
               placeholder="Tìm kiếm ứng viên"
-              className="w-full py-[9px] pl-8 pr-2.5 rounded-lg border border-slate-200 text-[13px] box-border"
+              className="w-full py-[9px] pl-8 pr-2.5 rounded-lg border border-slate-400 text-[13px] box-border"
               type="text"
               value={SearchTerm}
               onChange={HandleSearchChange}

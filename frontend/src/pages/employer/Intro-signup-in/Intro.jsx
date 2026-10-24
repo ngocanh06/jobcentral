@@ -184,6 +184,16 @@ const TESTIMONIALS = [
     name: "Trần Văn B",
     roleKey: "testimonials.roleTwo",
   },
+  {
+    quoteKey: "testimonials.quoteThree",
+    name: "Võ Văn C",
+    roleKey: "testimonials.roleThree",
+  },
+  {
+    quoteKey: "testimonials.quoteFour",
+    name: "Lê Văn D",
+    roleKey: "testimonials.roleFour",
+  },
 ];
 
 const PLANS = [
@@ -383,65 +393,82 @@ function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 transition-all duration-300 ${
-        scrolled ? "bg-white/90 backdrop-blur shadow-sm" : "bg-white"
+      className={`fixed left-1/2 top-[10px] z-50 w-[calc(100%-32px)] max-w-[1500px] -translate-x-1/2 rounded-full border border-white/50 transition-all duration-300 ${
+        scrolled
+          ? "bg-white/80 shadow-lg shadow-slate-900/10 backdrop-blur-xl"
+          : "bg-white/65 shadow-md shadow-slate-900/5 backdrop-blur-lg"
       }`}
     >
-      <div className="mx-10 flex max-w-9xl items-center justify-between px-6 py-4">
-        <div className="flex items-center text-[1.35rem] font-black leading-none text-slate-900">
+      <div
+        className={`mx-auto flex max-w-[1500px] items-center justify-between rounded-full border border-white/50 px-6 py-3 transition-all duration-300 ${
+          scrolled
+            ? "bg-white/75 shadow-lg shadow-slate-900/5 backdrop-blur-xl"
+            : "bg-white/60 shadow-md shadow-slate-900/5 backdrop-blur-lg"
+        }`}
+      >
+        {/* LOGO */}
+        <Link
+          to="/"
+          className="flex shrink-0 items-center text-[1.35rem] font-black leading-none text-slate-900"
+        >
           JOB<span className="ml-1 text-[#2170e4]">CENTRAL</span>
-        </div>
-        <nav className="hidden items-center gap-8 text-sm font-medium text-slate-600 lg:flex">
+        </Link>
+
+        {/* MENU CHÍNH */}
+        <nav className="hidden items-center gap-6 text-lg font-medium text-slate-600 lg:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               to={link.href}
-              className="relative py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+              className="relative whitespace-nowrap py-2 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
             >
               {link.label}
             </Link>
           ))}
+
+          {/* MENU TIỆN ÍCH */}
           <div className="group relative">
             <button
               type="button"
               aria-haspopup="true"
-              className="flex items-center gap-1 py-1 transition-colors hover:text-blue-600 after:absolute after:bottom-0 after:left-0 after:h-[2px] after:w-0 after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full"
+              className="flex items-center text-lg gap-1 whitespace-nowrap py-2 transition-colors hover:text-blue-600"
             >
               {t("nav.utilities")}
-              <span className="text-xs text-slate-400">▼</span>
+              <span className="text-lg text-slate-400">▼</span>
             </button>
-            <div className="invisible absolute left-0 top-full z-50 mt-2 w-64 translate-y-1 rounded-xl border border-slate-200 bg-white p-1.5 text-sm opacity-0 shadow-lg transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+
+            <div className="invisible absolute left-0 top-full z-50 mt-3 w-64 translate-y-1 rounded-2xl border border-white/60 bg-white/90 p-2 text-lg opacity-0 shadow-xl backdrop-blur-xl transition-all duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
               <Link
                 to="/Truth-Score"
-                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                className="block rounded-xl px-3 py-2.5 text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
               >
                 {t("utilities.truthScore")}
               </Link>
 
               <Link
                 to="/Goi-dich-vu"
-                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                className="block rounded-xl px-3 py-2.5 text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
               >
                 {t("utilities.servicePlans")}
               </Link>
 
               <Link
-                // to={/BoTinhLuong}
-                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                to="/BoTinhLuong"
+                className="block rounded-xl px-3 py-2.5 text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
               >
                 {t("utilities.Calculator_salary")}
               </Link>
 
               <Link
-                // to={/BoTinhLuong}
-                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                to="/Personal-IncomeTax"
+                className="block rounded-xl px-3 py-2.5 text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
               >
                 {t("utilities.Personal_IncomeTax")}
               </Link>
 
               <Link
-                // to={/BoTinhLuong}
-                className="block rounded-lg px-3 py-2 text-slate-700 hover:bg-blue-50 hover:text-blue-600"
+                to="/industry-specific-base-salary"
+                className="block rounded-xl px-3 py-2.5 text-slate-700 transition-colors hover:bg-blue-50 hover:text-blue-600"
               >
                 {t("utilities.industry_specific_base_salary")}
               </Link>
@@ -449,11 +476,11 @@ function Header() {
           </div>
         </nav>
 
-        <div className="hidden items-center gap-3 sm:flex">
-          <div className="flex items-center gap-2">
+        <div className="hidden shrink-0 items-center gap-3 sm:flex">
+          <div className="flex items-center gap-1">
             <Link
               to="/login"
-              className="group flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+              className="group flex items-center gap-1.5 rounded-full px-3 py-2 text-sx bg-slate-200 font-medium text-slate-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
             >
               <User
                 size={16}
@@ -467,31 +494,40 @@ function Header() {
 
             <Link
               to="/Register"
-              className="rounded-lg px-2.5 py-2 text-sm font-medium text-slate-700 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
+              className="rounded-full px-3 py-2 text-sx font-medium text-slate-700 bg-slate-200 transition-all duration-200 hover:bg-blue-50 hover:text-blue-600"
             >
               {t("nav.register")}
             </Link>
           </div>
-          <div className="relative w-30">
+
+          {/* CHỌN NGÔN NGỮ */}
+          <div className="relative w-[76px]">
             <button
+              type="button"
+              aria-haspopup="true"
+              aria-expanded={open}
               onClick={() => setOpen(!open)}
-              className="flex w-full items-center justify-between rounded-2xl border border-slate-200 bg-white px-3 py-2 text-sm"
+              className="flex w-full items-center justify-between rounded-full border border-slate-200/80 bg-white/60 px-3 py-2 text-sm font-medium text-slate-700 transition-colors hover:bg-white"
             >
               {currentLanguage.toUpperCase()}
-
-              <span className="text-slate-400">▼</span>
+              <span className="text-xs text-slate-400">▼</span>
             </button>
 
             {open && (
-              <div className="absolute z-10 mt-1 w-full rounded-lg border border-slate-200 bg-white p-1 shadow-lg">
+              <div className="absolute right-0 z-50 mt-2 w-full rounded-xl border border-white/60 bg-white/95 p-1 shadow-lg backdrop-blur-xl">
                 {options.map((option) => (
                   <button
                     key={option.code}
+                    type="button"
                     onClick={() => {
                       void i18n.changeLanguage(option.code);
                       setOpen(false);
                     }}
-                    className="w-full rounded-md px-3 py-2 text-left text-sm hover:bg-slate-100"
+                    className={`w-full rounded-lg px-3 py-2 text-left text-sm transition-colors hover:bg-blue-50 ${
+                      currentLanguage.startsWith(option.code)
+                        ? "font-semibold text-blue-600"
+                        : "text-slate-700"
+                    }`}
                   >
                     {option.label}
                   </button>
@@ -499,17 +535,17 @@ function Header() {
               </div>
             )}
           </div>
+
+          {/* CHUYỂN SANG GIAO DIỆN ỨNG VIÊN */}
           <Link
             to="/"
-            className="ml-4 group flex h-10 w-fit items-center justify-center gap-2 rounded-full bg-blue-600 px-5 text-sm font-semibold text-white transition-all duration-300"
+            className="group flex h-10 items-center justify-center gap-2 whitespace-nowrap rounded-full bg-[#2170e4] px-4 text-sm font-semibold text-white shadow-sm transition-all duration-300 hover:bg-blue-700 hover:shadow-md"
           >
             <RefreshCw
               size={16}
               className="transition-transform duration-300 group-hover:animate-spin"
             />
-            <span className="transition-all duration-200">
-              {t("nav.candidate")}
-            </span>
+            <span>{t("nav.candidate")}</span>
           </Link>
         </div>
       </div>
@@ -563,7 +599,14 @@ function Hero() {
                   >
                     {t("hero.start")}
                   </Link>
-                  <button className="rounded-full border border-white/70 bg-white/10 px-7 py-3.5 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-blue-600">
+                  <button
+                    onClick={() =>
+                      document
+                        .getElementById("career-advice")
+                        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }
+                    className="rounded-full border border-white/70 bg-white/10 px-7 py-3.5 font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:-translate-y-0.5 hover:bg-white hover:text-blue-600"
+                  >
                     {t("hero.learnMore")}
                   </button>
                 </div>
@@ -716,13 +759,26 @@ function Features() {
                 className="h-full w-full object-cover transition-all duration-500 ease-out"
               />
               <div className="absolute bottom-5 left-1/2 flex w-[min(88%,440px)] -translate-x-1/2 gap-3">
-                <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
-                  Trải nghiệm ngay
-                </button>
+                <div className="flex gap-7 mt-7 justify-center">
+                  <Link
+                    to="/Register"
+                    className="flex rounded-md border border-[#2170E4] bg-white px-5 py-2 text-lg font-medium text-[#2170E4] transition-all duration-200 hover:bg-[#2170E4] hover:text-white"
+                  >
+                    {"Trải nghiệm ngay"}
+                  </Link>
 
-                <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
-                  Liên hệ tư vấn
-                </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      document
+                        .getElementById("career-advice")
+                        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+                    }
+                    className="rounded-md border border-slate-200 bg-white px-5 py-2 text-lg font-medium text-slate-700 transition-all duration-200 hover:border-[#2170E4] hover:text-[#2170E4]"
+                  >
+                    Liên hệ tư vấn
+                  </button>
+                </div>
               </div>
             </div>
           </div>
@@ -769,14 +825,14 @@ function FeatureImage({ src, title }) {
 
 function AIRecruitmentSection() {
   return (
-    <section className="mt-10 w-full bg-white px-4 py-8 sm:px-6 lg:px-8">
-      <div className="mx-auto w-full max-w-6xl rounded-[14px] border border-[#d7e1f0] bg-[#f3f6fb] p-2.5 sm:p-3">
+    <section class="w-full bg-white mt-[3.75rem] px-6 py-[8.5rem] sm:px-8 lg:px-10">
+      <div className="mx-auto w-full max-w-7xl rounded-[14px] border border-[#d7e1f0] bg-[#f3f6fb] p-2.5 sm:p-3">
         {/* Header */}
-        <div className="flex flex-col gap-6 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
-          <h2 className="flex text-base font-bold text-slate-900 sm:text-lg">
-            Tối ưu hiệu quả tuyển dụng với
-            <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent text-2xl font-bold">
-              JobCentralAI
+        <div className="flex justify-center items-center flex-col gap-6 px-3 py-3 sm:flex-row sm:items-center sm:justify-between">
+          <h2 className="flex text-3xl font-bold text-slate-900 ">
+            Tối ưu hiệu quả tuyển dụng với {"\u00a0"}
+            <span className="flex items-center bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent text-5xl font-bold">
+              HIRA
             </span>
             <img
               src="/picture/AI_logo2.png"
@@ -784,26 +840,10 @@ function AIRecruitmentSection() {
               className="h-6 w-6 object-contain"
             />
           </h2>
-
-          <div className="flex gap-2">
-            <button
-              type="button"
-              className="rounded-md border border-[#2170E4] bg-white px-5 py-2 text-xs font-medium text-[#2170E4] transition-all duration-200 hover:bg-[#2170E4] hover:text-white"
-            >
-              Trải nghiệm ngay
-            </button>
-
-            <button
-              type="button"
-              className="rounded-md border border-slate-200 bg-white px-5 py-2 text-xs font-medium text-slate-700 transition-all duration-200 hover:border-[#2170E4] hover:text-[#2170E4]"
-            >
-              Liên hệ tư vấn
-            </button>
-          </div>
         </div>
 
         {/* Feature sections */}
-        <div className="space-y-2.5">
+        <div className="space-y-4">
           {Intro_AI.map((feature, index) => (
             <div
               key={feature.title}
@@ -834,6 +874,26 @@ function AIRecruitmentSection() {
             </div>
           ))}
         </div>
+        <div className="flex gap-7 mt-7 justify-center">
+          <Link
+            to="/Register"
+            className="flex rounded-md border border-[#2170E4] bg-white px-5 py-2 text-lg font-medium text-[#2170E4] transition-all duration-200 hover:bg-[#2170E4] hover:text-white"
+          >
+            {"Trải nghiệm ngay"}
+          </Link>
+
+          <button
+            type="button"
+            onClick={() =>
+              document
+                .getElementById("career-advice")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" })
+            }
+            className="rounded-md border border-slate-200 bg-white px-5 py-2 text-lg font-medium text-slate-700 transition-all duration-200 hover:border-[#2170E4] hover:text-[#2170E4]"
+          >
+            Liên hệ tư vấn
+          </button>
+        </div>
       </div>
     </section>
   );
@@ -850,7 +910,7 @@ function Process() {
   const [Title, setTitle] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
-  const [position, setposition] = useState("");
+  const [Demand, setDemand] = useState("");
   const [message, setMessage] = useState("");
 
   const [submitting, setsubmitting] = useState(false);
@@ -859,16 +919,16 @@ function Process() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setsubmitting(false);
+    setsubmitting(true);
     setcomplete(false);
 
     const formData = new FormData();
 
     formData.append("Title", Title);
-    formData.append("email", email);
-    formData.append("phone", phone);
-    formData.append("Position", position);
-    formData.append("message", message);
+    formData.append("Email", email);
+    formData.append("Phone", phone);
+    formData.append("Demand", Demand);
+    formData.append("Message", message);
 
     formData.append("_subject", "Support JobCenter - Bộ phận tư vấn");
     formData.append("_template", "table");
@@ -884,11 +944,13 @@ function Process() {
       );
 
       if (res.ok) {
-        alert("Gửi yêu cầu thành công!");
+        alert(
+          "Gửi yêu cầu thành công! JobCentral sẽ liên hệ với bạn thông qua Mail hoặc Zalo hãy để ý thông báo nhé !",
+        );
         setTitle("");
         setEmail("");
         setPhone("");
-        setposition("");
+        setDemand("");
         setcomplete(true);
       } else {
         console.error("FormSubmit error:", res.status);
@@ -906,20 +968,13 @@ function Process() {
   return (
     <section id="career-advice" className="scroll-mt-24 bg-slate-50/60 py-20">
       <div className="mx-auto max-w-6xl px-6">
-        {/* TITLE */}
-        <Reveal>
-          <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
-            {t("process.title")}
-          </h2>
-        </Reveal>
-
-        <div className="mt-14 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
+        <div className="mt-14 grid gap-18 lg:grid-cols-[0.9fr_1.1fr] lg:items-start">
           {/* ================= LEFT - PROCESS ================= */}
           <Reveal>
-            <div className="relative rounded-2xl border border-slate-200 bg-slate-50 p-6 md:p-8">
+            <div className="relative rounded-xl mr-[30px] bg-slate-50 p-6 md:p-8">
               <div className="mb-8">
-                <h3 className="text-xl font-bold text-slate-900">
-                  Quy trình tuyển dụng
+                <h3 className="text-3xl font-bold text-slate-900">
+                  Quy trình tuyển dụng nhanh chóng
                 </h3>
 
                 <p className="mt-2 text-sm leading-6 text-slate-500">
@@ -929,7 +984,7 @@ function Process() {
               </div>
 
               {/* Vertical connecting line */}
-              <div className="absolute left-[60px] top-[125px] bottom-[45px] w-[2px] bg-slate-200" />
+              <div className="absolute left-[50px] top-[170px] bottom-[70px] w-[4px] bg-slate-200" />
 
               <div className="relative space-y-8">
                 {STEPS.map(({ icon: Icon, titleKey, descKey }, i) => (
@@ -941,11 +996,7 @@ function Process() {
                   >
                     {/* NUMBER */}
                     <div
-                      className={`relative z-10 flex h-14 w-14 shrink-0 items-center justify-center rounded-full text-lg font-bold transition-all duration-300 ${
-                        active === i
-                          ? "scale-110 bg-blue-600 text-white shadow-lg shadow-blue-600/30"
-                          : "bg-blue-100 text-blue-600"
-                      }`}
+                      className={`relative z-5 flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sx font-bold transition-all duration-300 scale-110 bg-[linear-gradient(140deg,#2D589F_18%,#5CBED1_85%)] text-white shadow-lg shadow-blue-600/30`}
                     >
                       {i + 1}
                     </div>
@@ -981,14 +1032,6 @@ function Process() {
               </div>
             </div>
 
-            <div className="mt-3 w-100 h-48 overflow-hidden rounded-lg shadow-md">
-              <img
-                src="./picture/pic1.png"
-                alt="pic-HIRA"
-                className="w-full h-full object-cover"
-              />
-            </div>
-
             <Link
               to="/Register"
               className="mt-8 inline-flex w-[43%] items-center justify-center gap-2 rounded-3xl bg-[#2170e4] px-5 py-3.5 text-base font-semibold text-white shadow-md shadow-blue-600/20 transition-colors duration-200 hover:bg-[#185fc5] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-blue-500/25"
@@ -996,10 +1039,17 @@ function Process() {
               <span>Đăng ký ngay</span>
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
+            <div className="mt-9 w-full h-48 overflow-hidden rounded-lg shadow-md">
+              <img
+                src="/picture/pic1.png"
+                alt="pic-HIRA"
+                className="w-full h-full object-cover"
+              />
+            </div>
           </Reveal>
 
           <Reveal delay={200}>
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm md:p-8">
+            <div className="rounded-2xl border border-slate-200 bg-white p-6 ml-10 shadow-sm md:p-8">
               <div className="mb-7">
                 <h3 className="mt-3 text-3xl font-bold text-[#2170e4]">
                   Nhận tư vấn miễn phí ngay !
@@ -1030,7 +1080,7 @@ function Process() {
                     name="Title"
                     type="text"
                     value={Title}
-                    onChange={(e)=>setTitle(e.target.value)}
+                    onChange={(e) => setTitle(e.target.value)}
                     placeholder="Nhập họ và tên"
                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   />
@@ -1049,7 +1099,7 @@ function Process() {
                       name="email"
                       type="email"
                       value={email}
-                      onChange={(e)=>setEmail(e.target.value)}
+                      onChange={(e) => setEmail(e.target.value)}
                       placeholder="example@gmail.com"
                       required
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
@@ -1069,7 +1119,7 @@ function Process() {
                       name="phone"
                       type="tel"
                       value={phone}
-                      onChange={(e)=>setPhone(e.target.value)}
+                      onChange={(e) => setPhone(e.target.value)}
                       placeholder="09xx xxx xxx"
                       required
                       className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
@@ -1077,30 +1127,35 @@ function Process() {
                   </div>
                 </div>
 
-                {/* POSITION */}
+                {/* Demand */}
                 <div>
                   <label
-                    htmlFor="position"
+                    htmlFor="Demand"
                     className="mb-2 block text-sm font-medium text-slate-700"
                   >
                     Vị trí quan tâm
                   </label>
 
                   <select
-                    id="position"
-                    name="position"
-                    value={position}
-                    onChange={(e)=>setposition(e.target.value)}
+                    id="Demand"
+                    name="Demand"
+                    value={Demand}
+                    onChange={(e) => setDemand(e.target.value)}
                     required
                     className="w-full rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm text-slate-700 outline-none transition-all focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   >
-                    <option value="">Chọn vị trí bạn quan tâm</option>
-                    <option value="frontend">Frontend Developer</option>
-                    <option value="backend">Backend Developer</option>
-                    <option value="fullstack">Fullstack Developer</option>
-                    <option value="designer">UI/UX Designer</option>
-                    <option value="marketing">Marketing</option>
-                    <option value="other">Vị trí khác</option>
+                    <option value="">Chọn nhu cầu tư vấn của bạn</option>
+                    <option value="Giới thiệu quy trình tuyển dụng ATS">
+                      giới thiệu quy trình tuyển dụng ATS
+                    </option>
+                    <option value="POST - Đăng tin">Đăng tin</option>
+                    <option value="PAYMENT - Hình thức thanh toán hệ thống">
+                      Hình thức thanh toán hệ thống
+                    </option>
+                    <option value="Bills - Hóa đơn điện tử khi mua gói">
+                      Hóa đơn điện tử khi mua gói
+                    </option>
+                    <option value="More">Khác</option>
                   </select>
                 </div>
 
@@ -1117,8 +1172,8 @@ function Process() {
                     id="message"
                     name="message"
                     value={message}
-                    onChange={(e)=>setMessage(e.target.value)}
-                    rows={8}
+                    onChange={(e) => setMessage(e.target.value)}
+                    rows={10}
                     placeholder="Bạn đang quan tâm đến công việc hoặc vị trí nào?"
                     className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm outline-none transition-all placeholder:text-slate-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10"
                   />
@@ -1127,25 +1182,27 @@ function Process() {
                 {/* SUBMIT */}
                 <div className="flex gap-4">
                   <button
-                  type="submit"
-                  disabled={submitting}
-                  className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
+                    type="submit"
+                    disabled={submitting}
+                    className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0"
+                  >
                     {submitting ? (
-                    <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      Đang gửi...
-                    </>
-                  ) : complete ? (
-                    <>
-                      <Check className="w-4 h-4 disabled:cursor-not-allowed" />
-                    </>
-                  ) : (
-                    "Liên hệ tư vấn ngay"
-                  )}
-                  </button>
-
-                  <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
-                    Tìm hiểu thêm
+                      <>
+                        <div className="flex gap-3">
+                          <Loader2 className="flex w-4 h-4 animate-spin justify-center" />
+                          Đang gửi...
+                        </div>
+                      </>
+                    ) : complete ? (
+                      <>
+                        <div className="flex gap-3">
+                          <Check className="w-4 h-4 disabled:cursor-not-allowed" />
+                          Liên hệ thành công
+                        </div>
+                      </>
+                    ) : (
+                      "Liên hệ tư vấn ngay"
+                    )}
                   </button>
                 </div>
 
@@ -1202,11 +1259,21 @@ function TOOLS() {
           ))}
         </div>
         <div className="flex mt-20 mx-auto max-w-xl items-center justify-center gap-5">
-          <button className="flex-1 rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0">
-            Trải nghiệm ngay
-          </button>
+          <Link
+            to="/Register"
+            className="flex flex-1 items-center justify-center rounded-xl border-2 border-[#2170e4] bg-white px-5 py-3.5 text-base font-semibold text-[#2170e4] shadow-lg shadow-blue-600/25 transition-all duration-300 hover:bg-blue-50 hover:shadow-xl active:translate-y-0"
+          >
+            {"Trải nghiệm ngay"}
+          </Link>
 
-          <button className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0">
+          <button
+            onClick={() =>
+              document
+                .getElementById("career-advice")
+                ?.scrollIntoView({ behavior: "smooth", block: "start" })
+            }
+            className="flex-1 rounded-xl border-2 border-gray-300 bg-white/90 px-5 py-3.5 text-base font-semibold text-slate-800 shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white hover:shadow-xl active:translate-y-0"
+          >
             Liên hệ tư vấn
           </button>
         </div>
@@ -1216,43 +1283,133 @@ function TOOLS() {
 }
 
 /* ------------------------------------------------------------------ */
-/*  Testimonials                                                       */
+/*  Testimonials               // CUSTOMER REVIREW                    */
 /* ------------------------------------------------------------------ */
 function Testimonials() {
   const { t } = useTranslation();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Tự động chuyển thẻ mỗi 4 giây (tạm dừng khi hover)
+  useEffect(() => {
+    if (isPaused || !TESTIMONIALS?.length) return;
+
+    const timer = setInterval(() => {
+      setActiveIndex((prev) => (prev + 1) % TESTIMONIALS.length);
+    }, 3000);
+
+    return () => clearInterval(timer);
+  }, [isPaused]);
 
   return (
-    <section className="bg-slate-50/60 py-20">
+    <section
+      className="relative overflow-hidden py-24"
+      style={{
+        backgroundColor: "#2D589F",
+        backgroundImage:
+          "linear-gradient(89deg, rgba(45, 88, 159, 1) 19%, rgba(92, 190, 209, 1) 93%)",
+      }}
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+    >
       <div className="mx-auto max-w-5xl px-6">
         <Reveal>
-          <h2 className="text-center text-2xl font-bold text-slate-900 md:text-3xl">
+          {/* Tiêu đề màu trắng sắc nét trên nền xanh */}
+          <h2 className="text-center text-3xl font-bold tracking-tight text-white drop-shadow-sm md:text-5xl">
             {t("testimonials.title")}
           </h2>
         </Reveal>
 
-        <div className="mt-12 grid gap-6 md:grid-cols-2">
-          {TESTIMONIALS.map((testimonial, i) => (
-            <Reveal key={testimonial.name} delay={i * 120}>
-              <div className="h-full rounded-2xl bg-white p-7 shadow-sm ring-1 ring-slate-100 transition-shadow duration-300 hover:shadow-md">
-                <Quote className="text-blue-200" size={28} />
-                <p className="mt-4 text-sm leading-relaxed text-slate-600">
-                  “{t(testimonial.quoteKey)}”
-                </p>
-                <div className="mt-6 flex items-center gap-3">
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-600 text-sm font-semibold text-white">
-                    {testimonial.name.charAt(0)}
-                  </div>
+        {/* Khung trượt 1 hàng ngang */}
+        <div className="relative mt-14 overflow-hidden py-4">
+          <div
+            className="flex items-center transition-transform duration-700 ease-out"
+            style={{
+              transform: `translateX(calc(50% - ${activeIndex * 404 + 190}px))`,
+            }}
+          >
+            {TESTIMONIALS.map((testimonial, i) => {
+              const isActive = i === activeIndex;
+
+              return (
+                <div
+                  key={testimonial.name}
+                  onClick={() => setActiveIndex(i)}
+                  className={`mx-3 flex h-[280px] w-[380px] shrink-0 flex-col justify-between rounded-2xl p-7 transition-all duration-500 ease-out ${
+                    isActive
+                      ? "z-10 scale-105 border border-white/80 bg-white shadow-2xl shadow-slate-950/20 opacity-100"
+                      : "scale-95 border border-white/20 bg-white/10 backdrop-blur-md opacity-40 hover:opacity-75 cursor-pointer"
+                  }`}
+                >
                   <div>
-                    <div className="text-sm font-semibold text-slate-900">
-                      {testimonial.name}
+                    <Quote
+                      className={`transition-colors duration-300 ${
+                        isActive ? "text-[#2D589F]/40" : "text-white/60"
+                      }`}
+                      size={28}
+                    />{" "}
+                    <p
+                      className={`mt-4 text-lg font-semibold leading-relaxed line-clamp-4 ${
+                        isActive
+                          ? "text-slate-700 font-normal"
+                          : "text-white/90"
+                      }`}
+                    >
+                      “{t(testimonial.quoteKey)}”
+                    </p>
+                  </div>
+
+                  {/* Thông tin người đánh giá */}
+                  <div
+                    className={`mt-6 flex items-center gap-3 border-t pt-4 ${
+                      isActive ? "border-slate-100" : "border-white/15"
+                    }`}
+                  >
+                    <div
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold transition-all duration-300 ${
+                        isActive
+                          ? "bg-[#2D589F] text-white shadow-md shadow-[#2D589F]/30"
+                          : "bg-white/20 text-white"
+                      }`}
+                    >
+                      {testimonial.name.charAt(0)}
                     </div>
-                    <div className="text-xs text-slate-500">
-                      {t(testimonial.roleKey)}
+                    <div className="min-w-0">
+                      <div
+                        className={`truncate text-sm font-semibold ${
+                          isActive ? "text-slate-900" : "text-white"
+                        }`}
+                      >
+                        {testimonial.name}
+                      </div>
+                      <div
+                        className={`truncate text-xs ${
+                          isActive ? "text-slate-500" : "text-cyan-100/80"
+                        }`}
+                      >
+                        {t(testimonial.roleKey)}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            </Reveal>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Thanh Dots hiển thị vị trí */}
+        <div className="mt-8 flex items-center justify-center gap-2">
+          {TESTIMONIALS.map((_, dotIdx) => (
+            <button
+              key={dotIdx}
+              onClick={() => setActiveIndex(dotIdx)}
+              aria-label={`Chuyển tới đánh giá ${dotIdx + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                dotIdx === activeIndex
+                  ? "w-7 bg-white shadow-sm"
+                  : "w-2 bg-white/40 hover:bg-white/70"
+              }`}
+            />
           ))}
         </div>
       </div>
@@ -1373,7 +1530,7 @@ function Clients() {
   useEffect(() => {
     const autoAdvance = setInterval(() => {
       setCurrentPage((page) => (page + 1) % pageCount);
-    }, 5000);
+    }, 2000);
 
     return () => clearInterval(autoAdvance);
   }, [currentPage, pageCount]);
@@ -1389,12 +1546,12 @@ function Clients() {
   return (
     <section className="bg-slate-50/60 py-16">
       <Reveal>
-        <h2 className="text-center text-lg font-semibold text-slate-500">
+        <h2 className="text-center text-3xl font-semibold text-slate-500">
           {t("clients.title")}
         </h2>
       </Reveal>
       <Reveal delay={100}>
-        <div className="mx-auto mt-8 max-w-5xl rounded-3xl border border-slate-200 bg-white px-5 py-8 shadow-sm md:px-10">
+        <div className="mx-auto mt-8 max-w-9xl rounded-3xl border border-slate-200 bg-white px-5 py-8 shadow-sm md:px-10">
           <div
             key={currentPage}
             className="clients-page-enter grid min-h-32 grid-cols-2 items-center gap-6 sm:grid-cols-3 md:grid-cols-6 md:gap-8"
@@ -1402,14 +1559,14 @@ function Clients() {
             {visibleClients.map((client) => (
               <div
                 key={client.name}
-                className="group flex h-16 flex-col items-center justify-center gap-2 text-center transition-all duration-300 hover:scale-105"
+                className="group flex h-24 flex-col items-center justify-center gap-2 text-center transition-all duration-300 hover:scale-105"
               >
                 <img
                   src={client.image}
                   alt={t("clients.logo", { name: client.name })}
-                  className="h-9 max-w-[8rem] object-contain grayscale opacity-60 transition-all duration-300 group-hover:grayscale-0 group-hover:opacity-100"
+                  className="h-14 max-w-40 object-contain"
                   onError={(event) => {
-                    event.currentTarget.style.display = "none";
+                    event.currentTarget.classList.add("hidden");
                   }}
                 />
                 <span className="text-xs font-black tracking-tight text-slate-400 transition-colors group-hover:text-[#2170e4]">
@@ -1479,7 +1636,7 @@ export default function JobCentralLanding() {
       <AIRecruitmentSection />
       <Process />
       <Testimonials />
-      <Pricing />
+      {/* <Pricing /> */}
       <Clients />
       <Footer />
     </div>
