@@ -1,0 +1,6 @@
+-- Dữ liệu mẫu phục vụ phát triển & kiểm thử (Dev Seeds)
+-- CHỈ CHẠY TRÊN LOCAL / STAGING. KHÔNG CHẠY TRÊN PRODUCTION.
+
+-- Tài khoản test mẫu
+-- INSERT INTO users (email, password_hash, role) VALUES ('candidate.test@jobcentral.vn', 'hash_here', 'candidate');
+-- INSERT INTO users (email, password_hash, role) VALUES ('recruiter.test@jobcentral.vn', 'hash_here', 'recruiter');

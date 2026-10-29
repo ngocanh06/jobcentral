@@ -1,11 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import {
-  INITIAL_JOBS,
   INITIAL_COMPANIES,
   INITIAL_ARTICLES,
   INITIAL_REVIEWS,
-  INITIAL_NOTIFICATIONS,
-  SIMULATED_SYSTEM_NOTIFICATIONS,
 } from './data/mockData';
 import { Header } from './components/Header';
 import { AllJobsView } from './components/AllJobsView';
@@ -23,103 +20,113 @@ import { JobDetailView } from './components/JobDetailView';
 import { ApplyJobView } from './components/ApplyJobView';
 import { JobDetailModal } from './components/JobDetailModal';
 import { ApplyModal } from './components/ApplyModal';
-import { AuthModal } from './components/AuthModal';
+import { CandidateLoginPage } from './pages/login';
 import { Toast } from './components/Toast';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileProfileDrawer } from './components/MobileProfileDrawer';
-import { useDevice } from './context/DeviceContext';
-import catAvatar from './assets/images/cat_opentowork_avatar_1791346160613.jpg';
+import { useAuthStore } from './store/authStore';
+import { useJobsStore } from './store/jobsStore';
+import { useCompaniesStore } from './store/companiesStore';
+import { useNotificationsStore } from './store/notificationsStore';
+import { useUiStore } from './store/uiStore';
+import { useToastStore } from './store/toastStore';
 
 export function App() {
-  const device = useDevice();
-  const [jobs, setJobs] = useState(INITIAL_JOBS);
-  const [followedCompanyIds, setFollowedCompanyIds] = useState(['c1', 'c2']);
-  const [notifications, setNotifications] = useState(INITIAL_NOTIFICATIONS);
-  const [activeTab, setActiveTab] = useState('jobs');
-  const [previousTab, setPreviousTab] = useState('jobs');
-  const [targetConversationId, setTargetConversationId] = useState('conv-1');
-  const [selectedJobForDetail, setSelectedJobForDetail] = useState(null);
-  const [selectedJobForApply, setSelectedJobForApply] = useState(null);
-  const [selectedJobForStandardApply, setSelectedJobForStandardApply] = useState(null);
-  const [authModalOpen, setAuthModalOpen] = useState(false);
-  const [authMode, setAuthMode] = useState('login');
-  const [mobileProfileDrawerOpen, setMobileProfileDrawerOpen] = useState(false);
-  const [targetCompanyFilter, setTargetCompanyFilter] = useState(null);
-  const [selectedCompany, setSelectedCompany] = useState(null);
-  const simNotifIndexRef = useRef(0);
-  const [currentUser, setCurrentUser] = useState(() => {
-    try {
-      const savedUser = localStorage.getItem('jobcentral_user');
-      if (savedUser) {
-        const parsed = JSON.parse(savedUser);
-        return { ...parsed, avatar: catAvatar };
-      }
-      return null;
-    } catch {
-      return null;
-    }
-  });
-  const [toast, setToast] = useState(null);
+  // Auth
+  const currentUser = useAuthStore((s) => s.currentUser);
+  const authModalOpen = useAuthStore((s) => s.authModalOpen);
+  const authMode = useAuthStore((s) => s.authMode);
+  const setAuthModalOpen = useAuthStore((s) => s.setAuthModalOpen);
+  const setAuthMode = useAuthStore((s) => s.setAuthMode);
+  const login = useAuthStore((s) => s.login);
+  const logout = useAuthStore((s) => s.logout);
 
-  const showToast = (message, type = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => {
-      setToast((prev) => (prev?.message === message ? null : prev));
-    }, 3500);
-  };
+  // Jobs
+  const jobs = useJobsStore((s) => s.jobs);
+  const toggleSave = useJobsStore((s) => s.toggleSave);
+  const savedCount = useJobsStore(
+    (s) => s.jobs.filter((job) => job.isSaved).length
+  );
 
-  // Push a new real-time notification into the system notification stream
-  const pushSystemNotification = (notifPayload) => {
-    const newNotif = {
-      id: `notif-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
-      type: notifPayload.type || 'system',
-      category: notifPayload.category || 'system',
-      title: notifPayload.title,
-      description: notifPayload.description || '',
-      time: 'Vừa xong',
-      isRead: false,
-      badgeText: notifPayload.badgeText || 'Hệ thống',
-      badgeColor: notifPayload.badgeColor || 'blue',
-      targetType: notifPayload.targetType || 'job',
-      targetId: notifPayload.targetId || 'job-1',
-      actionLabel: notifPayload.actionLabel || 'Xem chi tiết',
-    };
-    setNotifications((prev) => [newNotif, ...prev]);
-    return newNotif;
-  };
+  // Companies
+  const followedCompanyIds = useCompaniesStore((s) => s.followedCompanyIds);
+  const selectedCompany = useCompaniesStore((s) => s.selectedCompany);
+  const targetCompanyFilter = useCompaniesStore((s) => s.targetCompanyFilter);
+  const setSelectedCompany = useCompaniesStore((s) => s.setSelectedCompany);
+  const setTargetCompanyFilter = useCompaniesStore(
+    (s) => s.setTargetCompanyFilter
+  );
+  const toggleFollow = useCompaniesStore((s) => s.toggleFollow);
+
+  // Notifications
+  const notifications = useNotificationsStore((s) => s.notifications);
+  const pushNotification = useNotificationsStore((s) => s.pushNotification);
+  const simulateNotification = useNotificationsStore(
+    (s) => s.simulateNotification
+  );
+  const markRead = useNotificationsStore((s) => s.markRead);
+  const markAllRead = useNotificationsStore((s) => s.markAllRead);
+  const deleteNotification = useNotificationsStore(
+    (s) => s.deleteNotification
+  );
+
+  // UI / navigation
+  const activeTab = useUiStore((s) => s.activeTab);
+  const previousTab = useUiStore((s) => s.previousTab);
+  const targetConversationId = useUiStore((s) => s.targetConversationId);
+  const selectedJobForDetail = useUiStore((s) => s.selectedJobForDetail);
+  const selectedJobForApply = useUiStore((s) => s.selectedJobForApply);
+  const selectedJobForStandardApply = useUiStore(
+    (s) => s.selectedJobForStandardApply
+  );
+  const mobileProfileDrawerOpen = useUiStore(
+    (s) => s.mobileProfileDrawerOpen
+  );
+  const setActiveTab = useUiStore((s) => s.setActiveTab);
+  const setPreviousTab = useUiStore((s) => s.setPreviousTab);
+  const setTargetConversationId = useUiStore(
+    (s) => s.setTargetConversationId
+  );
+  const setSelectedJobForDetail = useUiStore(
+    (s) => s.setSelectedJobForDetail
+  );
+  const setSelectedJobForApply = useUiStore((s) => s.setSelectedJobForApply);
+  const setSelectedJobForStandardApply = useUiStore(
+    (s) => s.setSelectedJobForStandardApply
+  );
+  const setMobileProfileDrawerOpen = useUiStore(
+    (s) => s.setMobileProfileDrawerOpen
+  );
+
+  // Toast
+  const toast = useToastStore((s) => s.toast);
+  const showToast = useToastStore((s) => s.showToast);
+  const setToast = useToastStore((s) => s.setToast);
+
+  const pushSystemNotification = pushNotification;
 
   const handleSimulateNotification = () => {
-    const template =
-      SIMULATED_SYSTEM_NOTIFICATIONS[
-      simNotifIndexRef.current % SIMULATED_SYSTEM_NOTIFICATIONS.length
-      ];
-    simNotifIndexRef.current += 1;
-    pushSystemNotification(template);
-    showToast(`Thông báo hệ thống mới: ${template.title}`, 'info');
+    simulateNotification();
   };
 
   const handleMarkNotificationRead = (notifId, e) => {
     if (e) e.stopPropagation();
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === notifId ? { ...n, isRead: true } : n))
-    );
+    markRead(notifId);
   };
 
   const handleMarkAllNotificationsRead = () => {
-    setNotifications((prev) => prev.map((n) => ({ ...n, isRead: true })));
+    markAllRead();
     showToast('Đã đánh dấu đọc tất cả thông báo.', 'info');
   };
 
   const handleDeleteNotification = (notifId, e) => {
     if (e) e.stopPropagation();
-    setNotifications((prev) => prev.filter((n) => n.id !== notifId));
+    deleteNotification(notifId);
   };
 
   const handleNotificationClick = (notif) => {
     // Mark clicked notification as read
-    setNotifications((prev) =>
-      prev.map((n) => (n.id === notif.id ? { ...n, isRead: true } : n))
-    );
+    markRead(notif.id);
 
     setSelectedJobForStandardApply(null);
 
@@ -231,35 +238,7 @@ export function App() {
 
   const handleToggleFollowCompany = (companyId, e) => {
     if (e) e.stopPropagation();
-    const company = INITIAL_COMPANIES.find((c) => c.id === companyId);
-    const companyName = company ? company.name : 'Công ty';
-    const isAlreadyFollowed = followedCompanyIds.includes(companyId);
-
-    setFollowedCompanyIds((prev) =>
-      prev.includes(companyId)
-        ? prev.filter((id) => id !== companyId)
-        : [...prev, companyId]
-    );
-
-    if (isAlreadyFollowed) {
-      showToast(`Đã bỏ theo dõi công ty "${companyName}"`, 'info');
-    } else {
-      showToast(
-        `Đã theo dõi công ty "${companyName}"! Bạn sẽ nhận được thông báo khi có việc làm mới.`,
-        'success'
-      );
-      pushSystemNotification({
-        type: 'company_update',
-        category: 'job_match',
-        title: `Đang theo dõi ${companyName}`,
-        description: `Hệ thống đã bật thông báo ưu tiên khi ${companyName} đăng vị trí tuyển dụng hoặc cập nhật phúc lợi mới.`,
-        badgeText: 'Theo dõi mới',
-        badgeColor: 'indigo',
-        targetType: 'company',
-        targetId: companyId,
-        actionLabel: 'Xem công ty',
-      });
-    }
+    toggleFollow(companyId);
   };
 
   // Open job details if URL contains jobId
@@ -320,40 +299,7 @@ export function App() {
 
   const handleToggleSave = (jobId, e) => {
     if (e) e.stopPropagation();
-    const targetJob = jobs.find((j) => j.id === jobId);
-    if (targetJob) {
-      const nextSaved = !targetJob.isSaved;
-      showToast(
-        nextSaved
-          ? `Đã lưu công việc "${targetJob.title}" thành công!`
-          : `Đã bỏ lưu công việc "${targetJob.title}"`
-      );
-      if (nextSaved) {
-        pushSystemNotification({
-          type: 'job_match',
-          category: 'job_match',
-          title: `Đã lưu việc làm: ${targetJob.title}`,
-          description: `Vị trí tại ${targetJob.company} (${targetJob.salary}) đã được lưu vào danh sách theo dõi của bạn.`,
-          badgeText: 'Đã lưu việc',
-          badgeColor: 'blue',
-          targetType: 'job',
-          targetId: targetJob.id,
-          actionLabel: 'Xem việc làm',
-        });
-      }
-    }
-
-    setJobs((prevJobs) =>
-      prevJobs.map((job) =>
-        job.id === jobId ? { ...job, isSaved: !job.isSaved } : job
-      )
-    );
-
-    if (selectedJobForDetail && selectedJobForDetail.id === jobId) {
-      setSelectedJobForDetail((prev) =>
-        prev ? { ...prev, isSaved: !prev.isSaved } : null
-      );
-    }
+    toggleSave(jobId);
   };
 
   const handleViewJobDetails = (job) => {
@@ -403,47 +349,16 @@ export function App() {
   };
 
   const handleAuthSuccess = (user) => {
-    const loggedInUser = {
-      ...user,
-      avatar: user.avatar || catAvatar,
-      isGuest: false,
-    };
-    setCurrentUser(loggedInUser);
-    try {
-      localStorage.setItem('jobcentral_user', JSON.stringify(loggedInUser));
-    } catch (e) {
-      console.error('Failed to save user session:', e);
-    }
-    setAuthModalOpen(false);
-    showToast(`Chào mừng ${user.name}! Bạn đã đăng nhập thành công.`, 'success');
-    pushSystemNotification({
-      type: 'system',
-      category: 'system',
-      title: `Đăng nhập thành công: ${user.name}`,
-      description: `Chào mừng bạn quay lại JobCentral! Hồ sơ và các thông báo tuyển dụng của bạn đã được đồng bộ.`,
-      badgeText: 'Tài khoản',
-      badgeColor: 'purple',
-      targetType: 'messages',
-      targetId: 'conv-1',
-      actionLabel: 'Mở tin nhắn HR',
-    });
+    login(user);
   };
 
   const handleLogout = () => {
-    setCurrentUser(null);
-    try {
-      localStorage.removeItem('jobcentral_user');
-      localStorage.removeItem('user_session');
-    } catch (e) {
-      console.error('Failed to remove user session:', e);
-    }
+    logout();
     if (activeTab === 'messages') {
       setActiveTab('jobs');
     }
     showToast('Đã đăng xuất. Bạn đang ở trạng thái chưa đăng nhập.', 'info');
   };
-
-  const savedCount = jobs.filter((j) => j.isSaved).length;
 
   return (
     <div
@@ -838,11 +753,18 @@ export function App() {
       )}
 
       {authModalOpen && (
-        <AuthModal
-          initialMode={authMode}
-          onClose={() => setAuthModalOpen(false)}
-          onSuccess={handleAuthSuccess}
-        />
+        <div className="fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-3 sm:p-4">
+          <div className="fixed inset-0" onClick={() => setAuthModalOpen(false)} aria-hidden="true" />
+          <div className="relative z-10 w-full max-w-5xl">
+            <CandidateLoginPage
+              onLoginSuccess={handleAuthSuccess}
+              onNavigateHome={() => setAuthModalOpen(false)}
+              onNavigateRegister={(mode) => {
+                showToast(`Chức năng đăng ký/khôi phục (${mode}) đang cập nhật.`, 'info');
+              }}
+            />
+          </div>
+        </div>
       )}
 
       {/* Global Toast Notification */}

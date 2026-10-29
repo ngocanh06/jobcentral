@@ -10,6 +10,10 @@ export default defineConfig(() => {
       alias: {
         '@': path.resolve(__dirname, 'src'),
       },
+      // npm workspaces hoists some deps (e.g. zustand) to the repo root while
+      // react lives in frontend/node_modules. Dedupe keeps a single React copy
+      // so pre-bundled deps can resolve the `react` peer dependency.
+      dedupe: ['react', 'react-dom'],
     },
     server: {
       port: 3000,

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 
 const DeviceContext = createContext(null);
 
@@ -98,32 +98,36 @@ export const DeviceProvider = ({ children }) => {
     };
   }, []);
 
-  // Effective values considering simulation
-  const effectiveIsPhone =
-    simulatedDevice === 'phone' ? true :
-    simulatedDevice === 'desktop' ? false :
-    simulatedDevice === 'tablet' ? false :
-    deviceInfo.isPhone;
+  // Effective values considering simulation.
+  // Memoized so consumers don't re-render on unrelated parent renders;
+  // only a real device change or simulation change creates a new value.
+  const value = useMemo(() => {
+    const effectiveIsPhone =
+      simulatedDevice === 'phone' ? true :
+      simulatedDevice === 'desktop' ? false :
+      simulatedDevice === 'tablet' ? false :
+      deviceInfo.isPhone;
 
-  const effectiveIsTablet =
-    simulatedDevice === 'tablet' ? true :
-    simulatedDevice === 'desktop' ? false :
-    simulatedDevice === 'phone' ? false :
-    deviceInfo.isTablet;
+    const effectiveIsTablet =
+      simulatedDevice === 'tablet' ? true :
+      simulatedDevice === 'desktop' ? false :
+      simulatedDevice === 'phone' ? false :
+      deviceInfo.isTablet;
 
-  const effectiveIsMobile = effectiveIsPhone || effectiveIsTablet;
-  const effectiveIsDesktop = !effectiveIsMobile;
+    const effectiveIsMobile = effectiveIsPhone || effectiveIsTablet;
+    const effectiveIsDesktop = !effectiveIsMobile;
 
-  const value = {
-    ...deviceInfo,
-    isPhone: effectiveIsPhone,
-    isTablet: effectiveIsTablet,
-    isMobile: effectiveIsMobile,
-    isDesktop: effectiveIsDesktop,
-    deviceType: effectiveIsPhone ? 'phone' : effectiveIsTablet ? 'tablet' : 'desktop',
-    simulatedDevice,
-    setSimulatedDevice,
-  };
+    return {
+      ...deviceInfo,
+      isPhone: effectiveIsPhone,
+      isTablet: effectiveIsTablet,
+      isMobile: effectiveIsMobile,
+      isDesktop: effectiveIsDesktop,
+      deviceType: effectiveIsPhone ? 'phone' : effectiveIsTablet ? 'tablet' : 'desktop',
+      simulatedDevice,
+      setSimulatedDevice,
+    };
+  }, [deviceInfo, simulatedDevice]);
 
   return (
     <DeviceContext.Provider value={value}>

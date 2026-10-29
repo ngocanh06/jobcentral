@@ -1,0 +1,2 @@
+-- Snapshot cấu trúc hiện tại của database (tự động xuất ra từ DB)
+-- Không sửa tay trực tiếp vào file này khi thay đổi cấu trúc bảng, hãy dùng migrations.

@@ -1,0 +1,8 @@
+-- Dữ liệu bắt buộc (Base Seeds)
+-- Chạy trên mọi môi trường (Local, Dev, Staging, Production)
+
+-- Ngành nghề mẫu
+-- INSERT INTO industries (name, code) VALUES ('Công nghệ thông tin', 'IT'), ('Tài chính - Ngân hàng', 'FIN');
+
+-- Vùng lương mẫu
+-- INSERT INTO salary_ranges (label, min_val, max_val) VALUES ('Dưới 10 triệu', 0, 10000000);
